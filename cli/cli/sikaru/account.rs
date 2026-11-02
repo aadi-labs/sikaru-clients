@@ -58,6 +58,7 @@ fn login(m: &ArgMatches) -> Result<(), CliError> {
         return user_auth::login_with_token();
     }
     user_auth::login(m.get_flag("no-browser"))?;
+    user_auth::project_hint();
     if std::env::var("SIKARU_API_KEY").is_ok_and(|key| !key.is_empty()) {
         eprintln!("SIKARU_API_KEY is set and takes precedence over this sign-in. Unset it to use the sign-in.");
     }

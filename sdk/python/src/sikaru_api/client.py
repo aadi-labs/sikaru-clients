@@ -30,7 +30,9 @@ if typing.TYPE_CHECKING:
     from .connections.client import AsyncConnectionsClient, ConnectionsClient
     from .context_registry.client import AsyncContextRegistryClient, ContextRegistryClient
     from .conversations.client import AsyncConversationsClient, ConversationsClient
+    from .credit_top_ups.client import AsyncCreditTopUpsClient, CreditTopUpsClient
     from .datasets.client import AsyncDatasetsClient, DatasetsClient
+    from .decisions.client import AsyncDecisionsClient, DecisionsClient
     from .deployments.client import AsyncDeploymentsClient, DeploymentsClient
     from .end_users.client import AsyncEndUsersClient, EndUsersClient
     from .environments.client import AsyncEnvironmentsClient, EnvironmentsClient
@@ -183,6 +185,7 @@ class SikaruApi:
         self._connections: typing.Optional[ConnectionsClient] = None
         self._context_registry: typing.Optional[ContextRegistryClient] = None
         self._conversations: typing.Optional[ConversationsClient] = None
+        self._credit_top_ups: typing.Optional[CreditTopUpsClient] = None
         self._datasets: typing.Optional[DatasetsClient] = None
         self._deployments: typing.Optional[DeploymentsClient] = None
         self._environments: typing.Optional[EnvironmentsClient] = None
@@ -223,6 +226,7 @@ class SikaruApi:
         self._workflow_runs: typing.Optional[WorkflowRunsClient] = None
         self._workflows: typing.Optional[WorkflowsClient] = None
         self._responses: typing.Optional[ResponsesClient] = None
+        self._decisions: typing.Optional[DecisionsClient] = None
         self._trace_streams: typing.Optional[TraceStreamsClient] = None
         self._chat: typing.Optional[ChatClient] = None
 
@@ -385,6 +389,14 @@ class SikaruApi:
 
             self._conversations = ConversationsClient(client_wrapper=self._client_wrapper)
         return self._conversations
+
+    @property
+    def credit_top_ups(self):
+        if self._credit_top_ups is None:
+            from .credit_top_ups.client import CreditTopUpsClient  # noqa: E402
+
+            self._credit_top_ups = CreditTopUpsClient(client_wrapper=self._client_wrapper)
+        return self._credit_top_ups
 
     @property
     def datasets(self):
@@ -707,6 +719,14 @@ class SikaruApi:
         return self._responses
 
     @property
+    def decisions(self):
+        if self._decisions is None:
+            from .decisions.client import DecisionsClient  # noqa: E402
+
+            self._decisions = DecisionsClient(client_wrapper=self._client_wrapper)
+        return self._decisions
+
+    @property
     def trace_streams(self):
         if self._trace_streams is None:
             from .trace_streams.client import TraceStreamsClient  # noqa: E402
@@ -852,6 +872,7 @@ class AsyncSikaruApi:
         self._connections: typing.Optional[AsyncConnectionsClient] = None
         self._context_registry: typing.Optional[AsyncContextRegistryClient] = None
         self._conversations: typing.Optional[AsyncConversationsClient] = None
+        self._credit_top_ups: typing.Optional[AsyncCreditTopUpsClient] = None
         self._datasets: typing.Optional[AsyncDatasetsClient] = None
         self._deployments: typing.Optional[AsyncDeploymentsClient] = None
         self._environments: typing.Optional[AsyncEnvironmentsClient] = None
@@ -892,6 +913,7 @@ class AsyncSikaruApi:
         self._workflow_runs: typing.Optional[AsyncWorkflowRunsClient] = None
         self._workflows: typing.Optional[AsyncWorkflowsClient] = None
         self._responses: typing.Optional[AsyncResponsesClient] = None
+        self._decisions: typing.Optional[AsyncDecisionsClient] = None
         self._trace_streams: typing.Optional[AsyncTraceStreamsClient] = None
         self._chat: typing.Optional[AsyncChatClient] = None
 
@@ -1054,6 +1076,14 @@ class AsyncSikaruApi:
 
             self._conversations = AsyncConversationsClient(client_wrapper=self._client_wrapper)
         return self._conversations
+
+    @property
+    def credit_top_ups(self):
+        if self._credit_top_ups is None:
+            from .credit_top_ups.client import AsyncCreditTopUpsClient  # noqa: E402
+
+            self._credit_top_ups = AsyncCreditTopUpsClient(client_wrapper=self._client_wrapper)
+        return self._credit_top_ups
 
     @property
     def datasets(self):
@@ -1374,6 +1404,14 @@ class AsyncSikaruApi:
 
             self._responses = AsyncResponsesClient(client_wrapper=self._client_wrapper)
         return self._responses
+
+    @property
+    def decisions(self):
+        if self._decisions is None:
+            from .decisions.client import AsyncDecisionsClient  # noqa: E402
+
+            self._decisions = AsyncDecisionsClient(client_wrapper=self._client_wrapper)
+        return self._decisions
 
     @property
     def trace_streams(self):

@@ -9,6 +9,7 @@ pub enum ApiError {
         code: Option<String>,
         detail: Option<String>,
         reason: Option<String>,
+        top_up: Option<TopUpHint>,
     },
     #[error("ForbiddenError: Access forbidden - {message}")]
     ForbiddenError {
@@ -16,6 +17,7 @@ pub enum ApiError {
         code: Option<String>,
         detail: Option<String>,
         reason: Option<String>,
+        top_up: Option<TopUpHint>,
     },
     #[error("NotFoundError: Resource not found - {message}")]
     NotFoundError {
@@ -23,11 +25,13 @@ pub enum ApiError {
         code: Option<String>,
         detail: Option<String>,
         reason: Option<String>,
+        top_up: Option<TopUpHint>,
     },
     #[error("UnprocessableEntityError: Unprocessable entity - {message}")]
     UnprocessableEntityError {
         message: String,
-        detail: Option<Vec<ValidationError>>,
+        field: Option<String>,
+        validation_error: Option<String>,
     },
     #[error("ConflictError: Conflict - {message}")]
     ConflictError {
@@ -35,6 +39,7 @@ pub enum ApiError {
         code: Option<String>,
         detail: Option<String>,
         reason: Option<String>,
+        top_up: Option<TopUpHint>,
     },
     #[error("ServiceUnavailableError: {message}")]
     ServiceUnavailableError {
@@ -42,6 +47,7 @@ pub enum ApiError {
         code: Option<String>,
         detail: Option<String>,
         reason: Option<String>,
+        top_up: Option<TopUpHint>,
     },
     #[error("PaymentRequiredError: {message}")]
     PaymentRequiredError {
@@ -49,6 +55,7 @@ pub enum ApiError {
         code: Option<String>,
         detail: Option<String>,
         reason: Option<String>,
+        top_up: Option<TopUpHint>,
     },
     #[error("TooManyRequestsError: Rate limit exceeded - {message}")]
     TooManyRequestsError {
@@ -56,6 +63,7 @@ pub enum ApiError {
         code: Option<String>,
         detail: Option<String>,
         reason: Option<String>,
+        top_up: Option<TopUpHint>,
     },
     #[error("HTTP error {status}: {message}")]
     Http { status: u16, message: String },
@@ -101,6 +109,9 @@ impl ApiError {
                             reason: parsed
                                 .get("reason")
                                 .and_then(|v| v.as_str().map(|s| s.to_string())),
+                            top_up: parsed
+                                .get("topUp")
+                                .and_then(|v| serde_json::from_value::<TopUpHint>(v.clone()).ok()),
                         };
                     }
                 }
@@ -109,6 +120,7 @@ impl ApiError {
                     code: None,
                     detail: None,
                     reason: None,
+                    top_up: None,
                 };
             }
             403 => {
@@ -130,6 +142,9 @@ impl ApiError {
                             reason: parsed
                                 .get("reason")
                                 .and_then(|v| v.as_str().map(|s| s.to_string())),
+                            top_up: parsed
+                                .get("topUp")
+                                .and_then(|v| serde_json::from_value::<TopUpHint>(v.clone()).ok()),
                         };
                     }
                 }
@@ -138,6 +153,7 @@ impl ApiError {
                     code: None,
                     detail: None,
                     reason: None,
+                    top_up: None,
                 };
             }
             404 => {
@@ -159,6 +175,9 @@ impl ApiError {
                             reason: parsed
                                 .get("reason")
                                 .and_then(|v| v.as_str().map(|s| s.to_string())),
+                            top_up: parsed
+                                .get("topUp")
+                                .and_then(|v| serde_json::from_value::<TopUpHint>(v.clone()).ok()),
                         };
                     }
                 }
@@ -167,6 +186,7 @@ impl ApiError {
                     code: None,
                     detail: None,
                     reason: None,
+                    top_up: None,
                 };
             }
             422 => {
@@ -179,15 +199,19 @@ impl ApiError {
                                 .and_then(|v| v.as_str())
                                 .unwrap_or("Unknown error")
                                 .to_string(),
-                            detail: parsed.get("detail").and_then(|v| {
-                                serde_json::from_value::<Vec<ValidationError>>(v.clone()).ok()
-                            }),
+                            field: parsed
+                                .get("field")
+                                .and_then(|v| v.as_str().map(|s| s.to_string())),
+                            validation_error: parsed
+                                .get("validationError")
+                                .and_then(|v| v.as_str().map(|s| s.to_string())),
                         };
                     }
                 }
                 return Self::UnprocessableEntityError {
                     message: body.unwrap_or("Unknown error").to_string(),
-                    detail: None,
+                    field: None,
+                    validation_error: None,
                 };
             }
             409 => {
@@ -209,6 +233,9 @@ impl ApiError {
                             reason: parsed
                                 .get("reason")
                                 .and_then(|v| v.as_str().map(|s| s.to_string())),
+                            top_up: parsed
+                                .get("topUp")
+                                .and_then(|v| serde_json::from_value::<TopUpHint>(v.clone()).ok()),
                         };
                     }
                 }
@@ -217,6 +244,7 @@ impl ApiError {
                     code: None,
                     detail: None,
                     reason: None,
+                    top_up: None,
                 };
             }
             503 => {
@@ -238,6 +266,9 @@ impl ApiError {
                             reason: parsed
                                 .get("reason")
                                 .and_then(|v| v.as_str().map(|s| s.to_string())),
+                            top_up: parsed
+                                .get("topUp")
+                                .and_then(|v| serde_json::from_value::<TopUpHint>(v.clone()).ok()),
                         };
                     }
                 }
@@ -246,6 +277,7 @@ impl ApiError {
                     code: None,
                     detail: None,
                     reason: None,
+                    top_up: None,
                 };
             }
             402 => {
@@ -267,6 +299,9 @@ impl ApiError {
                             reason: parsed
                                 .get("reason")
                                 .and_then(|v| v.as_str().map(|s| s.to_string())),
+                            top_up: parsed
+                                .get("topUp")
+                                .and_then(|v| serde_json::from_value::<TopUpHint>(v.clone()).ok()),
                         };
                     }
                 }
@@ -275,6 +310,7 @@ impl ApiError {
                     code: None,
                     detail: None,
                     reason: None,
+                    top_up: None,
                 };
             }
             429 => {
@@ -296,6 +332,9 @@ impl ApiError {
                             reason: parsed
                                 .get("reason")
                                 .and_then(|v| v.as_str().map(|s| s.to_string())),
+                            top_up: parsed
+                                .get("topUp")
+                                .and_then(|v| serde_json::from_value::<TopUpHint>(v.clone()).ok()),
                         };
                     }
                 }
@@ -304,6 +343,7 @@ impl ApiError {
                     code: None,
                     detail: None,
                     reason: None,
+                    top_up: None,
                 };
             }
             _ => Self::Http {

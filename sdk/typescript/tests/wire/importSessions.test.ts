@@ -84,7 +84,7 @@ describe("ImportSessionsClient", () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         
-        const rawResponseBody = { };
+        const rawResponseBody = { "key" : "value" };
         
         server
             .mockEndpoint()
@@ -192,7 +192,7 @@ describe("ImportSessionsClient", () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         const rawRequestBody = { "displayName" : "displayName" , "mode" : "workflow" };
-        const rawResponseBody = { };
+        const rawResponseBody = { "key" : "value" };
         
         server
             .mockEndpoint()
@@ -288,7 +288,7 @@ describe("ImportSessionsClient", () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         
-        const rawResponseBody = { };
+        const rawResponseBody = { "key" : "value" };
         
         server
             .mockEndpoint()
@@ -396,7 +396,7 @@ describe("ImportSessionsClient", () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         const rawRequestBody = { "displayName" : "displayName" , "harnessId" : "harnessId" };
-        const rawResponseBody = { };
+        const rawResponseBody = { "key" : "value" };
         
         server
             .mockEndpoint()
@@ -492,7 +492,7 @@ describe("ImportSessionsClient", () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         
-        const rawResponseBody = { };
+        const rawResponseBody = { "key" : "value" };
         
         server
             .mockEndpoint()
@@ -584,7 +584,7 @@ describe("ImportSessionsClient", () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         
-        const rawResponseBody = { };
+        const rawResponseBody = { "key" : "value" };
         
         server
             .mockEndpoint()
@@ -704,7 +704,7 @@ describe("ImportSessionsClient", () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         const rawRequestBody = { "activeHarnessVersionId" : "activeHarnessVersionId" , "agentSlug" : "agentSlug" , "compatibilityProfileId" : "compatibilityProfileId" , "displayName" : "displayName" , "harnessId" : "harnessId" };
-        const rawResponseBody = { };
+        const rawResponseBody = { "key" : "value" };
         
         server
             .mockEndpoint()
@@ -815,7 +815,7 @@ describe("ImportSessionsClient", () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         const rawRequestBody = { "compatibilityProfileId" : "compatibilityProfileId" };
-        const rawResponseBody = { };
+        const rawResponseBody = { "key" : "value" };
         
         server
             .mockEndpoint()
@@ -910,7 +910,7 @@ describe("ImportSessionsClient", () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         
-        const rawResponseBody = { };
+        const rawResponseBody = { "key" : "value" };
         
         server
             .mockEndpoint()
@@ -1026,7 +1026,7 @@ describe("ImportSessionsClient", () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         const rawRequestBody = { "contentDigest" : "contentDigest" , "exportPolicy" : "customer_source_exportable" , "sourceKind" : "workflow_json" , "storageRef" : "storageRef" };
-        const rawResponseBody = { };
+        const rawResponseBody = { "key" : "value" };
         
         server
             .mockEndpoint()
@@ -1136,7 +1136,7 @@ describe("ImportSessionsClient", () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         const rawRequestBody = { "compatibilityProfileId" : "compatibilityProfileId" };
-        const rawResponseBody = { };
+        const rawResponseBody = { "key" : "value" };
         
         server
             .mockEndpoint()

@@ -84,7 +84,7 @@ describe("ChangesetsClient", () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         
-        const rawResponseBody = { };
+        const rawResponseBody = { "key" : "value" };
         
         server
             .mockEndpoint()
@@ -204,7 +204,7 @@ describe("ChangesetsClient", () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         const rawRequestBody = { "publicSummary" : "publicSummary" , "publicTitle" : "publicTitle" , "scopeRef" : "scopeRef" , "scopeType" : "global" , "sourceType" : "import" };
-        const rawResponseBody = { };
+        const rawResponseBody = { "key" : "value" };
         
         server
             .mockEndpoint()
@@ -303,7 +303,7 @@ describe("ChangesetsClient", () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         
-        const rawResponseBody = { };
+        const rawResponseBody = { "key" : "value" };
         
         server
             .mockEndpoint()
@@ -416,7 +416,7 @@ describe("ChangesetsClient", () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         
-        const rawResponseBody = { };
+        const rawResponseBody = { "key" : "value" };
         
         server
             .mockEndpoint()
@@ -508,7 +508,7 @@ describe("ChangesetsClient", () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         
-        const rawResponseBody = { };
+        const rawResponseBody = { "key" : "value" };
         
         server
             .mockEndpoint()

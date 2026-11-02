@@ -108,7 +108,7 @@ describe("MemoryRegistryClient", () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         const rawRequestBody = { "memoryId" : "x" , "memoryType" : "x" , "name" : "x" , "scope" : "x" };
-        const rawResponseBody = { };
+        const rawResponseBody = { "key" : "value" };
         
         server
             .mockEndpoint()

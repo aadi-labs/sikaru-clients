@@ -4,15 +4,11 @@ import typing
 
 import pydantic
 from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
-from .validation_error_loc_item import ValidationErrorLocItem
 
 
-class ValidationError(UniversalBaseModel):
-    ctx: typing.Optional[typing.Dict[str, typing.Any]] = None
-    input: typing.Optional[typing.Any] = None
-    loc: typing.List[ValidationErrorLocItem]
-    msg: str
-    type: str
+class DecisionUsage(UniversalBaseModel):
+    input_tokens: int
+    output_tokens: int
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

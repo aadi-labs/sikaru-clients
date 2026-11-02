@@ -21,7 +21,6 @@ from ..types.agent_import_model_capture_request import AgentImportModelCaptureRe
 from ..types.agent_import_runner_request import AgentImportRunnerRequest
 from ..types.agent_import_source_ref_request import AgentImportSourceRefRequest
 from ..types.error_response import ErrorResponse
-from ..types.http_validation_error import HttpValidationError
 from pydantic import ValidationError
 
 # this is used as the default value for optional parameters
@@ -104,9 +103,9 @@ class RawAgentImportsClient:
                 raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        HttpValidationError,
+                        typing.Any,
                         parse_obj_as(
-                            type_=HttpValidationError,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -236,9 +235,9 @@ class RawAgentImportsClient:
                 raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        HttpValidationError,
+                        typing.Any,
                         parse_obj_as(
-                            type_=HttpValidationError,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -331,9 +330,9 @@ class AsyncRawAgentImportsClient:
                 raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        HttpValidationError,
+                        typing.Any,
                         parse_obj_as(
-                            type_=HttpValidationError,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -465,9 +464,9 @@ class AsyncRawAgentImportsClient:
                 raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        HttpValidationError,
+                        typing.Any,
                         parse_obj_as(
-                            type_=HttpValidationError,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),

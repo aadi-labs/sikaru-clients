@@ -454,10 +454,42 @@ async fn managed_run_paused_for_funding_exits_five_and_says_how_to_resume() {
     assert_eq!(output.status.code(), Some(5), "{}", text(&output.stderr));
     let result: Value = serde_json::from_slice(&output.stdout).unwrap();
     assert_eq!(result["status"], "paused");
-    let next = result["next"].as_str().unwrap();
-    assert!(next.contains("sikaru agent runs resume --project-id p --run-id r1"), "{next}");
+    assert_eq!(
+        result["next"],
+        "Resolve the billing issue, then run: sikaru agent runs resume --project-id p --run-id r1"
+    );
     let cancels = server.received_requests().await.unwrap();
     assert!(!cancels.iter().any(|r| r.url.path().ends_with("/cancel")), "a paused run is kept");
+}
+
+#[cfg(unix)]
+#[tokio::test(flavor = "multi_thread", worker_threads = 2)]
+async fn managed_run_out_of_credits_names_the_top_up_before_resume() {
+    let server = managed_gateway("run.paused", "paused").await;
+    Mock::given(method("GET"))
+        .and(path("/v1/projects/p/runs/r1"))
+        .respond_with(ResponseTemplate::new(200).set_body_json(json!({"runId": "r1",
+            "status": "paused", "eventsUrl": "events", "harnessId": "support-bot",
+            "harnessVersionId": "hv_1", "pause": {"reason": "credits_exhausted",
+            "message": "No credits.", "resumable": true, "requires_action": true,
+            "topUp": {"operation": "credit_top_ups_create", "cli": "sikaru credits add",
+                "minUsd": "5.00", "maxUsd": "500.00"}}})))
+        .with_priority(1)
+        .mount(&server)
+        .await;
+
+    let (output, _home) = sikaru(
+        &server,
+        &["agent", "run", "support-bot", "deploy", "-p", "p"],
+    )
+    .await;
+
+    assert_eq!(output.status.code(), Some(5), "{}", text(&output.stderr));
+    let result: Value = serde_json::from_slice(&output.stdout).unwrap();
+    let next = result["next"].as_str().unwrap();
+    let add = next.find("sikaru credits add --amount 5.00 --project p").expect(next);
+    let resume = next.find("sikaru agent runs resume --project-id p --run-id r1").expect(next);
+    assert!(add < resume, "{next}");
 }
 
 #[cfg(unix)]

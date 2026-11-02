@@ -92,7 +92,7 @@ describe("ConversationsClient", () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         
-        const rawResponseBody = { };
+        const rawResponseBody = { "key" : "value" };
         
         server
             .mockEndpoint()
@@ -218,7 +218,7 @@ describe("ConversationsClient", () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         const rawRequestBody = { "content" : "content" , "deliveredAt" : "2024-01-15T09:30:00Z" , "messageId" : "x" , "position" : 1 , "role" : "user" };
-        const rawResponseBody = { };
+        const rawResponseBody = { "key" : "value" };
         
         server
             .mockEndpoint()

@@ -471,7 +471,7 @@
       },
       "response": {
         "status": 200,
-        "body": "{}",
+        "body": "{\n  \"key\": \"value\"\n}",
         "headers": {
           "Content-Type": "application/json"
         }
@@ -4206,6 +4206,71 @@
       }
     },
     {
+      "id": "1e470a91-4dab-4f09-83f6-e6bc7ca483c3",
+      "name": "Create Credit Top Up - default",
+      "request": {
+        "urlPathTemplate": "/v1/projects/{project_id}/credit-top-ups",
+        "method": "POST",
+        "pathParameters": {
+          "project_id": {
+            "equalTo": "project_id"
+          }
+        }
+      },
+      "response": {
+        "status": 201,
+        "body": "{\n  \"amountUsd\": \"amountUsd\",\n  \"expiresAt\": 1,\n  \"id\": \"id\",\n  \"payUrl\": \"payUrl\",\n  \"status\": \"offered\"\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "1e470a91-4dab-4f09-83f6-e6bc7ca483c3",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "359e29b2-ac00-4eb8-a7e6-8fe4cdd3d078",
+      "name": "Get Credit Top Up - default",
+      "request": {
+        "urlPathTemplate": "/v1/projects/{project_id}/credit-top-ups/{top_up_id}",
+        "method": "GET",
+        "pathParameters": {
+          "project_id": {
+            "equalTo": "project_id"
+          },
+          "top_up_id": {
+            "equalTo": "top_up_id"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"amountUsd\": \"amountUsd\",\n  \"expiresAt\": 1,\n  \"id\": \"id\",\n  \"payUrl\": \"payUrl\",\n  \"status\": \"offered\"\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "359e29b2-ac00-4eb8-a7e6-8fe4cdd3d078",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
       "id": "276f48c6-03e4-42b7-9a45-41a2a9408e47",
       "name": "List Datasets - default",
       "request": {
@@ -6370,7 +6435,7 @@
       },
       "response": {
         "status": 202,
-        "body": "{\n  \"compatibilityProfileId\": \"compatibilityProfileId\",\n  \"completedAt\": \"completedAt\",\n  \"connections\": [\n    {\n      \"display_name\": \"display_name\",\n      \"id\": \"id\",\n      \"kind\": \"kind\"\n    }\n  ],\n  \"contentVisible\": true,\n  \"costSummary\": {\n    \"key\": \"value\"\n  },\n  \"error\": {\n    \"code\": \"code\",\n    \"message\": \"message\",\n    \"recoverable\": true,\n    \"stage\": \"admission\"\n  },\n  \"eventsUrl\": \"eventsUrl\",\n  \"harnessId\": \"harnessId\",\n  \"harnessVersionId\": \"harnessVersionId\",\n  \"latencyMs\": 1.1,\n  \"measurementStatus\": \"available\",\n  \"pause\": {\n    \"message\": \"message\",\n    \"reason\": \"reason\",\n    \"requires_action\": true,\n    \"resumable\": true\n  },\n  \"personal\": true,\n  \"runId\": \"runId\",\n  \"status\": \"status\",\n  \"usageSummary\": {\n    \"key\": \"value\"\n  }\n}",
+        "body": "{\n  \"compatibilityProfileId\": \"compatibilityProfileId\",\n  \"completedAt\": \"completedAt\",\n  \"connections\": [\n    {\n      \"display_name\": \"display_name\",\n      \"id\": \"id\",\n      \"kind\": \"kind\"\n    }\n  ],\n  \"contentVisible\": true,\n  \"costSummary\": {\n    \"key\": \"value\"\n  },\n  \"error\": {\n    \"code\": \"code\",\n    \"message\": \"message\",\n    \"recoverable\": true,\n    \"stage\": \"admission\"\n  },\n  \"eventsUrl\": \"eventsUrl\",\n  \"harnessId\": \"harnessId\",\n  \"harnessVersionId\": \"harnessVersionId\",\n  \"latencyMs\": 1.1,\n  \"measurementStatus\": \"available\",\n  \"pause\": {\n    \"message\": \"message\",\n    \"reason\": \"reason\",\n    \"requires_action\": true,\n    \"resumable\": true,\n    \"topUp\": {\n      \"cli\": \"cli\",\n      \"maxUsd\": \"maxUsd\",\n      \"minUsd\": \"minUsd\",\n      \"operation\": \"operation\"\n    }\n  },\n  \"personal\": true,\n  \"runId\": \"runId\",\n  \"status\": \"status\",\n  \"usageSummary\": {\n    \"key\": \"value\"\n  }\n}",
         "headers": {
           "Content-Type": "application/json"
         }
@@ -6497,7 +6562,7 @@
       },
       "response": {
         "status": 200,
-        "body": "{\n  \"compatibilityProfileId\": \"compatibilityProfileId\",\n  \"completedAt\": \"completedAt\",\n  \"connections\": [\n    {\n      \"display_name\": \"display_name\",\n      \"id\": \"id\",\n      \"kind\": \"kind\"\n    }\n  ],\n  \"contentVisible\": true,\n  \"costSummary\": {\n    \"key\": \"value\"\n  },\n  \"error\": {\n    \"code\": \"code\",\n    \"message\": \"message\",\n    \"recoverable\": true,\n    \"stage\": \"admission\"\n  },\n  \"eventsUrl\": \"eventsUrl\",\n  \"harnessId\": \"harnessId\",\n  \"harnessVersionId\": \"harnessVersionId\",\n  \"latencyMs\": 1.1,\n  \"measurementStatus\": \"available\",\n  \"pause\": {\n    \"message\": \"message\",\n    \"reason\": \"reason\",\n    \"requires_action\": true,\n    \"resumable\": true\n  },\n  \"personal\": true,\n  \"runId\": \"runId\",\n  \"status\": \"status\",\n  \"usageSummary\": {\n    \"key\": \"value\"\n  }\n}",
+        "body": "{\n  \"compatibilityProfileId\": \"compatibilityProfileId\",\n  \"completedAt\": \"completedAt\",\n  \"connections\": [\n    {\n      \"display_name\": \"display_name\",\n      \"id\": \"id\",\n      \"kind\": \"kind\"\n    }\n  ],\n  \"contentVisible\": true,\n  \"costSummary\": {\n    \"key\": \"value\"\n  },\n  \"error\": {\n    \"code\": \"code\",\n    \"message\": \"message\",\n    \"recoverable\": true,\n    \"stage\": \"admission\"\n  },\n  \"eventsUrl\": \"eventsUrl\",\n  \"harnessId\": \"harnessId\",\n  \"harnessVersionId\": \"harnessVersionId\",\n  \"latencyMs\": 1.1,\n  \"measurementStatus\": \"available\",\n  \"pause\": {\n    \"message\": \"message\",\n    \"reason\": \"reason\",\n    \"requires_action\": true,\n    \"resumable\": true,\n    \"topUp\": {\n      \"cli\": \"cli\",\n      \"maxUsd\": \"maxUsd\",\n      \"minUsd\": \"minUsd\",\n      \"operation\": \"operation\"\n    }\n  },\n  \"personal\": true,\n  \"runId\": \"runId\",\n  \"status\": \"status\",\n  \"usageSummary\": {\n    \"key\": \"value\"\n  }\n}",
         "headers": {
           "Content-Type": "application/json"
         }
@@ -6667,7 +6732,7 @@
       },
       "response": {
         "status": 202,
-        "body": "{\n  \"compatibilityProfileId\": \"compatibilityProfileId\",\n  \"completedAt\": \"completedAt\",\n  \"connections\": [\n    {\n      \"display_name\": \"display_name\",\n      \"id\": \"id\",\n      \"kind\": \"kind\"\n    }\n  ],\n  \"contentVisible\": true,\n  \"costSummary\": {\n    \"key\": \"value\"\n  },\n  \"error\": {\n    \"code\": \"code\",\n    \"message\": \"message\",\n    \"recoverable\": true,\n    \"stage\": \"admission\"\n  },\n  \"eventsUrl\": \"eventsUrl\",\n  \"harnessId\": \"harnessId\",\n  \"harnessVersionId\": \"harnessVersionId\",\n  \"latencyMs\": 1.1,\n  \"measurementStatus\": \"available\",\n  \"pause\": {\n    \"message\": \"message\",\n    \"reason\": \"reason\",\n    \"requires_action\": true,\n    \"resumable\": true\n  },\n  \"personal\": true,\n  \"runId\": \"runId\",\n  \"status\": \"status\",\n  \"usageSummary\": {\n    \"key\": \"value\"\n  }\n}",
+        "body": "{\n  \"compatibilityProfileId\": \"compatibilityProfileId\",\n  \"completedAt\": \"completedAt\",\n  \"connections\": [\n    {\n      \"display_name\": \"display_name\",\n      \"id\": \"id\",\n      \"kind\": \"kind\"\n    }\n  ],\n  \"contentVisible\": true,\n  \"costSummary\": {\n    \"key\": \"value\"\n  },\n  \"error\": {\n    \"code\": \"code\",\n    \"message\": \"message\",\n    \"recoverable\": true,\n    \"stage\": \"admission\"\n  },\n  \"eventsUrl\": \"eventsUrl\",\n  \"harnessId\": \"harnessId\",\n  \"harnessVersionId\": \"harnessVersionId\",\n  \"latencyMs\": 1.1,\n  \"measurementStatus\": \"available\",\n  \"pause\": {\n    \"message\": \"message\",\n    \"reason\": \"reason\",\n    \"requires_action\": true,\n    \"resumable\": true,\n    \"topUp\": {\n      \"cli\": \"cli\",\n      \"maxUsd\": \"maxUsd\",\n      \"minUsd\": \"minUsd\",\n      \"operation\": \"operation\"\n    }\n  },\n  \"personal\": true,\n  \"runId\": \"runId\",\n  \"status\": \"status\",\n  \"usageSummary\": {\n    \"key\": \"value\"\n  }\n}",
         "headers": {
           "Content-Type": "application/json"
         }
@@ -9578,6 +9643,32 @@
       }
     },
     {
+      "id": "d10887ee-1b7c-4572-87df-1bb6aa1f7f82",
+      "name": "Answer questions about a state - default",
+      "request": {
+        "urlPathTemplate": "/v1/systemone",
+        "method": "POST"
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"answers\": {\n    \"key\": {\n      \"choice\": \"choice\",\n      \"confidence\": 1.1,\n      \"probabilities\": {\n        \"key\": 1.1\n      },\n      \"type\": \"choice\"\n    }\n  },\n  \"model\": \"model\",\n  \"usage\": {\n    \"input_tokens\": 1,\n    \"output_tokens\": 1\n  }\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "d10887ee-1b7c-4572-87df-1bb6aa1f7f82",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
       "id": "8649a25e-5283-43cc-b1ae-af88ef34d35e",
       "name": "Stream Openinference Spans - default",
       "request": {
@@ -9662,6 +9753,6 @@
     }
   ],
   "meta": {
-    "total": 289
+    "total": 292
   }
 }

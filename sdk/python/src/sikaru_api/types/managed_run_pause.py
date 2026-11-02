@@ -3,7 +3,10 @@
 import typing
 
 import pydantic
+import typing_extensions
 from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
+from ..core.serialization import FieldMetadata
+from .top_up_hint import TopUpHint
 
 
 class ManagedRunPause(UniversalBaseModel):
@@ -11,6 +14,9 @@ class ManagedRunPause(UniversalBaseModel):
     reason: str
     requires_action: bool
     resumable: bool
+    top_up: typing_extensions.Annotated[
+        typing.Optional[TopUpHint], FieldMetadata(alias="topUp"), pydantic.Field(alias="topUp")
+    ] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

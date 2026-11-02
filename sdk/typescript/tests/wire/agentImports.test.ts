@@ -84,7 +84,7 @@ describe("AgentImportsClient", () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         
-        const rawResponseBody = { };
+        const rawResponseBody = { "key" : "value" };
         
         server
             .mockEndpoint()
@@ -208,7 +208,7 @@ describe("AgentImportsClient", () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         const rawRequestBody = { "improve" : { "mode" : "mode" , "objective" : "objective" , "promotionGate" : "promotionGate" } , "name" : "name" };
-        const rawResponseBody = { };
+        const rawResponseBody = { "key" : "value" };
         
         server
             .mockEndpoint()

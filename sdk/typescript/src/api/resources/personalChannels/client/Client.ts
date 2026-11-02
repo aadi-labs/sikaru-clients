@@ -64,7 +64,7 @@ export class PersonalChannelsClient {
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
-                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as Sikaru.HttpValidationError, _response.rawResponse);
+                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as unknown, _response.rawResponse);
                 default: throw new errors.SikaruError({
                     statusCode: _response.error.statusCode,
                     body: _response.error.body,
@@ -116,7 +116,7 @@ export class PersonalChannelsClient {
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
-                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as Sikaru.HttpValidationError, _response.rawResponse);
+                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as unknown, _response.rawResponse);
                 default: throw new errors.SikaruError({
                     statusCode: _response.error.statusCode,
                     body: _response.error.body,
@@ -175,7 +175,7 @@ export class PersonalChannelsClient {
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
-                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as Sikaru.HttpValidationError, _response.rawResponse);
+                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as unknown, _response.rawResponse);
                 default: throw new errors.SikaruError({
                     statusCode: _response.error.statusCode,
                     body: _response.error.body,
@@ -234,7 +234,7 @@ export class PersonalChannelsClient {
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
-                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as Sikaru.HttpValidationError, _response.rawResponse);
+                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as unknown, _response.rawResponse);
                 default: throw new errors.SikaruError({
                     statusCode: _response.error.statusCode,
                     body: _response.error.body,
@@ -285,7 +285,7 @@ export class PersonalChannelsClient {
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
-                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as Sikaru.HttpValidationError, _response.rawResponse);
+                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as unknown, _response.rawResponse);
                 default: throw new errors.SikaruError({
                     statusCode: _response.error.statusCode,
                     body: _response.error.body,
@@ -329,7 +329,7 @@ export class PersonalChannelsClient {
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
-                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as Sikaru.HttpValidationError, _response.rawResponse);
+                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as unknown, _response.rawResponse);
                 default: throw new errors.SikaruError({
                     statusCode: _response.error.statusCode,
                     body: _response.error.body,
@@ -389,7 +389,7 @@ export class PersonalChannelsClient {
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
-                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as Sikaru.HttpValidationError, _response.rawResponse);
+                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as unknown, _response.rawResponse);
                 default: throw new errors.SikaruError({
                     statusCode: _response.error.statusCode,
                     body: _response.error.body,
@@ -440,7 +440,7 @@ export class PersonalChannelsClient {
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
-                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as Sikaru.HttpValidationError, _response.rawResponse);
+                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as unknown, _response.rawResponse);
                 default: throw new errors.SikaruError({
                     statusCode: _response.error.statusCode,
                     body: _response.error.body,
@@ -497,7 +497,7 @@ export class PersonalChannelsClient {
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
-                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as Sikaru.HttpValidationError, _response.rawResponse);
+                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as unknown, _response.rawResponse);
                 default: throw new errors.SikaruError({
                     statusCode: _response.error.statusCode,
                     body: _response.error.body,
@@ -548,7 +548,7 @@ export class PersonalChannelsClient {
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
-                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as Sikaru.HttpValidationError, _response.rawResponse);
+                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as unknown, _response.rawResponse);
                 default: throw new errors.SikaruError({
                     statusCode: _response.error.statusCode,
                     body: _response.error.body,

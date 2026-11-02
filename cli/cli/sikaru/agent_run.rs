@@ -183,11 +183,26 @@ fn paused(project: &str, run: &str, event: &RunEvent, result: &mut Value) {
     result["pause"] = if pause.is_object() {
         pause
     } else {
-        json!({"reason": event.payload.get("reason"), "requires_action": true})
+        let mut fallback = json!({"reason": event.payload.get("reason"), "requires_action": true});
+        if let Some(hint) = event.payload.get("topUp") {
+            fallback["topUp"] = hint.clone();
+        }
+        fallback
     };
-    result["next"] = json!(format!(
-        "Resolve the billing issue, then run: sikaru agent runs resume --project-id {project} --run-id {run}"
-    ));
+    let resume = format!("sikaru agent runs resume --project-id {project} --run-id {run}");
+    result["next"] = json!(match top_up(&result["pause"]) {
+        Some(add) => format!("Add credits with: {add} --project {project}, pay its URL with an agent wallet, then run: {resume}"),
+        None => format!("Resolve the billing issue, then run: {resume}"),
+    });
+}
+
+/// The server's top-up hint for an exhausted-credits pause, as the command that creates an offer.
+fn top_up(pause: &Value) -> Option<String> {
+    let hint = &pause["topUp"];
+    match (pause["reason"].as_str(), hint["cli"].as_str(), hint["minUsd"].as_str()) {
+        (Some("credits_exhausted"), Some(cli), Some(min)) => Some(format!("{cli} --amount {min}")),
+        _ => None,
+    }
 }
 
 fn append_turn(client: &ApiClient, project: &str, session: &str, text: &str) -> Result<String> {

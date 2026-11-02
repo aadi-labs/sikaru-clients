@@ -77,7 +77,7 @@ export class ExecutionSessionsClient {
                 case 401: throw new Sikaru.UnauthorizedError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
                 case 403: throw new Sikaru.ForbiddenError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
                 case 404: throw new Sikaru.NotFoundError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
-                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as Sikaru.HttpValidationError, _response.rawResponse);
+                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as unknown, _response.rawResponse);
                 case 503: throw new Sikaru.ServiceUnavailableError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
                 default: throw new errors.SikaruError({
                     statusCode: _response.error.statusCode,
@@ -135,7 +135,7 @@ export class ExecutionSessionsClient {
                 case 401: throw new Sikaru.UnauthorizedError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
                 case 403: throw new Sikaru.ForbiddenError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
                 case 404: throw new Sikaru.NotFoundError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
-                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as Sikaru.HttpValidationError, _response.rawResponse);
+                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as unknown, _response.rawResponse);
                 case 503: throw new Sikaru.ServiceUnavailableError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
                 default: throw new errors.SikaruError({
                     statusCode: _response.error.statusCode,
@@ -202,7 +202,7 @@ export class ExecutionSessionsClient {
                 case 403: throw new Sikaru.ForbiddenError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
                 case 404: throw new Sikaru.NotFoundError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
                 case 409: throw new Sikaru.ConflictError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
-                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as Sikaru.HttpValidationError, _response.rawResponse);
+                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as unknown, _response.rawResponse);
                 case 503: throw new Sikaru.ServiceUnavailableError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
                 default: throw new errors.SikaruError({
                     statusCode: _response.error.statusCode,
@@ -260,7 +260,7 @@ export class ExecutionSessionsClient {
                 case 401: throw new Sikaru.UnauthorizedError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
                 case 403: throw new Sikaru.ForbiddenError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
                 case 404: throw new Sikaru.NotFoundError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
-                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as Sikaru.HttpValidationError, _response.rawResponse);
+                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as unknown, _response.rawResponse);
                 case 503: throw new Sikaru.ServiceUnavailableError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
                 default: throw new errors.SikaruError({
                     statusCode: _response.error.statusCode,
@@ -329,7 +329,7 @@ export class ExecutionSessionsClient {
                 case 403: throw new Sikaru.ForbiddenError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
                 case 404: throw new Sikaru.NotFoundError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
                 case 409: throw new Sikaru.ConflictError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
-                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as Sikaru.HttpValidationError, _response.rawResponse);
+                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as unknown, _response.rawResponse);
                 case 503: throw new Sikaru.ServiceUnavailableError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
                 default: throw new errors.SikaruError({
                     statusCode: _response.error.statusCode,
@@ -388,7 +388,7 @@ export class ExecutionSessionsClient {
                 case 401: throw new Sikaru.UnauthorizedError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
                 case 403: throw new Sikaru.ForbiddenError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
                 case 404: throw new Sikaru.NotFoundError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
-                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as Sikaru.HttpValidationError, _response.rawResponse);
+                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as unknown, _response.rawResponse);
                 case 503: throw new Sikaru.ServiceUnavailableError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
                 default: throw new errors.SikaruError({
                     statusCode: _response.error.statusCode,
@@ -440,7 +440,7 @@ export class ExecutionSessionsClient {
                 case 401: throw new Sikaru.UnauthorizedError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
                 case 403: throw new Sikaru.ForbiddenError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
                 case 404: throw new Sikaru.NotFoundError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
-                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as Sikaru.HttpValidationError, _response.rawResponse);
+                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as unknown, _response.rawResponse);
                 case 503: throw new Sikaru.ServiceUnavailableError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
                 default: throw new errors.SikaruError({
                     statusCode: _response.error.statusCode,
@@ -498,7 +498,7 @@ export class ExecutionSessionsClient {
                 case 401: throw new Sikaru.UnauthorizedError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
                 case 403: throw new Sikaru.ForbiddenError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
                 case 404: throw new Sikaru.NotFoundError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
-                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as Sikaru.HttpValidationError, _response.rawResponse);
+                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as unknown, _response.rawResponse);
                 case 503: throw new Sikaru.ServiceUnavailableError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
                 default: throw new errors.SikaruError({
                     statusCode: _response.error.statusCode,
@@ -555,7 +555,7 @@ export class ExecutionSessionsClient {
                 case 401: throw new Sikaru.UnauthorizedError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
                 case 403: throw new Sikaru.ForbiddenError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
                 case 404: throw new Sikaru.NotFoundError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
-                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as Sikaru.HttpValidationError, _response.rawResponse);
+                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as unknown, _response.rawResponse);
                 default: throw new errors.SikaruError({
                     statusCode: _response.error.statusCode,
                     body: _response.error.body,
@@ -626,7 +626,7 @@ export class ExecutionSessionsClient {
                 case 403: throw new Sikaru.ForbiddenError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
                 case 404: throw new Sikaru.NotFoundError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
                 case 409: throw new Sikaru.ConflictError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
-                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as Sikaru.HttpValidationError, _response.rawResponse);
+                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as unknown, _response.rawResponse);
                 case 429: throw new Sikaru.TooManyRequestsError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
                 case 503: throw new Sikaru.ServiceUnavailableError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
                 default: throw new errors.SikaruError({
@@ -691,7 +691,7 @@ export class ExecutionSessionsClient {
                 case 403: throw new Sikaru.ForbiddenError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
                 case 404: throw new Sikaru.NotFoundError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
                 case 409: throw new Sikaru.ConflictError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
-                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as Sikaru.HttpValidationError, _response.rawResponse);
+                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as unknown, _response.rawResponse);
                 case 503: throw new Sikaru.ServiceUnavailableError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
                 default: throw new errors.SikaruError({
                     statusCode: _response.error.statusCode,
@@ -755,7 +755,7 @@ export class ExecutionSessionsClient {
                 case 401: throw new Sikaru.UnauthorizedError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
                 case 403: throw new Sikaru.ForbiddenError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
                 case 404: throw new Sikaru.NotFoundError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
-                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as Sikaru.HttpValidationError, _response.rawResponse);
+                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as unknown, _response.rawResponse);
                 default: throw new errors.SikaruError({
                     statusCode: _response.error.statusCode,
                     body: _response.error.body,

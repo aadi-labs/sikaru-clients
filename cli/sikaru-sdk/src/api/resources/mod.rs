@@ -23,6 +23,7 @@
 //! - **Connections**
 //! - **ContextRegistry**
 //! - **Conversations**
+//! - **CreditTopUps**
 //! - **Datasets**
 //! - **Deployments**
 //! - **Environments**
@@ -63,6 +64,7 @@
 //! - **WorkflowRuns**
 //! - **Workflows**
 //! - **Responses**
+//! - **Decisions**
 //! - **TraceStreams**
 //! - **Chat**
 
@@ -87,7 +89,9 @@ pub mod compute_workspaces;
 pub mod connections;
 pub mod context_registry;
 pub mod conversations;
+pub mod credit_top_ups;
 pub mod datasets;
+pub mod decisions;
 pub mod deployments;
 pub mod end_users;
 pub mod environments;
@@ -154,6 +158,7 @@ pub struct ApiClient {
     pub connections: ConnectionsClient,
     pub context_registry: ContextRegistryClient,
     pub conversations: ConversationsClient,
+    pub credit_top_ups: CreditTopUpsClient,
     pub datasets: DatasetsClient,
     pub deployments: DeploymentsClient,
     pub environments: EnvironmentsClient,
@@ -194,6 +199,7 @@ pub struct ApiClient {
     pub workflow_runs: WorkflowRunsClient,
     pub workflows: WorkflowsClient,
     pub responses: ResponsesClient,
+    pub decisions: DecisionsClient,
     pub trace_streams: TraceStreamsClient,
     pub chat: ChatClient,
 }
@@ -223,6 +229,7 @@ impl ApiClient {
             connections: ConnectionsClient::new(config.clone())?,
             context_registry: ContextRegistryClient::new(config.clone())?,
             conversations: ConversationsClient::new(config.clone())?,
+            credit_top_ups: CreditTopUpsClient::new(config.clone())?,
             datasets: DatasetsClient::new(config.clone())?,
             deployments: DeploymentsClient::new(config.clone())?,
             environments: EnvironmentsClient::new(config.clone())?,
@@ -263,6 +270,7 @@ impl ApiClient {
             workflow_runs: WorkflowRunsClient::new(config.clone())?,
             workflows: WorkflowsClient::new(config.clone())?,
             responses: ResponsesClient::new(config.clone())?,
+            decisions: DecisionsClient::new(config.clone())?,
             trace_streams: TraceStreamsClient::new(config.clone())?,
             chat: ChatClient::new(config.clone())?,
         })
@@ -288,7 +296,9 @@ pub use compute_workspaces::ComputeWorkspacesClient;
 pub use connections::ConnectionsClient;
 pub use context_registry::ContextRegistryClient;
 pub use conversations::ConversationsClient;
+pub use credit_top_ups::CreditTopUpsClient;
 pub use datasets::DatasetsClient;
+pub use decisions::DecisionsClient;
 pub use deployments::DeploymentsClient;
 pub use end_users::EndUsersClient;
 pub use environments::EnvironmentsClient;

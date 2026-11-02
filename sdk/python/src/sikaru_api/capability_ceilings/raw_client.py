@@ -17,7 +17,6 @@ from ..errors.unprocessable_entity_error import UnprocessableEntityError
 from ..types.capability_ceilings_disallowed_tools_item import CapabilityCeilingsDisallowedToolsItem
 from ..types.capability_ceilings_view import CapabilityCeilingsView
 from ..types.error_response import ErrorResponse
-from ..types.http_validation_error import HttpValidationError
 from pydantic import ValidationError
 
 # this is used as the default value for optional parameters
@@ -100,9 +99,9 @@ class RawCapabilityCeilingsClient:
                 raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        HttpValidationError,
+                        typing.Any,
                         parse_obj_as(
-                            type_=HttpValidationError,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -214,9 +213,9 @@ class RawCapabilityCeilingsClient:
                 raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        HttpValidationError,
+                        typing.Any,
                         parse_obj_as(
-                            type_=HttpValidationError,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -309,9 +308,9 @@ class AsyncRawCapabilityCeilingsClient:
                 raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        HttpValidationError,
+                        typing.Any,
                         parse_obj_as(
-                            type_=HttpValidationError,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -425,9 +424,9 @@ class AsyncRawCapabilityCeilingsClient:
                 raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        HttpValidationError,
+                        typing.Any,
                         parse_obj_as(
-                            type_=HttpValidationError,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),

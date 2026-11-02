@@ -4,11 +4,18 @@ import typing
 
 import pydantic
 from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
-from .validation_error import ValidationError
+from .decision_answers_value import DecisionAnswersValue
+from .decision_usage import DecisionUsage
 
 
-class HttpValidationError(UniversalBaseModel):
-    detail: typing.Optional[typing.List[ValidationError]] = None
+class Decision(UniversalBaseModel):
+    """
+    Answers to the requested questions. A question the model could not answer is absent.
+    """
+
+    answers: typing.Dict[str, DecisionAnswersValue]
+    model: str
+    usage: DecisionUsage
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

@@ -2,12 +2,9 @@
 
 import * as core from "../../core/index.js";
 import * as errors from "../../errors/index.js";
-import * as Sikaru from "../index.js";
 
 export class UnprocessableEntityError extends errors.SikaruError {
-    declare public readonly body: Sikaru.HttpValidationError;
-
-    constructor(body: Sikaru.HttpValidationError, rawResponse?: core.RawResponse) {
+    constructor(body?: unknown, rawResponse?: core.RawResponse) {
         super({
             message: "UnprocessableEntityError",
             statusCode: 422,

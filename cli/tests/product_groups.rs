@@ -1,13 +1,21 @@
 use std::collections::BTreeSet;
 use std::process::Command;
 
-// The top level is product-shaped: five products plus account utilities. Every
+// The top level is product-shaped: six products plus account utilities. Every
 // generated API group is nested, hidden, under its product and still dispatches.
-const PRODUCTS: [&str; 5] = ["inference", "agent", "eval", "traces", "environment"];
-const UTILITIES: [&str; 6] = [
+const PRODUCTS: [&str; 6] = [
+    "inference",
+    "decision",
+    "agent",
+    "eval",
+    "traces",
+    "environment",
+];
+const UTILITIES: [&str; 7] = [
     "login",
     "logout",
     "config",
+    "credits",
     "doctor",
     "completion",
     "generate-skills",
@@ -56,6 +64,7 @@ fn top_level_lists_only_products_and_account_utilities() {
         "unexpected top-level commands {unexpected:?}"
     );
     assert!(!listed.contains("auth"), "auth is visible\n{top}");
+    assert!(!listed.contains("credit-top-ups"), "credit-top-ups is visible\n{top}");
     assert!(!top.contains("auth login"), "{top}");
     assert!(!top.contains("Operations on"), "{top}");
     let description = top.split("Commands:").next().unwrap();
@@ -97,6 +106,7 @@ fn removed_exec_chat_and_compute_are_unknown_commands() {
 fn hidden_operations_still_dispatch() {
     assert!(help(&["agent", "runs", "stream_events", "--help"]).contains("--run-id"));
     help(&["auth", "--help"]);
+    help(&["credit-top-ups", "create", "--help"]);
 }
 
 #[test]

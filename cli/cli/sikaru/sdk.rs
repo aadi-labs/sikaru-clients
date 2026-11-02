@@ -83,6 +83,7 @@ pub fn client(ctx: &AppContext) -> sikaru_sdk::api::ApiClient {
         connections: sikaru_sdk::api::ConnectionsClient { http_client: http_client.clone() },
         context_registry: sikaru_sdk::api::ContextRegistryClient { http_client: http_client.clone() },
         conversations: sikaru_sdk::api::ConversationsClient { http_client: http_client.clone() },
+        credit_top_ups: sikaru_sdk::api::CreditTopUpsClient { http_client: http_client.clone() },
         datasets: sikaru_sdk::api::DatasetsClient { http_client: http_client.clone() },
         deployments: sikaru_sdk::api::DeploymentsClient { http_client: http_client.clone() },
         environments: sikaru_sdk::api::EnvironmentsClient { http_client: http_client.clone() },
@@ -123,6 +124,7 @@ pub fn client(ctx: &AppContext) -> sikaru_sdk::api::ApiClient {
         workflow_runs: sikaru_sdk::api::WorkflowRunsClient { http_client: http_client.clone() },
         workflows: sikaru_sdk::api::WorkflowsClient { http_client: http_client.clone() },
         responses: sikaru_sdk::api::ResponsesClient { http_client: http_client.clone() },
+        decisions: sikaru_sdk::api::DecisionsClient { http_client: http_client.clone() },
         trace_streams: sikaru_sdk::api::TraceStreamsClient { http_client: http_client.clone() },
         chat: sikaru_sdk::api::ChatClient {
             http_client: http_client.clone(),

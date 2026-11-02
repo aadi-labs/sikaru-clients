@@ -7964,6 +7964,151 @@ await client.conversations.recordMessage("project_id", "conversation_id", {
 </dl>
 </details>
 
+## CreditTopUps
+<details><summary><code>client.creditTopUps.<a href="/src/api/resources/creditTopUps/client/Client.ts">create</a>(project_id, { ...params }) -> Sikaru.CreditTopUp</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Offer a credit top-up for this project's organization; an agent pays `payUrl` from its own wallet.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.creditTopUps.create("project_id", {
+    amountUsd: "amountUsd"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Sikaru.TopUpInput` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `CreditTopUpsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.creditTopUps.<a href="/src/api/resources/creditTopUps/client/Client.ts">get</a>(project_id, top_up_id) -> Sikaru.CreditTopUp</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Read a top-up offer's status.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.creditTopUps.get("project_id", "top_up_id");
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**top_up_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `CreditTopUpsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## Datasets
 <details><summary><code>client.datasets.<a href="/src/api/resources/datasets/client/Client.ts">listDatasets</a>(project_id, { ...params }) -> Sikaru.DatasetList</code></summary>
 <dl>
@@ -18361,6 +18506,63 @@ await client.responses.create({
 <dd>
 
 **requestOptions:** `ResponsesClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## Decisions
+<details><summary><code>client.decisions.<a href="/src/api/resources/decisions/client/Client.ts">create</a>({ ...params }) -> Sikaru.Decision</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.decisions.create({
+    questions: {
+        "key": {
+            "key": "value"
+        }
+    },
+    state: "state"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Sikaru.DecisionCreateParams` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `DecisionsClient.RequestOptions` 
     
 </dd>
 </dl>

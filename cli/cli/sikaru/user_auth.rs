@@ -7,7 +7,8 @@ use fern_cli_sdk::auth::{
     provider::{AuthProvider, DynAuthProvider, EndpointAuthMetadata},
 };
 use fern_cli_sdk::{app::CliApp, error::CliError};
-use std::sync::Arc;
+use std::io::IsTerminal;
+use std::sync::{Arc, OnceLock};
 
 const SCHEME: &str = "BearerAuth";
 const TOKEN: &str = "https://api.workos.com/user_management/authenticate";
@@ -153,6 +154,11 @@ impl AuthProvider for UserAuth {
                 .flatten()
                 .is_some()
     }
+    /// Asked just before a request is sent, so signing in here never runs for help, schemas
+    /// or dry runs.
+    fn has_credentials_for(&self, _endpoint: &EndpointAuthMetadata) -> bool {
+        self.has_credentials() || sign_in_at_terminal() && self.has_credentials()
+    }
     fn apply(
         &self,
         request: reqwest::RequestBuilder,
@@ -184,6 +190,54 @@ impl AuthProvider for UserAuth {
     fn credential_hints(&self) -> Vec<String> {
         vec!["SIKARU_API_KEY or sikaru login".into()]
     }
+}
+
+/// Native commands send their own requests, so they ask before sending: an API key or a
+/// stored sign-in, else the browser sign-in at a terminal, else a clear error.
+pub fn ensure_signed_in() -> Result<(), CliError> {
+    let signed_in = || {
+        UserAuth {
+            cli_name: CLI.into(),
+            flow: None,
+        }
+        .has_credentials()
+    };
+    if signed_in() || sign_in_at_terminal() && signed_in() {
+        return Ok(());
+    }
+    Err(CliError::Auth(
+        "Not signed in. Run `sikaru login`, or set SIKARU_API_KEY.".into(),
+    ))
+}
+
+/// Signed out at a terminal, the first authenticated request starts the browser sign-in,
+/// at most once per command. Without a terminal the request fails with the usual hint.
+fn sign_in_at_terminal() -> bool {
+    static SIGNED_IN: OnceLock<bool> = OnceLock::new();
+    *SIGNED_IN.get_or_init(|| {
+        if !(std::io::stdin().is_terminal() && std::io::stderr().is_terminal()) {
+            return false;
+        }
+        eprintln!("You are not signed in to Sikaru. Starting sign-in...");
+        match login(false) {
+            Ok(()) => {
+                project_hint();
+                true
+            }
+            Err(error) => {
+                eprintln!("Sign-in failed: {error}");
+                false
+            }
+        }
+    })
+}
+
+/// Signed-in model calls bill a project, so point at the setting until one is saved.
+pub fn project_hint() {
+    if std::env::var("SIKARU_PROJECT").is_ok_and(|project| !project.is_empty()) {
+        return;
+    }
+    eprintln!("Choose a project for this sign-in: sikaru config set project PROJECT");
 }
 
 #[cfg(test)]

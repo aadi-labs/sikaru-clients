@@ -112,7 +112,7 @@ describe("ToolProvidersClient", () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         const rawRequestBody = { "broker_endpoint_ref" : "broker_endpoint_ref" , "capability_prefix" : "capability_prefix" , "display_name" : "display_name" , "provider_type" : "provider_type" , "tool_catalog_ref" : "tool_catalog_ref" };
-        const rawResponseBody = { };
+        const rawResponseBody = { "key" : "value" };
         
         server
             .mockEndpoint()
@@ -239,7 +239,7 @@ describe("ToolProvidersClient", () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         const rawRequestBody = { "capability_refs" : [ "capability_refs" , "capability_refs" ] , "description" : "description" , "source" : { "kind" : "kind" } };
-        const rawResponseBody = { };
+        const rawResponseBody = { "key" : "value" };
         
         server
             .mockEndpoint()

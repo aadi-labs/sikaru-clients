@@ -168,7 +168,7 @@ describe("TraceStreamsClient", () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         const rawRequestBody = { "format" : "openinference.v1" , "metadata" : { "account_id" : "account_id" , "project_id" : "project_id" , "source" : "source" } };
-        const rawResponseBody = { };
+        const rawResponseBody = { "key" : "value" };
         
         server
             .mockEndpoint()

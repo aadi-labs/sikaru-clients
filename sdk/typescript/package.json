@@ -238,6 +238,17 @@
             },
             "default": "./dist/cjs/api/resources/conversations/exports.js"
         },
+        "./creditTopUps": {
+            "import": {
+                "types": "./dist/esm/api/resources/creditTopUps/exports.d.mts",
+                "default": "./dist/esm/api/resources/creditTopUps/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/api/resources/creditTopUps/exports.d.ts",
+                "default": "./dist/cjs/api/resources/creditTopUps/exports.js"
+            },
+            "default": "./dist/cjs/api/resources/creditTopUps/exports.js"
+        },
         "./datasets": {
             "import": {
                 "types": "./dist/esm/api/resources/datasets/exports.d.mts",
@@ -677,6 +688,17 @@
                 "default": "./dist/cjs/api/resources/responses/exports.js"
             },
             "default": "./dist/cjs/api/resources/responses/exports.js"
+        },
+        "./decisions": {
+            "import": {
+                "types": "./dist/esm/api/resources/decisions/exports.d.mts",
+                "default": "./dist/esm/api/resources/decisions/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/api/resources/decisions/exports.d.ts",
+                "default": "./dist/cjs/api/resources/decisions/exports.js"
+            },
+            "default": "./dist/cjs/api/resources/decisions/exports.js"
         },
         "./traceStreams": {
             "import": {

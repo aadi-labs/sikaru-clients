@@ -26,10 +26,16 @@ mod user_auth;
 #[path = "inference.rs"]
 mod inference;
 
+#[path = "decision.rs"]
+mod decision;
+
 #[path = "account.rs"]
 mod account;
 
-const DESCRIPTION: &str = "Sikaru: model inference, managed agents, evals, traces and environments. Run a product with --help to see its commands; every API operation stays callable under its product.";
+#[path = "credits.rs"]
+mod credits;
+
+const DESCRIPTION: &str = "Sikaru: model inference, decisions, managed agents, evals, traces and environments. Run a product with --help to see its commands; every API operation stays callable under its product.";
 
 pub fn register(app: CliApp) -> CliApp {
     account::apply_saved_project();
@@ -43,7 +49,7 @@ pub fn register(app: CliApp) -> CliApp {
     .fold(compute::install(user_auth::install(app)), |app, install| {
         install(app)
     });
-    let app = account::install(inference::install(app));
+    let app = credits::install(account::install(decision::install(inference::install(app))));
     hide_generated_groups(app.description(DESCRIPTION))
 }
 

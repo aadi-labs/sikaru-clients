@@ -23,7 +23,9 @@ Full command reference for `sikaru`.
 - [`sikaru connections`](#sikaru-connections)
 - [`sikaru context-registry`](#sikaru-context-registry)
 - [`sikaru conversations`](#sikaru-conversations)
+- [`sikaru credit-top-ups`](#sikaru-credit-top-ups)
 - [`sikaru datasets`](#sikaru-datasets)
+- [`sikaru decisions`](#sikaru-decisions)
 - [`sikaru deployments`](#sikaru-deployments)
 - [`sikaru end-users`](#sikaru-end-users)
 - [`sikaru environments`](#sikaru-environments)
@@ -1458,6 +1460,32 @@ Record Message
 
 ---
 
+### `sikaru credit-top-ups`
+
+#### `sikaru credit-top-ups create`
+
+Offer a credit top-up for this project's organization; an agent pays `payUrl` from its own wallet.
+
+`POST /v1/projects/{project_id}/credit-top-ups`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--project-id` | `string` | Yes |  |
+| `--json` | `JSON` | Yes | Request body as JSON (or use individual body-field flags) |
+
+#### `sikaru credit-top-ups get`
+
+Read a top-up offer's status.
+
+`GET /v1/projects/{project_id}/credit-top-ups/{top_up_id}`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--project-id` | `string` | Yes |  |
+| `--top-up-id` | `string` | Yes |  |
+
+---
+
 ### `sikaru datasets`
 
 #### `sikaru datasets capture-into-dataset`
@@ -1653,6 +1681,20 @@ Upload Examples
 |------|------|----------|-------------|
 | `--project-id` | `string` | Yes |  |
 | `--dataset-id` | `string` | Yes |  |
+| `--json` | `JSON` | Yes | Request body as JSON (or use individual body-field flags) |
+
+---
+
+### `sikaru decisions`
+
+#### `sikaru decisions create`
+
+Answer questions about a state
+
+`POST /v1/systemone`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
 | `--json` | `JSON` | Yes | Request body as JSON (or use individual body-field flags) |
 
 ---

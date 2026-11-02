@@ -10,7 +10,7 @@ describe("RunsClient", () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         const rawRequestBody = { "input" : { "key" : "value" } , "policy" : { "key" : "value" } , "product_context" : { "key" : "value" } , "tenant_id" : "tenant_id" , "user_id" : "user_id" };
-        const rawResponseBody = { "compatibilityProfileId" : "compatibilityProfileId" , "completedAt" : "completedAt" , "connections" : [ { "display_name" : "display_name" , "id" : "id" , "kind" : "kind" } ] , "contentVisible" : true , "costSummary" : { "key" : "value" } , "error" : { "code" : "code" , "message" : "message" , "recoverable" : true , "stage" : "admission" } , "eventsUrl" : "eventsUrl" , "harnessId" : "harnessId" , "harnessVersionId" : "harnessVersionId" , "latencyMs" : 1.1 , "measurementStatus" : "available" , "pause" : { "message" : "message" , "reason" : "reason" , "requires_action" : true , "resumable" : true } , "personal" : true , "runId" : "runId" , "status" : "status" , "usageSummary" : { "key" : "value" } };
+        const rawResponseBody = { "compatibilityProfileId" : "compatibilityProfileId" , "completedAt" : "completedAt" , "connections" : [ { "display_name" : "display_name" , "id" : "id" , "kind" : "kind" } ] , "contentVisible" : true , "costSummary" : { "key" : "value" } , "error" : { "code" : "code" , "message" : "message" , "recoverable" : true , "stage" : "admission" } , "eventsUrl" : "eventsUrl" , "harnessId" : "harnessId" , "harnessVersionId" : "harnessVersionId" , "latencyMs" : 1.1 , "measurementStatus" : "available" , "pause" : { "message" : "message" , "reason" : "reason" , "requires_action" : true , "resumable" : true , "topUp" : { "cli" : "cli" , "maxUsd" : "maxUsd" , "minUsd" : "minUsd" , "operation" : "operation" } } , "personal" : true , "runId" : "runId" , "status" : "status" , "usageSummary" : { "key" : "value" } };
         
         server
             .mockEndpoint()
@@ -228,7 +228,7 @@ describe("RunsClient", () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         const rawRequestBody = { "input" : { "input" : { "key" : "value" } } , "policy" : { "policy" : { "key" : "value" } } , "product_context" : { "product_context" : { "key" : "value" } } , "tenant_id" : "tenant_id" , "user_id" : "user_id" };
-        const rawResponseBody = { };
+        const rawResponseBody = { "key" : "value" };
         
         server
             .mockEndpoint()
@@ -473,7 +473,7 @@ describe("RunsClient", () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         const rawRequestBody = { "input" : "x" , "output" : "output" };
-        const rawResponseBody = { };
+        const rawResponseBody = { "key" : "value" };
         
         server
             .mockEndpoint()
@@ -595,7 +595,7 @@ describe("RunsClient", () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         const rawRequestBody = { };
-        const rawResponseBody = { };
+        const rawResponseBody = { "key" : "value" };
         
         server
             .mockEndpoint()
@@ -688,7 +688,7 @@ describe("RunsClient", () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         
-        const rawResponseBody = { };
+        const rawResponseBody = { "key" : "value" };
         
         server
             .mockEndpoint()
@@ -706,7 +706,7 @@ describe("RunsClient", () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         
-        const rawResponseBody = { "compatibilityProfileId" : "compatibilityProfileId" , "completedAt" : "completedAt" , "connections" : [ { "display_name" : "display_name" , "id" : "id" , "kind" : "kind" } ] , "contentVisible" : true , "costSummary" : { "key" : "value" } , "error" : { "code" : "code" , "message" : "message" , "recoverable" : true , "stage" : "admission" } , "eventsUrl" : "eventsUrl" , "harnessId" : "harnessId" , "harnessVersionId" : "harnessVersionId" , "latencyMs" : 1.1 , "measurementStatus" : "available" , "pause" : { "message" : "message" , "reason" : "reason" , "requires_action" : true , "resumable" : true } , "personal" : true , "runId" : "runId" , "status" : "status" , "usageSummary" : { "key" : "value" } };
+        const rawResponseBody = { "compatibilityProfileId" : "compatibilityProfileId" , "completedAt" : "completedAt" , "connections" : [ { "display_name" : "display_name" , "id" : "id" , "kind" : "kind" } ] , "contentVisible" : true , "costSummary" : { "key" : "value" } , "error" : { "code" : "code" , "message" : "message" , "recoverable" : true , "stage" : "admission" } , "eventsUrl" : "eventsUrl" , "harnessId" : "harnessId" , "harnessVersionId" : "harnessVersionId" , "latencyMs" : 1.1 , "measurementStatus" : "available" , "pause" : { "message" : "message" , "reason" : "reason" , "requires_action" : true , "resumable" : true , "topUp" : { "cli" : "cli" , "maxUsd" : "maxUsd" , "minUsd" : "minUsd" , "operation" : "operation" } } , "personal" : true , "runId" : "runId" , "status" : "status" , "usageSummary" : { "key" : "value" } };
         
         server
             .mockEndpoint()
@@ -780,7 +780,7 @@ describe("RunsClient", () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         
-        const rawResponseBody = { };
+        const rawResponseBody = { "key" : "value" };
         
         server
             .mockEndpoint()
@@ -872,7 +872,7 @@ describe("RunsClient", () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         
-        const rawResponseBody = { };
+        const rawResponseBody = { "key" : "value" };
         
         server
             .mockEndpoint()
@@ -964,7 +964,7 @@ describe("RunsClient", () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         
-        const rawResponseBody = { };
+        const rawResponseBody = { "key" : "value" };
         
         server
             .mockEndpoint()
@@ -1074,7 +1074,7 @@ describe("RunsClient", () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         
-        const rawResponseBody = { };
+        const rawResponseBody = { "key" : "value" };
         
         server
             .mockEndpoint()
@@ -1175,7 +1175,7 @@ describe("RunsClient", () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         
-        const rawResponseBody = { };
+        const rawResponseBody = { "key" : "value" };
         
         server
             .mockEndpoint()
@@ -1193,7 +1193,7 @@ describe("RunsClient", () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         const rawRequestBody = { };
-        const rawResponseBody = { "compatibilityProfileId" : "compatibilityProfileId" , "completedAt" : "completedAt" , "connections" : [ { "display_name" : "display_name" , "id" : "id" , "kind" : "kind" } ] , "contentVisible" : true , "costSummary" : { "key" : "value" } , "error" : { "code" : "code" , "message" : "message" , "recoverable" : true , "stage" : "admission" } , "eventsUrl" : "eventsUrl" , "harnessId" : "harnessId" , "harnessVersionId" : "harnessVersionId" , "latencyMs" : 1.1 , "measurementStatus" : "available" , "pause" : { "message" : "message" , "reason" : "reason" , "requires_action" : true , "resumable" : true } , "personal" : true , "runId" : "runId" , "status" : "status" , "usageSummary" : { "key" : "value" } };
+        const rawResponseBody = { "compatibilityProfileId" : "compatibilityProfileId" , "completedAt" : "completedAt" , "connections" : [ { "display_name" : "display_name" , "id" : "id" , "kind" : "kind" } ] , "contentVisible" : true , "costSummary" : { "key" : "value" } , "error" : { "code" : "code" , "message" : "message" , "recoverable" : true , "stage" : "admission" } , "eventsUrl" : "eventsUrl" , "harnessId" : "harnessId" , "harnessVersionId" : "harnessVersionId" , "latencyMs" : 1.1 , "measurementStatus" : "available" , "pause" : { "message" : "message" , "reason" : "reason" , "requires_action" : true , "resumable" : true , "topUp" : { "cli" : "cli" , "maxUsd" : "maxUsd" , "minUsd" : "minUsd" , "operation" : "operation" } } , "personal" : true , "runId" : "runId" , "status" : "status" , "usageSummary" : { "key" : "value" } };
         
         server
             .mockEndpoint()
@@ -1290,7 +1290,7 @@ describe("RunsClient", () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         const rawRequestBody = { };
-        const rawResponseBody = { };
+        const rawResponseBody = { "key" : "value" };
         
         server
             .mockEndpoint()
@@ -1401,7 +1401,7 @@ describe("RunsClient", () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         
-        const rawResponseBody = { };
+        const rawResponseBody = { "key" : "value" };
         
         server
             .mockEndpoint()
@@ -1547,7 +1547,7 @@ describe("RunsClient", () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         
-        const rawResponseBody = { };
+        const rawResponseBody = { "key" : "value" };
         
         server
             .mockEndpoint()
@@ -1713,7 +1713,7 @@ describe("RunsClient", () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         const rawRequestBody = { "decision" : "approved" , "idempotency_key" : "x" };
-        const rawResponseBody = { };
+        const rawResponseBody = { "key" : "value" };
         
         server
             .mockEndpoint()
@@ -1885,7 +1885,7 @@ describe("RunsClient", () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         const rawRequestBody = { "capability_name" : "capability_name" , "idempotency_key" : "idempotency_key" , "payload" : { "payload" : { "key" : "value" } } , "status" : "completed" , "tool_call_id" : "tool_call_id" , "tool_provider_id" : "tool_provider_id" };
-        const rawResponseBody = { };
+        const rawResponseBody = { "key" : "value" };
         
         server
             .mockEndpoint()
@@ -2007,7 +2007,7 @@ describe("RunsClient", () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         
-        const rawResponseBody = { };
+        const rawResponseBody = { "key" : "value" };
         
         server
             .mockEndpoint()
@@ -2135,7 +2135,7 @@ describe("RunsClient", () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         
-        const rawResponseBody = { };
+        const rawResponseBody = { "key" : "value" };
         
         server
             .mockEndpoint()
@@ -2257,7 +2257,7 @@ describe("RunsClient", () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         
-        const rawResponseBody = { };
+        const rawResponseBody = { "key" : "value" };
         
         server
             .mockEndpoint()

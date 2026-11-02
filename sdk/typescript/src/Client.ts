@@ -19,7 +19,9 @@ import { ComputeWorkspacesClient } from "./api/resources/computeWorkspaces/clien
 import { ConnectionsClient } from "./api/resources/connections/client/Client.js";
 import { ContextRegistryClient } from "./api/resources/contextRegistry/client/Client.js";
 import { ConversationsClient } from "./api/resources/conversations/client/Client.js";
+import { CreditTopUpsClient } from "./api/resources/creditTopUps/client/Client.js";
 import { DatasetsClient } from "./api/resources/datasets/client/Client.js";
+import { DecisionsClient } from "./api/resources/decisions/client/Client.js";
 import { DeploymentsClient } from "./api/resources/deployments/client/Client.js";
 import { EndUsersClient } from "./api/resources/endUsers/client/Client.js";
 import { EnvironmentsClient } from "./api/resources/environments/client/Client.js";
@@ -96,6 +98,7 @@ export class SikaruApi {
     protected _connections: ConnectionsClient | undefined;
     protected _contextRegistry: ContextRegistryClient | undefined;
     protected _conversations: ConversationsClient | undefined;
+    protected _creditTopUps: CreditTopUpsClient | undefined;
     protected _datasets: DatasetsClient | undefined;
     protected _deployments: DeploymentsClient | undefined;
     protected _environments: EnvironmentsClient | undefined;
@@ -136,6 +139,7 @@ export class SikaruApi {
     protected _workflowRuns: WorkflowRunsClient | undefined;
     protected _workflows: WorkflowsClient | undefined;
     protected _responses: ResponsesClient | undefined;
+    protected _decisions: DecisionsClient | undefined;
     protected _traceStreams: TraceStreamsClient | undefined;
     protected _chat: ChatClient | undefined;
 
@@ -222,6 +226,10 @@ export class SikaruApi {
 
     public get conversations(): ConversationsClient {
         return (this._conversations ??= new ConversationsClient(this._options));
+    }
+
+    public get creditTopUps(): CreditTopUpsClient {
+        return (this._creditTopUps ??= new CreditTopUpsClient(this._options));
     }
 
     public get datasets(): DatasetsClient {
@@ -382,6 +390,10 @@ export class SikaruApi {
 
     public get responses(): ResponsesClient {
         return (this._responses ??= new ResponsesClient(this._options));
+    }
+
+    public get decisions(): DecisionsClient {
+        return (this._decisions ??= new DecisionsClient(this._options));
     }
 
     public get traceStreams(): TraceStreamsClient {

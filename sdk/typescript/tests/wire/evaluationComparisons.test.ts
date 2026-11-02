@@ -84,7 +84,7 @@ describe("EvaluationComparisonsClient", () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         
-        const rawResponseBody = { };
+        const rawResponseBody = { "key" : "value" };
         
         server
             .mockEndpoint()
@@ -288,7 +288,7 @@ describe("EvaluationComparisonsClient", () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         const rawRequestBody = { "cases" : [ { "baseline" : { "accountId" : "x" , "conversationId" : "x" , "messageId" : "x" } , "candidate" : { "accountId" : "x" , "conversationId" : "x" , "messageId" : "x" } , "caseId" : "x" } , { "baseline" : { "accountId" : "x" , "conversationId" : "x" , "messageId" : "x" } , "candidate" : { "accountId" : "x" , "conversationId" : "x" , "messageId" : "x" } , "caseId" : "x" } ] , "evaluator" : "x" , "id" : "x" , "revision" : "x" , "rubric" : "x" };
-        const rawResponseBody = { };
+        const rawResponseBody = { "key" : "value" };
         
         server
             .mockEndpoint()
@@ -411,7 +411,7 @@ describe("EvaluationComparisonsClient", () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         
-        const rawResponseBody = { };
+        const rawResponseBody = { "key" : "value" };
         
         server
             .mockEndpoint()
@@ -503,7 +503,7 @@ describe("EvaluationComparisonsClient", () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         
-        const rawResponseBody = { };
+        const rawResponseBody = { "key" : "value" };
         
         server
             .mockEndpoint()

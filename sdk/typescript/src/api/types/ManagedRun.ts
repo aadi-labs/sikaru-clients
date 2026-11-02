@@ -35,5 +35,6 @@ export namespace ManagedRun {
         reason: string;
         requires_action: boolean;
         resumable: boolean;
+        topUp?: Sikaru.TopUpHint | undefined;
     }
 }

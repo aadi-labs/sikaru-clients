@@ -12,6 +12,9 @@ pub struct ManagedRunPause {
     pub requires_action: bool,
     #[serde(default)]
     pub resumable: bool,
+    #[serde(rename = "topUp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub top_up: Option<TopUpHint>,
 }
 
 impl ManagedRunPause {
@@ -27,6 +30,7 @@ pub struct ManagedRunPauseBuilder {
     reason: Option<String>,
     requires_action: Option<bool>,
     resumable: Option<bool>,
+    top_up: Option<TopUpHint>,
 }
 
 impl ManagedRunPauseBuilder {
@@ -50,6 +54,11 @@ impl ManagedRunPauseBuilder {
         self
     }
 
+    pub fn top_up(mut self, value: TopUpHint) -> Self {
+        self.top_up = Some(value);
+        self
+    }
+
     /// Consumes the builder and constructs a [`ManagedRunPause`].
     /// This method will fail if any of the following fields are not set:
     /// - [`message`](ManagedRunPauseBuilder::message)
@@ -62,6 +71,7 @@ impl ManagedRunPauseBuilder {
             reason: self.reason.ok_or_else(|| BuildError::missing_field("reason"))?,
             requires_action: self.requires_action.ok_or_else(|| BuildError::missing_field("requires_action"))?,
             resumable: self.resumable.ok_or_else(|| BuildError::missing_field("resumable"))?,
+            top_up: self.top_up,
         })
     }
 }

@@ -42,7 +42,7 @@ pub fn install(app: CliApp) -> CliApp {
     )
 }
 
-fn blocking<T>(future: impl std::future::Future<Output = T>) -> T {
+pub(super) fn blocking<T>(future: impl std::future::Future<Output = T>) -> T {
     tokio::task::block_in_place(|| tokio::runtime::Handle::current().block_on(future))
 }
 
@@ -118,7 +118,7 @@ fn models_command() -> Command {
         )
 }
 
-fn output_arg(formats: [&'static str; 2], default: &'static str) -> Arg {
+pub(super) fn output_arg(formats: [&'static str; 2], default: &'static str) -> Arg {
     Arg::new("output")
         .long("output")
         .short('o')
@@ -127,7 +127,7 @@ fn output_arg(formats: [&'static str; 2], default: &'static str) -> Arg {
         .help(format!("{}|{}", formats[0], formats[1]))
 }
 
-fn json_output(m: &ArgMatches) -> bool {
+pub(super) fn json_output(m: &ArgMatches) -> bool {
     m.get_one::<String>("output")
         .is_some_and(|output| output == "json")
 }
@@ -137,7 +137,7 @@ async fn chat(m: &ArgMatches, ctx: &AppContext) -> Result<(), CliError> {
     if stream && json_output(m) {
         return Err(invalid("--stream is not supported with --output json"));
     }
-    let message = message(m)?;
+    let message = argument_or_stdin(m, "message")?;
     let accept = if stream {
         "text/event-stream"
     } else {
@@ -161,16 +161,16 @@ async fn chat(m: &ArgMatches, ctx: &AppContext) -> Result<(), CliError> {
     Ok(())
 }
 
-/// The message argument, or piped stdin when it is omitted.
-fn message(m: &ArgMatches) -> Result<String, CliError> {
-    if let Some(message) = m.get_one::<String>("message") {
-        return Ok(message.clone());
+/// The named argument, or piped stdin when it is omitted.
+pub(super) fn argument_or_stdin(m: &ArgMatches, name: &str) -> Result<String, CliError> {
+    if let Some(value) = m.get_one::<String>(name) {
+        return Ok(value.clone());
     }
     let stdin = std::io::stdin();
     if stdin.is_terminal() {
-        return Err(invalid(
-            "no message provided (pass it as an argument or via stdin)",
-        ));
+        return Err(invalid(format!(
+            "no {name} provided (pass it as an argument or via stdin)"
+        )));
     }
     let mut text = String::new();
     stdin
@@ -179,7 +179,7 @@ fn message(m: &ArgMatches) -> Result<String, CliError> {
         .map_err(|error| invalid(format!("reading stdin failed: {error}")))?;
     let text = text.trim();
     if text.is_empty() {
-        return Err(invalid("empty message from stdin"));
+        return Err(invalid(format!("empty {name} from stdin")));
     }
     Ok(text.to_string())
 }
@@ -216,18 +216,29 @@ fn effort_value(effort: &str) -> Value {
         .unwrap_or_else(|_| Value::from(effort))
 }
 
-fn endpoint(ctx: &AppContext, method: Method, path: &str) -> reqwest::RequestBuilder {
-    reqwest::Client::new().request(
+/// A signed-in call names its project; a project API key already carries one.
+pub(super) fn endpoint(ctx: &AppContext, method: Method, path: &str) -> reqwest::RequestBuilder {
+    let request = reqwest::Client::new().request(
         method,
         sikaru_sdk::join_url(&ctx.effective_base_url(), path),
-    )
+    );
+    match signed_in_project() {
+        Some(project) => request.header("Sikaru-Project", project),
+        None => request,
+    }
+}
+
+fn signed_in_project() -> Option<String> {
+    let set = |name| std::env::var(name).ok().filter(|value| !value.is_empty());
+    set("SIKARU_API_KEY").map_or_else(|| set("SIKARU_PROJECT"), |_| None)
 }
 
 /// Sends through the CLI's own transport, so credentials, base URL and `--debug` apply.
-async fn execute(
+pub(super) async fn execute(
     ctx: &AppContext,
     request: reqwest::RequestBuilder,
 ) -> Result<reqwest::Response, CliError> {
+    super::user_auth::ensure_signed_in()?;
     let request = request
         .build()
         .map_err(|error| invalid(error.to_string()))?;
@@ -388,17 +399,17 @@ fn usage_line(usage: &Value) -> String {
     )
 }
 
-fn print_json(value: &Value) -> Result<(), CliError> {
+pub(super) fn print_json(value: &Value) -> Result<(), CliError> {
     let text = serde_json::to_string_pretty(value).map_err(|error| invalid(error.to_string()))?;
     println!("{text}");
     Ok(())
 }
 
-fn transport_error(error: reqwest::Error) -> CliError {
+pub(super) fn transport_error(error: reqwest::Error) -> CliError {
     CliError::Validation(format!("inference response failed: {error}"))
 }
 
-fn invalid(message: impl Into<String>) -> CliError {
+pub(super) fn invalid(message: impl Into<String>) -> CliError {
     CliError::Validation(message.into())
 }
 

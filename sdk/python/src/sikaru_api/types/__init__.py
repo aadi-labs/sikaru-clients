@@ -73,6 +73,7 @@ if typing.TYPE_CHECKING:
     from .check_result_status import CheckResultStatus
     from .check_source import CheckSource
     from .check_verification import CheckVerification
+    from .choice_answer import ChoiceAnswer
     from .claim_view import ClaimView
     from .complete_authorization import CompleteAuthorization
     from .completion import Completion
@@ -105,6 +106,8 @@ if typing.TYPE_CHECKING:
     from .credential_issued import CredentialIssued
     from .credential_renewed import CredentialRenewed
     from .credential_revoked import CredentialRevoked
+    from .credit_top_up import CreditTopUp
+    from .credit_top_up_status import CreditTopUpStatus
     from .dataset import Dataset
     from .dataset_check_failure import DatasetCheckFailure
     from .dataset_check_group import DatasetCheckGroup
@@ -122,6 +125,14 @@ if typing.TYPE_CHECKING:
     from .dataset_version import DatasetVersion
     from .dataset_version_list import DatasetVersionList
     from .dataset_version_response import DatasetVersionResponse
+    from .decision import Decision
+    from .decision_answers_value import (
+        DecisionAnswersValue,
+        DecisionAnswersValue_Choice,
+        DecisionAnswersValue_Noul,
+        DecisionAnswersValue_Score,
+    )
+    from .decision_usage import DecisionUsage
     from .definition_change import DefinitionChange
     from .definition_revision import DefinitionRevision
     from .definition_revision_result import DefinitionRevisionResult
@@ -178,7 +189,6 @@ if typing.TYPE_CHECKING:
     from .http_output import HttpOutput
     from .http_receipt import HttpReceipt
     from .http_receipt_status import HttpReceiptStatus
-    from .http_validation_error import HttpValidationError
     from .imported_document import ImportedDocument
     from .initial_http_channel import InitialHttpChannel
     from .initial_http_channel_transport import InitialHttpChannelTransport
@@ -214,6 +224,7 @@ if typing.TYPE_CHECKING:
     from .model_specs_endpoints_item import ModelSpecsEndpointsItem
     from .new_dataset import NewDataset
     from .new_dataset_purpose import NewDatasetPurpose
+    from .noul_answer import NoulAnswer
     from .o_auth_result import OAuthResult
     from .o_auth_result_status import OAuthResultStatus
     from .open_inference_span import OpenInferenceSpan
@@ -298,6 +309,7 @@ if typing.TYPE_CHECKING:
     from .schedule_record_session_mode import ScheduleRecordSessionMode
     from .schedule_response import ScheduleResponse
     from .scope_type import ScopeType
+    from .score_answer import ScoreAnswer
     from .session_spend import SessionSpend
     from .slack_link import SlackLink
     from .source_type import SourceType
@@ -312,6 +324,7 @@ if typing.TYPE_CHECKING:
     from .tool_provider_ref_request import ToolProviderRefRequest
     from .tool_skill_source_request import ToolSkillSourceRequest
     from .toolkit_category import ToolkitCategory
+    from .top_up_hint import TopUpHint
     from .trace_import_grouping_request import TraceImportGroupingRequest
     from .trace_import_options_request import TraceImportOptionsRequest
     from .trace_import_scope_request import TraceImportScopeRequest
@@ -335,8 +348,6 @@ if typing.TYPE_CHECKING:
     from .transcript_trajectory import TranscriptTrajectory
     from .transcript_usage import TranscriptUsage
     from .uncertain_operation import UncertainOperation
-    from .validation_error import ValidationError
-    from .validation_error_loc_item import ValidationErrorLocItem
     from .versioned_trace_import_action import VersionedTraceImportAction
     from .work_page import WorkPage
     from .work_page_execution_phase import WorkPageExecutionPhase
@@ -414,6 +425,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "CheckResultStatus": ".check_result_status",
     "CheckSource": ".check_source",
     "CheckVerification": ".check_verification",
+    "ChoiceAnswer": ".choice_answer",
     "ClaimView": ".claim_view",
     "CompleteAuthorization": ".complete_authorization",
     "Completion": ".completion",
@@ -446,6 +458,8 @@ _dynamic_imports: typing.Dict[str, str] = {
     "CredentialIssued": ".credential_issued",
     "CredentialRenewed": ".credential_renewed",
     "CredentialRevoked": ".credential_revoked",
+    "CreditTopUp": ".credit_top_up",
+    "CreditTopUpStatus": ".credit_top_up_status",
     "Dataset": ".dataset",
     "DatasetCheckFailure": ".dataset_check_failure",
     "DatasetCheckGroup": ".dataset_check_group",
@@ -463,6 +477,12 @@ _dynamic_imports: typing.Dict[str, str] = {
     "DatasetVersion": ".dataset_version",
     "DatasetVersionList": ".dataset_version_list",
     "DatasetVersionResponse": ".dataset_version_response",
+    "Decision": ".decision",
+    "DecisionAnswersValue": ".decision_answers_value",
+    "DecisionAnswersValue_Choice": ".decision_answers_value",
+    "DecisionAnswersValue_Noul": ".decision_answers_value",
+    "DecisionAnswersValue_Score": ".decision_answers_value",
+    "DecisionUsage": ".decision_usage",
     "DefinitionChange": ".definition_change",
     "DefinitionRevision": ".definition_revision",
     "DefinitionRevisionResult": ".definition_revision_result",
@@ -519,7 +539,6 @@ _dynamic_imports: typing.Dict[str, str] = {
     "HttpOutput": ".http_output",
     "HttpReceipt": ".http_receipt",
     "HttpReceiptStatus": ".http_receipt_status",
-    "HttpValidationError": ".http_validation_error",
     "ImportedDocument": ".imported_document",
     "InitialHttpChannel": ".initial_http_channel",
     "InitialHttpChannelTransport": ".initial_http_channel_transport",
@@ -555,6 +574,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ModelSpecsEndpointsItem": ".model_specs_endpoints_item",
     "NewDataset": ".new_dataset",
     "NewDatasetPurpose": ".new_dataset_purpose",
+    "NoulAnswer": ".noul_answer",
     "OAuthResult": ".o_auth_result",
     "OAuthResultStatus": ".o_auth_result_status",
     "OpenInferenceSpan": ".open_inference_span",
@@ -639,6 +659,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ScheduleRecordSessionMode": ".schedule_record_session_mode",
     "ScheduleResponse": ".schedule_response",
     "ScopeType": ".scope_type",
+    "ScoreAnswer": ".score_answer",
     "SessionSpend": ".session_spend",
     "SlackLink": ".slack_link",
     "SourceType": ".source_type",
@@ -653,6 +674,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ToolProviderRefRequest": ".tool_provider_ref_request",
     "ToolSkillSourceRequest": ".tool_skill_source_request",
     "ToolkitCategory": ".toolkit_category",
+    "TopUpHint": ".top_up_hint",
     "TraceImportGroupingRequest": ".trace_import_grouping_request",
     "TraceImportOptionsRequest": ".trace_import_options_request",
     "TraceImportScopeRequest": ".trace_import_scope_request",
@@ -676,8 +698,6 @@ _dynamic_imports: typing.Dict[str, str] = {
     "TranscriptTrajectory": ".transcript_trajectory",
     "TranscriptUsage": ".transcript_usage",
     "UncertainOperation": ".uncertain_operation",
-    "ValidationError": ".validation_error",
-    "ValidationErrorLocItem": ".validation_error_loc_item",
     "VersionedTraceImportAction": ".versioned_trace_import_action",
     "WorkPage": ".work_page",
     "WorkPageExecutionPhase": ".work_page_execution_phase",
@@ -779,6 +799,7 @@ __all__ = [
     "CheckResultStatus",
     "CheckSource",
     "CheckVerification",
+    "ChoiceAnswer",
     "ClaimView",
     "CompleteAuthorization",
     "Completion",
@@ -811,6 +832,8 @@ __all__ = [
     "CredentialIssued",
     "CredentialRenewed",
     "CredentialRevoked",
+    "CreditTopUp",
+    "CreditTopUpStatus",
     "Dataset",
     "DatasetCheckFailure",
     "DatasetCheckGroup",
@@ -828,6 +851,12 @@ __all__ = [
     "DatasetVersion",
     "DatasetVersionList",
     "DatasetVersionResponse",
+    "Decision",
+    "DecisionAnswersValue",
+    "DecisionAnswersValue_Choice",
+    "DecisionAnswersValue_Noul",
+    "DecisionAnswersValue_Score",
+    "DecisionUsage",
     "DefinitionChange",
     "DefinitionRevision",
     "DefinitionRevisionResult",
@@ -884,7 +913,6 @@ __all__ = [
     "HttpOutput",
     "HttpReceipt",
     "HttpReceiptStatus",
-    "HttpValidationError",
     "ImportedDocument",
     "InitialHttpChannel",
     "InitialHttpChannelTransport",
@@ -920,6 +948,7 @@ __all__ = [
     "ModelSpecsEndpointsItem",
     "NewDataset",
     "NewDatasetPurpose",
+    "NoulAnswer",
     "OAuthResult",
     "OAuthResultStatus",
     "OpenInferenceSpan",
@@ -1004,6 +1033,7 @@ __all__ = [
     "ScheduleRecordSessionMode",
     "ScheduleResponse",
     "ScopeType",
+    "ScoreAnswer",
     "SessionSpend",
     "SlackLink",
     "SourceType",
@@ -1018,6 +1048,7 @@ __all__ = [
     "ToolProviderRefRequest",
     "ToolSkillSourceRequest",
     "ToolkitCategory",
+    "TopUpHint",
     "TraceImportGroupingRequest",
     "TraceImportOptionsRequest",
     "TraceImportScopeRequest",
@@ -1041,8 +1072,6 @@ __all__ = [
     "TranscriptTrajectory",
     "TranscriptUsage",
     "UncertainOperation",
-    "ValidationError",
-    "ValidationErrorLocItem",
     "VersionedTraceImportAction",
     "WorkPage",
     "WorkPageExecutionPhase",
