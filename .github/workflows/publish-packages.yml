@@ -1,0 +1,79 @@
+name: Publish packages
+
+# Called by release.yml (cargo-dist publish-jobs) after the GitHub release is
+# created. It checks the tag against every client again, then publishes the npm
+# packages through OIDC trusted publishing. PyPI is published separately by
+# publish-pypi.yml, because PyPI trusted publishing does not support reusable
+# workflows.
+on:
+  workflow_call:
+    inputs:
+      plan:
+        required: true
+        type: string
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  check-version:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Check release version
+        env:
+          TAG: ${{ fromJson(inputs.plan).announcement_tag }}
+        run: node scripts/check-release-version.mjs "$TAG"
+
+  npm-sdk:
+    needs: check-version
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          registry-url: 'https://registry.npmjs.org'
+      - name: Use npm with trusted publishing
+        run: |
+          npm install -g 'npm@^11.5.1'
+          npm --version
+      - uses: pnpm/action-setup@v4
+        with:
+          package_json_file: sdk/typescript/package.json
+      - name: Build @sikaru/sdk
+        working-directory: sdk/typescript
+        run: |
+          pnpm install --frozen-lockfile --ignore-scripts
+          npm run build:cjs
+          npm run build:esm
+      - name: Publish @sikaru/sdk
+        working-directory: sdk/typescript
+        run: npm publish --provenance --access public
+
+  npm-cli:
+    needs: check-version
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          registry-url: 'https://registry.npmjs.org'
+      - name: Use npm with trusted publishing
+        run: |
+          npm install -g 'npm@^11.5.1'
+          npm --version
+      - name: Download CLI npm installer package
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ fromJson(inputs.plan).announcement_tag }}
+        run: gh release download "$TAG" --repo "$GITHUB_REPOSITORY" --pattern sikaru-cli-npm-package.tar.gz
+      - name: Publish CLI npm installer package
+        run: npm publish ./sikaru-cli-npm-package.tar.gz --provenance --access public

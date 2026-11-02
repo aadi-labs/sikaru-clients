@@ -1,0 +1,334 @@
+//! Service clients and API endpoints
+//!
+//! This module contains client implementations for:
+//!
+//! - **Auth**
+//! - **HttpChannels**
+//! - **Completions**
+//! - **Models**
+//! - **Organizations**
+//! - **PersonalChannels**
+//! - **Activation**
+//! - **AgentDocuments**
+//! - **AgentImports**
+//! - **Agents**
+//! - **CapabilityCeilings**
+//! - **Changesets**
+//! - **Channels**
+//! - **ComputeAttachments**
+//! - **ComputeOperations**
+//! - **ComputeWorkspaces**
+//! - **ComputeCredentials**
+//! - **ComputeEnvironments**
+//! - **Connections**
+//! - **ContextRegistry**
+//! - **Conversations**
+//! - **Datasets**
+//! - **Deployments**
+//! - **Environments**
+//! - **EvaluationComparisons**
+//! - **EvaluationCriteria**
+//! - **EvaluationJobs**
+//! - **EvaluationResults**
+//! - **EvaluatorRuns**
+//! - **ExecutionObjectives**
+//! - **ExecutionSessions**
+//! - **Specialists**
+//! - **Executions**
+//! - **Feedback**
+//! - **GitCredentials**
+//! - **Harnesses**
+//! - **Runs**
+//! - **ImportSessions**
+//! - **IssueClusters**
+//! - **JudgeAlignment**
+//! - **ManagedAgents**
+//! - **Checks**
+//! - **EndUsers**
+//! - **MemoryRegistry**
+//! - **ModelGateway**
+//! - **ModelSettings**
+//! - **OnlineEvaluations**
+//! - **ReleaseWatches**
+//! - **RetentionPolicies**
+//! - **ReviewQueue**
+//! - **RunReferences**
+//! - **RunSchedules**
+//! - **RunWebhooks**
+//! - **Sessions**
+//! - **ToolProviders**
+//! - **TraceImportConnections**
+//! - **TraceImports**
+//! - **WorkflowIntents**
+//! - **WorkflowRuns**
+//! - **Workflows**
+//! - **Responses**
+//! - **TraceStreams**
+//! - **Chat**
+
+use crate::{ApiError, ClientConfig};
+
+pub mod activation;
+pub mod agent_documents;
+pub mod agent_imports;
+pub mod agents;
+pub mod auth;
+pub mod capability_ceilings;
+pub mod changesets;
+pub mod channels;
+pub mod chat;
+pub mod checks;
+pub mod completions;
+pub mod compute_attachments;
+pub mod compute_credentials;
+pub mod compute_environments;
+pub mod compute_operations;
+pub mod compute_workspaces;
+pub mod connections;
+pub mod context_registry;
+pub mod conversations;
+pub mod datasets;
+pub mod deployments;
+pub mod end_users;
+pub mod environments;
+pub mod evaluation_comparisons;
+pub mod evaluation_criteria;
+pub mod evaluation_jobs;
+pub mod evaluation_results;
+pub mod evaluator_runs;
+pub mod execution_objectives;
+pub mod execution_sessions;
+pub mod executions;
+pub mod feedback;
+pub mod git_credentials;
+pub mod harnesses;
+pub mod http_channels;
+pub mod import_sessions;
+pub mod issue_clusters;
+pub mod judge_alignment;
+pub mod managed_agents;
+pub mod memory_registry;
+pub mod model_gateway;
+pub mod model_settings;
+pub mod models;
+pub mod online_evaluations;
+pub mod organizations;
+pub mod personal_channels;
+pub mod release_watches;
+pub mod responses;
+pub mod retention_policies;
+pub mod review_queue;
+pub mod run_references;
+pub mod run_schedules;
+pub mod run_webhooks;
+pub mod runs;
+pub mod sessions;
+pub mod specialists;
+pub mod tool_providers;
+pub mod trace_import_connections;
+pub mod trace_imports;
+pub mod trace_streams;
+pub mod workflow_intents;
+pub mod workflow_runs;
+pub mod workflows;
+pub struct ApiClient {
+    pub config: ClientConfig,
+    pub auth: AuthClient,
+    pub http_channels: HttpChannelsClient,
+    pub completions: CompletionsClient,
+    pub models: ModelsClient,
+    pub organizations: OrganizationsClient,
+    pub personal_channels: PersonalChannelsClient,
+    pub activation: ActivationClient,
+    pub agent_documents: AgentDocumentsClient,
+    pub agent_imports: AgentImportsClient,
+    pub agents: AgentsClient,
+    pub capability_ceilings: CapabilityCeilingsClient,
+    pub changesets: ChangesetsClient,
+    pub channels: ChannelsClient,
+    pub compute_attachments: ComputeAttachmentsClient,
+    pub compute_operations: ComputeOperationsClient,
+    pub compute_workspaces: ComputeWorkspacesClient,
+    pub compute_credentials: ComputeCredentialsClient,
+    pub compute_environments: ComputeEnvironmentsClient,
+    pub connections: ConnectionsClient,
+    pub context_registry: ContextRegistryClient,
+    pub conversations: ConversationsClient,
+    pub datasets: DatasetsClient,
+    pub deployments: DeploymentsClient,
+    pub environments: EnvironmentsClient,
+    pub evaluation_comparisons: EvaluationComparisonsClient,
+    pub evaluation_criteria: EvaluationCriteriaClient,
+    pub evaluation_jobs: EvaluationJobsClient,
+    pub evaluation_results: EvaluationResultsClient,
+    pub evaluator_runs: EvaluatorRunsClient,
+    pub execution_objectives: ExecutionObjectivesClient,
+    pub execution_sessions: ExecutionSessionsClient,
+    pub specialists: SpecialistsClient,
+    pub executions: ExecutionsClient,
+    pub feedback: FeedbackClient,
+    pub git_credentials: GitCredentialsClient,
+    pub harnesses: HarnessesClient,
+    pub runs: RunsClient,
+    pub import_sessions: ImportSessionsClient,
+    pub issue_clusters: IssueClustersClient,
+    pub judge_alignment: JudgeAlignmentClient,
+    pub managed_agents: ManagedAgentsClient,
+    pub checks: ChecksClient,
+    pub end_users: EndUsersClient,
+    pub memory_registry: MemoryRegistryClient,
+    pub model_gateway: ModelGatewayClient,
+    pub model_settings: ModelSettingsClient,
+    pub online_evaluations: OnlineEvaluationsClient,
+    pub release_watches: ReleaseWatchesClient,
+    pub retention_policies: RetentionPoliciesClient,
+    pub review_queue: ReviewQueueClient,
+    pub run_references: RunReferencesClient,
+    pub run_schedules: RunSchedulesClient,
+    pub run_webhooks: RunWebhooksClient,
+    pub sessions: SessionsClient,
+    pub tool_providers: ToolProvidersClient,
+    pub trace_import_connections: TraceImportConnectionsClient,
+    pub trace_imports: TraceImportsClient,
+    pub workflow_intents: WorkflowIntentsClient,
+    pub workflow_runs: WorkflowRunsClient,
+    pub workflows: WorkflowsClient,
+    pub responses: ResponsesClient,
+    pub trace_streams: TraceStreamsClient,
+    pub chat: ChatClient,
+}
+
+impl ApiClient {
+    pub fn new(config: ClientConfig) -> Result<Self, ApiError> {
+        Ok(Self {
+            config: config.clone(),
+            auth: AuthClient::new(config.clone())?,
+            http_channels: HttpChannelsClient::new(config.clone())?,
+            completions: CompletionsClient::new(config.clone())?,
+            models: ModelsClient::new(config.clone())?,
+            organizations: OrganizationsClient::new(config.clone())?,
+            personal_channels: PersonalChannelsClient::new(config.clone())?,
+            activation: ActivationClient::new(config.clone())?,
+            agent_documents: AgentDocumentsClient::new(config.clone())?,
+            agent_imports: AgentImportsClient::new(config.clone())?,
+            agents: AgentsClient::new(config.clone())?,
+            capability_ceilings: CapabilityCeilingsClient::new(config.clone())?,
+            changesets: ChangesetsClient::new(config.clone())?,
+            channels: ChannelsClient::new(config.clone())?,
+            compute_attachments: ComputeAttachmentsClient::new(config.clone())?,
+            compute_operations: ComputeOperationsClient::new(config.clone())?,
+            compute_workspaces: ComputeWorkspacesClient::new(config.clone())?,
+            compute_credentials: ComputeCredentialsClient::new(config.clone())?,
+            compute_environments: ComputeEnvironmentsClient::new(config.clone())?,
+            connections: ConnectionsClient::new(config.clone())?,
+            context_registry: ContextRegistryClient::new(config.clone())?,
+            conversations: ConversationsClient::new(config.clone())?,
+            datasets: DatasetsClient::new(config.clone())?,
+            deployments: DeploymentsClient::new(config.clone())?,
+            environments: EnvironmentsClient::new(config.clone())?,
+            evaluation_comparisons: EvaluationComparisonsClient::new(config.clone())?,
+            evaluation_criteria: EvaluationCriteriaClient::new(config.clone())?,
+            evaluation_jobs: EvaluationJobsClient::new(config.clone())?,
+            evaluation_results: EvaluationResultsClient::new(config.clone())?,
+            evaluator_runs: EvaluatorRunsClient::new(config.clone())?,
+            execution_objectives: ExecutionObjectivesClient::new(config.clone())?,
+            execution_sessions: ExecutionSessionsClient::new(config.clone())?,
+            specialists: SpecialistsClient::new(config.clone())?,
+            executions: ExecutionsClient::new(config.clone())?,
+            feedback: FeedbackClient::new(config.clone())?,
+            git_credentials: GitCredentialsClient::new(config.clone())?,
+            harnesses: HarnessesClient::new(config.clone())?,
+            runs: RunsClient::new(config.clone())?,
+            import_sessions: ImportSessionsClient::new(config.clone())?,
+            issue_clusters: IssueClustersClient::new(config.clone())?,
+            judge_alignment: JudgeAlignmentClient::new(config.clone())?,
+            managed_agents: ManagedAgentsClient::new(config.clone())?,
+            checks: ChecksClient::new(config.clone())?,
+            end_users: EndUsersClient::new(config.clone())?,
+            memory_registry: MemoryRegistryClient::new(config.clone())?,
+            model_gateway: ModelGatewayClient::new(config.clone())?,
+            model_settings: ModelSettingsClient::new(config.clone())?,
+            online_evaluations: OnlineEvaluationsClient::new(config.clone())?,
+            release_watches: ReleaseWatchesClient::new(config.clone())?,
+            retention_policies: RetentionPoliciesClient::new(config.clone())?,
+            review_queue: ReviewQueueClient::new(config.clone())?,
+            run_references: RunReferencesClient::new(config.clone())?,
+            run_schedules: RunSchedulesClient::new(config.clone())?,
+            run_webhooks: RunWebhooksClient::new(config.clone())?,
+            sessions: SessionsClient::new(config.clone())?,
+            tool_providers: ToolProvidersClient::new(config.clone())?,
+            trace_import_connections: TraceImportConnectionsClient::new(config.clone())?,
+            trace_imports: TraceImportsClient::new(config.clone())?,
+            workflow_intents: WorkflowIntentsClient::new(config.clone())?,
+            workflow_runs: WorkflowRunsClient::new(config.clone())?,
+            workflows: WorkflowsClient::new(config.clone())?,
+            responses: ResponsesClient::new(config.clone())?,
+            trace_streams: TraceStreamsClient::new(config.clone())?,
+            chat: ChatClient::new(config.clone())?,
+        })
+    }
+}
+
+pub use activation::ActivationClient;
+pub use agent_documents::AgentDocumentsClient;
+pub use agent_imports::AgentImportsClient;
+pub use agents::AgentsClient;
+pub use auth::AuthClient;
+pub use capability_ceilings::CapabilityCeilingsClient;
+pub use changesets::ChangesetsClient;
+pub use channels::ChannelsClient;
+pub use chat::ChatClient;
+pub use checks::ChecksClient;
+pub use completions::CompletionsClient;
+pub use compute_attachments::ComputeAttachmentsClient;
+pub use compute_credentials::ComputeCredentialsClient;
+pub use compute_environments::ComputeEnvironmentsClient;
+pub use compute_operations::ComputeOperationsClient;
+pub use compute_workspaces::ComputeWorkspacesClient;
+pub use connections::ConnectionsClient;
+pub use context_registry::ContextRegistryClient;
+pub use conversations::ConversationsClient;
+pub use datasets::DatasetsClient;
+pub use deployments::DeploymentsClient;
+pub use end_users::EndUsersClient;
+pub use environments::EnvironmentsClient;
+pub use evaluation_comparisons::EvaluationComparisonsClient;
+pub use evaluation_criteria::EvaluationCriteriaClient;
+pub use evaluation_jobs::EvaluationJobsClient;
+pub use evaluation_results::EvaluationResultsClient;
+pub use evaluator_runs::EvaluatorRunsClient;
+pub use execution_objectives::ExecutionObjectivesClient;
+pub use execution_sessions::ExecutionSessionsClient;
+pub use executions::ExecutionsClient;
+pub use feedback::FeedbackClient;
+pub use git_credentials::GitCredentialsClient;
+pub use harnesses::HarnessesClient;
+pub use http_channels::HttpChannelsClient;
+pub use import_sessions::ImportSessionsClient;
+pub use issue_clusters::IssueClustersClient;
+pub use judge_alignment::JudgeAlignmentClient;
+pub use managed_agents::ManagedAgentsClient;
+pub use memory_registry::MemoryRegistryClient;
+pub use model_gateway::ModelGatewayClient;
+pub use model_settings::ModelSettingsClient;
+pub use models::ModelsClient;
+pub use online_evaluations::OnlineEvaluationsClient;
+pub use organizations::OrganizationsClient;
+pub use personal_channels::PersonalChannelsClient;
+pub use release_watches::ReleaseWatchesClient;
+pub use responses::ResponsesClient;
+pub use retention_policies::RetentionPoliciesClient;
+pub use review_queue::ReviewQueueClient;
+pub use run_references::RunReferencesClient;
+pub use run_schedules::RunSchedulesClient;
+pub use run_webhooks::RunWebhooksClient;
+pub use runs::RunsClient;
+pub use sessions::SessionsClient;
+pub use specialists::SpecialistsClient;
+pub use tool_providers::ToolProvidersClient;
+pub use trace_import_connections::TraceImportConnectionsClient;
+pub use trace_imports::TraceImportsClient;
+pub use trace_streams::TraceStreamsClient;
+pub use workflow_intents::WorkflowIntentsClient;
+pub use workflow_runs::WorkflowRunsClient;
+pub use workflows::WorkflowsClient;

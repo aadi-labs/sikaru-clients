@@ -1,0 +1,10 @@
+export type { AuthorizeConnectionPersonalChannelsRequest } from "./AuthorizeConnectionPersonalChannelsRequest.js";
+export type { CompleteConnectionPersonalChannelsRequest } from "./CompleteConnectionPersonalChannelsRequest.js";
+export type { DecideApprovalPersonalChannelsRequest } from "./DecideApprovalPersonalChannelsRequest.js";
+export type { DownloadFilePersonalChannelsRequest } from "./DownloadFilePersonalChannelsRequest.js";
+export type { GetMessagePersonalChannelsRequest } from "./GetMessagePersonalChannelsRequest.js";
+export type { GetSlackLinkPersonalChannelsRequest } from "./GetSlackLinkPersonalChannelsRequest.js";
+export type { ListFilesPersonalChannelsRequest } from "./ListFilesPersonalChannelsRequest.js";
+export type { ReplaceConnectionCredentialsPersonalChannelsRequest } from "./ReplaceConnectionCredentialsPersonalChannelsRequest.js";
+export type { StartSlackLinkPersonalChannelsRequest } from "./StartSlackLinkPersonalChannelsRequest.js";
+export type { UnlinkSlackIdentityPersonalChannelsRequest } from "./UnlinkSlackIdentityPersonalChannelsRequest.js";

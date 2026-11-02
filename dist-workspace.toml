@@ -1,0 +1,42 @@
+[workspace]
+members = ["cargo:cli"]
+
+# Config for 'dist'
+[dist]
+# The preferred dist version to use in CI (Cargo.toml SemVer syntax)
+cargo-dist-version = "0.31.0"
+# CI backends to support
+ci = "github"
+precise-builds = true
+# The installers to generate for each app
+installers = ["shell", "powershell", "npm"]
+# Publish the npm installer as @sikaru/cli, beside @sikaru/sdk.
+npm-scope = "@sikaru"
+npm-package = "cli"
+# Whether to enable GitHub Attestations
+github-attestations = true
+# Target platforms to build apps for (Rust target-triple syntax)
+targets = ["aarch64-apple-darwin", "aarch64-unknown-linux-gnu", "aarch64-unknown-linux-musl", "x86_64-apple-darwin", "x86_64-unknown-linux-gnu", "x86_64-unknown-linux-musl", "x86_64-pc-windows-msvc"]
+# Which actions to run on pull requests
+pr-run-mode = "plan"
+# Check that every client carries the release version before building.
+plan-jobs = ["./check-version"]
+# Publish the SDKs and the CLI npm installer through OIDC trusted publishing.
+publish-jobs = ["./publish-packages"]
+# Never publish installer packages for prerelease tags.
+publish-prereleases = false
+# The archive format to use for windows builds (defaults .zip)
+windows-archive = ".zip"
+# The archive format to use for non-windows builds (defaults .tar.xz)
+unix-archive = ".tar.gz"
+# Path that installers should place binaries in
+install-path = "CARGO_HOME"
+# Whether to install an updater program
+install-updater = false
+default-features = false
+features = ["rustls"]
+
+# The publish job needs OIDC for trusted publishing and read access for checkout
+# and the release download.
+[dist.github-custom-job-permissions]
+"publish-packages" = { id-token = "write", contents = "read" }

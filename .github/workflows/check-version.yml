@@ -1,0 +1,27 @@
+name: Check release version
+
+# Called by release.yml (cargo-dist plan-jobs) before any artifact is built.
+on:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Check release version
+        env:
+          TAG: ${{ github.ref_type == 'tag' && github.ref_name || '' }}
+        run: |
+          if [ -n "$TAG" ]; then
+            node scripts/check-release-version.mjs "$TAG"
+          else
+            node scripts/check-release-version.mjs
+          fi

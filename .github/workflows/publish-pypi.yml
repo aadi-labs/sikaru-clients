@@ -1,0 +1,60 @@
+name: Publish PyPI
+
+# PyPI trusted publishing does not support reusable workflows, so the Python SDK
+# is published by this top-level workflow after a successful Release run for a
+# stable vX.Y.Z tag.
+on:
+  workflow_run:
+    workflows: [Release]
+    types: [completed]
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  pypi:
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'push' &&
+      startsWith(github.event.workflow_run.head_branch, 'v')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Check tag shape
+        id: tag
+        env:
+          TAG: ${{ github.event.workflow_run.head_branch }}
+        run: |
+          if [[ "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "stable=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Skipping PyPI publish: $TAG is not a stable vX.Y.Z tag."
+            echo "stable=false" >> "$GITHUB_OUTPUT"
+          fi
+      - if: steps.tag.outputs.stable == 'true'
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+      - if: steps.tag.outputs.stable == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Check release version
+        if: steps.tag.outputs.stable == 'true'
+        env:
+          TAG: ${{ github.event.workflow_run.head_branch }}
+        run: node scripts/check-release-version.mjs "$TAG"
+      - if: steps.tag.outputs.stable == 'true'
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Build wheel and source distribution
+        if: steps.tag.outputs.stable == 'true'
+        run: |
+          python -m pip install 'build>=1,<2'
+          python -m build sdk/python
+      - if: steps.tag.outputs.stable == 'true'
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: sdk/python/dist/

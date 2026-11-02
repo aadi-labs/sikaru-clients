@@ -1,0 +1,126 @@
+name: Verify
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: verify-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  python:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Build wheel and source distribution
+        run: |
+          python -m pip install 'build>=1,<2'
+          python -m build sdk/python
+          python -m pip install sdk/python/dist/*.whl
+          python -c 'from sikaru_api import SikaruApi, AsyncSikaruApi'
+      - name: Install Python authoring companion
+        run: |
+          python -m pip install ./shared/authoring/python
+          python -c 'from sikaru_authoring import compile_directory'
+      - name: Python compute lifecycle wire contract
+        run: python shared/compute-contracts/wire.py python shared/compute-contracts/python_contract.py
+
+  typescript:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: pnpm/action-setup@v4
+        with:
+          package_json_file: sdk/typescript/package.json
+      - name: Build and run unit tests
+        working-directory: sdk/typescript
+        run: |
+          pnpm install --frozen-lockfile --ignore-scripts
+          npm run build:cjs
+          npm run build:esm
+          node_modules/.bin/vitest run --project unit
+      - name: TypeScript compute lifecycle wire contract
+        run: |
+          sdk/typescript/node_modules/.bin/tsc --project shared/compute-contracts/tsconfig.json
+          python shared/compute-contracts/wire.py node shared/compute-contracts/typescript_contract.js
+
+  cli:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    env:
+      CARGO_BUILD_JOBS: 2
+      CARGO_PROFILE_DEV_DEBUG: 0
+      CARGO_INCREMENTAL: 0
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      # installed_artifact_is_required needs SIKARU_TEST_INSTALLED; the installed
+      # package step below runs the whole compute_packaged_acceptance suite with it.
+      - name: Test CLI
+        working-directory: cli
+        run: cargo test --locked -- --skip installed_artifact_is_required
+      - name: Build CLI
+        working-directory: cli
+        run: cargo build --locked --bin sikaru
+      - run: node scripts/check-cli.mjs cli/target/debug/sikaru
+      - name: Verify installed native compute package
+        working-directory: cli
+        run: |
+          cargo install --locked --debug --path . --root "$RUNNER_TEMP/sikaru-installed"
+          SIKARU_TEST_INSTALLED="$RUNNER_TEMP/sikaru-installed/bin/sikaru" cargo test --locked --test compute_packaged_acceptance
+      - name: CLI compute lifecycle wire contract
+        env:
+          COMPUTE_CONTRACT_BINARY: cli/target/debug/sikaru
+        run: python shared/compute-contracts/wire.py python shared/compute-contracts/cli_contract.py
+
+  authoring-rust:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    env:
+      CARGO_BUILD_JOBS: 2
+      CARGO_PROFILE_DEV_DEBUG: 0
+      CARGO_INCREMENTAL: 0
+      RUST_MIN_STACK: 16777216
+      CARGO_TARGET_DIR: ${{ github.workspace }}/target
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      # dev_tests_saved_revision_without_creating_an_agent is parked pending the
+      # authoring `dev` migration; every other authoring test runs.
+      - name: Test authoring companion
+        run: cargo test --locked --manifest-path shared/authoring/rust/Cargo.toml -- --skip dev_tests_saved_revision_without_creating_an_agent
+      - name: Install authoring companion
+        run: |
+          cargo install --locked --debug --path shared/authoring/rust
+          sikaru-authoring --help
+
+  version:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: node scripts/check-release-version.mjs

@@ -1,0 +1,32 @@
+import assert from 'node:assert/strict';
+import { SikaruApi, SikaruError } from '../../sdk/typescript/dist/cjs/index.js';
+const client = (apiKey: string) => new SikaruApi({baseUrl: process.env.CONTRACT_URL, apiKey, maxRetries: 5});
+async function main() {
+  const controller = client('controller');
+  const provenance = {kind:'existing_directory', identity:'workspace'} as const;
+  const a = await controller.computeAttachments.create('project', 'session', {environment_id:'environment', idempotency_key:'create', workspace_provenance:provenance});
+  assert.equal(a.owner_id,null);
+  assert.equal(a.workspace_generation, 'generation'); assert.equal(a.status, 'pending');
+  assert.equal((await controller.computeAttachments.get('project','attachment')).journal_id,'journal');
+  const claim = await controller.computeAttachments.claim('project','attachment',{idempotency_key:'claim'});
+  assert.equal(claim.attachment_id,'attachment');
+  assert.equal(claim.owner_id,'controller:claim'); assert.equal(claim.owner_epoch,1);
+  const credential = await controller.computeAttachments.issueCredential('project','attachment',{owner_id:claim.owner_id,owner_epoch:claim.owner_epoch});
+  assert.equal(credential.credential_id,'executor-credential'); assert.equal(credential.expires_at,2000000000);
+  const executor = client(credential.token);
+  const ready = await executor.computeAttachments.ready('project','attachment',{executor_instance_id:'instance',journal_id:'journal',workspace_provenance:provenance,protocol_version:'sikaru-compute-v1',capabilities:['compute.execute']});
+  assert.equal(ready.status,'ready'); assert.equal(ready.lease_ttl_seconds,60);
+  const work = await executor.computeOperations.poll('project','attachment',{wait_seconds:0});
+  assert.equal(work.execution_phase,'running'); assert.equal(work.operations[0].request_digest,'a'.repeat(64));
+  const receipt = {run_id:'run',tool_call_id:'tool',tool_provider_id:'provider',capability_name:'compute.execute',idempotency_key:'receipt',request_digest:'a'.repeat(64),status:'completed',payload:{output:'done'}} as const;
+  assert.equal((await executor.computeOperations.submitReceipt('project','attachment',receipt)).created,true);
+  assert.equal((await executor.computeOperations.submitReceipt('project','attachment',receipt)).created,false);
+  const reconciled = await executor.computeAttachments.reconcile('project','attachment',{executor_instance_id:'instance',journal_id:'journal',workspace_provenance:provenance,processes:[{handle_id:'handle',status:'lost',evidence:'ownership unproven'}]});
+  assert.equal(reconciled.attachment.status,'recovery_required');
+  assert.equal((await executor.computeAttachments.status('project','attachment')).processes[0].status,'lost');
+  const terminal = await executor.computeOperations.poll('project','attachment');
+  assert.equal(terminal.execution_phase,'terminal'); assert.equal(terminal.execution?.terminal,true);
+  await assert.rejects(()=>client('wrong-scope').computeOperations.poll('project','attachment'), e=>e instanceof SikaruError && e.statusCode===403);
+  await assert.rejects(()=>executor.computeOperations.submitReceipt('project','attachment',receipt,{maxRetries:9}), e=>e instanceof SikaruError && e.statusCode===503);
+}
+main().catch(error=>{console.error(error);process.exitCode=1;});
