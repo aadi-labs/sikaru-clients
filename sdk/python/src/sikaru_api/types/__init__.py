@@ -106,6 +106,8 @@ if typing.TYPE_CHECKING:
     from .credential_issued import CredentialIssued
     from .credential_renewed import CredentialRenewed
     from .credential_revoked import CredentialRevoked
+    from .credit_balance import CreditBalance
+    from .credit_balance_state import CreditBalanceState
     from .credit_top_up import CreditTopUp
     from .credit_top_up_status import CreditTopUpStatus
     from .dataset import Dataset
@@ -458,6 +460,8 @@ _dynamic_imports: typing.Dict[str, str] = {
     "CredentialIssued": ".credential_issued",
     "CredentialRenewed": ".credential_renewed",
     "CredentialRevoked": ".credential_revoked",
+    "CreditBalance": ".credit_balance",
+    "CreditBalanceState": ".credit_balance_state",
     "CreditTopUp": ".credit_top_up",
     "CreditTopUpStatus": ".credit_top_up_status",
     "Dataset": ".dataset",
@@ -832,6 +836,8 @@ __all__ = [
     "CredentialIssued",
     "CredentialRenewed",
     "CredentialRevoked",
+    "CreditBalance",
+    "CreditBalanceState",
     "CreditTopUp",
     "CreditTopUpStatus",
     "Dataset",

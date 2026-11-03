@@ -47,6 +47,7 @@ import { ModelsClient } from "./api/resources/models/client/Client.js";
 import { ModelSettingsClient } from "./api/resources/modelSettings/client/Client.js";
 import { OnlineEvaluationsClient } from "./api/resources/onlineEvaluations/client/Client.js";
 import { PersonalChannelsClient } from "./api/resources/personalChannels/client/Client.js";
+import { ProjectsClient } from "./api/resources/projects/client/Client.js";
 import { ReleaseWatchesClient } from "./api/resources/releaseWatches/client/Client.js";
 import { ResponsesClient } from "./api/resources/responses/client/Client.js";
 import { RetentionPoliciesClient } from "./api/resources/retentionPolicies/client/Client.js";
@@ -83,6 +84,7 @@ export class SikaruApi {
     protected _completions: CompletionsClient | undefined;
     protected _models: ModelsClient | undefined;
     protected _personalChannels: PersonalChannelsClient | undefined;
+    protected _projects: ProjectsClient | undefined;
     protected _activation: ActivationClient | undefined;
     protected _agentDocuments: AgentDocumentsClient | undefined;
     protected _agentImports: AgentImportsClient | undefined;
@@ -166,6 +168,10 @@ export class SikaruApi {
 
     public get personalChannels(): PersonalChannelsClient {
         return (this._personalChannels ??= new PersonalChannelsClient(this._options));
+    }
+
+    public get projects(): ProjectsClient {
+        return (this._projects ??= new ProjectsClient(this._options));
     }
 
     public get activation(): ActivationClient {

@@ -80,7 +80,7 @@ fn generated_groups_are_hidden_under_their_product() {
         ("traces", "trace-streams"),
         ("environment", "datasets"),
         ("inference", "completions"),
-        ("config", "organizations"),
+        ("config", "projects"),
     ] {
         assert!(
             !listed_commands(&help(&[product, "--help"])).contains(group),

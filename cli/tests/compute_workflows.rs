@@ -592,7 +592,7 @@ mod workflow {
         let (code, result) = launch(&server, dir.path(), &["agent", "--prompt", "task"]).await;
         assert_eq!(code, 4);
         assert!(
-            result["help"].as_str().unwrap().contains("subscription"),
+            result["help"].as_str().unwrap().contains("credits"),
             "{result}"
         );
         assert!(!result.to_string().contains("secret-provider-token"));

@@ -1,7 +1,8 @@
-//! `sikaru credits`: an account utility beside `login` and `config`. `add` creates a top-up offer
-//! for the project's organization and prints its pay URL; an agent wallet pays that URL. `status`
-//! reads an offer. The CLI never sees payment credentials. `--output json` prints the gateway's
-//! offer as is.
+//! `sikaru credits`: an account utility beside `login` and `config`. `balance` shows the credits
+//! available to the project's organization and the largest top-up an agent can offer, so an agent
+//! can top up before work pauses. `add` creates a top-up offer and prints its pay URL; an agent
+//! wallet pays that URL. `status` reads an offer. The CLI never sees payment credentials.
+//! `--output json` prints the gateway's response as is.
 use super::inference::{blocking, endpoint, json_output, output_arg, print_json};
 use clap::{Arg, ArgMatches, Command};
 use fern_cli_sdk::{
@@ -21,9 +22,16 @@ pub fn install(app: fern_cli_sdk::app::CliApp) -> fern_cli_sdk::app::CliApp {
 
 fn command() -> Command {
     Command::new("credits")
-        .about("Add credits to your organization from an agent wallet")
+        .about("Check your organization's credits and add more from an agent wallet")
         .subcommand_required(true)
         .arg_required_else_help(true)
+        .subcommand(
+            Command::new("balance")
+                .about("Show available credits and the largest top-up an agent can offer")
+                .after_help("Example:\n  sikaru credits balance")
+                .arg(project())
+                .arg(output_arg(["text", "json"], "text")),
+        )
         .subcommand(
             Command::new("add")
                 .about("Create a top-up offer and print the URL an agent wallet pays")
@@ -52,11 +60,20 @@ fn project() -> Arg {
         .short('p')
         .env("SIKARU_PROJECT")
         .required(true)
-        .help("Project whose organization receives the credits")
+        .help("Project whose organization's credits to use")
 }
 
 async fn run(m: &ArgMatches, ctx: &AppContext) -> Result<(), CliError> {
     let (verb, m) = m.subcommand().expect("clap requires a subcommand");
+    if verb == "balance" {
+        let path = format!("v1/projects/{}/credits", arg(m, "project"));
+        let balance = send(ctx, endpoint(ctx, Method::GET, &path)).await?;
+        if json_output(m) {
+            return print_json(&balance);
+        }
+        print_balance(&balance);
+        return Ok(());
+    }
     let offers = format!("v1/projects/{}/credit-top-ups", arg(m, "project"));
     let offer = if verb == "add" {
         let body = json!({"amountUsd": arg(m, "amount")});
@@ -99,6 +116,21 @@ async fn send(ctx: &AppContext, request: reqwest::RequestBuilder) -> Result<Valu
     let message = body["detail"].as_str().unwrap_or(&text);
     let code = body["code"].as_str().unwrap_or("request_failed");
     Err(CliError::api(status, message, code))
+}
+
+fn print_balance(balance: &Value) {
+    match balance["state"].as_str().unwrap_or("") {
+        "complimentary" => println!("Usage is covered for this organization; it needs no credits."),
+        "no_card" => println!("No credits yet: an organization admin needs to save a card in Billing."),
+        _ => {
+            let available = balance["availableUsd"].as_str().and_then(|usd| usd.parse::<f64>().ok());
+            println!("Available: ${:.2}", available.unwrap_or(0.0));
+        }
+    }
+    match balance["topUpMaxUsd"].as_str() {
+        Some(maximum) => println!("Agent top-ups: up to ${maximum} per top-up with `sikaru credits add`"),
+        None => println!("Agent top-ups: off"),
+    }
 }
 
 fn print_offer(offer: &Value, created: bool) {

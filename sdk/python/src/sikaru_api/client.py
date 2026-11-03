@@ -58,6 +58,7 @@ if typing.TYPE_CHECKING:
     from .models.client import AsyncModelsClient, ModelsClient
     from .online_evaluations.client import AsyncOnlineEvaluationsClient, OnlineEvaluationsClient
     from .personal_channels.client import AsyncPersonalChannelsClient, PersonalChannelsClient
+    from .projects.client import AsyncProjectsClient, ProjectsClient
     from .release_watches.client import AsyncReleaseWatchesClient, ReleaseWatchesClient
     from .responses.client import AsyncResponsesClient, ResponsesClient
     from .retention_policies.client import AsyncRetentionPoliciesClient, RetentionPoliciesClient
@@ -170,6 +171,7 @@ class SikaruApi:
         self._completions: typing.Optional[CompletionsClient] = None
         self._models: typing.Optional[ModelsClient] = None
         self._personal_channels: typing.Optional[PersonalChannelsClient] = None
+        self._projects: typing.Optional[ProjectsClient] = None
         self._activation: typing.Optional[ActivationClient] = None
         self._agent_documents: typing.Optional[AgentDocumentsClient] = None
         self._agent_imports: typing.Optional[AgentImportsClient] = None
@@ -269,6 +271,14 @@ class SikaruApi:
 
             self._personal_channels = PersonalChannelsClient(client_wrapper=self._client_wrapper)
         return self._personal_channels
+
+    @property
+    def projects(self):
+        if self._projects is None:
+            from .projects.client import ProjectsClient  # noqa: E402
+
+            self._projects = ProjectsClient(client_wrapper=self._client_wrapper)
+        return self._projects
 
     @property
     def activation(self):
@@ -857,6 +867,7 @@ class AsyncSikaruApi:
         self._completions: typing.Optional[AsyncCompletionsClient] = None
         self._models: typing.Optional[AsyncModelsClient] = None
         self._personal_channels: typing.Optional[AsyncPersonalChannelsClient] = None
+        self._projects: typing.Optional[AsyncProjectsClient] = None
         self._activation: typing.Optional[AsyncActivationClient] = None
         self._agent_documents: typing.Optional[AsyncAgentDocumentsClient] = None
         self._agent_imports: typing.Optional[AsyncAgentImportsClient] = None
@@ -956,6 +967,14 @@ class AsyncSikaruApi:
 
             self._personal_channels = AsyncPersonalChannelsClient(client_wrapper=self._client_wrapper)
         return self._personal_channels
+
+    @property
+    def projects(self):
+        if self._projects is None:
+            from .projects.client import AsyncProjectsClient  # noqa: E402
+
+            self._projects = AsyncProjectsClient(client_wrapper=self._client_wrapper)
+        return self._projects
 
     @property
     def activation(self):

@@ -50,8 +50,8 @@ Full command reference for `sikaru`.
 - [`sikaru model-settings`](#sikaru-model-settings)
 - [`sikaru models`](#sikaru-models)
 - [`sikaru online-evaluations`](#sikaru-online-evaluations)
-- [`sikaru organizations`](#sikaru-organizations)
 - [`sikaru personal-channels`](#sikaru-personal-channels)
+- [`sikaru projects`](#sikaru-projects)
 - [`sikaru release-watches`](#sikaru-release-watches)
 - [`sikaru responses`](#sikaru-responses)
 - [`sikaru retention-policies`](#sikaru-retention-policies)
@@ -1484,6 +1484,16 @@ Read a top-up offer's status.
 | `--project-id` | `string` | Yes |  |
 | `--top-up-id` | `string` | Yes |  |
 
+#### `sikaru credit-top-ups get-balance`
+
+Read the credits available to this project's organization and the largest top-up an agent can offer.
+
+`GET /v1/projects/{project_id}/credits`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--project-id` | `string` | Yes |  |
+
 ---
 
 ### `sikaru datasets`
@@ -2833,52 +2843,6 @@ Update Policy
 
 ---
 
-### `sikaru organizations`
-
-#### `sikaru organizations cancel-subscription`
-
-Cancel Subscription
-
-`POST /v1/organizations/{organization_id}/subscription/cancel`
-
-| Flag | Type | Required | Description |
-|------|------|----------|-------------|
-| `--organization-id` | `string` | Yes |  |
-
-#### `sikaru organizations change-subscription`
-
-Change Subscription
-
-`POST /v1/organizations/{organization_id}/subscription/change`
-
-| Flag | Type | Required | Description |
-|------|------|----------|-------------|
-| `--organization-id` | `string` | Yes |  |
-| `--json` | `JSON` | Yes | Request body as JSON (or use individual body-field flags) |
-
-#### `sikaru organizations get-subscription`
-
-Get Subscription
-
-`GET /v1/organizations/{organization_id}/subscription`
-
-| Flag | Type | Required | Description |
-|------|------|----------|-------------|
-| `--organization-id` | `string` | Yes |  |
-
-#### `sikaru organizations subscribe`
-
-Subscribe
-
-`POST /v1/organizations/{organization_id}/subscription`
-
-| Flag | Type | Required | Description |
-|------|------|----------|-------------|
-| `--organization-id` | `string` | Yes |  |
-| `--json` | `JSON` | Yes | Request body as JSON (or use individual body-field flags) |
-
----
-
 ### `sikaru personal-channels`
 
 #### `sikaru personal-channels authorize-connection`
@@ -3028,6 +2992,16 @@ Unlink
 | `--authorization` | `string` | No |  |
 | `--x-sikaru-user-assertion` | `string` | No |  |
 | `--x-sikaru-member-authorization` | `string` | No |  |
+
+---
+
+### `sikaru projects`
+
+#### `sikaru projects list-projects`
+
+The caller's organization and projects; a signed-in bearer's first call sets them up.
+
+`GET /v1/projects`
 
 ---
 

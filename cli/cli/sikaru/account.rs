@@ -4,17 +4,24 @@
 //! credential file (`~/Library/Application Support` on macOS, `$XDG_CONFIG_HOME` or `~/.config`
 //! elsewhere). At startup a saved project fills `SIKARU_PROJECT` when it is unset, so every
 //! `--project` flag resolves flag, then environment, then saved project. The saved organization
-//! is shown only; the hidden `config organizations` operations take it as an explicit argument.
+//! is shown only.
+use super::inference::{blocking, endpoint};
 use super::user_auth;
 use clap::{Arg, ArgAction, ArgMatches, Command};
-use fern_cli_sdk::{app::CliApp, error::CliError};
+use fern_cli_sdk::{
+    app::CliApp,
+    error::CliError,
+    openapi::{AppContext, OpenApiBinding},
+    sdk_executor::SdkRequestExecutor,
+};
+use reqwest::Method;
 use serde_json::{json, Map, Value};
 use std::path::PathBuf;
 
 const SETTINGS: [&str; 2] = ["project", "organization"];
 
 pub fn install(app: CliApp) -> CliApp {
-    app.command(login_command(), Box::new(|m, _| login(m)))
+    app.command(login_command(), OpenApiBinding::handler(login))
         .command(logout_command(), Box::new(|_, _| user_auth::logout()))
         .command_under(&["config"], show_command(), Box::new(|_, _| show()))
         .command_under(&["config"], set_command(), Box::new(|m, _| set(m)))
@@ -52,13 +59,13 @@ fn set_command() -> Command {
         .arg(Arg::new("id").required(true))
 }
 
-fn login(m: &ArgMatches) -> Result<(), CliError> {
+fn login(m: &ArgMatches, ctx: &AppContext) -> Result<(), CliError> {
     // Token paste already warns when SIKARU_API_KEY shadows the stored credential.
     if m.get_flag("with-token") {
         return user_auth::login_with_token();
     }
     user_auth::login(m.get_flag("no-browser"))?;
-    user_auth::project_hint();
+    choose_project(ctx)?;
     if std::env::var("SIKARU_API_KEY").is_ok_and(|key| !key.is_empty()) {
         eprintln!("SIKARU_API_KEY is set and takes precedence over this sign-in. Unset it to use the sign-in.");
     }
@@ -87,11 +94,64 @@ fn show() -> Result<(), CliError> {
 fn set(m: &ArgMatches) -> Result<(), CliError> {
     let setting = m.get_one::<String>("setting").expect("required");
     let id = m.get_one::<String>("id").expect("required");
-    let mut settings = read_settings();
-    settings.insert(setting.clone(), Value::from(id.as_str()));
-    write_settings(&settings)?;
+    save_setting(setting, id)?;
     eprintln!("Saved {setting} {id}.");
     Ok(())
+}
+
+fn save_setting(setting: &str, id: &str) -> Result<(), CliError> {
+    let mut settings = read_settings();
+    settings.insert(setting.into(), Value::from(id));
+    write_settings(&settings)
+}
+
+/// Keeps a project this run's environment chose, or a saved one that belongs to the signed-in
+/// account; otherwise saves the account's default, so switching accounts never keeps the
+/// previous account's project.
+fn choose_project(ctx: &AppContext) -> Result<(), CliError> {
+    let saved = read_settings()
+        .get("project")
+        .and_then(Value::as_str)
+        .map(str::to_string);
+    let active = std::env::var("SIKARU_PROJECT")
+        .ok()
+        .filter(|project| !project.is_empty());
+    if active.is_some() && active != saved {
+        return Ok(());
+    }
+    let Some(projects) = blocking(signed_in_projects(ctx)) else {
+        user_auth::project_hint();
+        return Ok(());
+    };
+    let owned = |id: &str| {
+        projects["projects"]
+            .as_array()
+            .is_some_and(|all| all.iter().any(|p| p["id"] == id))
+    };
+    if saved.as_deref().is_some_and(owned) {
+        return Ok(());
+    }
+    let Some(project) = projects["defaultProjectId"].as_str() else {
+        eprintln!("Choose a project for this sign-in: sikaru config set project PROJECT");
+        return Ok(());
+    };
+    save_setting("project", project)?;
+    eprintln!("Using project {project}. Change it with: sikaru config set project PROJECT");
+    Ok(())
+}
+
+/// The signed-in organization's projects and default. A first sign-in from the CLI creates the
+/// organization and its default project on this call; any failure leaves the project to choose.
+async fn signed_in_projects(ctx: &AppContext) -> Option<Value> {
+    let request = endpoint(ctx, Method::GET, "v1/projects")
+        .header("Accept", "application/json")
+        .build()
+        .ok()?;
+    let response = ctx.build_sdk_executor().execute(request).await.ok()?;
+    if !response.status().is_success() {
+        return None;
+    }
+    response.json().await.ok()
 }
 
 /// Saved project fills `SIKARU_PROJECT`; flag and environment still win. clap captures `.env()`

@@ -76,6 +76,7 @@ export * from "./CreationResumeId.js";
 export * from "./CredentialIssued.js";
 export * from "./CredentialRenewed.js";
 export * from "./CredentialRevoked.js";
+export * from "./CreditBalance.js";
 export * from "./CreditTopUp.js";
 export * from "./Dataset.js";
 export * from "./DatasetCheckFailure.js";

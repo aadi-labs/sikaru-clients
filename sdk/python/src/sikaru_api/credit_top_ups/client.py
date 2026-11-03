@@ -4,6 +4,7 @@ import typing
 
 from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ..core.request_options import RequestOptions
+from ..types.credit_balance import CreditBalance
 from ..types.credit_top_up import CreditTopUp
 from .raw_client import AsyncRawCreditTopUpsClient, RawCreditTopUpsClient
 
@@ -97,6 +98,37 @@ class CreditTopUpsClient:
         )
         """
         _response = self._raw_client.get(project_id, top_up_id, request_options=request_options)
+        return _response.data
+
+    def get_balance(self, project_id: str, *, request_options: typing.Optional[RequestOptions] = None) -> CreditBalance:
+        """
+        Read the credits available to this project's organization and the largest top-up an agent can offer.
+
+        Parameters
+        ----------
+        project_id : str
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        CreditBalance
+            Successful Response
+
+        Examples
+        --------
+        from sikaru_api import SikaruApi
+
+        client = SikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+        client.credit_top_ups.get_balance(
+            project_id="project_id",
+        )
+        """
+        _response = self._raw_client.get_balance(project_id, request_options=request_options)
         return _response.data
 
 
@@ -202,4 +234,45 @@ class AsyncCreditTopUpsClient:
         asyncio.run(main())
         """
         _response = await self._raw_client.get(project_id, top_up_id, request_options=request_options)
+        return _response.data
+
+    async def get_balance(
+        self, project_id: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> CreditBalance:
+        """
+        Read the credits available to this project's organization and the largest top-up an agent can offer.
+
+        Parameters
+        ----------
+        project_id : str
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        CreditBalance
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sikaru_api import AsyncSikaruApi
+
+        client = AsyncSikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+
+
+        async def main() -> None:
+            await client.credit_top_ups.get_balance(
+                project_id="project_id",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.get_balance(project_id, request_options=request_options)
         return _response.data

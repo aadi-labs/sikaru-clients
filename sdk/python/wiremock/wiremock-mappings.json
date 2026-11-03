@@ -625,6 +625,33 @@
       }
     },
     {
+      "id": "d2946d4e-560f-437c-a4bb-3437c36e5701",
+      "name": "List Projects - default",
+      "request": {
+        "urlPathTemplate": "/v1/projects",
+        "method": "GET"
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"key\": \"value\"\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "d2946d4e-560f-437c-a4bb-3437c36e5701",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      },
+      "postServeActions": []
+    },
+    {
       "id": "cc2b6254-0c26-4340-9dd1-a46e713acbe7",
       "name": "Project Activation Status - default",
       "request": {
@@ -4259,6 +4286,37 @@
         }
       },
       "uuid": "359e29b2-ac00-4eb8-a7e6-8fe4cdd3d078",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "a0111fe9-e5c5-47a9-a542-4ad9f5cb5808",
+      "name": "Get Credit Balance - default",
+      "request": {
+        "urlPathTemplate": "/v1/projects/{project_id}/credits",
+        "method": "GET",
+        "pathParameters": {
+          "project_id": {
+            "equalTo": "project_id"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"availableUsd\": \"availableUsd\",\n  \"state\": \"ready\",\n  \"topUpMaxUsd\": \"topUpMaxUsd\"\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "a0111fe9-e5c5-47a9-a542-4ad9f5cb5808",
       "persistent": true,
       "priority": 3,
       "metadata": {
@@ -9753,6 +9811,6 @@
     }
   ],
   "meta": {
-    "total": 292
+    "total": 294
   }
 }

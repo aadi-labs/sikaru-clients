@@ -3,6 +3,5 @@
 import typing
 
 FundingWaitReason = typing.Union[
-    typing.Literal["credits_exhausted", "spend_limit_reached", "billing_unavailable", "plan_inactive", "trial_ended"],
-    typing.Any,
+    typing.Literal["credits_exhausted", "spend_limit_reached", "billing_unavailable"], typing.Any
 ]

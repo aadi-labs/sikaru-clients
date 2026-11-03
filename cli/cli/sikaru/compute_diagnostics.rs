@@ -51,7 +51,7 @@ pub fn failure(error: &anyhow::Error, reason: &str) -> Value {
 fn advice(error: &anyhow::Error) -> &'static str {
     match error.downcast_ref::<TransportFailure>() {
         Some(TransportFailure::Rejected(401)) => "Authentication failed. Run sikaru login, then resume the saved state directory.",
-        Some(TransportFailure::Rejected(402)) => "Billing blocked this request. Check the team's subscription and available budget, then resume the saved state directory.",
+        Some(TransportFailure::Rejected(402)) => "Billing blocked this request. Check the organization's credits and spending limits in Billing, then resume the saved state directory.",
         Some(TransportFailure::Rejected(403)) => "Access denied. Check that your API key has access to this project and the required scopes.",
         Some(TransportFailure::Rejected(404)) => "Resource not found. Check --project and the agent, or your saved session's availability.",
         Some(TransportFailure::Transient) => "The service could not be reached or is temporarily unavailable. Check connectivity and service status; preserve the state directory for explicit resume.",

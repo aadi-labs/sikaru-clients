@@ -6,8 +6,8 @@
 //! - **HttpChannels**
 //! - **Completions**
 //! - **Models**
-//! - **Organizations**
 //! - **PersonalChannels**
+//! - **Projects**
 //! - **Activation**
 //! - **AgentDocuments**
 //! - **AgentImports**
@@ -116,8 +116,8 @@ pub mod model_gateway;
 pub mod model_settings;
 pub mod models;
 pub mod online_evaluations;
-pub mod organizations;
 pub mod personal_channels;
+pub mod projects;
 pub mod release_watches;
 pub mod responses;
 pub mod retention_policies;
@@ -141,8 +141,8 @@ pub struct ApiClient {
     pub http_channels: HttpChannelsClient,
     pub completions: CompletionsClient,
     pub models: ModelsClient,
-    pub organizations: OrganizationsClient,
     pub personal_channels: PersonalChannelsClient,
+    pub projects: ProjectsClient,
     pub activation: ActivationClient,
     pub agent_documents: AgentDocumentsClient,
     pub agent_imports: AgentImportsClient,
@@ -212,8 +212,8 @@ impl ApiClient {
             http_channels: HttpChannelsClient::new(config.clone())?,
             completions: CompletionsClient::new(config.clone())?,
             models: ModelsClient::new(config.clone())?,
-            organizations: OrganizationsClient::new(config.clone())?,
             personal_channels: PersonalChannelsClient::new(config.clone())?,
+            projects: ProjectsClient::new(config.clone())?,
             activation: ActivationClient::new(config.clone())?,
             agent_documents: AgentDocumentsClient::new(config.clone())?,
             agent_imports: AgentImportsClient::new(config.clone())?,
@@ -323,8 +323,8 @@ pub use model_gateway::ModelGatewayClient;
 pub use model_settings::ModelSettingsClient;
 pub use models::ModelsClient;
 pub use online_evaluations::OnlineEvaluationsClient;
-pub use organizations::OrganizationsClient;
 pub use personal_channels::PersonalChannelsClient;
+pub use projects::ProjectsClient;
 pub use release_watches::ReleaseWatchesClient;
 pub use responses::ResponsesClient;
 pub use retention_policies::RetentionPoliciesClient;

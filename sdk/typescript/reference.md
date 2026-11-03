@@ -1193,6 +1193,62 @@ await client.personalChannels.unlinkSlackIdentity("binding_id", "installation_id
 </dl>
 </details>
 
+## Projects
+<details><summary><code>client.projects.<a href="/src/api/resources/projects/client/Client.ts">listProjects</a>() -> Record&lt;string, unknown&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+The caller's organization and projects; a signed-in bearer's first call sets them up.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.projects.listProjects();
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**requestOptions:** `ProjectsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## Activation
 <details><summary><code>client.activation.<a href="/src/api/resources/activation/client/Client.ts">projectActivationStatus</a>(project_id) -> Record&lt;string, unknown&gt;</code></summary>
 <dl>
@@ -8090,6 +8146,69 @@ await client.creditTopUps.get("project_id", "top_up_id");
 <dd>
 
 **top_up_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `CreditTopUpsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.creditTopUps.<a href="/src/api/resources/creditTopUps/client/Client.ts">getBalance</a>(project_id) -> Sikaru.CreditBalance</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Read the credits available to this project's organization and the largest top-up an agent can offer.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.creditTopUps.getBalance("project_id");
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `string` 
     
 </dd>
 </dl>

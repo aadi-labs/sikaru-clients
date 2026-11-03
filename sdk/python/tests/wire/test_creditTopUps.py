@@ -25,3 +25,14 @@ def test_creditTopUps_get() -> None:
     verify_auth_headers(
         test_id, "GET", "/v1/projects/project_id/credit-top-ups/top_up_id", {"Authorization": r"Bearer .+"}, []
     )
+
+
+def test_creditTopUps_get_balance() -> None:
+    """Test get_balance endpoint with WireMock"""
+    test_id = "credit_top_ups.get_balance.0"
+    client = get_client(test_id)
+    client.credit_top_ups.get_balance(
+        project_id="project_id",
+    )
+    verify_request_count(test_id, "GET", "/v1/projects/project_id/credits", None, 1)
+    verify_auth_headers(test_id, "GET", "/v1/projects/project_id/credits", {"Authorization": r"Bearer .+"}, [])

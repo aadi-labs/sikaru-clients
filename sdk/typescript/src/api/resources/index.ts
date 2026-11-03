@@ -91,6 +91,7 @@ export * from "./onlineEvaluations/client/requests/index.js";
 export * from "./onlineEvaluations/types/index.js";
 export * as personalChannels from "./personalChannels/index.js";
 export * from "./personalChannels/client/requests/index.js";
+export * as projects from "./projects/index.js";
 export * as releaseWatches from "./releaseWatches/index.js";
 export * from "./releaseWatches/client/requests/index.js";
 export * as responses from "./responses/index.js";

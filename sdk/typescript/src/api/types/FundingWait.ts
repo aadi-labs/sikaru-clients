@@ -11,9 +11,7 @@ export namespace FundingWait {
     export const Reason = {
             CreditsExhausted: "credits_exhausted",
             SpendLimitReached: "spend_limit_reached",
-            BillingUnavailable: "billing_unavailable",
-            PlanInactive: "plan_inactive",
-            TrialEnded: "trial_ended"
+            BillingUnavailable: "billing_unavailable"
         } as const;
     export type Reason = typeof Reason[keyof typeof Reason];
 }

@@ -14,7 +14,7 @@ class RunError(UniversalBaseModel):
 
     code: str = pydantic.Field()
     """
-    Stable failure code. Known values: `credits_exhausted`, `spend_limit_reached`, `billing_unavailable`, `plan_inactive`, `trial_ended`, `model_request_rejected`, `model_not_available`, `model_access_denied`, `effect_outcome_uncertain`, `model_timeout`, `model_unavailable`, `setup_failed`, `tool_not_allowed`, `evidence_unavailable`, `interrupted`, `runtime_incompatible`, `startup_failed`, `capacity_unavailable`, `compute_unavailable`, `recovery_unavailable`, `execution_connection_lost`, `execution_process_exited`, `execution_session_failed`, `execution_failed`. Treat an unrecognized code like `execution_failed`.
+    Stable failure code. Known values: `credits_exhausted`, `spend_limit_reached`, `billing_unavailable`, `model_request_rejected`, `model_not_available`, `model_access_denied`, `effect_outcome_uncertain`, `model_timeout`, `model_unavailable`, `setup_failed`, `tool_not_allowed`, `evidence_unavailable`, `interrupted`, `runtime_incompatible`, `startup_failed`, `capacity_unavailable`, `compute_unavailable`, `recovery_unavailable`, `execution_connection_lost`, `execution_process_exited`, `execution_session_failed`, `execution_failed`. Treat an unrecognized code like `execution_failed`.
     """
 
     message: str = pydantic.Field()
