@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Ask System One questions about a text state from the CLI.
-# Install: curl -fsSL https://sikaru.ai/install.sh | sh
+# Install: curl -fsSL https://app.sikaru.ai/install.sh | sh
 # Authenticate with `sikaru login` and `sikaru config set project PROJECT`, or set SIKARU_API_KEY.
 set -euo pipefail
 

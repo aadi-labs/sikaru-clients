@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Create, publish and run a managed agent from an agent document.
-# Install: curl -fsSL https://sikaru.ai/install.sh | sh
+# Install: curl -fsSL https://app.sikaru.ai/install.sh | sh
 # Authenticate with `sikaru login`, or set SIKARU_API_KEY.
 set -euo pipefail
 

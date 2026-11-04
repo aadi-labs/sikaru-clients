@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Call a Sikaru catalog model from the CLI.
-# Install: curl -fsSL https://sikaru.ai/install.sh | sh
+# Install: curl -fsSL https://app.sikaru.ai/install.sh | sh
 # Authenticate with `sikaru login`, or set SIKARU_API_KEY.
 set -euo pipefail
 

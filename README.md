@@ -11,7 +11,7 @@ version.
 | --- | --- |
 | Python SDK (`sikaru_api`) | `pip install sikaru_api` or `uv add sikaru_api` |
 | TypeScript SDK (`@sikaru/sdk`) | `npm i @sikaru/sdk` |
-| CLI (`sikaru`) | `curl -fsSL https://sikaru.ai/install.sh \| sh` or `npm i -g @sikaru/cli` |
+| CLI (`sikaru`) | `curl -fsSL https://app.sikaru.ai/install.sh \| sh` or `npm i -g @sikaru/cli` (Windows: PowerShell installer on the releases page) |
 
 The CLI signs you in with `sikaru login` (or on the first command you run), then
 `sikaru config set project PROJECT` picks the project to work in. The SDKs, servers and

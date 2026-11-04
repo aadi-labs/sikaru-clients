@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Add credits to your organization from an agent wallet: create a top-up offer, pay its URL,
-# then check it. Install: curl -fsSL https://sikaru.ai/install.sh | sh
+# then check it. Install: curl -fsSL https://app.sikaru.ai/install.sh | sh
 # Authenticate with `sikaru login`, or set SIKARU_API_KEY.
 set -euo pipefail
 
