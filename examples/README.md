@@ -13,15 +13,15 @@ List the models available to your project with `sikaru inference models`.
 
 | Example | What it does | Run it |
 | --- | --- | --- |
-| [python/inference.py](python/inference.py) | Lists models, then makes a plain, a streamed and an async chat call | `pip install sikaru_api && python examples/python/inference.py` |
-| [typescript/inference.ts](typescript/inference.ts) | Lists models, then makes a plain and a streamed chat call | `npm i @sikaru/sdk && node --experimental-strip-types examples/typescript/inference.ts` |
+| [python/inference.py](python/inference.py) | Lists models, then makes a plain, a streamed and an async chat call | `pip install sikaru-sdk && python examples/python/inference.py` |
+| [typescript/inference.ts](typescript/inference.ts) | Lists models, then makes a plain and a streamed chat call | `npm i @aadi-labs/sikaru-sdk && node --experimental-strip-types examples/typescript/inference.ts` |
 | [cli/inference.sh](cli/inference.sh) | Lists and describes models, then chats with one | `bash examples/cli/inference.sh` |
 | [cli/decision.sh](cli/decision.sh) | Asks System One yes-or-no, choice and score questions about a support ticket | `bash examples/cli/decision.sh` |
 | [cli/agent.sh](cli/agent.sh) | Creates, publishes and runs the agent in [agents/data-helper.md](agents/data-helper.md) | `SIKARU_PROJECT=... bash examples/cli/agent.sh` |
 | [cli/credits.sh](cli/credits.sh) | Creates a credit top-up offer, waits while an agent wallet pays its URL, then checks it | `SIKARU_PROJECT=... bash examples/cli/credits.sh` |
 
 The Python and TypeScript examples use the OpenAI-shaped client, `Sikaru` and
-`AsyncSikaru` in Python and `@sikaru/sdk/inference` in TypeScript. Passing
+`AsyncSikaru` in Python and `@aadi-labs/sikaru-sdk/inference` in TypeScript. Passing
 `stream=True` (`stream: true` in TypeScript) to `chat.completions.create` returns a
 stream of chunks. The TypeScript example uses top-level `await`, so run it as an ES module: Node 22.6
 or later, in a project with `"type": "module"`.

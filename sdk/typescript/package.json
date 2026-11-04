@@ -1,5 +1,5 @@
 {
-    "name": "@sikaru/sdk",
+    "name": "@aadi-labs/sikaru-sdk",
     "version": "0.0.1",
     "private": false,
     "type": "commonjs",

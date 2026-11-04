@@ -1,6 +1,6 @@
 from .conftest import get_client, verify_auth_headers, verify_request_count
 
-from sikaru_api import AgentDefinition
+from sikaru_sdk import AgentDefinition
 
 
 def test_managedAgents_list_managed_agents() -> None:

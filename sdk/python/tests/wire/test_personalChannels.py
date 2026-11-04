@@ -1,6 +1,6 @@
 from .conftest import get_client, verify_auth_headers, verify_request_count
 
-from sikaru_api import ConnectionCredentials
+from sikaru_sdk import ConnectionCredentials
 
 
 def test_personalChannels_get_message() -> None:

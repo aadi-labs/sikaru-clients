@@ -1,6 +1,6 @@
 from .conftest import get_client, verify_auth_headers, verify_request_count
 
-from sikaru_api import ReleaseActionRequest
+from sikaru_sdk import ReleaseActionRequest
 
 
 def test_changesets_list_changesets() -> None:

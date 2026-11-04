@@ -1,6 +1,6 @@
 from .conftest import get_client, verify_auth_headers, verify_request_count
 
-from sikaru_api import TraceImportScopeRequest
+from sikaru_sdk import TraceImportScopeRequest
 
 
 def test_traceImports_list_trace_imports() -> None:

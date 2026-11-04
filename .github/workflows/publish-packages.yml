@@ -47,13 +47,13 @@ jobs:
       - uses: pnpm/action-setup@v4
         with:
           package_json_file: sdk/typescript/package.json
-      - name: Build @sikaru/sdk
+      - name: Build @aadi-labs/sikaru-sdk
         working-directory: sdk/typescript
         run: |
           pnpm install --frozen-lockfile --ignore-scripts
           npm run build:cjs
           npm run build:esm
-      - name: Publish @sikaru/sdk
+      - name: Publish @aadi-labs/sikaru-sdk
         working-directory: sdk/typescript
         run: npm publish --provenance --access public
 

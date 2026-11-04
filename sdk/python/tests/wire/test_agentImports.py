@@ -1,6 +1,6 @@
 from .conftest import get_client, verify_auth_headers, verify_request_count
 
-from sikaru_api import AgentImportImproveRequest
+from sikaru_sdk import AgentImportImproveRequest
 
 
 def test_agentImports_list_agent_imports() -> None:

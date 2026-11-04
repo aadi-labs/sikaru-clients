@@ -1,6 +1,6 @@
 # Reference
 ## Auth
-<details><summary><code>client.auth.<a href="src/sikaru_api/auth/client.py">get_device_configuration</a>() -> DeviceConfiguration</code></summary>
+<details><summary><code>client.auth.<a href="src/sikaru_sdk/auth/client.py">get_device_configuration</a>() -> DeviceConfiguration</code></summary>
 <dl>
 <dd>
 
@@ -13,8 +13,8 @@
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -50,7 +50,7 @@ client.auth.get_device_configuration()
 </details>
 
 ## HttpChannels
-<details><summary><code>client.http_channels.<a href="src/sikaru_api/http_channels/client.py">invoke</a>(...) -> HttpReceipt</code></summary>
+<details><summary><code>client.http_channels.<a href="src/sikaru_sdk/http_channels/client.py">invoke</a>(...) -> HttpReceipt</code></summary>
 <dl>
 <dd>
 
@@ -63,8 +63,8 @@ client.auth.get_device_configuration()
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -168,7 +168,7 @@ client.http_channels.invoke(
 </dl>
 </details>
 
-<details><summary><code>client.http_channels.<a href="src/sikaru_api/http_channels/client.py">poll</a>(...) -> HttpReceipt</code></summary>
+<details><summary><code>client.http_channels.<a href="src/sikaru_sdk/http_channels/client.py">poll</a>(...) -> HttpReceipt</code></summary>
 <dl>
 <dd>
 
@@ -181,8 +181,8 @@ client.http_channels.invoke(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -252,7 +252,7 @@ client.http_channels.poll(
 </dl>
 </details>
 
-<details><summary><code>client.http_channels.<a href="src/sikaru_api/http_channels/client.py">start_slack_link</a>(...) -> PersonalSlackChallenge</code></summary>
+<details><summary><code>client.http_channels.<a href="src/sikaru_sdk/http_channels/client.py">start_slack_link</a>(...) -> PersonalSlackChallenge</code></summary>
 <dl>
 <dd>
 
@@ -265,8 +265,8 @@ client.http_channels.poll(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -336,7 +336,7 @@ client.http_channels.start_slack_link(
 </dl>
 </details>
 
-<details><summary><code>client.http_channels.<a href="src/sikaru_api/http_channels/client.py">unlink_slack_identity</a>(...)</code></summary>
+<details><summary><code>client.http_channels.<a href="src/sikaru_sdk/http_channels/client.py">unlink_slack_identity</a>(...)</code></summary>
 <dl>
 <dd>
 
@@ -349,8 +349,8 @@ client.http_channels.start_slack_link(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -421,7 +421,7 @@ client.http_channels.unlink_slack_identity(
 </details>
 
 ## Completions
-<details><summary><code>client.completions.<a href="src/sikaru_api/completions/client.py">create_stream</a>(...) -> typing.Iterator[bytes]</code></summary>
+<details><summary><code>client.completions.<a href="src/sikaru_sdk/completions/client.py">create_stream</a>(...) -> typing.Iterator[bytes]</code></summary>
 <dl>
 <dd>
 
@@ -434,8 +434,8 @@ client.http_channels.unlink_slack_identity(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -689,7 +689,7 @@ client.completions.create_stream(
 </dl>
 </details>
 
-<details><summary><code>client.completions.<a href="src/sikaru_api/completions/client.py">create</a>(...) -> Completion</code></summary>
+<details><summary><code>client.completions.<a href="src/sikaru_sdk/completions/client.py">create</a>(...) -> Completion</code></summary>
 <dl>
 <dd>
 
@@ -702,8 +702,8 @@ client.completions.create_stream(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -958,7 +958,7 @@ client.completions.create_stream(
 </details>
 
 ## Models
-<details><summary><code>client.models.<a href="src/sikaru_api/models/client.py">list</a>() -> ModelList</code></summary>
+<details><summary><code>client.models.<a href="src/sikaru_sdk/models/client.py">list</a>() -> ModelList</code></summary>
 <dl>
 <dd>
 
@@ -971,8 +971,8 @@ client.completions.create_stream(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -1007,7 +1007,7 @@ client.models.list()
 </dl>
 </details>
 
-<details><summary><code>client.models.<a href="src/sikaru_api/models/client.py">retrieve</a>(...) -> PublicModel</code></summary>
+<details><summary><code>client.models.<a href="src/sikaru_sdk/models/client.py">retrieve</a>(...) -> PublicModel</code></summary>
 <dl>
 <dd>
 
@@ -1020,8 +1020,8 @@ client.models.list()
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -1067,7 +1067,7 @@ client.models.retrieve(
 </details>
 
 ## PersonalChannels
-<details><summary><code>client.personal_channels.<a href="src/sikaru_api/personal_channels/client.py">get_message</a>(...) -> PersonalChannelReceipt</code></summary>
+<details><summary><code>client.personal_channels.<a href="src/sikaru_sdk/personal_channels/client.py">get_message</a>(...) -> PersonalChannelReceipt</code></summary>
 <dl>
 <dd>
 
@@ -1080,8 +1080,8 @@ client.models.retrieve(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -1159,7 +1159,7 @@ client.personal_channels.get_message(
 </dl>
 </details>
 
-<details><summary><code>client.personal_channels.<a href="src/sikaru_api/personal_channels/client.py">authorize_connection</a>(...) -> ConnectionAuthorization</code></summary>
+<details><summary><code>client.personal_channels.<a href="src/sikaru_sdk/personal_channels/client.py">authorize_connection</a>(...) -> ConnectionAuthorization</code></summary>
 <dl>
 <dd>
 
@@ -1172,8 +1172,8 @@ client.personal_channels.get_message(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -1260,7 +1260,7 @@ client.personal_channels.authorize_connection(
 </dl>
 </details>
 
-<details><summary><code>client.personal_channels.<a href="src/sikaru_api/personal_channels/client.py">complete_connection</a>(...) -> PersonalChannelConnection</code></summary>
+<details><summary><code>client.personal_channels.<a href="src/sikaru_sdk/personal_channels/client.py">complete_connection</a>(...) -> PersonalChannelConnection</code></summary>
 <dl>
 <dd>
 
@@ -1273,8 +1273,8 @@ client.personal_channels.authorize_connection(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -1370,7 +1370,7 @@ client.personal_channels.complete_connection(
 </dl>
 </details>
 
-<details><summary><code>client.personal_channels.<a href="src/sikaru_api/personal_channels/client.py">replace_connection_credentials</a>(...) -> PersonalChannelConnection</code></summary>
+<details><summary><code>client.personal_channels.<a href="src/sikaru_sdk/personal_channels/client.py">replace_connection_credentials</a>(...) -> PersonalChannelConnection</code></summary>
 <dl>
 <dd>
 
@@ -1383,8 +1383,8 @@ client.personal_channels.complete_connection(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi, ConnectionCredentials
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi, ConnectionCredentials
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -1480,7 +1480,7 @@ client.personal_channels.replace_connection_credentials(
 </dl>
 </details>
 
-<details><summary><code>client.personal_channels.<a href="src/sikaru_api/personal_channels/client.py">list_files</a>(...) -> PersonalChannelFiles</code></summary>
+<details><summary><code>client.personal_channels.<a href="src/sikaru_sdk/personal_channels/client.py">list_files</a>(...) -> PersonalChannelFiles</code></summary>
 <dl>
 <dd>
 
@@ -1493,8 +1493,8 @@ client.personal_channels.replace_connection_credentials(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -1572,7 +1572,7 @@ client.personal_channels.list_files(
 </dl>
 </details>
 
-<details><summary><code>client.personal_channels.<a href="src/sikaru_api/personal_channels/client.py">download_file</a>(...) -> typing.Iterator[bytes]</code></summary>
+<details><summary><code>client.personal_channels.<a href="src/sikaru_sdk/personal_channels/client.py">download_file</a>(...) -> typing.Iterator[bytes]</code></summary>
 <dl>
 <dd>
 
@@ -1585,8 +1585,8 @@ client.personal_channels.list_files(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -1673,7 +1673,7 @@ client.personal_channels.download_file(
 </dl>
 </details>
 
-<details><summary><code>client.personal_channels.<a href="src/sikaru_api/personal_channels/client.py">decide_approval</a>(...) -> PersonalChannelApproval</code></summary>
+<details><summary><code>client.personal_channels.<a href="src/sikaru_sdk/personal_channels/client.py">decide_approval</a>(...) -> PersonalChannelApproval</code></summary>
 <dl>
 <dd>
 
@@ -1686,8 +1686,8 @@ client.personal_channels.download_file(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -1784,7 +1784,7 @@ client.personal_channels.decide_approval(
 </dl>
 </details>
 
-<details><summary><code>client.personal_channels.<a href="src/sikaru_api/personal_channels/client.py">get_slack_link</a>(...) -> PersonalSlackStatus</code></summary>
+<details><summary><code>client.personal_channels.<a href="src/sikaru_sdk/personal_channels/client.py">get_slack_link</a>(...) -> PersonalSlackStatus</code></summary>
 <dl>
 <dd>
 
@@ -1797,8 +1797,8 @@ client.personal_channels.decide_approval(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -1876,7 +1876,7 @@ client.personal_channels.get_slack_link(
 </dl>
 </details>
 
-<details><summary><code>client.personal_channels.<a href="src/sikaru_api/personal_channels/client.py">start_slack_link</a>(...) -> PersonalSlackChallenge</code></summary>
+<details><summary><code>client.personal_channels.<a href="src/sikaru_sdk/personal_channels/client.py">start_slack_link</a>(...) -> PersonalSlackChallenge</code></summary>
 <dl>
 <dd>
 
@@ -1889,8 +1889,8 @@ client.personal_channels.get_slack_link(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -1968,7 +1968,7 @@ client.personal_channels.start_slack_link(
 </dl>
 </details>
 
-<details><summary><code>client.personal_channels.<a href="src/sikaru_api/personal_channels/client.py">unlink_slack_identity</a>(...)</code></summary>
+<details><summary><code>client.personal_channels.<a href="src/sikaru_sdk/personal_channels/client.py">unlink_slack_identity</a>(...)</code></summary>
 <dl>
 <dd>
 
@@ -1981,8 +1981,8 @@ client.personal_channels.start_slack_link(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -2061,7 +2061,7 @@ client.personal_channels.unlink_slack_identity(
 </details>
 
 ## Projects
-<details><summary><code>client.projects.<a href="src/sikaru_api/projects/client.py">list_projects</a>() -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.projects.<a href="src/sikaru_sdk/projects/client.py">list_projects</a>() -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -2088,8 +2088,8 @@ The caller's organization and projects; a signed-in bearer's first call sets the
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -2125,7 +2125,7 @@ client.projects.list_projects()
 </details>
 
 ## Activation
-<details><summary><code>client.activation.<a href="src/sikaru_api/activation/client.py">project_activation_status</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.activation.<a href="src/sikaru_sdk/activation/client.py">project_activation_status</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -2138,8 +2138,8 @@ client.projects.list_projects()
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -2185,7 +2185,7 @@ client.activation.project_activation_status(
 </details>
 
 ## AgentDocuments
-<details><summary><code>client.agent_documents.<a href="src/sikaru_api/agent_documents/client.py">draft</a>(...) -> AgentDocumentDraft</code></summary>
+<details><summary><code>client.agent_documents.<a href="src/sikaru_sdk/agent_documents/client.py">draft</a>(...) -> AgentDocumentDraft</code></summary>
 <dl>
 <dd>
 
@@ -2212,8 +2212,8 @@ Draft a first agent document, starter checks and suggested apps from a descripti
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -2298,7 +2298,7 @@ client.agent_documents.draft(
 </dl>
 </details>
 
-<details><summary><code>client.agent_documents.<a href="src/sikaru_api/agent_documents/client.py">import_files</a>(...) -> ImportedDocument</code></summary>
+<details><summary><code>client.agent_documents.<a href="src/sikaru_sdk/agent_documents/client.py">import_files</a>(...) -> ImportedDocument</code></summary>
 <dl>
 <dd>
 
@@ -2311,8 +2311,8 @@ client.agent_documents.draft(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -2368,7 +2368,7 @@ client.agent_documents.import_files(
 </dl>
 </details>
 
-<details><summary><code>client.agent_documents.<a href="src/sikaru_api/agent_documents/client.py">list_resources</a>(...) -> DocumentResources</code></summary>
+<details><summary><code>client.agent_documents.<a href="src/sikaru_sdk/agent_documents/client.py">list_resources</a>(...) -> DocumentResources</code></summary>
 <dl>
 <dd>
 
@@ -2381,8 +2381,8 @@ client.agent_documents.import_files(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -2427,7 +2427,7 @@ client.agent_documents.list_resources(
 </dl>
 </details>
 
-<details><summary><code>client.agent_documents.<a href="src/sikaru_api/agent_documents/client.py">edit_setting</a>(...) -> ImportedDocument</code></summary>
+<details><summary><code>client.agent_documents.<a href="src/sikaru_sdk/agent_documents/client.py">edit_setting</a>(...) -> ImportedDocument</code></summary>
 <dl>
 <dd>
 
@@ -2454,8 +2454,8 @@ Set or remove one setting without rewriting the rest of the document.
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -2536,7 +2536,7 @@ client.agent_documents.edit_setting(
 </dl>
 </details>
 
-<details><summary><code>client.agent_documents.<a href="src/sikaru_api/agent_documents/client.py">list_templates</a>(...) -> DocumentTemplates</code></summary>
+<details><summary><code>client.agent_documents.<a href="src/sikaru_sdk/agent_documents/client.py">list_templates</a>(...) -> DocumentTemplates</code></summary>
 <dl>
 <dd>
 
@@ -2549,8 +2549,8 @@ client.agent_documents.edit_setting(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -2595,7 +2595,7 @@ client.agent_documents.list_templates(
 </dl>
 </details>
 
-<details><summary><code>client.agent_documents.<a href="src/sikaru_api/agent_documents/client.py">validate_text</a>(...) -> DocumentValidationView</code></summary>
+<details><summary><code>client.agent_documents.<a href="src/sikaru_sdk/agent_documents/client.py">validate_text</a>(...) -> DocumentValidationView</code></summary>
 <dl>
 <dd>
 
@@ -2608,8 +2608,8 @@ client.agent_documents.list_templates(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -2663,7 +2663,7 @@ client.agent_documents.validate_text(
 </dl>
 </details>
 
-<details><summary><code>client.agent_documents.<a href="src/sikaru_api/agent_documents/client.py">get</a>(...) -> AgentDocument</code></summary>
+<details><summary><code>client.agent_documents.<a href="src/sikaru_sdk/agent_documents/client.py">get</a>(...) -> AgentDocument</code></summary>
 <dl>
 <dd>
 
@@ -2676,8 +2676,8 @@ client.agent_documents.validate_text(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -2731,7 +2731,7 @@ client.agent_documents.get(
 </dl>
 </details>
 
-<details><summary><code>client.agent_documents.<a href="src/sikaru_api/agent_documents/client.py">save</a>(...) -> AgentDocument</code></summary>
+<details><summary><code>client.agent_documents.<a href="src/sikaru_sdk/agent_documents/client.py">save</a>(...) -> AgentDocument</code></summary>
 <dl>
 <dd>
 
@@ -2744,8 +2744,8 @@ client.agent_documents.get(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -2817,7 +2817,7 @@ client.agent_documents.save(
 </dl>
 </details>
 
-<details><summary><code>client.agent_documents.<a href="src/sikaru_api/agent_documents/client.py">compare</a>(...) -> DocumentComparison</code></summary>
+<details><summary><code>client.agent_documents.<a href="src/sikaru_sdk/agent_documents/client.py">compare</a>(...) -> DocumentComparison</code></summary>
 <dl>
 <dd>
 
@@ -2830,8 +2830,8 @@ client.agent_documents.save(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -2885,7 +2885,7 @@ client.agent_documents.compare(
 </dl>
 </details>
 
-<details><summary><code>client.agent_documents.<a href="src/sikaru_api/agent_documents/client.py">discard</a>(...) -> AgentDocument</code></summary>
+<details><summary><code>client.agent_documents.<a href="src/sikaru_sdk/agent_documents/client.py">discard</a>(...) -> AgentDocument</code></summary>
 <dl>
 <dd>
 
@@ -2898,8 +2898,8 @@ client.agent_documents.compare(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -2970,7 +2970,7 @@ client.agent_documents.discard(
 </dl>
 </details>
 
-<details><summary><code>client.agent_documents.<a href="src/sikaru_api/agent_documents/client.py">publish</a>(...) -> DocumentPublication</code></summary>
+<details><summary><code>client.agent_documents.<a href="src/sikaru_sdk/agent_documents/client.py">publish</a>(...) -> DocumentPublication</code></summary>
 <dl>
 <dd>
 
@@ -2983,8 +2983,8 @@ client.agent_documents.discard(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -3079,7 +3079,7 @@ client.agent_documents.publish(
 </dl>
 </details>
 
-<details><summary><code>client.agent_documents.<a href="src/sikaru_api/agent_documents/client.py">revert</a>(...) -> DocumentPublication</code></summary>
+<details><summary><code>client.agent_documents.<a href="src/sikaru_sdk/agent_documents/client.py">revert</a>(...) -> DocumentPublication</code></summary>
 <dl>
 <dd>
 
@@ -3092,8 +3092,8 @@ client.agent_documents.publish(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -3197,7 +3197,7 @@ client.agent_documents.revert(
 </dl>
 </details>
 
-<details><summary><code>client.agent_documents.<a href="src/sikaru_api/agent_documents/client.py">review</a>(...) -> DocumentReview</code></summary>
+<details><summary><code>client.agent_documents.<a href="src/sikaru_sdk/agent_documents/client.py">review</a>(...) -> DocumentReview</code></summary>
 <dl>
 <dd>
 
@@ -3210,8 +3210,8 @@ client.agent_documents.revert(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -3314,7 +3314,7 @@ client.agent_documents.review(
 </dl>
 </details>
 
-<details><summary><code>client.agent_documents.<a href="src/sikaru_api/agent_documents/client.py">snippets</a>(...) -> AgentSnippets</code></summary>
+<details><summary><code>client.agent_documents.<a href="src/sikaru_sdk/agent_documents/client.py">snippets</a>(...) -> AgentSnippets</code></summary>
 <dl>
 <dd>
 
@@ -3327,8 +3327,8 @@ client.agent_documents.review(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -3382,7 +3382,7 @@ client.agent_documents.snippets(
 </dl>
 </details>
 
-<details><summary><code>client.agent_documents.<a href="src/sikaru_api/agent_documents/client.py">list_suggestions</a>(...) -> DocumentSuggestions</code></summary>
+<details><summary><code>client.agent_documents.<a href="src/sikaru_sdk/agent_documents/client.py">list_suggestions</a>(...) -> DocumentSuggestions</code></summary>
 <dl>
 <dd>
 
@@ -3395,8 +3395,8 @@ client.agent_documents.snippets(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -3450,7 +3450,7 @@ client.agent_documents.list_suggestions(
 </dl>
 </details>
 
-<details><summary><code>client.agent_documents.<a href="src/sikaru_api/agent_documents/client.py">adopt_suggestion</a>(...) -> AgentDocument</code></summary>
+<details><summary><code>client.agent_documents.<a href="src/sikaru_sdk/agent_documents/client.py">adopt_suggestion</a>(...) -> AgentDocument</code></summary>
 <dl>
 <dd>
 
@@ -3463,8 +3463,8 @@ client.agent_documents.list_suggestions(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -3536,7 +3536,7 @@ client.agent_documents.adopt_suggestion(
 </dl>
 </details>
 
-<details><summary><code>client.agent_documents.<a href="src/sikaru_api/agent_documents/client.py">dismiss_suggestion</a>(...) -> DocumentSuggestion</code></summary>
+<details><summary><code>client.agent_documents.<a href="src/sikaru_sdk/agent_documents/client.py">dismiss_suggestion</a>(...) -> DocumentSuggestion</code></summary>
 <dl>
 <dd>
 
@@ -3549,8 +3549,8 @@ client.agent_documents.adopt_suggestion(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -3613,7 +3613,7 @@ client.agent_documents.dismiss_suggestion(
 </dl>
 </details>
 
-<details><summary><code>client.agent_documents.<a href="src/sikaru_api/agent_documents/client.py">validate</a>(...) -> DocumentValidationView</code></summary>
+<details><summary><code>client.agent_documents.<a href="src/sikaru_sdk/agent_documents/client.py">validate</a>(...) -> DocumentValidationView</code></summary>
 <dl>
 <dd>
 
@@ -3626,8 +3626,8 @@ client.agent_documents.dismiss_suggestion(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -3690,7 +3690,7 @@ client.agent_documents.validate(
 </dl>
 </details>
 
-<details><summary><code>client.agent_documents.<a href="src/sikaru_api/agent_documents/client.py">list_versions</a>(...) -> DocumentVersions</code></summary>
+<details><summary><code>client.agent_documents.<a href="src/sikaru_sdk/agent_documents/client.py">list_versions</a>(...) -> DocumentVersions</code></summary>
 <dl>
 <dd>
 
@@ -3703,8 +3703,8 @@ client.agent_documents.validate(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -3759,7 +3759,7 @@ client.agent_documents.list_versions(
 </details>
 
 ## AgentImports
-<details><summary><code>client.agent_imports.<a href="src/sikaru_api/agent_imports/client.py">list_agent_imports</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.agent_imports.<a href="src/sikaru_sdk/agent_imports/client.py">list_agent_imports</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -3772,8 +3772,8 @@ client.agent_documents.list_versions(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -3818,7 +3818,7 @@ client.agent_imports.list_agent_imports(
 </dl>
 </details>
 
-<details><summary><code>client.agent_imports.<a href="src/sikaru_api/agent_imports/client.py">create_agent_import</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.agent_imports.<a href="src/sikaru_sdk/agent_imports/client.py">create_agent_import</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -3831,8 +3831,8 @@ client.agent_imports.list_agent_imports(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi, AgentImportImproveRequest
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi, AgentImportImproveRequest
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -3932,7 +3932,7 @@ client.agent_imports.create_agent_import(
 </details>
 
 ## Agents
-<details><summary><code>client.agents.<a href="src/sikaru_api/agents/client.py">create_managed_session</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.agents.<a href="src/sikaru_sdk/agents/client.py">create_managed_session</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -3945,8 +3945,8 @@ client.agent_imports.create_agent_import(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -4034,7 +4034,7 @@ client.agents.create_managed_session(
 </details>
 
 ## CapabilityCeilings
-<details><summary><code>client.capability_ceilings.<a href="src/sikaru_api/capability_ceilings/client.py">get</a>(...) -> CapabilityCeilingsView</code></summary>
+<details><summary><code>client.capability_ceilings.<a href="src/sikaru_sdk/capability_ceilings/client.py">get</a>(...) -> CapabilityCeilingsView</code></summary>
 <dl>
 <dd>
 
@@ -4047,8 +4047,8 @@ client.agents.create_managed_session(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -4093,7 +4093,7 @@ client.capability_ceilings.get(
 </dl>
 </details>
 
-<details><summary><code>client.capability_ceilings.<a href="src/sikaru_api/capability_ceilings/client.py">update</a>(...) -> CapabilityCeilingsView</code></summary>
+<details><summary><code>client.capability_ceilings.<a href="src/sikaru_sdk/capability_ceilings/client.py">update</a>(...) -> CapabilityCeilingsView</code></summary>
 <dl>
 <dd>
 
@@ -4106,8 +4106,8 @@ client.capability_ceilings.get(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -4161,7 +4161,7 @@ client.capability_ceilings.update(
 </details>
 
 ## Changesets
-<details><summary><code>client.changesets.<a href="src/sikaru_api/changesets/client.py">list_changesets</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.changesets.<a href="src/sikaru_sdk/changesets/client.py">list_changesets</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -4174,8 +4174,8 @@ client.capability_ceilings.update(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -4236,7 +4236,7 @@ client.changesets.list_changesets(
 </dl>
 </details>
 
-<details><summary><code>client.changesets.<a href="src/sikaru_api/changesets/client.py">create_changeset</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.changesets.<a href="src/sikaru_sdk/changesets/client.py">create_changeset</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -4249,8 +4249,8 @@ client.changesets.list_changesets(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -4372,7 +4372,7 @@ client.changesets.create_changeset(
 </dl>
 </details>
 
-<details><summary><code>client.changesets.<a href="src/sikaru_api/changesets/client.py">get_changeset</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.changesets.<a href="src/sikaru_sdk/changesets/client.py">get_changeset</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -4385,8 +4385,8 @@ client.changesets.create_changeset(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -4440,7 +4440,7 @@ client.changesets.get_changeset(
 </dl>
 </details>
 
-<details><summary><code>client.changesets.<a href="src/sikaru_api/changesets/client.py">approve_changeset</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.changesets.<a href="src/sikaru_sdk/changesets/client.py">approve_changeset</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -4453,8 +4453,8 @@ client.changesets.get_changeset(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi, ReleaseActionRequest
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi, ReleaseActionRequest
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -4517,7 +4517,7 @@ client.changesets.approve_changeset(
 </dl>
 </details>
 
-<details><summary><code>client.changesets.<a href="src/sikaru_api/changesets/client.py">list_changeset_diffs</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.changesets.<a href="src/sikaru_sdk/changesets/client.py">list_changeset_diffs</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -4530,8 +4530,8 @@ client.changesets.approve_changeset(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -4585,7 +4585,7 @@ client.changesets.list_changeset_diffs(
 </dl>
 </details>
 
-<details><summary><code>client.changesets.<a href="src/sikaru_api/changesets/client.py">list_changeset_evidence</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.changesets.<a href="src/sikaru_sdk/changesets/client.py">list_changeset_evidence</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -4598,8 +4598,8 @@ client.changesets.list_changeset_diffs(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -4653,7 +4653,7 @@ client.changesets.list_changeset_evidence(
 </dl>
 </details>
 
-<details><summary><code>client.changesets.<a href="src/sikaru_api/changesets/client.py">promote_changeset</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.changesets.<a href="src/sikaru_sdk/changesets/client.py">promote_changeset</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -4666,8 +4666,8 @@ client.changesets.list_changeset_evidence(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi, ReleaseActionRequest
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi, ReleaseActionRequest
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -4730,7 +4730,7 @@ client.changesets.promote_changeset(
 </dl>
 </details>
 
-<details><summary><code>client.changesets.<a href="src/sikaru_api/changesets/client.py">reject_changeset</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.changesets.<a href="src/sikaru_sdk/changesets/client.py">reject_changeset</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -4743,8 +4743,8 @@ client.changesets.promote_changeset(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi, ReleaseActionRequest
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi, ReleaseActionRequest
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -4807,7 +4807,7 @@ client.changesets.reject_changeset(
 </dl>
 </details>
 
-<details><summary><code>client.changesets.<a href="src/sikaru_api/changesets/client.py">rollback_changeset</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.changesets.<a href="src/sikaru_sdk/changesets/client.py">rollback_changeset</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -4820,8 +4820,8 @@ client.changesets.reject_changeset(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi, ReleaseActionRequest
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi, ReleaseActionRequest
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -4884,7 +4884,7 @@ client.changesets.rollback_changeset(
 </dl>
 </details>
 
-<details><summary><code>client.changesets.<a href="src/sikaru_api/changesets/client.py">stage_changeset</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.changesets.<a href="src/sikaru_sdk/changesets/client.py">stage_changeset</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -4897,8 +4897,8 @@ client.changesets.rollback_changeset(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi, ReleaseActionRequest
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi, ReleaseActionRequest
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -4962,7 +4962,7 @@ client.changesets.stage_changeset(
 </details>
 
 ## Channels
-<details><summary><code>client.channels.<a href="src/sikaru_api/channels/client.py">availability</a>(...) -> Availability</code></summary>
+<details><summary><code>client.channels.<a href="src/sikaru_sdk/channels/client.py">availability</a>(...) -> Availability</code></summary>
 <dl>
 <dd>
 
@@ -4975,8 +4975,8 @@ client.changesets.stage_changeset(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -5021,7 +5021,7 @@ client.channels.availability(
 </dl>
 </details>
 
-<details><summary><code>client.channels.<a href="src/sikaru_api/channels/client.py">bindings</a>(...) -> typing.List[Binding]</code></summary>
+<details><summary><code>client.channels.<a href="src/sikaru_sdk/channels/client.py">bindings</a>(...) -> typing.List[Binding]</code></summary>
 <dl>
 <dd>
 
@@ -5034,8 +5034,8 @@ client.channels.availability(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -5089,7 +5089,7 @@ client.channels.bindings(
 </dl>
 </details>
 
-<details><summary><code>client.channels.<a href="src/sikaru_api/channels/client.py">create_binding</a>(...) -> Binding</code></summary>
+<details><summary><code>client.channels.<a href="src/sikaru_sdk/channels/client.py">create_binding</a>(...) -> Binding</code></summary>
 <dl>
 <dd>
 
@@ -5102,8 +5102,8 @@ client.channels.bindings(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -5206,7 +5206,7 @@ client.channels.create_binding(
 </dl>
 </details>
 
-<details><summary><code>client.channels.<a href="src/sikaru_api/channels/client.py">delete_http_binding</a>(...)</code></summary>
+<details><summary><code>client.channels.<a href="src/sikaru_sdk/channels/client.py">delete_http_binding</a>(...)</code></summary>
 <dl>
 <dd>
 
@@ -5219,8 +5219,8 @@ client.channels.create_binding(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -5274,7 +5274,7 @@ client.channels.delete_http_binding(
 </dl>
 </details>
 
-<details><summary><code>client.channels.<a href="src/sikaru_api/channels/client.py">status</a>(...) -> Binding</code></summary>
+<details><summary><code>client.channels.<a href="src/sikaru_sdk/channels/client.py">status</a>(...) -> Binding</code></summary>
 <dl>
 <dd>
 
@@ -5287,8 +5287,8 @@ client.channels.delete_http_binding(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -5351,7 +5351,7 @@ client.channels.status(
 </dl>
 </details>
 
-<details><summary><code>client.channels.<a href="src/sikaru_api/channels/client.py">configure_http_binding</a>(...) -> Binding</code></summary>
+<details><summary><code>client.channels.<a href="src/sikaru_sdk/channels/client.py">configure_http_binding</a>(...) -> Binding</code></summary>
 <dl>
 <dd>
 
@@ -5364,8 +5364,8 @@ client.channels.status(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -5443,7 +5443,7 @@ client.channels.configure_http_binding(
 </dl>
 </details>
 
-<details><summary><code>client.channels.<a href="src/sikaru_api/channels/client.py">issue_http_credential</a>(...) -> HttpCredential</code></summary>
+<details><summary><code>client.channels.<a href="src/sikaru_sdk/channels/client.py">issue_http_credential</a>(...) -> HttpCredential</code></summary>
 <dl>
 <dd>
 
@@ -5456,8 +5456,8 @@ client.channels.configure_http_binding(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -5511,7 +5511,7 @@ client.channels.issue_http_credential(
 </dl>
 </details>
 
-<details><summary><code>client.channels.<a href="src/sikaru_api/channels/client.py">configure_personal_access</a>(...) -> PersonalAccessConfiguration</code></summary>
+<details><summary><code>client.channels.<a href="src/sikaru_sdk/channels/client.py">configure_personal_access</a>(...) -> PersonalAccessConfiguration</code></summary>
 <dl>
 <dd>
 
@@ -5524,8 +5524,8 @@ client.channels.issue_http_credential(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -5596,7 +5596,7 @@ client.channels.configure_personal_access(
 </dl>
 </details>
 
-<details><summary><code>client.channels.<a href="src/sikaru_api/channels/client.py">recent_receipts</a>(...) -> typing.List[ReceiptSummary]</code></summary>
+<details><summary><code>client.channels.<a href="src/sikaru_sdk/channels/client.py">recent_receipts</a>(...) -> typing.List[ReceiptSummary]</code></summary>
 <dl>
 <dd>
 
@@ -5609,8 +5609,8 @@ client.channels.configure_personal_access(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -5664,7 +5664,7 @@ client.channels.recent_receipts(
 </dl>
 </details>
 
-<details><summary><code>client.channels.<a href="src/sikaru_api/channels/client.py">get_member_slack_link</a>(...) -> PersonalSlackStatus</code></summary>
+<details><summary><code>client.channels.<a href="src/sikaru_sdk/channels/client.py">get_member_slack_link</a>(...) -> PersonalSlackStatus</code></summary>
 <dl>
 <dd>
 
@@ -5677,8 +5677,8 @@ client.channels.recent_receipts(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -5741,7 +5741,7 @@ client.channels.get_member_slack_link(
 </dl>
 </details>
 
-<details><summary><code>client.channels.<a href="src/sikaru_api/channels/client.py">start_member_slack_link</a>(...) -> PersonalSlackChallenge</code></summary>
+<details><summary><code>client.channels.<a href="src/sikaru_sdk/channels/client.py">start_member_slack_link</a>(...) -> PersonalSlackChallenge</code></summary>
 <dl>
 <dd>
 
@@ -5754,8 +5754,8 @@ client.channels.get_member_slack_link(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -5818,7 +5818,7 @@ client.channels.start_member_slack_link(
 </dl>
 </details>
 
-<details><summary><code>client.channels.<a href="src/sikaru_api/channels/client.py">unlink_member_slack_identity</a>(...)</code></summary>
+<details><summary><code>client.channels.<a href="src/sikaru_sdk/channels/client.py">unlink_member_slack_identity</a>(...)</code></summary>
 <dl>
 <dd>
 
@@ -5831,8 +5831,8 @@ client.channels.start_member_slack_link(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -5895,7 +5895,7 @@ client.channels.unlink_member_slack_identity(
 </dl>
 </details>
 
-<details><summary><code>client.channels.<a href="src/sikaru_api/channels/client.py">save_creation_resume</a>(...) -> CreationResumeId</code></summary>
+<details><summary><code>client.channels.<a href="src/sikaru_sdk/channels/client.py">save_creation_resume</a>(...) -> CreationResumeId</code></summary>
 <dl>
 <dd>
 
@@ -5908,8 +5908,8 @@ client.channels.unlink_member_slack_identity(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -5965,7 +5965,7 @@ client.channels.save_creation_resume(
 </dl>
 </details>
 
-<details><summary><code>client.channels.<a href="src/sikaru_api/channels/client.py">get_creation_resume</a>(...) -> CreationResume</code></summary>
+<details><summary><code>client.channels.<a href="src/sikaru_sdk/channels/client.py">get_creation_resume</a>(...) -> CreationResume</code></summary>
 <dl>
 <dd>
 
@@ -5978,8 +5978,8 @@ client.channels.save_creation_resume(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -6033,7 +6033,7 @@ client.channels.get_creation_resume(
 </dl>
 </details>
 
-<details><summary><code>client.channels.<a href="src/sikaru_api/channels/client.py">list_identity_apps</a>(...) -> typing.List[ChannelIdentityApp]</code></summary>
+<details><summary><code>client.channels.<a href="src/sikaru_sdk/channels/client.py">list_identity_apps</a>(...) -> typing.List[ChannelIdentityApp]</code></summary>
 <dl>
 <dd>
 
@@ -6046,8 +6046,8 @@ client.channels.get_creation_resume(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -6092,7 +6092,7 @@ client.channels.list_identity_apps(
 </dl>
 </details>
 
-<details><summary><code>client.channels.<a href="src/sikaru_api/channels/client.py">create_identity_app</a>(...) -> ChannelIdentityAppId</code></summary>
+<details><summary><code>client.channels.<a href="src/sikaru_sdk/channels/client.py">create_identity_app</a>(...) -> ChannelIdentityAppId</code></summary>
 <dl>
 <dd>
 
@@ -6105,8 +6105,8 @@ client.channels.list_identity_apps(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -6196,7 +6196,7 @@ client.channels.create_identity_app(
 </dl>
 </details>
 
-<details><summary><code>client.channels.<a href="src/sikaru_api/channels/client.py">revoke_identity_app</a>(...)</code></summary>
+<details><summary><code>client.channels.<a href="src/sikaru_sdk/channels/client.py">revoke_identity_app</a>(...)</code></summary>
 <dl>
 <dd>
 
@@ -6209,8 +6209,8 @@ client.channels.create_identity_app(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -6264,7 +6264,7 @@ client.channels.revoke_identity_app(
 </dl>
 </details>
 
-<details><summary><code>client.channels.<a href="src/sikaru_api/channels/client.py">update_identity_app_urls</a>(...) -> ChannelIdentityAppUrLs</code></summary>
+<details><summary><code>client.channels.<a href="src/sikaru_sdk/channels/client.py">update_identity_app_urls</a>(...) -> ChannelIdentityAppUrLs</code></summary>
 <dl>
 <dd>
 
@@ -6277,8 +6277,8 @@ client.channels.revoke_identity_app(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -6348,7 +6348,7 @@ client.channels.update_identity_app_urls(
 </dl>
 </details>
 
-<details><summary><code>client.channels.<a href="src/sikaru_api/channels/client.py">revoke_subject</a>(...)</code></summary>
+<details><summary><code>client.channels.<a href="src/sikaru_sdk/channels/client.py">revoke_subject</a>(...)</code></summary>
 <dl>
 <dd>
 
@@ -6361,8 +6361,8 @@ client.channels.update_identity_app_urls(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -6434,7 +6434,7 @@ client.channels.revoke_subject(
 </dl>
 </details>
 
-<details><summary><code>client.channels.<a href="src/sikaru_api/channels/client.py">create_personal_slack_binding</a>(...) -> Binding</code></summary>
+<details><summary><code>client.channels.<a href="src/sikaru_sdk/channels/client.py">create_personal_slack_binding</a>(...) -> Binding</code></summary>
 <dl>
 <dd>
 
@@ -6447,8 +6447,8 @@ client.channels.revoke_subject(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -6529,7 +6529,7 @@ client.channels.create_personal_slack_binding(
 </dl>
 </details>
 
-<details><summary><code>client.channels.<a href="src/sikaru_api/channels/client.py">delivery</a>(...) -> typing.Optional[Delivery]</code></summary>
+<details><summary><code>client.channels.<a href="src/sikaru_sdk/channels/client.py">delivery</a>(...) -> typing.Optional[Delivery]</code></summary>
 <dl>
 <dd>
 
@@ -6542,8 +6542,8 @@ client.channels.create_personal_slack_binding(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -6597,7 +6597,7 @@ client.channels.delivery(
 </dl>
 </details>
 
-<details><summary><code>client.channels.<a href="src/sikaru_api/channels/client.py">resend_delivery</a>(...) -> Delivery</code></summary>
+<details><summary><code>client.channels.<a href="src/sikaru_sdk/channels/client.py">resend_delivery</a>(...) -> Delivery</code></summary>
 <dl>
 <dd>
 
@@ -6610,8 +6610,8 @@ client.channels.delivery(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -6674,7 +6674,7 @@ client.channels.resend_delivery(
 </dl>
 </details>
 
-<details><summary><code>client.channels.<a href="src/sikaru_api/channels/client.py">dm_status</a>(...) -> DmStatus</code></summary>
+<details><summary><code>client.channels.<a href="src/sikaru_sdk/channels/client.py">dm_status</a>(...) -> DmStatus</code></summary>
 <dl>
 <dd>
 
@@ -6687,8 +6687,8 @@ client.channels.resend_delivery(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -6742,7 +6742,7 @@ client.channels.dm_status(
 </dl>
 </details>
 
-<details><summary><code>client.channels.<a href="src/sikaru_api/channels/client.py">installations</a>(...) -> typing.List[Installation]</code></summary>
+<details><summary><code>client.channels.<a href="src/sikaru_sdk/channels/client.py">installations</a>(...) -> typing.List[Installation]</code></summary>
 <dl>
 <dd>
 
@@ -6755,8 +6755,8 @@ client.channels.dm_status(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -6801,7 +6801,7 @@ client.channels.installations(
 </dl>
 </details>
 
-<details><summary><code>client.channels.<a href="src/sikaru_api/channels/client.py">disconnect</a>(...) -> Installation</code></summary>
+<details><summary><code>client.channels.<a href="src/sikaru_sdk/channels/client.py">disconnect</a>(...) -> Installation</code></summary>
 <dl>
 <dd>
 
@@ -6814,8 +6814,8 @@ client.channels.installations(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -6869,7 +6869,7 @@ client.channels.disconnect(
 </dl>
 </details>
 
-<details><summary><code>client.channels.<a href="src/sikaru_api/channels/client.py">start_dm</a>(...) -> DmChallenge</code></summary>
+<details><summary><code>client.channels.<a href="src/sikaru_sdk/channels/client.py">start_dm</a>(...) -> DmChallenge</code></summary>
 <dl>
 <dd>
 
@@ -6882,8 +6882,8 @@ client.channels.disconnect(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -6937,7 +6937,7 @@ client.channels.start_dm(
 </dl>
 </details>
 
-<details><summary><code>client.channels.<a href="src/sikaru_api/channels/client.py">rooms</a>(...) -> typing.List[Room]</code></summary>
+<details><summary><code>client.channels.<a href="src/sikaru_sdk/channels/client.py">rooms</a>(...) -> typing.List[Room]</code></summary>
 <dl>
 <dd>
 
@@ -6950,8 +6950,8 @@ client.channels.start_dm(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -7005,7 +7005,7 @@ client.channels.rooms(
 </dl>
 </details>
 
-<details><summary><code>client.channels.<a href="src/sikaru_api/channels/client.py">complete</a>(...) -> OAuthResult</code></summary>
+<details><summary><code>client.channels.<a href="src/sikaru_sdk/channels/client.py">complete</a>(...) -> OAuthResult</code></summary>
 <dl>
 <dd>
 
@@ -7018,8 +7018,8 @@ client.channels.rooms(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -7089,7 +7089,7 @@ client.channels.complete(
 </dl>
 </details>
 
-<details><summary><code>client.channels.<a href="src/sikaru_api/channels/client.py">start</a>(...) -> Authorization</code></summary>
+<details><summary><code>client.channels.<a href="src/sikaru_sdk/channels/client.py">start</a>(...) -> Authorization</code></summary>
 <dl>
 <dd>
 
@@ -7102,8 +7102,8 @@ client.channels.complete(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -7165,7 +7165,7 @@ client.channels.start(
 </details>
 
 ## ComputeAttachments
-<details><summary><code>client.compute_attachments.<a href="src/sikaru_api/compute_attachments/client.py">get</a>(...) -> AttachmentView</code></summary>
+<details><summary><code>client.compute_attachments.<a href="src/sikaru_sdk/compute_attachments/client.py">get</a>(...) -> AttachmentView</code></summary>
 <dl>
 <dd>
 
@@ -7178,8 +7178,8 @@ client.channels.start(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -7233,7 +7233,7 @@ client.compute_attachments.get(
 </dl>
 </details>
 
-<details><summary><code>client.compute_attachments.<a href="src/sikaru_api/compute_attachments/client.py">abandon</a>(...) -> AttachmentView</code></summary>
+<details><summary><code>client.compute_attachments.<a href="src/sikaru_sdk/compute_attachments/client.py">abandon</a>(...) -> AttachmentView</code></summary>
 <dl>
 <dd>
 
@@ -7260,8 +7260,8 @@ Irreversibly abandon execution authority, preserving unknown effects. Cleanup is
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -7324,7 +7324,7 @@ client.compute_attachments.abandon(
 </dl>
 </details>
 
-<details><summary><code>client.compute_attachments.<a href="src/sikaru_api/compute_attachments/client.py">cancel</a>(...) -> AttachmentView</code></summary>
+<details><summary><code>client.compute_attachments.<a href="src/sikaru_sdk/compute_attachments/client.py">cancel</a>(...) -> AttachmentView</code></summary>
 <dl>
 <dd>
 
@@ -7351,8 +7351,8 @@ Idempotently request stopping. This never asserts child cleanup.
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -7406,7 +7406,7 @@ client.compute_attachments.cancel(
 </dl>
 </details>
 
-<details><summary><code>client.compute_attachments.<a href="src/sikaru_api/compute_attachments/client.py">claim</a>(...) -> ClaimView</code></summary>
+<details><summary><code>client.compute_attachments.<a href="src/sikaru_sdk/compute_attachments/client.py">claim</a>(...) -> ClaimView</code></summary>
 <dl>
 <dd>
 
@@ -7433,8 +7433,8 @@ Same attachment/key returns the same launch identity, never another launch.
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -7497,7 +7497,7 @@ client.compute_attachments.claim(
 </dl>
 </details>
 
-<details><summary><code>client.compute_attachments.<a href="src/sikaru_api/compute_attachments/client.py">cleanup</a>(...) -> AttachmentView</code></summary>
+<details><summary><code>client.compute_attachments.<a href="src/sikaru_sdk/compute_attachments/client.py">cleanup</a>(...) -> AttachmentView</code></summary>
 <dl>
 <dd>
 
@@ -7510,8 +7510,8 @@ client.compute_attachments.claim(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -7583,7 +7583,7 @@ client.compute_attachments.cleanup(
 </dl>
 </details>
 
-<details><summary><code>client.compute_attachments.<a href="src/sikaru_api/compute_attachments/client.py">connect</a>(...) -> AttachmentView</code></summary>
+<details><summary><code>client.compute_attachments.<a href="src/sikaru_sdk/compute_attachments/client.py">connect</a>(...) -> AttachmentView</code></summary>
 <dl>
 <dd>
 
@@ -7610,8 +7610,8 @@ Attest original workspace/journal. Reconnection never replays uncertain effects.
 <dd>
 
 ```python
-from sikaru_api import SikaruApi, WorkspaceProvenance
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi, WorkspaceProvenance
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -7683,7 +7683,7 @@ client.compute_attachments.connect(
 </dl>
 </details>
 
-<details><summary><code>client.compute_attachments.<a href="src/sikaru_api/compute_attachments/client.py">issue_credential</a>(...) -> CredentialIssued</code></summary>
+<details><summary><code>client.compute_attachments.<a href="src/sikaru_sdk/compute_attachments/client.py">issue_credential</a>(...) -> CredentialIssued</code></summary>
 <dl>
 <dd>
 
@@ -7696,8 +7696,8 @@ client.compute_attachments.connect(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -7769,7 +7769,7 @@ client.compute_attachments.issue_credential(
 </dl>
 </details>
 
-<details><summary><code>client.compute_attachments.<a href="src/sikaru_api/compute_attachments/client.py">heartbeat</a>(...) -> AttachmentView</code></summary>
+<details><summary><code>client.compute_attachments.<a href="src/sikaru_sdk/compute_attachments/client.py">heartbeat</a>(...) -> AttachmentView</code></summary>
 <dl>
 <dd>
 
@@ -7782,8 +7782,8 @@ client.compute_attachments.issue_credential(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -7837,7 +7837,7 @@ client.compute_attachments.heartbeat(
 </dl>
 </details>
 
-<details><summary><code>client.compute_attachments.<a href="src/sikaru_api/compute_attachments/client.py">ready</a>(...) -> AttachmentView</code></summary>
+<details><summary><code>client.compute_attachments.<a href="src/sikaru_sdk/compute_attachments/client.py">ready</a>(...) -> AttachmentView</code></summary>
 <dl>
 <dd>
 
@@ -7850,8 +7850,8 @@ client.compute_attachments.heartbeat(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi, WorkspaceProvenance
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi, WorkspaceProvenance
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -7923,7 +7923,7 @@ client.compute_attachments.ready(
 </dl>
 </details>
 
-<details><summary><code>client.compute_attachments.<a href="src/sikaru_api/compute_attachments/client.py">reconcile</a>(...) -> ReconcileView</code></summary>
+<details><summary><code>client.compute_attachments.<a href="src/sikaru_sdk/compute_attachments/client.py">reconcile</a>(...) -> ReconcileView</code></summary>
 <dl>
 <dd>
 
@@ -7936,8 +7936,8 @@ client.compute_attachments.ready(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi, WorkspaceProvenance
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi, WorkspaceProvenance
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -8045,7 +8045,7 @@ client.compute_attachments.reconcile(
 </dl>
 </details>
 
-<details><summary><code>client.compute_attachments.<a href="src/sikaru_api/compute_attachments/client.py">status</a>(...) -> AttachmentView</code></summary>
+<details><summary><code>client.compute_attachments.<a href="src/sikaru_sdk/compute_attachments/client.py">status</a>(...) -> AttachmentView</code></summary>
 <dl>
 <dd>
 
@@ -8058,8 +8058,8 @@ client.compute_attachments.reconcile(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -8113,7 +8113,7 @@ client.compute_attachments.status(
 </dl>
 </details>
 
-<details><summary><code>client.compute_attachments.<a href="src/sikaru_api/compute_attachments/client.py">stop</a>(...) -> AttachmentView</code></summary>
+<details><summary><code>client.compute_attachments.<a href="src/sikaru_sdk/compute_attachments/client.py">stop</a>(...) -> AttachmentView</code></summary>
 <dl>
 <dd>
 
@@ -8140,8 +8140,8 @@ Executor can stop its own attachment and cancel its runs; cleanup is separately 
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -8195,7 +8195,7 @@ client.compute_attachments.stop(
 </dl>
 </details>
 
-<details><summary><code>client.compute_attachments.<a href="src/sikaru_api/compute_attachments/client.py">teardown</a>(...) -> AttachmentView</code></summary>
+<details><summary><code>client.compute_attachments.<a href="src/sikaru_sdk/compute_attachments/client.py">teardown</a>(...) -> AttachmentView</code></summary>
 <dl>
 <dd>
 
@@ -8222,8 +8222,8 @@ Controller attests sandbox teardown; clean parked turns stay resumable.
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -8322,7 +8322,7 @@ client.compute_attachments.teardown(
 </dl>
 </details>
 
-<details><summary><code>client.compute_attachments.<a href="src/sikaru_api/compute_attachments/client.py">create</a>(...) -> AttachmentView</code></summary>
+<details><summary><code>client.compute_attachments.<a href="src/sikaru_sdk/compute_attachments/client.py">create</a>(...) -> AttachmentView</code></summary>
 <dl>
 <dd>
 
@@ -8349,8 +8349,8 @@ Same session/key/workspace returns the original binding; changed workspace confl
 <dd>
 
 ```python
-from sikaru_api import SikaruApi, WorkspaceProvenance
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi, WorkspaceProvenance
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -8443,7 +8443,7 @@ client.compute_attachments.create(
 </details>
 
 ## ComputeOperations
-<details><summary><code>client.compute_operations.<a href="src/sikaru_api/compute_operations/client.py">submit_receipt</a>(...) -> ReceiptView</code></summary>
+<details><summary><code>client.compute_operations.<a href="src/sikaru_sdk/compute_operations/client.py">submit_receipt</a>(...) -> ReceiptView</code></summary>
 <dl>
 <dd>
 
@@ -8475,8 +8475,8 @@ Network failures, 429 and 5xx are transient and may be retried.
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -8547,7 +8547,7 @@ client.compute_operations.submit_receipt(
 </dl>
 </details>
 
-<details><summary><code>client.compute_operations.<a href="src/sikaru_api/compute_operations/client.py">poll</a>(...) -> WorkPage</code></summary>
+<details><summary><code>client.compute_operations.<a href="src/sikaru_sdk/compute_operations/client.py">poll</a>(...) -> WorkPage</code></summary>
 <dl>
 <dd>
 
@@ -8560,8 +8560,8 @@ client.compute_operations.submit_receipt(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -8632,7 +8632,7 @@ client.compute_operations.poll(
 </details>
 
 ## ComputeWorkspaces
-<details><summary><code>client.compute_workspaces.<a href="src/sikaru_api/compute_workspaces/client.py">record</a>(...) -> WorkspaceCheckpointView</code></summary>
+<details><summary><code>client.compute_workspaces.<a href="src/sikaru_sdk/compute_workspaces/client.py">record</a>(...) -> WorkspaceCheckpointView</code></summary>
 <dl>
 <dd>
 
@@ -8659,8 +8659,8 @@ Record a verified uploaded manifest as this session's workspace checkpoint.
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -8740,7 +8740,7 @@ client.compute_workspaces.record(
 </dl>
 </details>
 
-<details><summary><code>client.compute_workspaces.<a href="src/sikaru_api/compute_workspaces/client.py">upload</a>(...) -> WorkspaceContentView</code></summary>
+<details><summary><code>client.compute_workspaces.<a href="src/sikaru_sdk/compute_workspaces/client.py">upload</a>(...) -> WorkspaceContentView</code></summary>
 <dl>
 <dd>
 
@@ -8818,7 +8818,7 @@ client.compute_workspaces.upload(...)
 </dl>
 </details>
 
-<details><summary><code>client.compute_workspaces.<a href="src/sikaru_api/compute_workspaces/client.py">policy</a>(...) -> WorkspacePolicyView</code></summary>
+<details><summary><code>client.compute_workspaces.<a href="src/sikaru_sdk/compute_workspaces/client.py">policy</a>(...) -> WorkspacePolicyView</code></summary>
 <dl>
 <dd>
 
@@ -8845,8 +8845,8 @@ Read the pinned publication rules before capturing workspace files.
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -8909,7 +8909,7 @@ client.compute_workspaces.policy(
 </details>
 
 ## ComputeCredentials
-<details><summary><code>client.compute_credentials.<a href="src/sikaru_api/compute_credentials/client.py">renew</a>(...) -> CredentialRenewed</code></summary>
+<details><summary><code>client.compute_credentials.<a href="src/sikaru_sdk/compute_credentials/client.py">renew</a>(...) -> CredentialRenewed</code></summary>
 <dl>
 <dd>
 
@@ -8922,8 +8922,8 @@ client.compute_workspaces.policy(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -8968,7 +8968,7 @@ client.compute_credentials.renew(
 </dl>
 </details>
 
-<details><summary><code>client.compute_credentials.<a href="src/sikaru_api/compute_credentials/client.py">revoke</a>(...) -> CredentialRevoked</code></summary>
+<details><summary><code>client.compute_credentials.<a href="src/sikaru_sdk/compute_credentials/client.py">revoke</a>(...) -> CredentialRevoked</code></summary>
 <dl>
 <dd>
 
@@ -8981,8 +8981,8 @@ client.compute_credentials.renew(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -9037,7 +9037,7 @@ client.compute_credentials.revoke(
 </details>
 
 ## ComputeEnvironments
-<details><summary><code>client.compute_environments.<a href="src/sikaru_api/compute_environments/client.py">create</a>(...) -> EnvironmentView</code></summary>
+<details><summary><code>client.compute_environments.<a href="src/sikaru_sdk/compute_environments/client.py">create</a>(...) -> EnvironmentView</code></summary>
 <dl>
 <dd>
 
@@ -9064,8 +9064,8 @@ Same key + same configuration returns the same environment; changed input confli
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -9144,7 +9144,7 @@ client.compute_environments.create(
 </dl>
 </details>
 
-<details><summary><code>client.compute_environments.<a href="src/sikaru_api/compute_environments/client.py">get</a>(...) -> EnvironmentView</code></summary>
+<details><summary><code>client.compute_environments.<a href="src/sikaru_sdk/compute_environments/client.py">get</a>(...) -> EnvironmentView</code></summary>
 <dl>
 <dd>
 
@@ -9157,8 +9157,8 @@ client.compute_environments.create(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -9212,7 +9212,7 @@ client.compute_environments.get(
 </dl>
 </details>
 
-<details><summary><code>client.compute_environments.<a href="src/sikaru_api/compute_environments/client.py">disable</a>(...) -> EnvironmentView</code></summary>
+<details><summary><code>client.compute_environments.<a href="src/sikaru_sdk/compute_environments/client.py">disable</a>(...) -> EnvironmentView</code></summary>
 <dl>
 <dd>
 
@@ -9239,8 +9239,8 @@ Idempotently disable future claims and credentials; existing cleanup remains req
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -9295,7 +9295,7 @@ client.compute_environments.disable(
 </details>
 
 ## Connections
-<details><summary><code>client.connections.<a href="src/sikaru_api/connections/client.py">list_connections</a>(...) -> typing.List[Connection]</code></summary>
+<details><summary><code>client.connections.<a href="src/sikaru_sdk/connections/client.py">list_connections</a>(...) -> typing.List[Connection]</code></summary>
 <dl>
 <dd>
 
@@ -9308,8 +9308,8 @@ client.compute_environments.disable(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -9354,7 +9354,7 @@ client.connections.list_connections(
 </dl>
 </details>
 
-<details><summary><code>client.connections.<a href="src/sikaru_api/connections/client.py">create_connection</a>(...) -> Connection</code></summary>
+<details><summary><code>client.connections.<a href="src/sikaru_sdk/connections/client.py">create_connection</a>(...) -> Connection</code></summary>
 <dl>
 <dd>
 
@@ -9367,8 +9367,8 @@ client.connections.list_connections(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi, ConnectionConfig
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi, ConnectionConfig
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -9464,7 +9464,7 @@ client.connections.create_connection(
 </dl>
 </details>
 
-<details><summary><code>client.connections.<a href="src/sikaru_api/connections/client.py">list_apps</a>(...) -> ConnectionApps</code></summary>
+<details><summary><code>client.connections.<a href="src/sikaru_sdk/connections/client.py">list_apps</a>(...) -> ConnectionApps</code></summary>
 <dl>
 <dd>
 
@@ -9477,8 +9477,8 @@ client.connections.create_connection(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -9555,7 +9555,7 @@ client.connections.list_apps(
 </dl>
 </details>
 
-<details><summary><code>client.connections.<a href="src/sikaru_api/connections/client.py">get_connection</a>(...) -> Connection</code></summary>
+<details><summary><code>client.connections.<a href="src/sikaru_sdk/connections/client.py">get_connection</a>(...) -> Connection</code></summary>
 <dl>
 <dd>
 
@@ -9568,8 +9568,8 @@ client.connections.list_apps(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -9623,7 +9623,7 @@ client.connections.get_connection(
 </dl>
 </details>
 
-<details><summary><code>client.connections.<a href="src/sikaru_api/connections/client.py">update_connection</a>(...) -> Connection</code></summary>
+<details><summary><code>client.connections.<a href="src/sikaru_sdk/connections/client.py">update_connection</a>(...) -> Connection</code></summary>
 <dl>
 <dd>
 
@@ -9636,8 +9636,8 @@ client.connections.get_connection(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -9716,7 +9716,7 @@ client.connections.update_connection(
 </dl>
 </details>
 
-<details><summary><code>client.connections.<a href="src/sikaru_api/connections/client.py">authorize</a>(...) -> ConnectionAuthorization</code></summary>
+<details><summary><code>client.connections.<a href="src/sikaru_sdk/connections/client.py">authorize</a>(...) -> ConnectionAuthorization</code></summary>
 <dl>
 <dd>
 
@@ -9729,8 +9729,8 @@ client.connections.update_connection(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -9784,7 +9784,7 @@ client.connections.authorize(
 </dl>
 </details>
 
-<details><summary><code>client.connections.<a href="src/sikaru_api/connections/client.py">complete</a>(...) -> Connection</code></summary>
+<details><summary><code>client.connections.<a href="src/sikaru_sdk/connections/client.py">complete</a>(...) -> Connection</code></summary>
 <dl>
 <dd>
 
@@ -9797,8 +9797,8 @@ client.connections.authorize(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -9861,7 +9861,7 @@ client.connections.complete(
 </dl>
 </details>
 
-<details><summary><code>client.connections.<a href="src/sikaru_api/connections/client.py">credentials</a>(...) -> Connection</code></summary>
+<details><summary><code>client.connections.<a href="src/sikaru_sdk/connections/client.py">credentials</a>(...) -> Connection</code></summary>
 <dl>
 <dd>
 
@@ -9874,8 +9874,8 @@ client.connections.complete(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi, ConnectionCredentials
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi, ConnectionCredentials
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -9938,7 +9938,7 @@ client.connections.credentials(
 </dl>
 </details>
 
-<details><summary><code>client.connections.<a href="src/sikaru_api/connections/client.py">disable</a>(...) -> Connection</code></summary>
+<details><summary><code>client.connections.<a href="src/sikaru_sdk/connections/client.py">disable</a>(...) -> Connection</code></summary>
 <dl>
 <dd>
 
@@ -9951,8 +9951,8 @@ client.connections.credentials(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -10006,7 +10006,7 @@ client.connections.disable(
 </dl>
 </details>
 
-<details><summary><code>client.connections.<a href="src/sikaru_api/connections/client.py">disconnect</a>(...) -> Connection</code></summary>
+<details><summary><code>client.connections.<a href="src/sikaru_sdk/connections/client.py">disconnect</a>(...) -> Connection</code></summary>
 <dl>
 <dd>
 
@@ -10019,8 +10019,8 @@ client.connections.disable(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -10074,7 +10074,7 @@ client.connections.disconnect(
 </dl>
 </details>
 
-<details><summary><code>client.connections.<a href="src/sikaru_api/connections/client.py">discover</a>(...) -> Connection</code></summary>
+<details><summary><code>client.connections.<a href="src/sikaru_sdk/connections/client.py">discover</a>(...) -> Connection</code></summary>
 <dl>
 <dd>
 
@@ -10101,8 +10101,8 @@ Retry loading tools. Tools load automatically after sign-in and on creation; the
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -10156,7 +10156,7 @@ client.connections.discover(
 </dl>
 </details>
 
-<details><summary><code>client.connections.<a href="src/sikaru_api/connections/client.py">enable</a>(...) -> Connection</code></summary>
+<details><summary><code>client.connections.<a href="src/sikaru_sdk/connections/client.py">enable</a>(...) -> Connection</code></summary>
 <dl>
 <dd>
 
@@ -10169,8 +10169,8 @@ client.connections.discover(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -10224,7 +10224,7 @@ client.connections.enable(
 </dl>
 </details>
 
-<details><summary><code>client.connections.<a href="src/sikaru_api/connections/client.py">events</a>(...) -> ConnectionEventPage</code></summary>
+<details><summary><code>client.connections.<a href="src/sikaru_sdk/connections/client.py">events</a>(...) -> ConnectionEventPage</code></summary>
 <dl>
 <dd>
 
@@ -10237,8 +10237,8 @@ client.connections.enable(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -10308,7 +10308,7 @@ client.connections.events(
 </dl>
 </details>
 
-<details><summary><code>client.connections.<a href="src/sikaru_api/connections/client.py">grant</a>(...) -> Connection</code></summary>
+<details><summary><code>client.connections.<a href="src/sikaru_sdk/connections/client.py">grant</a>(...) -> Connection</code></summary>
 <dl>
 <dd>
 
@@ -10321,8 +10321,8 @@ client.connections.events(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -10412,7 +10412,7 @@ client.connections.grant(
 </dl>
 </details>
 
-<details><summary><code>client.connections.<a href="src/sikaru_api/connections/client.py">revoke_grant</a>(...) -> Connection</code></summary>
+<details><summary><code>client.connections.<a href="src/sikaru_sdk/connections/client.py">revoke_grant</a>(...) -> Connection</code></summary>
 <dl>
 <dd>
 
@@ -10425,8 +10425,8 @@ client.connections.grant(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -10489,7 +10489,7 @@ client.connections.revoke_grant(
 </dl>
 </details>
 
-<details><summary><code>client.connections.<a href="src/sikaru_api/connections/client.py">revoke</a>(...) -> ConnectionRevocation</code></summary>
+<details><summary><code>client.connections.<a href="src/sikaru_sdk/connections/client.py">revoke</a>(...) -> ConnectionRevocation</code></summary>
 <dl>
 <dd>
 
@@ -10502,8 +10502,8 @@ client.connections.revoke_grant(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -10557,7 +10557,7 @@ client.connections.revoke(
 </dl>
 </details>
 
-<details><summary><code>client.connections.<a href="src/sikaru_api/connections/client.py">usage</a>(...) -> ConnectionUsage</code></summary>
+<details><summary><code>client.connections.<a href="src/sikaru_sdk/connections/client.py">usage</a>(...) -> ConnectionUsage</code></summary>
 <dl>
 <dd>
 
@@ -10570,8 +10570,8 @@ client.connections.revoke(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -10626,7 +10626,7 @@ client.connections.usage(
 </details>
 
 ## ContextRegistry
-<details><summary><code>client.context_registry.<a href="src/sikaru_api/context_registry/client.py">create_context_registry_change</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.context_registry.<a href="src/sikaru_sdk/context_registry/client.py">create_context_registry_change</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -10639,8 +10639,8 @@ client.connections.usage(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -10816,7 +10816,7 @@ client.context_registry.create_context_registry_change(
 </details>
 
 ## Conversations
-<details><summary><code>client.conversations.<a href="src/sikaru_api/conversations/client.py">list_messages</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.conversations.<a href="src/sikaru_sdk/conversations/client.py">list_messages</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -10829,8 +10829,8 @@ client.context_registry.create_context_registry_change(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -10909,7 +10909,7 @@ client.conversations.list_messages(
 </dl>
 </details>
 
-<details><summary><code>client.conversations.<a href="src/sikaru_api/conversations/client.py">record_message</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.conversations.<a href="src/sikaru_sdk/conversations/client.py">record_message</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -10922,8 +10922,8 @@ client.conversations.list_messages(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 import datetime
 
 client = SikaruApi(
@@ -11049,7 +11049,7 @@ client.conversations.record_message(
 </details>
 
 ## CreditTopUps
-<details><summary><code>client.credit_top_ups.<a href="src/sikaru_api/credit_top_ups/client.py">create</a>(...) -> CreditTopUp</code></summary>
+<details><summary><code>client.credit_top_ups.<a href="src/sikaru_sdk/credit_top_ups/client.py">create</a>(...) -> CreditTopUp</code></summary>
 <dl>
 <dd>
 
@@ -11076,8 +11076,8 @@ Offer a credit top-up for this project's organization; an agent pays `payUrl` fr
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -11131,7 +11131,7 @@ client.credit_top_ups.create(
 </dl>
 </details>
 
-<details><summary><code>client.credit_top_ups.<a href="src/sikaru_api/credit_top_ups/client.py">get</a>(...) -> CreditTopUp</code></summary>
+<details><summary><code>client.credit_top_ups.<a href="src/sikaru_sdk/credit_top_ups/client.py">get</a>(...) -> CreditTopUp</code></summary>
 <dl>
 <dd>
 
@@ -11158,8 +11158,8 @@ Read a top-up offer's status.
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -11213,7 +11213,7 @@ client.credit_top_ups.get(
 </dl>
 </details>
 
-<details><summary><code>client.credit_top_ups.<a href="src/sikaru_api/credit_top_ups/client.py">get_balance</a>(...) -> CreditBalance</code></summary>
+<details><summary><code>client.credit_top_ups.<a href="src/sikaru_sdk/credit_top_ups/client.py">get_balance</a>(...) -> CreditBalance</code></summary>
 <dl>
 <dd>
 
@@ -11240,8 +11240,8 @@ Read the credits available to this project's organization and the largest top-up
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -11287,7 +11287,7 @@ client.credit_top_ups.get_balance(
 </details>
 
 ## Datasets
-<details><summary><code>client.datasets.<a href="src/sikaru_api/datasets/client.py">list_datasets</a>(...) -> DatasetList</code></summary>
+<details><summary><code>client.datasets.<a href="src/sikaru_sdk/datasets/client.py">list_datasets</a>(...) -> DatasetList</code></summary>
 <dl>
 <dd>
 
@@ -11300,8 +11300,8 @@ client.credit_top_ups.get_balance(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -11354,7 +11354,7 @@ client.datasets.list_datasets(
 </dl>
 </details>
 
-<details><summary><code>client.datasets.<a href="src/sikaru_api/datasets/client.py">create_dataset</a>(...) -> DatasetResponse</code></summary>
+<details><summary><code>client.datasets.<a href="src/sikaru_sdk/datasets/client.py">create_dataset</a>(...) -> DatasetResponse</code></summary>
 <dl>
 <dd>
 
@@ -11367,8 +11367,8 @@ client.datasets.list_datasets(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -11446,7 +11446,7 @@ client.datasets.create_dataset(
 </dl>
 </details>
 
-<details><summary><code>client.datasets.<a href="src/sikaru_api/datasets/client.py">capture_into_new_dataset</a>(...) -> BatchResult</code></summary>
+<details><summary><code>client.datasets.<a href="src/sikaru_sdk/datasets/client.py">capture_into_new_dataset</a>(...) -> BatchResult</code></summary>
 <dl>
 <dd>
 
@@ -11473,8 +11473,8 @@ Creates the named dataset and adds the runs to it; a retry of the key reuses bot
 <dd>
 
 ```python
-from sikaru_api import SikaruApi, NewDataset, CaptureItem
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi, NewDataset, CaptureItem
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -11552,7 +11552,7 @@ client.datasets.capture_into_new_dataset(
 </dl>
 </details>
 
-<details><summary><code>client.datasets.<a href="src/sikaru_api/datasets/client.py">get_dataset</a>(...) -> DatasetResponse</code></summary>
+<details><summary><code>client.datasets.<a href="src/sikaru_sdk/datasets/client.py">get_dataset</a>(...) -> DatasetResponse</code></summary>
 <dl>
 <dd>
 
@@ -11565,8 +11565,8 @@ client.datasets.capture_into_new_dataset(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -11620,7 +11620,7 @@ client.datasets.get_dataset(
 </dl>
 </details>
 
-<details><summary><code>client.datasets.<a href="src/sikaru_api/datasets/client.py">delete_dataset</a>(...)</code></summary>
+<details><summary><code>client.datasets.<a href="src/sikaru_sdk/datasets/client.py">delete_dataset</a>(...)</code></summary>
 <dl>
 <dd>
 
@@ -11633,8 +11633,8 @@ client.datasets.get_dataset(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -11688,7 +11688,7 @@ client.datasets.delete_dataset(
 </dl>
 </details>
 
-<details><summary><code>client.datasets.<a href="src/sikaru_api/datasets/client.py">update_dataset</a>(...) -> DatasetResponse</code></summary>
+<details><summary><code>client.datasets.<a href="src/sikaru_sdk/datasets/client.py">update_dataset</a>(...) -> DatasetResponse</code></summary>
 <dl>
 <dd>
 
@@ -11701,8 +11701,8 @@ client.datasets.delete_dataset(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -11780,7 +11780,7 @@ client.datasets.update_dataset(
 </dl>
 </details>
 
-<details><summary><code>client.datasets.<a href="src/sikaru_api/datasets/client.py">capture_into_dataset</a>(...) -> BatchResult</code></summary>
+<details><summary><code>client.datasets.<a href="src/sikaru_sdk/datasets/client.py">capture_into_dataset</a>(...) -> BatchResult</code></summary>
 <dl>
 <dd>
 
@@ -11793,8 +11793,8 @@ client.datasets.update_dataset(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi, CaptureItem
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi, CaptureItem
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -11870,7 +11870,7 @@ client.datasets.capture_into_dataset(
 </dl>
 </details>
 
-<details><summary><code>client.datasets.<a href="src/sikaru_api/datasets/client.py">start_dataset_checks</a>(...) -> DatasetChecksStarted</code></summary>
+<details><summary><code>client.datasets.<a href="src/sikaru_sdk/datasets/client.py">start_dataset_checks</a>(...) -> DatasetChecksStarted</code></summary>
 <dl>
 <dd>
 
@@ -11900,8 +11900,8 @@ returns the same checks and starts only what did not start before.
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -11989,7 +11989,7 @@ client.datasets.start_dataset_checks(
 </dl>
 </details>
 
-<details><summary><code>client.datasets.<a href="src/sikaru_api/datasets/client.py">preview_dataset_checks</a>(...) -> DatasetChecksPreview</code></summary>
+<details><summary><code>client.datasets.<a href="src/sikaru_sdk/datasets/client.py">preview_dataset_checks</a>(...) -> DatasetChecksPreview</code></summary>
 <dl>
 <dd>
 
@@ -12016,8 +12016,8 @@ How many examples can run as Checks, why the rest cannot, and the estimated mode
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -12087,7 +12087,7 @@ client.datasets.preview_dataset_checks(
 </dl>
 </details>
 
-<details><summary><code>client.datasets.<a href="src/sikaru_api/datasets/client.py">list_dataset_check_results</a>(...) -> DatasetCheckResults</code></summary>
+<details><summary><code>client.datasets.<a href="src/sikaru_sdk/datasets/client.py">list_dataset_check_results</a>(...) -> DatasetCheckResults</code></summary>
 <dl>
 <dd>
 
@@ -12114,8 +12114,8 @@ Pass rate per agent version for each dataset version run as Checks; failures nam
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -12177,7 +12177,7 @@ client.datasets.list_dataset_check_results(
 </dl>
 </details>
 
-<details><summary><code>client.datasets.<a href="src/sikaru_api/datasets/client.py">list_examples</a>(...) -> DatasetExamplePage</code></summary>
+<details><summary><code>client.datasets.<a href="src/sikaru_sdk/datasets/client.py">list_examples</a>(...) -> DatasetExamplePage</code></summary>
 <dl>
 <dd>
 
@@ -12190,8 +12190,8 @@ client.datasets.list_dataset_check_results(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -12269,7 +12269,7 @@ client.datasets.list_examples(
 </dl>
 </details>
 
-<details><summary><code>client.datasets.<a href="src/sikaru_api/datasets/client.py">delete_example</a>(...) -> DatasetVersionResponse</code></summary>
+<details><summary><code>client.datasets.<a href="src/sikaru_sdk/datasets/client.py">delete_example</a>(...) -> DatasetVersionResponse</code></summary>
 <dl>
 <dd>
 
@@ -12296,8 +12296,8 @@ Permanently removes every copy of the example, including from older versions.
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -12360,7 +12360,7 @@ client.datasets.delete_example(
 </dl>
 </details>
 
-<details><summary><code>client.datasets.<a href="src/sikaru_api/datasets/client.py">update_example</a>(...) -> DatasetExampleResponse</code></summary>
+<details><summary><code>client.datasets.<a href="src/sikaru_sdk/datasets/client.py">update_example</a>(...) -> DatasetExampleResponse</code></summary>
 <dl>
 <dd>
 
@@ -12389,8 +12389,8 @@ Sikaru's own tags survive a tag edit unless it comes from the signed-in dashboar
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -12469,7 +12469,7 @@ client.datasets.update_example(
 </dl>
 </details>
 
-<details><summary><code>client.datasets.<a href="src/sikaru_api/datasets/client.py">export_dataset</a>(...) -> typing.Iterator[bytes]</code></summary>
+<details><summary><code>client.datasets.<a href="src/sikaru_sdk/datasets/client.py">export_dataset</a>(...) -> typing.Iterator[bytes]</code></summary>
 <dl>
 <dd>
 
@@ -12482,8 +12482,8 @@ client.datasets.update_example(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -12545,7 +12545,7 @@ client.datasets.export_dataset(
 </dl>
 </details>
 
-<details><summary><code>client.datasets.<a href="src/sikaru_api/datasets/client.py">upload_examples</a>(...) -> BatchResult</code></summary>
+<details><summary><code>client.datasets.<a href="src/sikaru_sdk/datasets/client.py">upload_examples</a>(...) -> BatchResult</code></summary>
 <dl>
 <dd>
 
@@ -12558,8 +12558,8 @@ client.datasets.export_dataset(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -12640,7 +12640,7 @@ client.datasets.upload_examples(
 </dl>
 </details>
 
-<details><summary><code>client.datasets.<a href="src/sikaru_api/datasets/client.py">list_versions</a>(...) -> DatasetVersionList</code></summary>
+<details><summary><code>client.datasets.<a href="src/sikaru_sdk/datasets/client.py">list_versions</a>(...) -> DatasetVersionList</code></summary>
 <dl>
 <dd>
 
@@ -12653,8 +12653,8 @@ client.datasets.upload_examples(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -12709,7 +12709,7 @@ client.datasets.list_versions(
 </details>
 
 ## Deployments
-<details><summary><code>client.deployments.<a href="src/sikaru_api/deployments/client.py">list_console_deployments</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.deployments.<a href="src/sikaru_sdk/deployments/client.py">list_console_deployments</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -12722,8 +12722,8 @@ client.datasets.list_versions(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -12769,7 +12769,7 @@ client.deployments.list_console_deployments(
 </details>
 
 ## Environments
-<details><summary><code>client.environments.<a href="src/sikaru_api/environments/client.py">list_managed_environments</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.environments.<a href="src/sikaru_sdk/environments/client.py">list_managed_environments</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -12782,8 +12782,8 @@ client.deployments.list_console_deployments(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -12828,7 +12828,7 @@ client.environments.list_managed_environments(
 </dl>
 </details>
 
-<details><summary><code>client.environments.<a href="src/sikaru_api/environments/client.py">create_managed_environment</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.environments.<a href="src/sikaru_sdk/environments/client.py">create_managed_environment</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -12841,8 +12841,8 @@ client.environments.list_managed_environments(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -12931,7 +12931,7 @@ client.environments.create_managed_environment(
 </details>
 
 ## EvaluationComparisons
-<details><summary><code>client.evaluation_comparisons.<a href="src/sikaru_api/evaluation_comparisons/client.py">list_comparisons</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.evaluation_comparisons.<a href="src/sikaru_sdk/evaluation_comparisons/client.py">list_comparisons</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -12944,8 +12944,8 @@ client.environments.create_managed_environment(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -12998,7 +12998,7 @@ client.evaluation_comparisons.list_comparisons(
 </dl>
 </details>
 
-<details><summary><code>client.evaluation_comparisons.<a href="src/sikaru_api/evaluation_comparisons/client.py">create_comparison</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.evaluation_comparisons.<a href="src/sikaru_sdk/evaluation_comparisons/client.py">create_comparison</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -13011,8 +13011,8 @@ client.evaluation_comparisons.list_comparisons(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi, CaseInput, AnswerRef
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi, CaseInput, AnswerRef
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -13116,7 +13116,7 @@ client.evaluation_comparisons.create_comparison(
 </dl>
 </details>
 
-<details><summary><code>client.evaluation_comparisons.<a href="src/sikaru_api/evaluation_comparisons/client.py">get_comparison</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.evaluation_comparisons.<a href="src/sikaru_sdk/evaluation_comparisons/client.py">get_comparison</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -13129,8 +13129,8 @@ client.evaluation_comparisons.create_comparison(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -13184,7 +13184,7 @@ client.evaluation_comparisons.get_comparison(
 </dl>
 </details>
 
-<details><summary><code>client.evaluation_comparisons.<a href="src/sikaru_api/evaluation_comparisons/client.py">cancel_comparison</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.evaluation_comparisons.<a href="src/sikaru_sdk/evaluation_comparisons/client.py">cancel_comparison</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -13197,8 +13197,8 @@ client.evaluation_comparisons.get_comparison(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -13253,7 +13253,7 @@ client.evaluation_comparisons.cancel_comparison(
 </details>
 
 ## EvaluationCriteria
-<details><summary><code>client.evaluation_criteria.<a href="src/sikaru_api/evaluation_criteria/client.py">list_criteria</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.evaluation_criteria.<a href="src/sikaru_sdk/evaluation_criteria/client.py">list_criteria</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -13266,8 +13266,8 @@ client.evaluation_comparisons.cancel_comparison(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -13321,7 +13321,7 @@ client.evaluation_criteria.list_criteria(
 </details>
 
 ## EvaluationJobs
-<details><summary><code>client.evaluation_jobs.<a href="src/sikaru_api/evaluation_jobs/client.py">list_jobs</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.evaluation_jobs.<a href="src/sikaru_sdk/evaluation_jobs/client.py">list_jobs</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -13334,8 +13334,8 @@ client.evaluation_criteria.list_criteria(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -13388,7 +13388,7 @@ client.evaluation_jobs.list_jobs(
 </dl>
 </details>
 
-<details><summary><code>client.evaluation_jobs.<a href="src/sikaru_api/evaluation_jobs/client.py">create_job</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.evaluation_jobs.<a href="src/sikaru_sdk/evaluation_jobs/client.py">create_job</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -13401,8 +13401,8 @@ client.evaluation_jobs.list_jobs(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi, TargetInput, JudgmentTarget
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi, TargetInput, JudgmentTarget
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -13508,7 +13508,7 @@ client.evaluation_jobs.create_job(
 </dl>
 </details>
 
-<details><summary><code>client.evaluation_jobs.<a href="src/sikaru_api/evaluation_jobs/client.py">get_job</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.evaluation_jobs.<a href="src/sikaru_sdk/evaluation_jobs/client.py">get_job</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -13521,8 +13521,8 @@ client.evaluation_jobs.create_job(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -13576,7 +13576,7 @@ client.evaluation_jobs.get_job(
 </dl>
 </details>
 
-<details><summary><code>client.evaluation_jobs.<a href="src/sikaru_api/evaluation_jobs/client.py">cancel_job</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.evaluation_jobs.<a href="src/sikaru_sdk/evaluation_jobs/client.py">cancel_job</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -13589,8 +13589,8 @@ client.evaluation_jobs.get_job(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -13645,7 +13645,7 @@ client.evaluation_jobs.cancel_job(
 </details>
 
 ## EvaluationResults
-<details><summary><code>client.evaluation_results.<a href="src/sikaru_api/evaluation_results/client.py">list_results</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.evaluation_results.<a href="src/sikaru_sdk/evaluation_results/client.py">list_results</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -13658,8 +13658,8 @@ client.evaluation_jobs.cancel_job(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -13744,7 +13744,7 @@ client.evaluation_results.list_results(
 </dl>
 </details>
 
-<details><summary><code>client.evaluation_results.<a href="src/sikaru_api/evaluation_results/client.py">record_result</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.evaluation_results.<a href="src/sikaru_sdk/evaluation_results/client.py">record_result</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -13757,8 +13757,8 @@ client.evaluation_results.list_results(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -13900,7 +13900,7 @@ client.evaluation_results.record_result(
 </details>
 
 ## EvaluatorRuns
-<details><summary><code>client.evaluator_runs.<a href="src/sikaru_api/evaluator_runs/client.py">create_evaluator_run</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.evaluator_runs.<a href="src/sikaru_sdk/evaluator_runs/client.py">create_evaluator_run</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -13913,8 +13913,8 @@ client.evaluation_results.record_result(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -14043,7 +14043,7 @@ client.evaluator_runs.create_evaluator_run(
 </details>
 
 ## ExecutionObjectives
-<details><summary><code>client.execution_objectives.<a href="src/sikaru_api/execution_objectives/client.py">list_objectives</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.execution_objectives.<a href="src/sikaru_sdk/execution_objectives/client.py">list_objectives</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -14056,8 +14056,8 @@ client.evaluator_runs.create_evaluator_run(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -14134,7 +14134,7 @@ client.execution_objectives.list_objectives(
 </dl>
 </details>
 
-<details><summary><code>client.execution_objectives.<a href="src/sikaru_api/execution_objectives/client.py">create</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.execution_objectives.<a href="src/sikaru_sdk/execution_objectives/client.py">create</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -14147,8 +14147,8 @@ client.execution_objectives.list_objectives(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -14254,7 +14254,7 @@ client.execution_objectives.create(
 </dl>
 </details>
 
-<details><summary><code>client.execution_objectives.<a href="src/sikaru_api/execution_objectives/client.py">get</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.execution_objectives.<a href="src/sikaru_sdk/execution_objectives/client.py">get</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -14267,8 +14267,8 @@ client.execution_objectives.create(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -14322,7 +14322,7 @@ client.execution_objectives.get(
 </dl>
 </details>
 
-<details><summary><code>client.execution_objectives.<a href="src/sikaru_api/execution_objectives/client.py">cancel</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.execution_objectives.<a href="src/sikaru_sdk/execution_objectives/client.py">cancel</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -14335,8 +14335,8 @@ client.execution_objectives.get(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -14390,7 +14390,7 @@ client.execution_objectives.cancel(
 </dl>
 </details>
 
-<details><summary><code>client.execution_objectives.<a href="src/sikaru_api/execution_objectives/client.py">pause</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.execution_objectives.<a href="src/sikaru_sdk/execution_objectives/client.py">pause</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -14403,8 +14403,8 @@ client.execution_objectives.cancel(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -14458,7 +14458,7 @@ client.execution_objectives.pause(
 </dl>
 </details>
 
-<details><summary><code>client.execution_objectives.<a href="src/sikaru_api/execution_objectives/client.py">resume</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.execution_objectives.<a href="src/sikaru_sdk/execution_objectives/client.py">resume</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -14471,8 +14471,8 @@ client.execution_objectives.pause(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi, ResumeInput
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi, ResumeInput
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -14536,7 +14536,7 @@ client.execution_objectives.resume(
 </details>
 
 ## ExecutionSessions
-<details><summary><code>client.execution_sessions.<a href="src/sikaru_api/execution_sessions/client.py">list</a>(...) -> ExecutionSessionPage</code></summary>
+<details><summary><code>client.execution_sessions.<a href="src/sikaru_sdk/execution_sessions/client.py">list</a>(...) -> ExecutionSessionPage</code></summary>
 <dl>
 <dd>
 
@@ -14549,8 +14549,8 @@ client.execution_objectives.resume(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -14627,7 +14627,7 @@ client.execution_sessions.list(
 </dl>
 </details>
 
-<details><summary><code>client.execution_sessions.<a href="src/sikaru_api/execution_sessions/client.py">get</a>(...) -> ExecutionSessionResponse</code></summary>
+<details><summary><code>client.execution_sessions.<a href="src/sikaru_sdk/execution_sessions/client.py">get</a>(...) -> ExecutionSessionResponse</code></summary>
 <dl>
 <dd>
 
@@ -14640,8 +14640,8 @@ client.execution_sessions.list(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -14695,7 +14695,7 @@ client.execution_sessions.get(
 </dl>
 </details>
 
-<details><summary><code>client.execution_sessions.<a href="src/sikaru_api/execution_sessions/client.py">branch</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.execution_sessions.<a href="src/sikaru_sdk/execution_sessions/client.py">branch</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -14708,8 +14708,8 @@ client.execution_sessions.get(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -14781,7 +14781,7 @@ client.execution_sessions.branch(
 </dl>
 </details>
 
-<details><summary><code>client.execution_sessions.<a href="src/sikaru_api/execution_sessions/client.py">list_files</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.execution_sessions.<a href="src/sikaru_sdk/execution_sessions/client.py">list_files</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -14794,8 +14794,8 @@ client.execution_sessions.branch(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -14849,7 +14849,7 @@ client.execution_sessions.list_files(
 </dl>
 </details>
 
-<details><summary><code>client.execution_sessions.<a href="src/sikaru_api/execution_sessions/client.py">upload_file</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.execution_sessions.<a href="src/sikaru_sdk/execution_sessions/client.py">upload_file</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -14921,7 +14921,7 @@ client.execution_sessions.upload_file(...)
 </dl>
 </details>
 
-<details><summary><code>client.execution_sessions.<a href="src/sikaru_api/execution_sessions/client.py">delete_file</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.execution_sessions.<a href="src/sikaru_sdk/execution_sessions/client.py">delete_file</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -14934,8 +14934,8 @@ client.execution_sessions.upload_file(...)
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -14998,7 +14998,7 @@ client.execution_sessions.delete_file(
 </dl>
 </details>
 
-<details><summary><code>client.execution_sessions.<a href="src/sikaru_api/execution_sessions/client.py">download_file</a>(...) -> typing.Iterator[bytes]</code></summary>
+<details><summary><code>client.execution_sessions.<a href="src/sikaru_sdk/execution_sessions/client.py">download_file</a>(...) -> typing.Iterator[bytes]</code></summary>
 <dl>
 <dd>
 
@@ -15011,8 +15011,8 @@ client.execution_sessions.delete_file(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -15075,7 +15075,7 @@ client.execution_sessions.download_file(
 </dl>
 </details>
 
-<details><summary><code>client.execution_sessions.<a href="src/sikaru_api/execution_sessions/client.py">list_session_inputs</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.execution_sessions.<a href="src/sikaru_sdk/execution_sessions/client.py">list_session_inputs</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -15088,8 +15088,8 @@ client.execution_sessions.download_file(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -15143,7 +15143,7 @@ client.execution_sessions.list_session_inputs(
 </dl>
 </details>
 
-<details><summary><code>client.execution_sessions.<a href="src/sikaru_api/execution_sessions/client.py">spend</a>(...) -> SessionSpend</code></summary>
+<details><summary><code>client.execution_sessions.<a href="src/sikaru_sdk/execution_sessions/client.py">spend</a>(...) -> SessionSpend</code></summary>
 <dl>
 <dd>
 
@@ -15156,8 +15156,8 @@ client.execution_sessions.list_session_inputs(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -15211,7 +15211,7 @@ client.execution_sessions.spend(
 </dl>
 </details>
 
-<details><summary><code>client.execution_sessions.<a href="src/sikaru_api/execution_sessions/client.py">append_turn</a>(...) -> ExecutionTurnResponse</code></summary>
+<details><summary><code>client.execution_sessions.<a href="src/sikaru_sdk/execution_sessions/client.py">append_turn</a>(...) -> ExecutionTurnResponse</code></summary>
 <dl>
 <dd>
 
@@ -15224,8 +15224,8 @@ client.execution_sessions.spend(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -15363,7 +15363,7 @@ client.execution_sessions.append_turn(
 </dl>
 </details>
 
-<details><summary><code>client.execution_sessions.<a href="src/sikaru_api/execution_sessions/client.py">create</a>(...) -> ExecutionSessionResponse</code></summary>
+<details><summary><code>client.execution_sessions.<a href="src/sikaru_sdk/execution_sessions/client.py">create</a>(...) -> ExecutionSessionResponse</code></summary>
 <dl>
 <dd>
 
@@ -15376,8 +15376,8 @@ client.execution_sessions.append_turn(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -15535,7 +15535,7 @@ client.execution_sessions.create(
 </dl>
 </details>
 
-<details><summary><code>client.execution_sessions.<a href="src/sikaru_api/execution_sessions/client.py">list_eligible_releases</a>(...) -> EligibleReleases</code></summary>
+<details><summary><code>client.execution_sessions.<a href="src/sikaru_sdk/execution_sessions/client.py">list_eligible_releases</a>(...) -> EligibleReleases</code></summary>
 <dl>
 <dd>
 
@@ -15562,8 +15562,8 @@ List release identities eligible for an optional session pin.
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -15626,7 +15626,7 @@ client.execution_sessions.list_eligible_releases(
 </details>
 
 ## Specialists
-<details><summary><code>client.specialists.<a href="src/sikaru_api/specialists/client.py">list</a>(...) -> SpecialistThreads</code></summary>
+<details><summary><code>client.specialists.<a href="src/sikaru_sdk/specialists/client.py">list</a>(...) -> SpecialistThreads</code></summary>
 <dl>
 <dd>
 
@@ -15639,8 +15639,8 @@ client.execution_sessions.list_eligible_releases(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -15694,7 +15694,7 @@ client.specialists.list(
 </dl>
 </details>
 
-<details><summary><code>client.specialists.<a href="src/sikaru_api/specialists/client.py">get</a>(...) -> SpecialistThread</code></summary>
+<details><summary><code>client.specialists.<a href="src/sikaru_sdk/specialists/client.py">get</a>(...) -> SpecialistThread</code></summary>
 <dl>
 <dd>
 
@@ -15707,8 +15707,8 @@ client.specialists.list(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -15771,7 +15771,7 @@ client.specialists.get(
 </dl>
 </details>
 
-<details><summary><code>client.specialists.<a href="src/sikaru_api/specialists/client.py">cancel</a>(...) -> SpecialistReceipt</code></summary>
+<details><summary><code>client.specialists.<a href="src/sikaru_sdk/specialists/client.py">cancel</a>(...) -> SpecialistReceipt</code></summary>
 <dl>
 <dd>
 
@@ -15784,8 +15784,8 @@ client.specialists.get(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -15857,7 +15857,7 @@ client.specialists.cancel(
 </dl>
 </details>
 
-<details><summary><code>client.specialists.<a href="src/sikaru_api/specialists/client.py">message</a>(...) -> SpecialistReceipt</code></summary>
+<details><summary><code>client.specialists.<a href="src/sikaru_sdk/specialists/client.py">message</a>(...) -> SpecialistReceipt</code></summary>
 <dl>
 <dd>
 
@@ -15870,8 +15870,8 @@ client.specialists.cancel(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -15963,7 +15963,7 @@ client.specialists.message(
 </details>
 
 ## Executions
-<details><summary><code>client.executions.<a href="src/sikaru_api/executions/client.py">execution_runtime_lineage</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.executions.<a href="src/sikaru_sdk/executions/client.py">execution_runtime_lineage</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -15976,8 +15976,8 @@ client.specialists.message(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -16049,7 +16049,7 @@ client.executions.execution_runtime_lineage(
 </details>
 
 ## Feedback
-<details><summary><code>client.feedback.<a href="src/sikaru_api/feedback/client.py">create_feedback</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.feedback.<a href="src/sikaru_sdk/feedback/client.py">create_feedback</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -16062,8 +16062,8 @@ client.executions.execution_runtime_lineage(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -16184,7 +16184,7 @@ client.feedback.create_feedback(
 </details>
 
 ## GitCredentials
-<details><summary><code>client.git_credentials.<a href="src/sikaru_api/git_credentials/client.py">list</a>(...) -> typing.List[GitCredential]</code></summary>
+<details><summary><code>client.git_credentials.<a href="src/sikaru_sdk/git_credentials/client.py">list</a>(...) -> typing.List[GitCredential]</code></summary>
 <dl>
 <dd>
 
@@ -16211,8 +16211,8 @@ The project's git credentials and their grants, without values.
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -16257,7 +16257,7 @@ client.git_credentials.list(
 </dl>
 </details>
 
-<details><summary><code>client.git_credentials.<a href="src/sikaru_api/git_credentials/client.py">create</a>(...) -> GitCredential</code></summary>
+<details><summary><code>client.git_credentials.<a href="src/sikaru_sdk/git_credentials/client.py">create</a>(...) -> GitCredential</code></summary>
 <dl>
 <dd>
 
@@ -16284,8 +16284,8 @@ Store a git credential for one host. The value is write-only.
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -16364,7 +16364,7 @@ client.git_credentials.create(
 </dl>
 </details>
 
-<details><summary><code>client.git_credentials.<a href="src/sikaru_api/git_credentials/client.py">grant</a>(...) -> GitCredential</code></summary>
+<details><summary><code>client.git_credentials.<a href="src/sikaru_sdk/git_credentials/client.py">grant</a>(...) -> GitCredential</code></summary>
 <dl>
 <dd>
 
@@ -16391,8 +16391,8 @@ Let an agent use a git credential for its declared repos.
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -16456,7 +16456,7 @@ client.git_credentials.grant(
 </details>
 
 ## Harnesses
-<details><summary><code>client.harnesses.<a href="src/sikaru_api/harnesses/client.py">get_invoice_budget</a>(...) -> InvoiceBudget</code></summary>
+<details><summary><code>client.harnesses.<a href="src/sikaru_sdk/harnesses/client.py">get_invoice_budget</a>(...) -> InvoiceBudget</code></summary>
 <dl>
 <dd>
 
@@ -16469,8 +16469,8 @@ client.git_credentials.grant(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -16524,7 +16524,7 @@ client.harnesses.get_invoice_budget(
 </dl>
 </details>
 
-<details><summary><code>client.harnesses.<a href="src/sikaru_api/harnesses/client.py">improvement_options</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.harnesses.<a href="src/sikaru_sdk/harnesses/client.py">improvement_options</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -16537,8 +16537,8 @@ client.harnesses.get_invoice_budget(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -16592,7 +16592,7 @@ client.harnesses.improvement_options(
 </dl>
 </details>
 
-<details><summary><code>client.harnesses.<a href="src/sikaru_api/harnesses/client.py">list_improvements</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.harnesses.<a href="src/sikaru_sdk/harnesses/client.py">list_improvements</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -16605,8 +16605,8 @@ client.harnesses.improvement_options(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -16676,7 +16676,7 @@ client.harnesses.list_improvements(
 </dl>
 </details>
 
-<details><summary><code>client.harnesses.<a href="src/sikaru_api/harnesses/client.py">start_improvement</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.harnesses.<a href="src/sikaru_sdk/harnesses/client.py">start_improvement</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -16689,8 +16689,8 @@ client.harnesses.list_improvements(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -16761,7 +16761,7 @@ client.harnesses.start_improvement(
 </dl>
 </details>
 
-<details><summary><code>client.harnesses.<a href="src/sikaru_api/harnesses/client.py">get_improvement</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.harnesses.<a href="src/sikaru_sdk/harnesses/client.py">get_improvement</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -16774,8 +16774,8 @@ client.harnesses.start_improvement(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -16838,7 +16838,7 @@ client.harnesses.get_improvement(
 </dl>
 </details>
 
-<details><summary><code>client.harnesses.<a href="src/sikaru_api/harnesses/client.py">resume_improvement</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.harnesses.<a href="src/sikaru_sdk/harnesses/client.py">resume_improvement</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -16851,8 +16851,8 @@ client.harnesses.get_improvement(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi, ResumeImprovementInput
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi, ResumeImprovementInput
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -16924,7 +16924,7 @@ client.harnesses.resume_improvement(
 </dl>
 </details>
 
-<details><summary><code>client.harnesses.<a href="src/sikaru_api/harnesses/client.py">train_model_stub</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.harnesses.<a href="src/sikaru_sdk/harnesses/client.py">train_model_stub</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -16951,8 +16951,8 @@ Reserved, unavailable model-training step; no learning job is submitted.
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -17007,7 +17007,7 @@ client.harnesses.train_model_stub(
 </details>
 
 ## Runs
-<details><summary><code>client.runs.<a href="src/sikaru_api/runs/client.py">start</a>(...) -> ManagedRun</code></summary>
+<details><summary><code>client.runs.<a href="src/sikaru_sdk/runs/client.py">start</a>(...) -> ManagedRun</code></summary>
 <dl>
 <dd>
 
@@ -17020,8 +17020,8 @@ client.harnesses.train_model_stub(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -17230,7 +17230,7 @@ client.runs.start(
 </dl>
 </details>
 
-<details><summary><code>client.runs.<a href="src/sikaru_api/runs/client.py">record</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.runs.<a href="src/sikaru_sdk/runs/client.py">record</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -17260,8 +17260,8 @@ inferred; the run is ordered by when Sikaru receives it.
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -17348,7 +17348,7 @@ client.runs.record(
 </dl>
 </details>
 
-<details><summary><code>client.runs.<a href="src/sikaru_api/runs/client.py">resume_all</a>(...) -> ResumeResults</code></summary>
+<details><summary><code>client.runs.<a href="src/sikaru_sdk/runs/client.py">resume_all</a>(...) -> ResumeResults</code></summary>
 <dl>
 <dd>
 
@@ -17375,8 +17375,8 @@ Recheck up to 100 authorized needs-action runs and jobs; only cleared stops resu
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -17429,7 +17429,7 @@ client.runs.resume_all(
 </dl>
 </details>
 
-<details><summary><code>client.runs.<a href="src/sikaru_api/runs/client.py">resume_count</a>(...) -> ResumeCounts</code></summary>
+<details><summary><code>client.runs.<a href="src/sikaru_sdk/runs/client.py">resume_count</a>(...) -> ResumeCounts</code></summary>
 <dl>
 <dd>
 
@@ -17456,8 +17456,8 @@ Count needs-action work the caller can control, grouped by funding reason.
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -17502,7 +17502,7 @@ client.runs.resume_count(
 </dl>
 </details>
 
-<details><summary><code>client.runs.<a href="src/sikaru_api/runs/client.py">get</a>(...) -> ManagedRun</code></summary>
+<details><summary><code>client.runs.<a href="src/sikaru_sdk/runs/client.py">get</a>(...) -> ManagedRun</code></summary>
 <dl>
 <dd>
 
@@ -17515,8 +17515,8 @@ client.runs.resume_count(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -17570,7 +17570,7 @@ client.runs.get(
 </dl>
 </details>
 
-<details><summary><code>client.runs.<a href="src/sikaru_api/runs/client.py">pending_actions</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.runs.<a href="src/sikaru_sdk/runs/client.py">pending_actions</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -17583,8 +17583,8 @@ client.runs.get(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -17638,7 +17638,7 @@ client.runs.pending_actions(
 </dl>
 </details>
 
-<details><summary><code>client.runs.<a href="src/sikaru_api/runs/client.py">cancel</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.runs.<a href="src/sikaru_sdk/runs/client.py">cancel</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -17651,8 +17651,8 @@ client.runs.pending_actions(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -17706,7 +17706,7 @@ client.runs.cancel(
 </dl>
 </details>
 
-<details><summary><code>client.runs.<a href="src/sikaru_api/runs/client.py">events</a>(...) -> RunEvents</code></summary>
+<details><summary><code>client.runs.<a href="src/sikaru_sdk/runs/client.py">events</a>(...) -> RunEvents</code></summary>
 <dl>
 <dd>
 
@@ -17719,8 +17719,8 @@ client.runs.cancel(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -17790,7 +17790,7 @@ client.runs.events(
 </dl>
 </details>
 
-<details><summary><code>client.runs.<a href="src/sikaru_api/runs/client.py">stream_events</a>(...) -> typing.Iterator[bytes]</code></summary>
+<details><summary><code>client.runs.<a href="src/sikaru_sdk/runs/client.py">stream_events</a>(...) -> typing.Iterator[bytes]</code></summary>
 <dl>
 <dd>
 
@@ -17820,8 +17820,8 @@ can resume from their last delivered event without restarting the run.
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -17891,7 +17891,7 @@ client.runs.stream_events(
 </dl>
 </details>
 
-<details><summary><code>client.runs.<a href="src/sikaru_api/runs/client.py">recover</a>(...) -> ManagedRun</code></summary>
+<details><summary><code>client.runs.<a href="src/sikaru_sdk/runs/client.py">recover</a>(...) -> ManagedRun</code></summary>
 <dl>
 <dd>
 
@@ -17904,8 +17904,8 @@ client.runs.stream_events(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -17967,7 +17967,7 @@ client.runs.recover(
 </dl>
 </details>
 
-<details><summary><code>client.runs.<a href="src/sikaru_api/runs/client.py">resume</a>(...) -> ResumeResult</code></summary>
+<details><summary><code>client.runs.<a href="src/sikaru_sdk/runs/client.py">resume</a>(...) -> ResumeResult</code></summary>
 <dl>
 <dd>
 
@@ -17994,8 +17994,8 @@ Resume the same retained turn. A refused request does not change its state.
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -18049,7 +18049,7 @@ client.runs.resume(
 </dl>
 </details>
 
-<details><summary><code>client.runs.<a href="src/sikaru_api/runs/client.py">retry</a>(...) -> ExecutionTurnResponse</code></summary>
+<details><summary><code>client.runs.<a href="src/sikaru_sdk/runs/client.py">retry</a>(...) -> ExecutionTurnResponse</code></summary>
 <dl>
 <dd>
 
@@ -18080,8 +18080,8 @@ fail, whose `error.recoverable` is false, or that failed too long ago is refused
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -18135,7 +18135,7 @@ client.runs.retry(
 </dl>
 </details>
 
-<details><summary><code>client.runs.<a href="src/sikaru_api/runs/client.py">decide_approval</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.runs.<a href="src/sikaru_sdk/runs/client.py">decide_approval</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -18148,8 +18148,8 @@ client.runs.retry(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -18222,7 +18222,7 @@ client.runs.decide_approval(
 </dl>
 </details>
 
-<details><summary><code>client.runs.<a href="src/sikaru_api/runs/client.py">submit_tool_result</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.runs.<a href="src/sikaru_sdk/runs/client.py">submit_tool_result</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -18235,8 +18235,8 @@ client.runs.decide_approval(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -18346,7 +18346,7 @@ client.runs.submit_tool_result(
 </dl>
 </details>
 
-<details><summary><code>client.runs.<a href="src/sikaru_api/runs/client.py">get_trajectory</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.runs.<a href="src/sikaru_sdk/runs/client.py">get_trajectory</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -18377,8 +18377,8 @@ omitted. No trajectory is synthesized when retained evidence is unavailable.
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -18432,7 +18432,7 @@ client.runs.get_trajectory(
 </dl>
 </details>
 
-<details><summary><code>client.runs.<a href="src/sikaru_api/runs/client.py">get_transcript</a>(...) -> RunTranscript</code></summary>
+<details><summary><code>client.runs.<a href="src/sikaru_sdk/runs/client.py">get_transcript</a>(...) -> RunTranscript</code></summary>
 <dl>
 <dd>
 
@@ -18445,8 +18445,8 @@ client.runs.get_trajectory(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -18500,7 +18500,7 @@ client.runs.get_transcript(
 </dl>
 </details>
 
-<details><summary><code>client.runs.<a href="src/sikaru_api/runs/client.py">stream_transcript_events</a>(...) -> typing.Iterator[bytes]</code></summary>
+<details><summary><code>client.runs.<a href="src/sikaru_sdk/runs/client.py">stream_transcript_events</a>(...) -> typing.Iterator[bytes]</code></summary>
 <dl>
 <dd>
 
@@ -18513,8 +18513,8 @@ client.runs.get_transcript(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -18585,7 +18585,7 @@ client.runs.stream_transcript_events(
 </details>
 
 ## ImportSessions
-<details><summary><code>client.import_sessions.<a href="src/sikaru_api/import_sessions/client.py">list_import_sessions</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.import_sessions.<a href="src/sikaru_sdk/import_sessions/client.py">list_import_sessions</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -18598,8 +18598,8 @@ client.runs.stream_transcript_events(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -18644,7 +18644,7 @@ client.import_sessions.list_import_sessions(
 </dl>
 </details>
 
-<details><summary><code>client.import_sessions.<a href="src/sikaru_api/import_sessions/client.py">create_import_session</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.import_sessions.<a href="src/sikaru_sdk/import_sessions/client.py">create_import_session</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -18657,8 +18657,8 @@ client.import_sessions.list_import_sessions(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -18721,7 +18721,7 @@ client.import_sessions.create_import_session(
 </dl>
 </details>
 
-<details><summary><code>client.import_sessions.<a href="src/sikaru_api/import_sessions/client.py">get_import_session</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.import_sessions.<a href="src/sikaru_sdk/import_sessions/client.py">get_import_session</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -18734,8 +18734,8 @@ client.import_sessions.create_import_session(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -18789,7 +18789,7 @@ client.import_sessions.get_import_session(
 </dl>
 </details>
 
-<details><summary><code>client.import_sessions.<a href="src/sikaru_api/import_sessions/client.py">create_compatibility_profile</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.import_sessions.<a href="src/sikaru_sdk/import_sessions/client.py">create_compatibility_profile</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -18802,8 +18802,8 @@ client.import_sessions.get_import_session(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -18939,7 +18939,7 @@ client.import_sessions.create_compatibility_profile(
 </dl>
 </details>
 
-<details><summary><code>client.import_sessions.<a href="src/sikaru_api/import_sessions/client.py">list_import_session_diffs</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.import_sessions.<a href="src/sikaru_sdk/import_sessions/client.py">list_import_session_diffs</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -18952,8 +18952,8 @@ client.import_sessions.create_compatibility_profile(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -19007,7 +19007,7 @@ client.import_sessions.list_import_session_diffs(
 </dl>
 </details>
 
-<details><summary><code>client.import_sessions.<a href="src/sikaru_api/import_sessions/client.py">get_parity_report</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.import_sessions.<a href="src/sikaru_sdk/import_sessions/client.py">get_parity_report</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -19020,8 +19020,8 @@ client.import_sessions.list_import_session_diffs(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -19075,7 +19075,7 @@ client.import_sessions.get_parity_report(
 </dl>
 </details>
 
-<details><summary><code>client.import_sessions.<a href="src/sikaru_api/import_sessions/client.py">promote_import_session</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.import_sessions.<a href="src/sikaru_sdk/import_sessions/client.py">promote_import_session</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -19088,8 +19088,8 @@ client.import_sessions.get_parity_report(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -19188,7 +19188,7 @@ client.import_sessions.promote_import_session(
 </dl>
 </details>
 
-<details><summary><code>client.import_sessions.<a href="src/sikaru_api/import_sessions/client.py">create_replay_run</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.import_sessions.<a href="src/sikaru_sdk/import_sessions/client.py">create_replay_run</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -19201,8 +19201,8 @@ client.import_sessions.promote_import_session(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -19265,7 +19265,7 @@ client.import_sessions.create_replay_run(
 </dl>
 </details>
 
-<details><summary><code>client.import_sessions.<a href="src/sikaru_api/import_sessions/client.py">list_source_artifacts</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.import_sessions.<a href="src/sikaru_sdk/import_sessions/client.py">list_source_artifacts</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -19278,8 +19278,8 @@ client.import_sessions.create_replay_run(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -19333,7 +19333,7 @@ client.import_sessions.list_source_artifacts(
 </dl>
 </details>
 
-<details><summary><code>client.import_sessions.<a href="src/sikaru_api/import_sessions/client.py">create_source_artifact</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.import_sessions.<a href="src/sikaru_sdk/import_sessions/client.py">create_source_artifact</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -19346,8 +19346,8 @@ client.import_sessions.list_source_artifacts(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -19445,7 +19445,7 @@ client.import_sessions.create_source_artifact(
 </dl>
 </details>
 
-<details><summary><code>client.import_sessions.<a href="src/sikaru_api/import_sessions/client.py">create_staging_run</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.import_sessions.<a href="src/sikaru_sdk/import_sessions/client.py">create_staging_run</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -19458,8 +19458,8 @@ client.import_sessions.create_source_artifact(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -19523,7 +19523,7 @@ client.import_sessions.create_staging_run(
 </details>
 
 ## IssueClusters
-<details><summary><code>client.issue_clusters.<a href="src/sikaru_api/issue_clusters/client.py">list_issue_clusters</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.issue_clusters.<a href="src/sikaru_sdk/issue_clusters/client.py">list_issue_clusters</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -19536,8 +19536,8 @@ client.import_sessions.create_staging_run(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -19606,7 +19606,7 @@ client.issue_clusters.list_issue_clusters(
 </dl>
 </details>
 
-<details><summary><code>client.issue_clusters.<a href="src/sikaru_api/issue_clusters/client.py">upsert_issue_cluster</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.issue_clusters.<a href="src/sikaru_sdk/issue_clusters/client.py">upsert_issue_cluster</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -19619,8 +19619,8 @@ client.issue_clusters.list_issue_clusters(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -19725,7 +19725,7 @@ client.issue_clusters.upsert_issue_cluster(
 </dl>
 </details>
 
-<details><summary><code>client.issue_clusters.<a href="src/sikaru_api/issue_clusters/client.py">get_issue_cluster</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.issue_clusters.<a href="src/sikaru_sdk/issue_clusters/client.py">get_issue_cluster</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -19738,8 +19738,8 @@ client.issue_clusters.upsert_issue_cluster(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -19793,7 +19793,7 @@ client.issue_clusters.get_issue_cluster(
 </dl>
 </details>
 
-<details><summary><code>client.issue_clusters.<a href="src/sikaru_api/issue_clusters/client.py">update_issue_cluster_status</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.issue_clusters.<a href="src/sikaru_sdk/issue_clusters/client.py">update_issue_cluster_status</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -19806,8 +19806,8 @@ client.issue_clusters.get_issue_cluster(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -19878,7 +19878,7 @@ client.issue_clusters.update_issue_cluster_status(
 </dl>
 </details>
 
-<details><summary><code>client.issue_clusters.<a href="src/sikaru_api/issue_clusters/client.py">propose_issue_cluster_fix</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.issue_clusters.<a href="src/sikaru_sdk/issue_clusters/client.py">propose_issue_cluster_fix</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -19891,8 +19891,8 @@ client.issue_clusters.update_issue_cluster_status(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -19947,7 +19947,7 @@ client.issue_clusters.propose_issue_cluster_fix(
 </details>
 
 ## JudgeAlignment
-<details><summary><code>client.judge_alignment.<a href="src/sikaru_api/judge_alignment/client.py">get_judge_alignment</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.judge_alignment.<a href="src/sikaru_sdk/judge_alignment/client.py">get_judge_alignment</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -19960,8 +19960,8 @@ client.issue_clusters.propose_issue_cluster_fix(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -20033,7 +20033,7 @@ client.judge_alignment.get_judge_alignment(
 </details>
 
 ## ManagedAgents
-<details><summary><code>client.managed_agents.<a href="src/sikaru_api/managed_agents/client.py">list_managed_agents</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.managed_agents.<a href="src/sikaru_sdk/managed_agents/client.py">list_managed_agents</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -20046,8 +20046,8 @@ client.judge_alignment.get_judge_alignment(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -20092,7 +20092,7 @@ client.managed_agents.list_managed_agents(
 </dl>
 </details>
 
-<details><summary><code>client.managed_agents.<a href="src/sikaru_api/managed_agents/client.py">create_managed_agent</a>(...) -> CreatedManagedAgent</code></summary>
+<details><summary><code>client.managed_agents.<a href="src/sikaru_sdk/managed_agents/client.py">create_managed_agent</a>(...) -> CreatedManagedAgent</code></summary>
 <dl>
 <dd>
 
@@ -20105,8 +20105,8 @@ client.managed_agents.list_managed_agents(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -20248,7 +20248,7 @@ client.managed_agents.create_managed_agent(
 </dl>
 </details>
 
-<details><summary><code>client.managed_agents.<a href="src/sikaru_api/managed_agents/client.py">get</a>(...) -> ManagedAgentRead</code></summary>
+<details><summary><code>client.managed_agents.<a href="src/sikaru_sdk/managed_agents/client.py">get</a>(...) -> ManagedAgentRead</code></summary>
 <dl>
 <dd>
 
@@ -20275,8 +20275,8 @@ One managed agent in the project: the same public summary the list returns.
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -20330,7 +20330,7 @@ client.managed_agents.get(
 </dl>
 </details>
 
-<details><summary><code>client.managed_agents.<a href="src/sikaru_api/managed_agents/client.py">delete_managed_agent</a>(...)</code></summary>
+<details><summary><code>client.managed_agents.<a href="src/sikaru_sdk/managed_agents/client.py">delete_managed_agent</a>(...)</code></summary>
 <dl>
 <dd>
 
@@ -20357,8 +20357,8 @@ Delete an agent that has never gone live, with its drafts, checks and schedules.
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -20412,7 +20412,7 @@ client.managed_agents.delete_managed_agent(
 </dl>
 </details>
 
-<details><summary><code>client.managed_agents.<a href="src/sikaru_api/managed_agents/client.py">update</a>(...) -> RenamedManagedAgent</code></summary>
+<details><summary><code>client.managed_agents.<a href="src/sikaru_sdk/managed_agents/client.py">update</a>(...) -> RenamedManagedAgent</code></summary>
 <dl>
 <dd>
 
@@ -20441,8 +20441,8 @@ Personal and end-user-cell choices are fixed at creation.
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -20520,7 +20520,7 @@ client.managed_agents.update(
 </dl>
 </details>
 
-<details><summary><code>client.managed_agents.<a href="src/sikaru_api/managed_agents/client.py">create_definition_revision</a>(...) -> DefinitionRevisionResult</code></summary>
+<details><summary><code>client.managed_agents.<a href="src/sikaru_sdk/managed_agents/client.py">create_definition_revision</a>(...) -> DefinitionRevisionResult</code></summary>
 <dl>
 <dd>
 
@@ -20547,8 +20547,8 @@ Stage a changed definition as a draft revision; the live definition is a no-op.
 <dd>
 
 ```python
-from sikaru_api import SikaruApi, AgentDefinition
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi, AgentDefinition
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -20622,7 +20622,7 @@ client.managed_agents.create_definition_revision(
 </dl>
 </details>
 
-<details><summary><code>client.managed_agents.<a href="src/sikaru_api/managed_agents/client.py">get_definition_revision</a>(...) -> DefinitionRevisionView</code></summary>
+<details><summary><code>client.managed_agents.<a href="src/sikaru_sdk/managed_agents/client.py">get_definition_revision</a>(...) -> DefinitionRevisionView</code></summary>
 <dl>
 <dd>
 
@@ -20635,8 +20635,8 @@ client.managed_agents.create_definition_revision(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -20700,7 +20700,7 @@ client.managed_agents.get_definition_revision(
 </details>
 
 ## Checks
-<details><summary><code>client.checks.<a href="src/sikaru_api/checks/client.py">list</a>(...) -> CheckList</code></summary>
+<details><summary><code>client.checks.<a href="src/sikaru_sdk/checks/client.py">list</a>(...) -> CheckList</code></summary>
 <dl>
 <dd>
 
@@ -20713,8 +20713,8 @@ client.managed_agents.get_definition_revision(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -20768,7 +20768,7 @@ client.checks.list(
 </dl>
 </details>
 
-<details><summary><code>client.checks.<a href="src/sikaru_api/checks/client.py">create</a>(...) -> CheckResponse</code></summary>
+<details><summary><code>client.checks.<a href="src/sikaru_sdk/checks/client.py">create</a>(...) -> CheckResponse</code></summary>
 <dl>
 <dd>
 
@@ -20795,8 +20795,8 @@ Same key and definition return the same check; a changed definition conflicts.
 <dd>
 
 ```python
-from sikaru_api import SikaruApi, CheckEnvironment, HarborTaskFiles
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi, CheckEnvironment, HarborTaskFiles
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -20892,7 +20892,7 @@ client.checks.create(
 </dl>
 </details>
 
-<details><summary><code>client.checks.<a href="src/sikaru_api/checks/client.py">list_results</a>(...) -> CheckResultList</code></summary>
+<details><summary><code>client.checks.<a href="src/sikaru_sdk/checks/client.py">list_results</a>(...) -> CheckResultList</code></summary>
 <dl>
 <dd>
 
@@ -20905,8 +20905,8 @@ client.checks.create(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -20969,7 +20969,7 @@ client.checks.list_results(
 </dl>
 </details>
 
-<details><summary><code>client.checks.<a href="src/sikaru_api/checks/client.py">run</a>(...) -> CheckResultResponse</code></summary>
+<details><summary><code>client.checks.<a href="src/sikaru_sdk/checks/client.py">run</a>(...) -> CheckResultResponse</code></summary>
 <dl>
 <dd>
 
@@ -20996,8 +20996,8 @@ Start the check's task as a real run of the agent's active release; the result s
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -21070,7 +21070,7 @@ client.checks.run(
 </details>
 
 ## EndUsers
-<details><summary><code>client.end_users.<a href="src/sikaru_api/end_users/client.py">get</a>(...) -> EndUser</code></summary>
+<details><summary><code>client.end_users.<a href="src/sikaru_sdk/end_users/client.py">get</a>(...) -> EndUser</code></summary>
 <dl>
 <dd>
 
@@ -21097,8 +21097,8 @@ What the agent knows about this end user: facts and the persona summary, never t
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -21170,7 +21170,7 @@ client.end_users.get(
 </dl>
 </details>
 
-<details><summary><code>client.end_users.<a href="src/sikaru_api/end_users/client.py">upsert</a>(...) -> EndUser</code></summary>
+<details><summary><code>client.end_users.<a href="src/sikaru_sdk/end_users/client.py">upsert</a>(...) -> EndUser</code></summary>
 <dl>
 <dd>
 
@@ -21197,8 +21197,8 @@ Create this end user's private cell, or update its timezone and population opt-i
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -21286,7 +21286,7 @@ client.end_users.upsert(
 </dl>
 </details>
 
-<details><summary><code>client.end_users.<a href="src/sikaru_api/end_users/client.py">delete</a>(...) -> EndUserDeletion</code></summary>
+<details><summary><code>client.end_users.<a href="src/sikaru_sdk/end_users/client.py">delete</a>(...) -> EndUserDeletion</code></summary>
 <dl>
 <dd>
 
@@ -21313,8 +21313,8 @@ Purge this user from every agent of the product, with every trace or eval case t
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -21386,7 +21386,7 @@ client.end_users.delete(
 </dl>
 </details>
 
-<details><summary><code>client.end_users.<a href="src/sikaru_api/end_users/client.py">update_fact</a>(...) -> EndUserFile</code></summary>
+<details><summary><code>client.end_users.<a href="src/sikaru_sdk/end_users/client.py">update_fact</a>(...) -> EndUserFile</code></summary>
 <dl>
 <dd>
 
@@ -21413,8 +21413,8 @@ Correct or add one fact. It serves from the next turn and becomes a held-out cas
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -21512,7 +21512,7 @@ client.end_users.update_fact(
 </dl>
 </details>
 
-<details><summary><code>client.end_users.<a href="src/sikaru_api/end_users/client.py">delete_fact</a>(...)</code></summary>
+<details><summary><code>client.end_users.<a href="src/sikaru_sdk/end_users/client.py">delete_fact</a>(...)</code></summary>
 <dl>
 <dd>
 
@@ -21539,8 +21539,8 @@ Forget one memory, or clear the profile.
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -21621,7 +21621,7 @@ client.end_users.delete_fact(
 </dl>
 </details>
 
-<details><summary><code>client.end_users.<a href="src/sikaru_api/end_users/client.py">correct_persona_summary</a>(...) -> RecordedCorrection</code></summary>
+<details><summary><code>client.end_users.<a href="src/sikaru_sdk/end_users/client.py">correct_persona_summary</a>(...) -> RecordedCorrection</code></summary>
 <dl>
 <dd>
 
@@ -21648,8 +21648,8 @@ Correct the persona summary. The correction applies from the next turn and is ne
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -21731,7 +21731,7 @@ client.end_users.correct_persona_summary(
 </details>
 
 ## MemoryRegistry
-<details><summary><code>client.memory_registry.<a href="src/sikaru_api/memory_registry/client.py">create_memory_registry_change</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.memory_registry.<a href="src/sikaru_sdk/memory_registry/client.py">create_memory_registry_change</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -21744,8 +21744,8 @@ client.end_users.correct_persona_summary(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -21891,7 +21891,7 @@ client.memory_registry.create_memory_registry_change(
 </details>
 
 ## ModelGateway
-<details><summary><code>client.model_gateway.<a href="src/sikaru_api/model_gateway/client.py">capture_model_gateway_chat_completion</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.model_gateway.<a href="src/sikaru_sdk/model_gateway/client.py">capture_model_gateway_chat_completion</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -21904,8 +21904,8 @@ client.memory_registry.create_memory_registry_change(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -21995,7 +21995,7 @@ client.model_gateway.capture_model_gateway_chat_completion(
 </details>
 
 ## ModelSettings
-<details><summary><code>client.model_settings.<a href="src/sikaru_api/model_settings/client.py">get_model_settings</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.model_settings.<a href="src/sikaru_sdk/model_settings/client.py">get_model_settings</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -22008,8 +22008,8 @@ client.model_gateway.capture_model_gateway_chat_completion(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -22054,7 +22054,7 @@ client.model_settings.get_model_settings(
 </dl>
 </details>
 
-<details><summary><code>client.model_settings.<a href="src/sikaru_api/model_settings/client.py">update_model_settings</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.model_settings.<a href="src/sikaru_sdk/model_settings/client.py">update_model_settings</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -22067,8 +22067,8 @@ client.model_settings.get_model_settings(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -22123,7 +22123,7 @@ client.model_settings.update_model_settings(
 </details>
 
 ## OnlineEvaluations
-<details><summary><code>client.online_evaluations.<a href="src/sikaru_api/online_evaluations/client.py">list_policies</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.online_evaluations.<a href="src/sikaru_sdk/online_evaluations/client.py">list_policies</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -22136,8 +22136,8 @@ client.model_settings.update_model_settings(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -22190,7 +22190,7 @@ client.online_evaluations.list_policies(
 </dl>
 </details>
 
-<details><summary><code>client.online_evaluations.<a href="src/sikaru_api/online_evaluations/client.py">create_policy</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.online_evaluations.<a href="src/sikaru_sdk/online_evaluations/client.py">create_policy</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -22203,8 +22203,8 @@ client.online_evaluations.list_policies(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -22302,7 +22302,7 @@ client.online_evaluations.create_policy(
 </dl>
 </details>
 
-<details><summary><code>client.online_evaluations.<a href="src/sikaru_api/online_evaluations/client.py">preview_policy_eligibility</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.online_evaluations.<a href="src/sikaru_sdk/online_evaluations/client.py">preview_policy_eligibility</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -22315,8 +22315,8 @@ client.online_evaluations.create_policy(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -22369,7 +22369,7 @@ client.online_evaluations.preview_policy_eligibility(
 </dl>
 </details>
 
-<details><summary><code>client.online_evaluations.<a href="src/sikaru_api/online_evaluations/client.py">update_policy</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.online_evaluations.<a href="src/sikaru_sdk/online_evaluations/client.py">update_policy</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -22382,8 +22382,8 @@ client.online_evaluations.preview_policy_eligibility(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -22447,7 +22447,7 @@ client.online_evaluations.update_policy(
 </details>
 
 ## ReleaseWatches
-<details><summary><code>client.release_watches.<a href="src/sikaru_api/release_watches/client.py">create_release_watch</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.release_watches.<a href="src/sikaru_sdk/release_watches/client.py">create_release_watch</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -22460,8 +22460,8 @@ client.online_evaluations.update_policy(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -22606,7 +22606,7 @@ client.release_watches.create_release_watch(
 </details>
 
 ## RetentionPolicies
-<details><summary><code>client.retention_policies.<a href="src/sikaru_api/retention_policies/client.py">create_retention_policy_update</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.retention_policies.<a href="src/sikaru_sdk/retention_policies/client.py">create_retention_policy_update</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -22619,8 +22619,8 @@ client.release_watches.create_release_watch(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -22765,7 +22765,7 @@ client.retention_policies.create_retention_policy_update(
 </details>
 
 ## ReviewQueue
-<details><summary><code>client.review_queue.<a href="src/sikaru_api/review_queue/client.py">create_review_queue_item</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.review_queue.<a href="src/sikaru_sdk/review_queue/client.py">create_review_queue_item</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -22778,8 +22778,8 @@ client.retention_policies.create_retention_policy_update(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -22924,7 +22924,7 @@ client.review_queue.create_review_queue_item(
 </details>
 
 ## RunReferences
-<details><summary><code>client.run_references.<a href="src/sikaru_api/run_references/client.py">resolve_run_reference</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.run_references.<a href="src/sikaru_sdk/run_references/client.py">resolve_run_reference</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -22937,8 +22937,8 @@ client.review_queue.create_review_queue_item(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -23001,7 +23001,7 @@ client.run_references.resolve_run_reference(
 </details>
 
 ## RunSchedules
-<details><summary><code>client.run_schedules.<a href="src/sikaru_api/run_schedules/client.py">list_schedules</a>(...) -> ScheduleList</code></summary>
+<details><summary><code>client.run_schedules.<a href="src/sikaru_sdk/run_schedules/client.py">list_schedules</a>(...) -> ScheduleList</code></summary>
 <dl>
 <dd>
 
@@ -23014,8 +23014,8 @@ client.run_references.resolve_run_reference(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -23076,7 +23076,7 @@ client.run_schedules.list_schedules(
 </dl>
 </details>
 
-<details><summary><code>client.run_schedules.<a href="src/sikaru_api/run_schedules/client.py">create_schedule</a>(...) -> ScheduleResponse</code></summary>
+<details><summary><code>client.run_schedules.<a href="src/sikaru_sdk/run_schedules/client.py">create_schedule</a>(...) -> ScheduleResponse</code></summary>
 <dl>
 <dd>
 
@@ -23089,8 +23089,8 @@ client.run_schedules.list_schedules(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -23210,7 +23210,7 @@ client.run_schedules.create_schedule(
 </dl>
 </details>
 
-<details><summary><code>client.run_schedules.<a href="src/sikaru_api/run_schedules/client.py">delete_schedule</a>(...) -> ScheduleDeleted</code></summary>
+<details><summary><code>client.run_schedules.<a href="src/sikaru_sdk/run_schedules/client.py">delete_schedule</a>(...) -> ScheduleDeleted</code></summary>
 <dl>
 <dd>
 
@@ -23223,8 +23223,8 @@ client.run_schedules.create_schedule(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -23278,7 +23278,7 @@ client.run_schedules.delete_schedule(
 </dl>
 </details>
 
-<details><summary><code>client.run_schedules.<a href="src/sikaru_api/run_schedules/client.py">pause_schedule</a>(...) -> SchedulePaused</code></summary>
+<details><summary><code>client.run_schedules.<a href="src/sikaru_sdk/run_schedules/client.py">pause_schedule</a>(...) -> SchedulePaused</code></summary>
 <dl>
 <dd>
 
@@ -23291,8 +23291,8 @@ client.run_schedules.delete_schedule(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -23355,7 +23355,7 @@ client.run_schedules.pause_schedule(
 </dl>
 </details>
 
-<details><summary><code>client.run_schedules.<a href="src/sikaru_api/run_schedules/client.py">schedule_notices</a>(...) -> ScheduleNotices</code></summary>
+<details><summary><code>client.run_schedules.<a href="src/sikaru_sdk/run_schedules/client.py">schedule_notices</a>(...) -> ScheduleNotices</code></summary>
 <dl>
 <dd>
 
@@ -23368,8 +23368,8 @@ client.run_schedules.pause_schedule(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -23423,7 +23423,7 @@ client.run_schedules.schedule_notices(
 </dl>
 </details>
 
-<details><summary><code>client.run_schedules.<a href="src/sikaru_api/run_schedules/client.py">schedule_history</a>(...) -> ScheduleHistory</code></summary>
+<details><summary><code>client.run_schedules.<a href="src/sikaru_sdk/run_schedules/client.py">schedule_history</a>(...) -> ScheduleHistory</code></summary>
 <dl>
 <dd>
 
@@ -23436,8 +23436,8 @@ client.run_schedules.schedule_notices(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -23508,7 +23508,7 @@ client.run_schedules.schedule_history(
 </details>
 
 ## RunWebhooks
-<details><summary><code>client.run_webhooks.<a href="src/sikaru_api/run_webhooks/client.py">list_webhooks</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.run_webhooks.<a href="src/sikaru_sdk/run_webhooks/client.py">list_webhooks</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -23521,8 +23521,8 @@ client.run_schedules.schedule_history(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -23567,7 +23567,7 @@ client.run_webhooks.list_webhooks(
 </dl>
 </details>
 
-<details><summary><code>client.run_webhooks.<a href="src/sikaru_api/run_webhooks/client.py">create_webhook</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.run_webhooks.<a href="src/sikaru_sdk/run_webhooks/client.py">create_webhook</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -23580,8 +23580,8 @@ client.run_webhooks.list_webhooks(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -23652,7 +23652,7 @@ client.run_webhooks.create_webhook(
 </dl>
 </details>
 
-<details><summary><code>client.run_webhooks.<a href="src/sikaru_api/run_webhooks/client.py">delete_webhook</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.run_webhooks.<a href="src/sikaru_sdk/run_webhooks/client.py">delete_webhook</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -23665,8 +23665,8 @@ client.run_webhooks.create_webhook(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -23721,7 +23721,7 @@ client.run_webhooks.delete_webhook(
 </details>
 
 ## Sessions
-<details><summary><code>client.sessions.<a href="src/sikaru_api/sessions/client.py">get_managed_session</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.sessions.<a href="src/sikaru_sdk/sessions/client.py">get_managed_session</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -23734,8 +23734,8 @@ client.run_webhooks.delete_webhook(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -23789,7 +23789,7 @@ client.sessions.get_managed_session(
 </dl>
 </details>
 
-<details><summary><code>client.sessions.<a href="src/sikaru_api/sessions/client.py">list_managed_session_events</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.sessions.<a href="src/sikaru_sdk/sessions/client.py">list_managed_session_events</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -23802,8 +23802,8 @@ client.sessions.get_managed_session(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -23873,7 +23873,7 @@ client.sessions.list_managed_session_events(
 </dl>
 </details>
 
-<details><summary><code>client.sessions.<a href="src/sikaru_api/sessions/client.py">list_managed_session_files</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.sessions.<a href="src/sikaru_sdk/sessions/client.py">list_managed_session_files</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -23886,8 +23886,8 @@ client.sessions.list_managed_session_events(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -23941,7 +23941,7 @@ client.sessions.list_managed_session_files(
 </dl>
 </details>
 
-<details><summary><code>client.sessions.<a href="src/sikaru_api/sessions/client.py">list_managed_session_plan</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.sessions.<a href="src/sikaru_sdk/sessions/client.py">list_managed_session_plan</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -23954,8 +23954,8 @@ client.sessions.list_managed_session_files(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -24010,7 +24010,7 @@ client.sessions.list_managed_session_plan(
 </details>
 
 ## ToolProviders
-<details><summary><code>client.tool_providers.<a href="src/sikaru_api/tool_providers/client.py">register_tool_provider</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.tool_providers.<a href="src/sikaru_sdk/tool_providers/client.py">register_tool_provider</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -24023,8 +24023,8 @@ client.sessions.list_managed_session_plan(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -24130,7 +24130,7 @@ client.tool_providers.register_tool_provider(
 </dl>
 </details>
 
-<details><summary><code>client.tool_providers.<a href="src/sikaru_api/tool_providers/client.py">attach_source_tool_skill</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.tool_providers.<a href="src/sikaru_sdk/tool_providers/client.py">attach_source_tool_skill</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -24143,8 +24143,8 @@ client.tool_providers.register_tool_provider(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi, ToolSkillSourceRequest
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi, ToolSkillSourceRequest
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -24230,7 +24230,7 @@ client.tool_providers.attach_source_tool_skill(
 </details>
 
 ## TraceImportConnections
-<details><summary><code>client.trace_import_connections.<a href="src/sikaru_api/trace_import_connections/client.py">list_trace_import_connections</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.trace_import_connections.<a href="src/sikaru_sdk/trace_import_connections/client.py">list_trace_import_connections</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -24243,8 +24243,8 @@ client.tool_providers.attach_source_tool_skill(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -24290,7 +24290,7 @@ client.trace_import_connections.list_trace_import_connections(
 </details>
 
 ## TraceImports
-<details><summary><code>client.trace_imports.<a href="src/sikaru_api/trace_imports/client.py">list_trace_imports</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.trace_imports.<a href="src/sikaru_sdk/trace_imports/client.py">list_trace_imports</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -24303,8 +24303,8 @@ client.trace_import_connections.list_trace_import_connections(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -24349,7 +24349,7 @@ client.trace_imports.list_trace_imports(
 </dl>
 </details>
 
-<details><summary><code>client.trace_imports.<a href="src/sikaru_api/trace_imports/client.py">create_trace_import</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.trace_imports.<a href="src/sikaru_sdk/trace_imports/client.py">create_trace_import</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -24362,8 +24362,8 @@ client.trace_imports.list_trace_imports(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi, TraceImportScopeRequest
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi, TraceImportScopeRequest
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -24504,7 +24504,7 @@ client.trace_imports.create_trace_import(
 </dl>
 </details>
 
-<details><summary><code>client.trace_imports.<a href="src/sikaru_api/trace_imports/client.py">plan_trace_import</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.trace_imports.<a href="src/sikaru_sdk/trace_imports/client.py">plan_trace_import</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -24517,8 +24517,8 @@ client.trace_imports.create_trace_import(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi, TraceImportScopeRequest
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi, TraceImportScopeRequest
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -24667,7 +24667,7 @@ client.trace_imports.plan_trace_import(
 </dl>
 </details>
 
-<details><summary><code>client.trace_imports.<a href="src/sikaru_api/trace_imports/client.py">get_trace_import</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.trace_imports.<a href="src/sikaru_sdk/trace_imports/client.py">get_trace_import</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -24680,8 +24680,8 @@ client.trace_imports.plan_trace_import(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -24735,7 +24735,7 @@ client.trace_imports.get_trace_import(
 </dl>
 </details>
 
-<details><summary><code>client.trace_imports.<a href="src/sikaru_api/trace_imports/client.py">cancel_trace_import</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.trace_imports.<a href="src/sikaru_sdk/trace_imports/client.py">cancel_trace_import</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -24748,8 +24748,8 @@ client.trace_imports.get_trace_import(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -24812,7 +24812,7 @@ client.trace_imports.cancel_trace_import(
 </dl>
 </details>
 
-<details><summary><code>client.trace_imports.<a href="src/sikaru_api/trace_imports/client.py">get_trace_import_receipt</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.trace_imports.<a href="src/sikaru_sdk/trace_imports/client.py">get_trace_import_receipt</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -24825,8 +24825,8 @@ client.trace_imports.cancel_trace_import(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -24880,7 +24880,7 @@ client.trace_imports.get_trace_import_receipt(
 </dl>
 </details>
 
-<details><summary><code>client.trace_imports.<a href="src/sikaru_api/trace_imports/client.py">retry_trace_import</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.trace_imports.<a href="src/sikaru_sdk/trace_imports/client.py">retry_trace_import</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -24893,8 +24893,8 @@ client.trace_imports.get_trace_import_receipt(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -24958,7 +24958,7 @@ client.trace_imports.retry_trace_import(
 </details>
 
 ## WorkflowIntents
-<details><summary><code>client.workflow_intents.<a href="src/sikaru_api/workflow_intents/client.py">create_project_workflow_intent</a>(...) -> typing.Dict[str, str]</code></summary>
+<details><summary><code>client.workflow_intents.<a href="src/sikaru_sdk/workflow_intents/client.py">create_project_workflow_intent</a>(...) -> typing.Dict[str, str]</code></summary>
 <dl>
 <dd>
 
@@ -24971,8 +24971,8 @@ client.trace_imports.retry_trace_import(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -25026,7 +25026,7 @@ client.workflow_intents.create_project_workflow_intent(
 </dl>
 </details>
 
-<details><summary><code>client.workflow_intents.<a href="src/sikaru_api/workflow_intents/client.py">compile_project_workflow_intent</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.workflow_intents.<a href="src/sikaru_sdk/workflow_intents/client.py">compile_project_workflow_intent</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -25039,8 +25039,8 @@ client.workflow_intents.create_project_workflow_intent(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -25095,7 +25095,7 @@ client.workflow_intents.compile_project_workflow_intent(
 </details>
 
 ## WorkflowRuns
-<details><summary><code>client.workflow_runs.<a href="src/sikaru_api/workflow_runs/client.py">project_workflow_run_events</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.workflow_runs.<a href="src/sikaru_sdk/workflow_runs/client.py">project_workflow_run_events</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -25108,8 +25108,8 @@ client.workflow_intents.compile_project_workflow_intent(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -25163,7 +25163,7 @@ client.workflow_runs.project_workflow_run_events(
 </dl>
 </details>
 
-<details><summary><code>client.workflow_runs.<a href="src/sikaru_api/workflow_runs/client.py">recover_project_workflow_run</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.workflow_runs.<a href="src/sikaru_sdk/workflow_runs/client.py">recover_project_workflow_run</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -25176,8 +25176,8 @@ client.workflow_runs.project_workflow_run_events(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -25240,7 +25240,7 @@ client.workflow_runs.recover_project_workflow_run(
 </details>
 
 ## Workflows
-<details><summary><code>client.workflows.<a href="src/sikaru_api/workflows/client.py">import_workflow</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.workflows.<a href="src/sikaru_sdk/workflows/client.py">import_workflow</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -25253,8 +25253,8 @@ client.workflow_runs.recover_project_workflow_run(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -25326,7 +25326,7 @@ client.workflows.import_workflow(
 </dl>
 </details>
 
-<details><summary><code>client.workflows.<a href="src/sikaru_api/workflows/client.py">export_product_workflow</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.workflows.<a href="src/sikaru_sdk/workflows/client.py">export_product_workflow</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -25339,8 +25339,8 @@ client.workflows.import_workflow(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -25394,7 +25394,7 @@ client.workflows.export_product_workflow(
 </dl>
 </details>
 
-<details><summary><code>client.workflows.<a href="src/sikaru_api/workflows/client.py">start_project_workflow_run</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.workflows.<a href="src/sikaru_sdk/workflows/client.py">start_project_workflow_run</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -25407,8 +25407,8 @@ client.workflows.export_product_workflow(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -25486,7 +25486,7 @@ client.workflows.start_project_workflow_run(
 </dl>
 </details>
 
-<details><summary><code>client.workflows.<a href="src/sikaru_api/workflows/client.py">create_project_workflow_version</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.workflows.<a href="src/sikaru_sdk/workflows/client.py">create_project_workflow_version</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -25499,8 +25499,8 @@ client.workflows.start_project_workflow_run(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -25571,7 +25571,7 @@ client.workflows.create_project_workflow_version(
 </details>
 
 ## Responses
-<details><summary><code>client.responses.<a href="src/sikaru_api/responses/client.py">create_stream</a>(...) -> typing.Iterator[bytes]</code></summary>
+<details><summary><code>client.responses.<a href="src/sikaru_sdk/responses/client.py">create_stream</a>(...) -> typing.Iterator[bytes]</code></summary>
 <dl>
 <dd>
 
@@ -25584,8 +25584,8 @@ client.workflows.create_project_workflow_version(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -25918,7 +25918,7 @@ client.responses.create_stream(
 </dl>
 </details>
 
-<details><summary><code>client.responses.<a href="src/sikaru_api/responses/client.py">create</a>(...) -> ModelResponse</code></summary>
+<details><summary><code>client.responses.<a href="src/sikaru_sdk/responses/client.py">create</a>(...) -> ModelResponse</code></summary>
 <dl>
 <dd>
 
@@ -25931,8 +25931,8 @@ client.responses.create_stream(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -26266,7 +26266,7 @@ client.responses.create_stream(
 </details>
 
 ## Decisions
-<details><summary><code>client.decisions.<a href="src/sikaru_api/decisions/client.py">create</a>(...) -> Decision</code></summary>
+<details><summary><code>client.decisions.<a href="src/sikaru_sdk/decisions/client.py">create</a>(...) -> Decision</code></summary>
 <dl>
 <dd>
 
@@ -26279,8 +26279,8 @@ client.responses.create_stream(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -26355,7 +26355,7 @@ client.decisions.create(
 </details>
 
 ## TraceStreams
-<details><summary><code>client.trace_streams.<a href="src/sikaru_api/trace_streams/client.py">stream_openinference_spans</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.trace_streams.<a href="src/sikaru_sdk/trace_streams/client.py">stream_openinference_spans</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
 
@@ -26368,8 +26368,8 @@ client.decisions.create(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi, TraceMetadata
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi, TraceMetadata
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -26484,7 +26484,7 @@ client.trace_streams.stream_openinference_spans(
 </details>
 
 ## Chat Completions
-<details><summary><code>client.chat.completions.<a href="src/sikaru_api/chat/completions/client.py">create_stream</a>(...) -> typing.Iterator[bytes]</code></summary>
+<details><summary><code>client.chat.completions.<a href="src/sikaru_sdk/chat/completions/client.py">create_stream</a>(...) -> typing.Iterator[bytes]</code></summary>
 <dl>
 <dd>
 
@@ -26497,8 +26497,8 @@ client.trace_streams.stream_openinference_spans(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",
@@ -26940,7 +26940,7 @@ client.chat.completions.create_stream(
 </dl>
 </details>
 
-<details><summary><code>client.chat.completions.<a href="src/sikaru_api/chat/completions/client.py">create</a>(...) -> ChatCompletion</code></summary>
+<details><summary><code>client.chat.completions.<a href="src/sikaru_sdk/chat/completions/client.py">create</a>(...) -> ChatCompletion</code></summary>
 <dl>
 <dd>
 
@@ -26953,8 +26953,8 @@ client.chat.completions.create_stream(
 <dd>
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     api_key="<token>",

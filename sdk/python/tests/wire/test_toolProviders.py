@@ -1,6 +1,6 @@
 from .conftest import get_client, verify_auth_headers, verify_request_count
 
-from sikaru_api import ToolSkillSourceRequest
+from sikaru_sdk import ToolSkillSourceRequest
 
 
 def test_toolProviders_register_tool_provider() -> None:

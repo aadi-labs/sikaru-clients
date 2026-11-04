@@ -1,6 +1,6 @@
 from .conftest import get_client, verify_auth_headers, verify_request_count
 
-from sikaru_api import ResumeInput
+from sikaru_sdk import ResumeInput
 
 
 def test_executionObjectives_list_objectives() -> None:

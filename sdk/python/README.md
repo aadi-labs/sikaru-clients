@@ -1,7 +1,7 @@
 # Sikaru Python Library
 
 [![fern shield](https://img.shields.io/badge/%F0%9F%8C%BF-Built%20with%20Fern-brightgreen)](https://buildwithfern.com?utm_source=github&utm_medium=github&utm_campaign=readme&utm_source=Sikaru%2FPython)
-[![pypi](https://img.shields.io/pypi/v/sikaru_api)](https://pypi.python.org/pypi/sikaru_api)
+[![pypi](https://img.shields.io/pypi/v/sikaru_sdk)](https://pypi.python.org/pypi/sikaru_sdk)
 
 The Sikaru Python library provides convenient access to the Sikaru APIs from Python.
 
@@ -24,7 +24,7 @@ The Sikaru Python library provides convenient access to the Sikaru APIs from Pyt
 ## Installation
 
 ```sh
-pip install sikaru_api
+pip install sikaru_sdk
 ```
 
 ## Reference
@@ -36,7 +36,7 @@ A full reference for this library is available [here](./reference.md).
 Instantiate and use the client with the following:
 
 ```python
-from sikaru_api import SikaruApi
+from sikaru_sdk import SikaruApi
 
 client = SikaruApi(
     api_key="<token>",
@@ -55,8 +55,8 @@ client.http_channels.invoke(
 This SDK allows you to configure different environments for API requests.
 
 ```python
-from sikaru_api import SikaruApi
-from sikaru_api.environment import SikaruApiEnvironment
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
     environment=SikaruApiEnvironment.DEFAULT,
@@ -70,7 +70,7 @@ The SDK also exports an `async` client so that you can make non-blocking calls t
 ```python
 import asyncio
 
-from sikaru_api import AsyncSikaruApi
+from sikaru_sdk import AsyncSikaruApi
 
 client = AsyncSikaruApi(
     api_key="<token>",
@@ -95,7 +95,7 @@ When the API returns a non-success status code (4xx or 5xx response), a subclass
 will be thrown.
 
 ```python
-from sikaru_api.core.api_error import ApiError
+from sikaru_sdk.core.api_error import ApiError
 
 try:
     client.http_channels.invoke(...)
@@ -109,7 +109,7 @@ except ApiError as e:
 The SDK supports streaming responses, as well, the response will be a generator that you can loop over.
 
 ```python
-from sikaru_api import SikaruApi
+from sikaru_sdk import SikaruApi
 
 client = SikaruApi(
     api_key="<token>",
@@ -129,7 +129,7 @@ The SDK provides access to raw response data, including headers, through the `.w
 The `.with_raw_response` property returns a "raw" client that can be used to access the `.headers` and `.data` attributes.
 
 ```python
-from sikaru_api import SikaruApi
+from sikaru_sdk import SikaruApi
 
 client = SikaruApi(...)
 response = client.http_channels.with_raw_response.invoke(...)
@@ -173,7 +173,7 @@ client.http_channels.invoke(..., request_options={
 The SDK defaults to a 60 second timeout. You can configure this with a timeout option at the client or request level.
 
 ```python
-from sikaru_api import SikaruApi
+from sikaru_sdk import SikaruApi
 
 client = SikaruApi(..., timeout=20.0)
 
@@ -190,7 +190,7 @@ and transports.
 
 ```python
 import httpx
-from sikaru_api import SikaruApi
+from sikaru_sdk import SikaruApi
 
 client = SikaruApi(
     ...,

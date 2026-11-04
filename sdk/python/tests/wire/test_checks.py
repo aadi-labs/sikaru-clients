@@ -1,6 +1,6 @@
 from .conftest import get_client, verify_auth_headers, verify_request_count
 
-from sikaru_api import CheckEnvironment, HarborTaskFiles
+from sikaru_sdk import CheckEnvironment, HarborTaskFiles
 
 
 def test_checks_list_() -> None:

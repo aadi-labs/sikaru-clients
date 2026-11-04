@@ -25,7 +25,7 @@ jobs:
           python -m pip install 'build>=1,<2'
           python -m build sdk/python
           python -m pip install sdk/python/dist/*.whl
-          python -c 'from sikaru_api import SikaruApi, AsyncSikaruApi'
+          python -c 'from sikaru_sdk import SikaruApi, AsyncSikaruApi'
       - name: Install Python authoring companion
         run: |
           python -m pip install ./shared/authoring/python

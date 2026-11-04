@@ -1,6 +1,6 @@
 from .conftest import get_client, verify_auth_headers, verify_request_count
 
-from sikaru_api import AnswerRef, CaseInput
+from sikaru_sdk import AnswerRef, CaseInput
 
 
 def test_evaluationComparisons_list_comparisons() -> None:

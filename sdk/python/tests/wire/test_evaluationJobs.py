@@ -1,6 +1,6 @@
 from .conftest import get_client, verify_auth_headers, verify_request_count
 
-from sikaru_api import JudgmentTarget, TargetInput
+from sikaru_sdk import JudgmentTarget, TargetInput
 
 
 def test_evaluationJobs_list_jobs() -> None:

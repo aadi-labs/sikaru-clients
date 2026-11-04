@@ -1,6 +1,6 @@
 from .conftest import get_client, verify_auth_headers, verify_request_count
 
-from sikaru_api import ResumeImprovementInput
+from sikaru_sdk import ResumeImprovementInput
 
 
 def test_harnesses_get_invoice_budget() -> None:

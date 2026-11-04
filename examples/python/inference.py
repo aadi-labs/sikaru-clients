@@ -6,7 +6,7 @@ for example `moonshotai/kimi-k3`.
 import asyncio
 import os
 
-from sikaru_api import AsyncSikaru, Sikaru
+from sikaru_sdk import AsyncSikaru, Sikaru
 
 model = os.environ["SIKARU_MODEL"]
 messages = [{"role": "user", "content": "Explain a rainbow in one sentence."}]

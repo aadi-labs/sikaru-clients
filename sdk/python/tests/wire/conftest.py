@@ -16,7 +16,7 @@ from typing import Any, Dict, List, Optional
 
 import httpx
 
-from sikaru_api.client import SikaruApi
+from sikaru_sdk.client import SikaruApi
 
 # Check once at import time whether the client constructor accepts a headers kwarg.
 try:

@@ -9,9 +9,9 @@ version.
 
 | Client | Install |
 | --- | --- |
-| Python SDK (`sikaru_api`) | `pip install sikaru_api` or `uv add sikaru_api` |
-| TypeScript SDK (`@sikaru/sdk`) | `npm i @sikaru/sdk` |
-| CLI (`sikaru`) | `curl -fsSL https://app.sikaru.ai/install.sh \| sh` or `npm i -g @sikaru/cli` (Windows: PowerShell installer on the releases page) |
+| Python SDK (`sikaru_sdk`) | `pip install sikaru-sdk` or `uv add sikaru-sdk` |
+| TypeScript SDK (`@aadi-labs/sikaru-sdk`) | `npm i @aadi-labs/sikaru-sdk` |
+| CLI (`sikaru`) | `curl -fsSL https://app.sikaru.ai/install.sh \| sh` or `npm i -g @aadi-labs/sikaru-cli` (Windows: PowerShell installer on the releases page) |
 
 The CLI signs you in with `sikaru login` (or on the first command you run), then
 `sikaru config set project PROJECT` picks the project to work in. The SDKs, servers and
@@ -20,7 +20,7 @@ CI use a project API key from the Sikaru dashboard in `SIKARU_API_KEY`.
 ## Quick start
 
 ```python
-from sikaru_api import Sikaru
+from sikaru_sdk import Sikaru
 
 client = Sikaru()  # reads SIKARU_API_KEY
 reply = client.chat.completions.create(
@@ -57,8 +57,8 @@ under each product.
 
 | Path | Contents |
 | --- | --- |
-| [`sdk/python`](sdk/python) | Python SDK (`sikaru_api` on PyPI) |
-| [`sdk/typescript`](sdk/typescript) | TypeScript SDK, published as `@sikaru/sdk` |
+| [`sdk/python`](sdk/python) | Python SDK (`sikaru_sdk` on PyPI) |
+| [`sdk/typescript`](sdk/typescript) | TypeScript SDK, published as `@aadi-labs/sikaru-sdk` |
 | [`cli`](cli) | The `sikaru` command-line tool |
 | [`shared`](shared) | Authoring companions and cross-language contracts |
 | [`examples`](examples) | Runnable examples for the Python SDK, the TypeScript SDK and the CLI |

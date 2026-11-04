@@ -11,9 +11,9 @@ precise-builds = true
 # The installers to generate for each app: the shell installer
 # (`curl -fsSL https://app.sikaru.ai/install.sh | sh`), PowerShell on Windows, and npm.
 installers = ["shell", "powershell", "npm"]
-# Publish the npm installer as @sikaru/cli, beside @sikaru/sdk.
-npm-scope = "@sikaru"
-npm-package = "cli"
+# Publish the npm installer as @aadi-labs/sikaru-cli, beside @aadi-labs/sikaru-sdk.
+npm-scope = "@aadi-labs"
+npm-package = "sikaru-cli"
 # Whether to enable GitHub Attestations
 github-attestations = true
 # Target platforms to build apps for (Rust target-triple syntax)

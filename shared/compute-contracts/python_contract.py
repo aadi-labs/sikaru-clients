@@ -1,7 +1,7 @@
 """Execute the actual generated Python client against the independent wire oracle."""
 import os
-from sikaru_api import SikaruApi
-from sikaru_api.core.api_error import ApiError
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.core.api_error import ApiError
 
 
 def client(token):

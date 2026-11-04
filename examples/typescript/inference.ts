@@ -1,7 +1,7 @@
 // Call a Sikaru catalog model with the TypeScript SDK.
 // Set SIKARU_API_KEY, and SIKARU_MODEL to a model ID from `client.models.list()`,
 // for example `moonshotai/kimi-k3`.
-import { Sikaru } from "@sikaru/sdk/inference";
+import { Sikaru } from "@aadi-labs/sikaru-sdk/inference";
 
 const apiKey = process.env.SIKARU_API_KEY;
 const model = process.env.SIKARU_MODEL;

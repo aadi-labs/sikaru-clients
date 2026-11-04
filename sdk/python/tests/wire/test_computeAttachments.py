@@ -1,6 +1,6 @@
 from .conftest import get_client, verify_auth_headers, verify_request_count
 
-from sikaru_api import WorkspaceProvenance
+from sikaru_sdk import WorkspaceProvenance
 
 
 def test_computeAttachments_get() -> None:

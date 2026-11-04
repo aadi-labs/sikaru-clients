@@ -1,6 +1,6 @@
 from .conftest import get_client, verify_auth_headers, verify_request_count
 
-from sikaru_api import ConnectionConfig, ConnectionCredentials
+from sikaru_sdk import ConnectionConfig, ConnectionCredentials
 
 
 def test_connections_list_connections() -> None:

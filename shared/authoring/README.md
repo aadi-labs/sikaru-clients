@@ -59,7 +59,7 @@ Document parsing and access validation happen on the server. The document
 helpers preserve UTF-8 bytes, including CRLF line endings, through pull and push:
 
 ```python
-from sikaru_api import SikaruApi
+from sikaru_sdk import SikaruApi
 from sikaru_authoring.documents import pull_document, push_document, publish_document
 
 client = SikaruApi()  # Reads SIKARU_API_KEY from the environment.

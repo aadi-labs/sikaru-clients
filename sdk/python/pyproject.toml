@@ -1,9 +1,9 @@
 [project]
-name = "sikaru_api"
+name = "sikaru_sdk"
 dynamic = ["version"]
 
 [tool.poetry]
-name = "sikaru_api"
+name = "sikaru_sdk"
 version = "0.0.1"
 description = ""
 readme = "README.md"
@@ -29,7 +29,7 @@ classifiers = [
     "Typing :: Typed"
 ]
 packages = [
-    { include = "sikaru_api", from = "src"}
+    { include = "sikaru_sdk", from = "src"}
 ]
 
 [tool.poetry.dependencies]

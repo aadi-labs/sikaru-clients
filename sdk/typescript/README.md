@@ -1,7 +1,7 @@
 # Sikaru TypeScript Library
 
 [![fern shield](https://img.shields.io/badge/%F0%9F%8C%BF-Built%20with%20Fern-brightgreen)](https://buildwithfern.com?utm_source=github&utm_medium=github&utm_campaign=readme&utm_source=Sikaru%2FTypeScript)
-[![npm shield](https://img.shields.io/npm/v/@sikaru/sdk)](https://www.npmjs.com/package/@sikaru/sdk)
+[![npm shield](https://img.shields.io/npm/v/@aadi-labs/sikaru-sdk)](https://www.npmjs.com/package/@aadi-labs/sikaru-sdk)
 
 The Sikaru TypeScript library provides convenient access to the Sikaru APIs from TypeScript.
 
@@ -32,7 +32,7 @@ The Sikaru TypeScript library provides convenient access to the Sikaru APIs from
 ## Installation
 
 ```sh
-npm i -s @sikaru/sdk
+npm i -s @aadi-labs/sikaru-sdk
 ```
 
 ## Reference
@@ -44,7 +44,7 @@ A full reference for this library is available [here](./reference.md).
 Instantiate and use the client with the following:
 
 ```typescript
-import { SikaruApi } from "@sikaru/sdk";
+import { SikaruApi } from "@aadi-labs/sikaru-sdk";
 
 const client = new SikaruApi({ apiKey: "YOUR_API_KEY", channelCredential: "YOUR_CHANNEL_CREDENTIAL" });
 await client.httpChannels.invoke("binding_id", {
@@ -59,7 +59,7 @@ await client.httpChannels.invoke("binding_id", {
 This SDK allows you to configure different environments for API requests.
 
 ```typescript
-import { SikaruApi, SikaruEnvironment } from "@sikaru/sdk";
+import { SikaruApi, SikaruEnvironment } from "@aadi-labs/sikaru-sdk";
 
 const client = new SikaruApi({
     environment: SikaruEnvironment.Default,
@@ -72,7 +72,7 @@ The SDK exports all request and response types as TypeScript interfaces. Simply 
 following namespace:
 
 ```typescript
-import { Sikaru } from "@sikaru/sdk";
+import { Sikaru } from "@aadi-labs/sikaru-sdk";
 
 const request: Sikaru.HttpMessage = {
     ...
@@ -85,7 +85,7 @@ When the API returns a non-success status code (4xx or 5xx response), a subclass
 will be thrown.
 
 ```typescript
-import { SikaruError } from "@sikaru/sdk";
+import { SikaruError } from "@aadi-labs/sikaru-sdk";
 
 try {
     await client.httpChannels.invoke(...);
@@ -105,7 +105,7 @@ Some endpoints return streaming responses instead of returning the full response
 The SDK uses async iterators, so you can consume the responses using a `for await...of` loop.
 
 ```typescript
-import { SikaruApi } from "@sikaru/sdk";
+import { SikaruApi } from "@aadi-labs/sikaru-sdk";
 
 const client = new SikaruApi({ apiKey: "YOUR_API_KEY", channelCredential: "YOUR_CHANNEL_CREDENTIAL" });
 const response = await client.completions.createStream({
@@ -558,7 +558,7 @@ const text = new TextDecoder().decode(bytes);
 This SDK supports direct imports of subpackage clients, which allows JavaScript bundlers to tree-shake and include only the imported subpackage code. This results in much smaller bundle sizes.
 
 ```typescript
-import { AuthClient } from '@sikaru/sdk/auth';
+import { AuthClient } from '@aadi-labs/sikaru-sdk/auth';
 
 const client = new AuthClient({...});
 ```
@@ -568,7 +568,7 @@ const client = new AuthClient({...});
 If you would like to send additional headers as part of the request, use the `headers` request option.
 
 ```typescript
-import { SikaruApi } from "@sikaru/sdk";
+import { SikaruApi } from "@aadi-labs/sikaru-sdk";
 
 const client = new SikaruApi({
     ...
@@ -663,7 +663,7 @@ console.log(rawResponse.headers['X-My-Header']);
 The SDK supports logging. You can configure the logger by passing in a `logging` object to the client options.
 
 ```typescript
-import { SikaruApi, logging } from "@sikaru/sdk";
+import { SikaruApi, logging } from "@aadi-labs/sikaru-sdk";
 
 const client = new SikaruApi({
     ...
