@@ -37,7 +37,8 @@ const groups = {
   inference: ["chat", "models"],
   agent: ["list", "get", "create", "run", "logs", "stop", "pull", "push", "validate", "review", "publish"],
   eval: ["run", "list", "get", "samples", "logs", "stop"],
-  traces: ["upload", "get"],
+  traces: ["upload"],
+  trajectories: ["get"],
   environment: ["list", "info", "push", "pull"],
   config: ["show", "set"],
 };
