@@ -373,9 +373,11 @@ pub fn classify(error: ApiError) -> anyhow::Error {
         return anyhow::Error::new(TransportFailure::Rejected(status));
     }
     let transient = match error {
-        ApiError::Network(_) | ApiError::ServiceUnavailableError { .. } => true,
+        ApiError::Network(_)
+        | ApiError::ServiceUnavailableError { .. }
+        | ApiError::TooManyRequestsError { .. } => true,
         ApiError::Http { status, .. } => status == 429 || (500..600).contains(&status),
-        _ => false,
+        ref other => executor_status(other).is_some_and(|status| status == 429 || (500..600).contains(&status)),
     };
     anyhow::Error::new(if transient {
         TransportFailure::Transient
@@ -386,9 +388,21 @@ pub fn classify(error: ApiError) -> anyhow::Error {
 fn rejected_status(error: &ApiError) -> Option<u16> {
     match error {
         ApiError::UnauthorizedError { .. } => Some(401),
+        ApiError::PaymentRequiredError { .. } => Some(402),
         ApiError::ForbiddenError { .. } => Some(403),
         ApiError::NotFoundError { .. } => Some(404),
         ApiError::Http { status, .. } if matches!(status, 401..=404) => Some(*status),
+        _ => executor_status(error).filter(|status| matches!(status, 401..=404)),
+    }
+}
+/// The executor path reports some responses as `SdkError::Http` rather than a typed variant.
+fn executor_status(error: &ApiError) -> Option<u16> {
+    use fern_cli_sdk::sdk_executor::SdkError;
+    match error {
+        ApiError::Executor(error) => match error.downcast_ref::<SdkError>() {
+            Some(SdkError::Http { status, .. }) => Some(*status),
+            _ => None,
+        },
         _ => None,
     }
 }
