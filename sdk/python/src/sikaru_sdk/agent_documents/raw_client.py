@@ -10,8 +10,10 @@ from ..core.jsonable_encoder import encode_path_param
 from ..core.parse_error import ParsingError
 from ..core.pydantic_utilities import parse_obj_as
 from ..core.request_options import RequestOptions
+from ..errors.conflict_error import ConflictError
 from ..errors.forbidden_error import ForbiddenError
 from ..errors.not_found_error import NotFoundError
+from ..errors.service_unavailable_error import ServiceUnavailableError
 from ..errors.unauthorized_error import UnauthorizedError
 from ..errors.unprocessable_entity_error import UnprocessableEntityError
 from ..types.agent_document import AgentDocument
@@ -28,6 +30,7 @@ from ..types.document_validation_view import DocumentValidationView
 from ..types.document_versions import DocumentVersions
 from ..types.error_response import ErrorResponse
 from ..types.imported_document import ImportedDocument
+from ..types.publication_state import PublicationState
 from .types.edit_document_setting_op import EditDocumentSettingOp
 from pydantic import ValidationError
 
@@ -349,8 +352,9 @@ class RawAgentDocumentsClient:
         self,
         project_id: str,
         *,
-        document: str,
         path: typing.Sequence[str],
+        document: typing.Optional[str] = OMIT,
+        files: typing.Optional[typing.Dict[str, typing.Optional[str]]] = OMIT,
         op: typing.Optional[EditDocumentSettingOp] = OMIT,
         value: typing.Optional[typing.Any] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
@@ -362,9 +366,11 @@ class RawAgentDocumentsClient:
         ----------
         project_id : str
 
-        document : str
-
         path : typing.Sequence[str]
+
+        document : typing.Optional[str]
+
+        files : typing.Optional[typing.Dict[str, typing.Optional[str]]]
 
         op : typing.Optional[EditDocumentSettingOp]
 
@@ -387,6 +393,7 @@ class RawAgentDocumentsClient:
             method="POST",
             json={
                 "document": document,
+                "files": files,
                 "op": op,
                 "path": path,
                 "value": value,
@@ -550,14 +557,21 @@ class RawAgentDocumentsClient:
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
     def validate_text(
-        self, project_id: str, *, document: str, request_options: typing.Optional[RequestOptions] = None
+        self,
+        project_id: str,
+        *,
+        document: typing.Optional[str] = OMIT,
+        files: typing.Optional[typing.Dict[str, typing.Optional[str]]] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[DocumentValidationView]:
         """
         Parameters
         ----------
         project_id : str
 
-        document : str
+        document : typing.Optional[str]
+
+        files : typing.Optional[typing.Dict[str, typing.Optional[str]]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -576,6 +590,7 @@ class RawAgentDocumentsClient:
             method="POST",
             json={
                 "document": document,
+                "files": files,
             },
             headers={
                 **_endpoint_auth_headers,
@@ -742,8 +757,9 @@ class RawAgentDocumentsClient:
         project_id: str,
         agent_slug: str,
         *,
-        document: str,
-        expected_revision: int,
+        base_revision: int,
+        document: typing.Optional[str] = OMIT,
+        files: typing.Optional[typing.Dict[str, typing.Optional[str]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[AgentDocument]:
         """
@@ -753,9 +769,11 @@ class RawAgentDocumentsClient:
 
         agent_slug : str
 
-        document : str
+        base_revision : int
 
-        expected_revision : int
+        document : typing.Optional[str]
+
+        files : typing.Optional[typing.Dict[str, typing.Optional[str]]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -773,8 +791,9 @@ class RawAgentDocumentsClient:
             f"v1/projects/{encode_path_param(project_id)}/managed-agents/{encode_path_param(agent_slug)}/document",
             method="PUT",
             json={
+                "baseRevision": base_revision,
                 "document": document,
-                "expectedRevision": expected_revision,
+                "files": files,
             },
             headers={
                 **_endpoint_auth_headers,
@@ -826,6 +845,17 @@ class RawAgentDocumentsClient:
                         ),
                     ),
                 )
+            if _response.status_code == 409:
+                raise ConflictError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
             if _response.status_code == 422:
                 raise UnprocessableEntityError(
                     headers=dict(_response.headers),
@@ -833,6 +863,17 @@ class RawAgentDocumentsClient:
                         typing.Any,
                         parse_obj_as(
                             type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 503:
+                raise ServiceUnavailableError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -941,7 +982,7 @@ class RawAgentDocumentsClient:
         project_id: str,
         agent_slug: str,
         *,
-        expected_revision: int,
+        base_revision: int,
         expected_live_version_id: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[AgentDocument]:
@@ -952,7 +993,7 @@ class RawAgentDocumentsClient:
 
         agent_slug : str
 
-        expected_revision : int
+        base_revision : int
 
         expected_live_version_id : typing.Optional[str]
 
@@ -972,8 +1013,8 @@ class RawAgentDocumentsClient:
             f"v1/projects/{encode_path_param(project_id)}/managed-agents/{encode_path_param(agent_slug)}/document/discard",
             method="POST",
             json={
+                "baseRevision": base_revision,
                 "expectedLiveVersionId": expected_live_version_id,
-                "expectedRevision": expected_revision,
             },
             headers={
                 **_endpoint_auth_headers,
@@ -1032,6 +1073,240 @@ class RawAgentDocumentsClient:
                         typing.Any,
                         parse_obj_as(
                             type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        except ValidationError as e:
+            raise ParsingError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+            )
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def get_publication(
+        self,
+        project_id: str,
+        agent_slug: str,
+        publication_id: str,
+        *,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[PublicationState]:
+        """
+        A publication's state, read without publishing again: follow a pending publish here until its release check
+        settles.
+
+        Parameters
+        ----------
+        project_id : str
+
+        agent_slug : str
+
+        publication_id : str
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[PublicationState]
+            Successful Response
+        """
+        _endpoint_auth_headers = self._client_wrapper.get_auth_headers_for_endpoint(security=[{"BearerAuth": []}])
+        _response = self._client_wrapper.httpx_client.request(
+            f"v1/projects/{encode_path_param(project_id)}/managed-agents/{encode_path_param(agent_slug)}/document/publications/{encode_path_param(publication_id)}",
+            method="GET",
+            headers={
+                **_endpoint_auth_headers,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    PublicationState,
+                    parse_obj_as(
+                        type_=PublicationState,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        except ValidationError as e:
+            raise ParsingError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+            )
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def publish_anyway(
+        self,
+        project_id: str,
+        agent_slug: str,
+        publication_id: str,
+        *,
+        reason: str,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[DocumentPublication]:
+        """
+        Release a publication its release check blocked or couldn't verify, recording who, when and why (R10, R33).
+        Only a release check is overridden: an agent's measured evaluation still runs (R34).
+
+        Parameters
+        ----------
+        project_id : str
+
+        agent_slug : str
+
+        publication_id : str
+
+        reason : str
+            Why this version goes live although its release check held it.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[DocumentPublication]
+            Successful Response
+        """
+        _request_options_with_retries_disabled: typing.Optional[RequestOptions] = (
+            {**request_options, "max_retries": 0} if request_options is not None else {"max_retries": 0}
+        )
+        _endpoint_auth_headers = self._client_wrapper.get_auth_headers_for_endpoint(security=[{"BearerAuth": []}])
+        _response = self._client_wrapper.httpx_client.request(
+            f"v1/projects/{encode_path_param(project_id)}/managed-agents/{encode_path_param(agent_slug)}/document/publications/{encode_path_param(publication_id)}/publish-anyway",
+            method="POST",
+            json={
+                "reason": reason,
+            },
+            headers={
+                **_endpoint_auth_headers,
+                "content-type": "application/json",
+            },
+            request_options=_request_options_with_retries_disabled,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    DocumentPublication,
+                    parse_obj_as(
+                        type_=DocumentPublication,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 409:
+                raise ConflictError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 503:
+                raise ServiceUnavailableError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -1146,6 +1421,17 @@ class RawAgentDocumentsClient:
                         ),
                     ),
                 )
+            if _response.status_code == 409:
+                raise ConflictError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
             if _response.status_code == 422:
                 raise UnprocessableEntityError(
                     headers=dict(_response.headers),
@@ -1153,6 +1439,17 @@ class RawAgentDocumentsClient:
                         typing.Any,
                         parse_obj_as(
                             type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 503:
+                raise ServiceUnavailableError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -1602,7 +1899,7 @@ class RawAgentDocumentsClient:
         agent_slug: str,
         suggestion_id: str,
         *,
-        expected_revision: int,
+        base_revision: int,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[AgentDocument]:
         """
@@ -1614,7 +1911,7 @@ class RawAgentDocumentsClient:
 
         suggestion_id : str
 
-        expected_revision : int
+        base_revision : int
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -1632,7 +1929,7 @@ class RawAgentDocumentsClient:
             f"v1/projects/{encode_path_param(project_id)}/managed-agents/{encode_path_param(agent_slug)}/document/suggestions/{encode_path_param(suggestion_id)}/adopt",
             method="POST",
             json={
-                "expectedRevision": expected_revision,
+                "baseRevision": base_revision,
             },
             headers={
                 **_endpoint_auth_headers,
@@ -1809,7 +2106,8 @@ class RawAgentDocumentsClient:
         project_id: str,
         agent_slug: str,
         *,
-        document: str,
+        document: typing.Optional[str] = OMIT,
+        files: typing.Optional[typing.Dict[str, typing.Optional[str]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[DocumentValidationView]:
         """
@@ -1819,7 +2117,9 @@ class RawAgentDocumentsClient:
 
         agent_slug : str
 
-        document : str
+        document : typing.Optional[str]
+
+        files : typing.Optional[typing.Dict[str, typing.Optional[str]]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -1838,6 +2138,7 @@ class RawAgentDocumentsClient:
             method="POST",
             json={
                 "document": document,
+                "files": files,
             },
             headers={
                 **_endpoint_auth_headers,
@@ -2320,8 +2621,9 @@ class AsyncRawAgentDocumentsClient:
         self,
         project_id: str,
         *,
-        document: str,
         path: typing.Sequence[str],
+        document: typing.Optional[str] = OMIT,
+        files: typing.Optional[typing.Dict[str, typing.Optional[str]]] = OMIT,
         op: typing.Optional[EditDocumentSettingOp] = OMIT,
         value: typing.Optional[typing.Any] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
@@ -2333,9 +2635,11 @@ class AsyncRawAgentDocumentsClient:
         ----------
         project_id : str
 
-        document : str
-
         path : typing.Sequence[str]
+
+        document : typing.Optional[str]
+
+        files : typing.Optional[typing.Dict[str, typing.Optional[str]]]
 
         op : typing.Optional[EditDocumentSettingOp]
 
@@ -2360,6 +2664,7 @@ class AsyncRawAgentDocumentsClient:
             method="POST",
             json={
                 "document": document,
+                "files": files,
                 "op": op,
                 "path": path,
                 "value": value,
@@ -2525,14 +2830,21 @@ class AsyncRawAgentDocumentsClient:
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
     async def validate_text(
-        self, project_id: str, *, document: str, request_options: typing.Optional[RequestOptions] = None
+        self,
+        project_id: str,
+        *,
+        document: typing.Optional[str] = OMIT,
+        files: typing.Optional[typing.Dict[str, typing.Optional[str]]] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[DocumentValidationView]:
         """
         Parameters
         ----------
         project_id : str
 
-        document : str
+        document : typing.Optional[str]
+
+        files : typing.Optional[typing.Dict[str, typing.Optional[str]]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -2553,6 +2865,7 @@ class AsyncRawAgentDocumentsClient:
             method="POST",
             json={
                 "document": document,
+                "files": files,
             },
             headers={
                 **_endpoint_auth_headers,
@@ -2721,8 +3034,9 @@ class AsyncRawAgentDocumentsClient:
         project_id: str,
         agent_slug: str,
         *,
-        document: str,
-        expected_revision: int,
+        base_revision: int,
+        document: typing.Optional[str] = OMIT,
+        files: typing.Optional[typing.Dict[str, typing.Optional[str]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[AgentDocument]:
         """
@@ -2732,9 +3046,11 @@ class AsyncRawAgentDocumentsClient:
 
         agent_slug : str
 
-        document : str
+        base_revision : int
 
-        expected_revision : int
+        document : typing.Optional[str]
+
+        files : typing.Optional[typing.Dict[str, typing.Optional[str]]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -2754,8 +3070,9 @@ class AsyncRawAgentDocumentsClient:
             f"v1/projects/{encode_path_param(project_id)}/managed-agents/{encode_path_param(agent_slug)}/document",
             method="PUT",
             json={
+                "baseRevision": base_revision,
                 "document": document,
-                "expectedRevision": expected_revision,
+                "files": files,
             },
             headers={
                 **_endpoint_auth_headers,
@@ -2807,6 +3124,17 @@ class AsyncRawAgentDocumentsClient:
                         ),
                     ),
                 )
+            if _response.status_code == 409:
+                raise ConflictError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
             if _response.status_code == 422:
                 raise UnprocessableEntityError(
                     headers=dict(_response.headers),
@@ -2814,6 +3142,17 @@ class AsyncRawAgentDocumentsClient:
                         typing.Any,
                         parse_obj_as(
                             type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 503:
+                raise ServiceUnavailableError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -2924,7 +3263,7 @@ class AsyncRawAgentDocumentsClient:
         project_id: str,
         agent_slug: str,
         *,
-        expected_revision: int,
+        base_revision: int,
         expected_live_version_id: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[AgentDocument]:
@@ -2935,7 +3274,7 @@ class AsyncRawAgentDocumentsClient:
 
         agent_slug : str
 
-        expected_revision : int
+        base_revision : int
 
         expected_live_version_id : typing.Optional[str]
 
@@ -2957,8 +3296,8 @@ class AsyncRawAgentDocumentsClient:
             f"v1/projects/{encode_path_param(project_id)}/managed-agents/{encode_path_param(agent_slug)}/document/discard",
             method="POST",
             json={
+                "baseRevision": base_revision,
                 "expectedLiveVersionId": expected_live_version_id,
-                "expectedRevision": expected_revision,
             },
             headers={
                 **_endpoint_auth_headers,
@@ -3017,6 +3356,244 @@ class AsyncRawAgentDocumentsClient:
                         typing.Any,
                         parse_obj_as(
                             type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        except ValidationError as e:
+            raise ParsingError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+            )
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def get_publication(
+        self,
+        project_id: str,
+        agent_slug: str,
+        publication_id: str,
+        *,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[PublicationState]:
+        """
+        A publication's state, read without publishing again: follow a pending publish here until its release check
+        settles.
+
+        Parameters
+        ----------
+        project_id : str
+
+        agent_slug : str
+
+        publication_id : str
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[PublicationState]
+            Successful Response
+        """
+        _endpoint_auth_headers = await self._client_wrapper.async_get_auth_headers_for_endpoint(
+            security=[{"BearerAuth": []}]
+        )
+        _response = await self._client_wrapper.httpx_client.request(
+            f"v1/projects/{encode_path_param(project_id)}/managed-agents/{encode_path_param(agent_slug)}/document/publications/{encode_path_param(publication_id)}",
+            method="GET",
+            headers={
+                **_endpoint_auth_headers,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    PublicationState,
+                    parse_obj_as(
+                        type_=PublicationState,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        except ValidationError as e:
+            raise ParsingError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+            )
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def publish_anyway(
+        self,
+        project_id: str,
+        agent_slug: str,
+        publication_id: str,
+        *,
+        reason: str,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[DocumentPublication]:
+        """
+        Release a publication its release check blocked or couldn't verify, recording who, when and why (R10, R33).
+        Only a release check is overridden: an agent's measured evaluation still runs (R34).
+
+        Parameters
+        ----------
+        project_id : str
+
+        agent_slug : str
+
+        publication_id : str
+
+        reason : str
+            Why this version goes live although its release check held it.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[DocumentPublication]
+            Successful Response
+        """
+        _request_options_with_retries_disabled: typing.Optional[RequestOptions] = (
+            {**request_options, "max_retries": 0} if request_options is not None else {"max_retries": 0}
+        )
+        _endpoint_auth_headers = await self._client_wrapper.async_get_auth_headers_for_endpoint(
+            security=[{"BearerAuth": []}]
+        )
+        _response = await self._client_wrapper.httpx_client.request(
+            f"v1/projects/{encode_path_param(project_id)}/managed-agents/{encode_path_param(agent_slug)}/document/publications/{encode_path_param(publication_id)}/publish-anyway",
+            method="POST",
+            json={
+                "reason": reason,
+            },
+            headers={
+                **_endpoint_auth_headers,
+                "content-type": "application/json",
+            },
+            request_options=_request_options_with_retries_disabled,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    DocumentPublication,
+                    parse_obj_as(
+                        type_=DocumentPublication,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 409:
+                raise ConflictError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 503:
+                raise ServiceUnavailableError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -3133,6 +3710,17 @@ class AsyncRawAgentDocumentsClient:
                         ),
                     ),
                 )
+            if _response.status_code == 409:
+                raise ConflictError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
             if _response.status_code == 422:
                 raise UnprocessableEntityError(
                     headers=dict(_response.headers),
@@ -3140,6 +3728,17 @@ class AsyncRawAgentDocumentsClient:
                         typing.Any,
                         parse_obj_as(
                             type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 503:
+                raise ServiceUnavailableError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -3597,7 +4196,7 @@ class AsyncRawAgentDocumentsClient:
         agent_slug: str,
         suggestion_id: str,
         *,
-        expected_revision: int,
+        base_revision: int,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[AgentDocument]:
         """
@@ -3609,7 +4208,7 @@ class AsyncRawAgentDocumentsClient:
 
         suggestion_id : str
 
-        expected_revision : int
+        base_revision : int
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -3629,7 +4228,7 @@ class AsyncRawAgentDocumentsClient:
             f"v1/projects/{encode_path_param(project_id)}/managed-agents/{encode_path_param(agent_slug)}/document/suggestions/{encode_path_param(suggestion_id)}/adopt",
             method="POST",
             json={
-                "expectedRevision": expected_revision,
+                "baseRevision": base_revision,
             },
             headers={
                 **_endpoint_auth_headers,
@@ -3808,7 +4407,8 @@ class AsyncRawAgentDocumentsClient:
         project_id: str,
         agent_slug: str,
         *,
-        document: str,
+        document: typing.Optional[str] = OMIT,
+        files: typing.Optional[typing.Dict[str, typing.Optional[str]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[DocumentValidationView]:
         """
@@ -3818,7 +4418,9 @@ class AsyncRawAgentDocumentsClient:
 
         agent_slug : str
 
-        document : str
+        document : typing.Optional[str]
+
+        files : typing.Optional[typing.Dict[str, typing.Optional[str]]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -3839,6 +4441,7 @@ class AsyncRawAgentDocumentsClient:
             method="POST",
             json={
                 "document": document,
+                "files": files,
             },
             headers={
                 **_endpoint_auth_headers,

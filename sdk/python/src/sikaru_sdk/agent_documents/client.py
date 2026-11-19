@@ -17,6 +17,7 @@ from ..types.document_templates import DocumentTemplates
 from ..types.document_validation_view import DocumentValidationView
 from ..types.document_versions import DocumentVersions
 from ..types.imported_document import ImportedDocument
+from ..types.publication_state import PublicationState
 from .raw_client import AsyncRawAgentDocumentsClient, RawAgentDocumentsClient
 from .types.edit_document_setting_op import EditDocumentSettingOp
 
@@ -167,8 +168,9 @@ class AgentDocumentsClient:
         self,
         project_id: str,
         *,
-        document: str,
         path: typing.Sequence[str],
+        document: typing.Optional[str] = OMIT,
+        files: typing.Optional[typing.Dict[str, typing.Optional[str]]] = OMIT,
         op: typing.Optional[EditDocumentSettingOp] = OMIT,
         value: typing.Optional[typing.Any] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
@@ -180,9 +182,11 @@ class AgentDocumentsClient:
         ----------
         project_id : str
 
-        document : str
-
         path : typing.Sequence[str]
+
+        document : typing.Optional[str]
+
+        files : typing.Optional[typing.Dict[str, typing.Optional[str]]]
 
         op : typing.Optional[EditDocumentSettingOp]
 
@@ -206,12 +210,11 @@ class AgentDocumentsClient:
         )
         client.agent_documents.edit_setting(
             project_id="project_id",
-            document="document",
             path=["path"],
         )
         """
         _response = self._raw_client.edit_setting(
-            project_id, document=document, path=path, op=op, value=value, request_options=request_options
+            project_id, path=path, document=document, files=files, op=op, value=value, request_options=request_options
         )
         return _response.data
 
@@ -247,14 +250,21 @@ class AgentDocumentsClient:
         return _response.data
 
     def validate_text(
-        self, project_id: str, *, document: str, request_options: typing.Optional[RequestOptions] = None
+        self,
+        project_id: str,
+        *,
+        document: typing.Optional[str] = OMIT,
+        files: typing.Optional[typing.Dict[str, typing.Optional[str]]] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> DocumentValidationView:
         """
         Parameters
         ----------
         project_id : str
 
-        document : str
+        document : typing.Optional[str]
+
+        files : typing.Optional[typing.Dict[str, typing.Optional[str]]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -274,10 +284,11 @@ class AgentDocumentsClient:
         )
         client.agent_documents.validate_text(
             project_id="project_id",
-            document="document",
         )
         """
-        _response = self._raw_client.validate_text(project_id, document=document, request_options=request_options)
+        _response = self._raw_client.validate_text(
+            project_id, document=document, files=files, request_options=request_options
+        )
         return _response.data
 
     def get(
@@ -319,8 +330,9 @@ class AgentDocumentsClient:
         project_id: str,
         agent_slug: str,
         *,
-        document: str,
-        expected_revision: int,
+        base_revision: int,
+        document: typing.Optional[str] = OMIT,
+        files: typing.Optional[typing.Dict[str, typing.Optional[str]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AgentDocument:
         """
@@ -330,9 +342,11 @@ class AgentDocumentsClient:
 
         agent_slug : str
 
-        document : str
+        base_revision : int
 
-        expected_revision : int
+        document : typing.Optional[str]
+
+        files : typing.Optional[typing.Dict[str, typing.Optional[str]]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -353,15 +367,15 @@ class AgentDocumentsClient:
         client.agent_documents.save(
             project_id="project_id",
             agent_slug="agent_slug",
-            document="document",
-            expected_revision=1,
+            base_revision=1,
         )
         """
         _response = self._raw_client.save(
             project_id,
             agent_slug,
+            base_revision=base_revision,
             document=document,
-            expected_revision=expected_revision,
+            files=files,
             request_options=request_options,
         )
         return _response.data
@@ -405,7 +419,7 @@ class AgentDocumentsClient:
         project_id: str,
         agent_slug: str,
         *,
-        expected_revision: int,
+        base_revision: int,
         expected_live_version_id: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AgentDocument:
@@ -416,7 +430,7 @@ class AgentDocumentsClient:
 
         agent_slug : str
 
-        expected_revision : int
+        base_revision : int
 
         expected_live_version_id : typing.Optional[str]
 
@@ -439,15 +453,114 @@ class AgentDocumentsClient:
         client.agent_documents.discard(
             project_id="project_id",
             agent_slug="agent_slug",
-            expected_revision=1,
+            base_revision=1,
         )
         """
         _response = self._raw_client.discard(
             project_id,
             agent_slug,
-            expected_revision=expected_revision,
+            base_revision=base_revision,
             expected_live_version_id=expected_live_version_id,
             request_options=request_options,
+        )
+        return _response.data
+
+    def get_publication(
+        self,
+        project_id: str,
+        agent_slug: str,
+        publication_id: str,
+        *,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> PublicationState:
+        """
+        A publication's state, read without publishing again: follow a pending publish here until its release check
+        settles.
+
+        Parameters
+        ----------
+        project_id : str
+
+        agent_slug : str
+
+        publication_id : str
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        PublicationState
+            Successful Response
+
+        Examples
+        --------
+        from sikaru_sdk import SikaruApi
+
+        client = SikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+        client.agent_documents.get_publication(
+            project_id="project_id",
+            agent_slug="agent_slug",
+            publication_id="publication_id",
+        )
+        """
+        _response = self._raw_client.get_publication(
+            project_id, agent_slug, publication_id, request_options=request_options
+        )
+        return _response.data
+
+    def publish_anyway(
+        self,
+        project_id: str,
+        agent_slug: str,
+        publication_id: str,
+        *,
+        reason: str,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> DocumentPublication:
+        """
+        Release a publication its release check blocked or couldn't verify, recording who, when and why (R10, R33).
+        Only a release check is overridden: an agent's measured evaluation still runs (R34).
+
+        Parameters
+        ----------
+        project_id : str
+
+        agent_slug : str
+
+        publication_id : str
+
+        reason : str
+            Why this version goes live although its release check held it.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        DocumentPublication
+            Successful Response
+
+        Examples
+        --------
+        from sikaru_sdk import SikaruApi
+
+        client = SikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+        client.agent_documents.publish_anyway(
+            project_id="project_id",
+            agent_slug="agent_slug",
+            publication_id="publication_id",
+            reason="reason",
+        )
+        """
+        _response = self._raw_client.publish_anyway(
+            project_id, agent_slug, publication_id, reason=reason, request_options=request_options
         )
         return _response.data
 
@@ -723,7 +836,7 @@ class AgentDocumentsClient:
         agent_slug: str,
         suggestion_id: str,
         *,
-        expected_revision: int,
+        base_revision: int,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AgentDocument:
         """
@@ -735,7 +848,7 @@ class AgentDocumentsClient:
 
         suggestion_id : str
 
-        expected_revision : int
+        base_revision : int
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -757,11 +870,11 @@ class AgentDocumentsClient:
             project_id="project_id",
             agent_slug="agent_slug",
             suggestion_id="suggestion_id",
-            expected_revision=1,
+            base_revision=1,
         )
         """
         _response = self._raw_client.adopt_suggestion(
-            project_id, agent_slug, suggestion_id, expected_revision=expected_revision, request_options=request_options
+            project_id, agent_slug, suggestion_id, base_revision=base_revision, request_options=request_options
         )
         return _response.data
 
@@ -814,7 +927,8 @@ class AgentDocumentsClient:
         project_id: str,
         agent_slug: str,
         *,
-        document: str,
+        document: typing.Optional[str] = OMIT,
+        files: typing.Optional[typing.Dict[str, typing.Optional[str]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> DocumentValidationView:
         """
@@ -824,7 +938,9 @@ class AgentDocumentsClient:
 
         agent_slug : str
 
-        document : str
+        document : typing.Optional[str]
+
+        files : typing.Optional[typing.Dict[str, typing.Optional[str]]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -845,11 +961,10 @@ class AgentDocumentsClient:
         client.agent_documents.validate(
             project_id="project_id",
             agent_slug="agent_slug",
-            document="document",
         )
         """
         _response = self._raw_client.validate(
-            project_id, agent_slug, document=document, request_options=request_options
+            project_id, agent_slug, document=document, files=files, request_options=request_options
         )
         return _response.data
 
@@ -1055,8 +1170,9 @@ class AsyncAgentDocumentsClient:
         self,
         project_id: str,
         *,
-        document: str,
         path: typing.Sequence[str],
+        document: typing.Optional[str] = OMIT,
+        files: typing.Optional[typing.Dict[str, typing.Optional[str]]] = OMIT,
         op: typing.Optional[EditDocumentSettingOp] = OMIT,
         value: typing.Optional[typing.Any] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
@@ -1068,9 +1184,11 @@ class AsyncAgentDocumentsClient:
         ----------
         project_id : str
 
-        document : str
-
         path : typing.Sequence[str]
+
+        document : typing.Optional[str]
+
+        files : typing.Optional[typing.Dict[str, typing.Optional[str]]]
 
         op : typing.Optional[EditDocumentSettingOp]
 
@@ -1099,7 +1217,6 @@ class AsyncAgentDocumentsClient:
         async def main() -> None:
             await client.agent_documents.edit_setting(
                 project_id="project_id",
-                document="document",
                 path=["path"],
             )
 
@@ -1107,7 +1224,7 @@ class AsyncAgentDocumentsClient:
         asyncio.run(main())
         """
         _response = await self._raw_client.edit_setting(
-            project_id, document=document, path=path, op=op, value=value, request_options=request_options
+            project_id, path=path, document=document, files=files, op=op, value=value, request_options=request_options
         )
         return _response.data
 
@@ -1151,14 +1268,21 @@ class AsyncAgentDocumentsClient:
         return _response.data
 
     async def validate_text(
-        self, project_id: str, *, document: str, request_options: typing.Optional[RequestOptions] = None
+        self,
+        project_id: str,
+        *,
+        document: typing.Optional[str] = OMIT,
+        files: typing.Optional[typing.Dict[str, typing.Optional[str]]] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> DocumentValidationView:
         """
         Parameters
         ----------
         project_id : str
 
-        document : str
+        document : typing.Optional[str]
+
+        files : typing.Optional[typing.Dict[str, typing.Optional[str]]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -1183,13 +1307,14 @@ class AsyncAgentDocumentsClient:
         async def main() -> None:
             await client.agent_documents.validate_text(
                 project_id="project_id",
-                document="document",
             )
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.validate_text(project_id, document=document, request_options=request_options)
+        _response = await self._raw_client.validate_text(
+            project_id, document=document, files=files, request_options=request_options
+        )
         return _response.data
 
     async def get(
@@ -1239,8 +1364,9 @@ class AsyncAgentDocumentsClient:
         project_id: str,
         agent_slug: str,
         *,
-        document: str,
-        expected_revision: int,
+        base_revision: int,
+        document: typing.Optional[str] = OMIT,
+        files: typing.Optional[typing.Dict[str, typing.Optional[str]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AgentDocument:
         """
@@ -1250,9 +1376,11 @@ class AsyncAgentDocumentsClient:
 
         agent_slug : str
 
-        document : str
+        base_revision : int
 
-        expected_revision : int
+        document : typing.Optional[str]
+
+        files : typing.Optional[typing.Dict[str, typing.Optional[str]]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -1278,8 +1406,7 @@ class AsyncAgentDocumentsClient:
             await client.agent_documents.save(
                 project_id="project_id",
                 agent_slug="agent_slug",
-                document="document",
-                expected_revision=1,
+                base_revision=1,
             )
 
 
@@ -1288,8 +1415,9 @@ class AsyncAgentDocumentsClient:
         _response = await self._raw_client.save(
             project_id,
             agent_slug,
+            base_revision=base_revision,
             document=document,
-            expected_revision=expected_revision,
+            files=files,
             request_options=request_options,
         )
         return _response.data
@@ -1341,7 +1469,7 @@ class AsyncAgentDocumentsClient:
         project_id: str,
         agent_slug: str,
         *,
-        expected_revision: int,
+        base_revision: int,
         expected_live_version_id: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AgentDocument:
@@ -1352,7 +1480,7 @@ class AsyncAgentDocumentsClient:
 
         agent_slug : str
 
-        expected_revision : int
+        base_revision : int
 
         expected_live_version_id : typing.Optional[str]
 
@@ -1380,7 +1508,7 @@ class AsyncAgentDocumentsClient:
             await client.agent_documents.discard(
                 project_id="project_id",
                 agent_slug="agent_slug",
-                expected_revision=1,
+                base_revision=1,
             )
 
 
@@ -1389,9 +1517,124 @@ class AsyncAgentDocumentsClient:
         _response = await self._raw_client.discard(
             project_id,
             agent_slug,
-            expected_revision=expected_revision,
+            base_revision=base_revision,
             expected_live_version_id=expected_live_version_id,
             request_options=request_options,
+        )
+        return _response.data
+
+    async def get_publication(
+        self,
+        project_id: str,
+        agent_slug: str,
+        publication_id: str,
+        *,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> PublicationState:
+        """
+        A publication's state, read without publishing again: follow a pending publish here until its release check
+        settles.
+
+        Parameters
+        ----------
+        project_id : str
+
+        agent_slug : str
+
+        publication_id : str
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        PublicationState
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sikaru_sdk import AsyncSikaruApi
+
+        client = AsyncSikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+
+
+        async def main() -> None:
+            await client.agent_documents.get_publication(
+                project_id="project_id",
+                agent_slug="agent_slug",
+                publication_id="publication_id",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.get_publication(
+            project_id, agent_slug, publication_id, request_options=request_options
+        )
+        return _response.data
+
+    async def publish_anyway(
+        self,
+        project_id: str,
+        agent_slug: str,
+        publication_id: str,
+        *,
+        reason: str,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> DocumentPublication:
+        """
+        Release a publication its release check blocked or couldn't verify, recording who, when and why (R10, R33).
+        Only a release check is overridden: an agent's measured evaluation still runs (R34).
+
+        Parameters
+        ----------
+        project_id : str
+
+        agent_slug : str
+
+        publication_id : str
+
+        reason : str
+            Why this version goes live although its release check held it.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        DocumentPublication
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sikaru_sdk import AsyncSikaruApi
+
+        client = AsyncSikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+
+
+        async def main() -> None:
+            await client.agent_documents.publish_anyway(
+                project_id="project_id",
+                agent_slug="agent_slug",
+                publication_id="publication_id",
+                reason="reason",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.publish_anyway(
+            project_id, agent_slug, publication_id, reason=reason, request_options=request_options
         )
         return _response.data
 
@@ -1707,7 +1950,7 @@ class AsyncAgentDocumentsClient:
         agent_slug: str,
         suggestion_id: str,
         *,
-        expected_revision: int,
+        base_revision: int,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AgentDocument:
         """
@@ -1719,7 +1962,7 @@ class AsyncAgentDocumentsClient:
 
         suggestion_id : str
 
-        expected_revision : int
+        base_revision : int
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -1746,14 +1989,14 @@ class AsyncAgentDocumentsClient:
                 project_id="project_id",
                 agent_slug="agent_slug",
                 suggestion_id="suggestion_id",
-                expected_revision=1,
+                base_revision=1,
             )
 
 
         asyncio.run(main())
         """
         _response = await self._raw_client.adopt_suggestion(
-            project_id, agent_slug, suggestion_id, expected_revision=expected_revision, request_options=request_options
+            project_id, agent_slug, suggestion_id, base_revision=base_revision, request_options=request_options
         )
         return _response.data
 
@@ -1814,7 +2057,8 @@ class AsyncAgentDocumentsClient:
         project_id: str,
         agent_slug: str,
         *,
-        document: str,
+        document: typing.Optional[str] = OMIT,
+        files: typing.Optional[typing.Dict[str, typing.Optional[str]]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> DocumentValidationView:
         """
@@ -1824,7 +2068,9 @@ class AsyncAgentDocumentsClient:
 
         agent_slug : str
 
-        document : str
+        document : typing.Optional[str]
+
+        files : typing.Optional[typing.Dict[str, typing.Optional[str]]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -1850,14 +2096,13 @@ class AsyncAgentDocumentsClient:
             await client.agent_documents.validate(
                 project_id="project_id",
                 agent_slug="agent_slug",
-                document="document",
             )
 
 
         asyncio.run(main())
         """
         _response = await self._raw_client.validate(
-            project_id, agent_slug, document=document, request_options=request_options
+            project_id, agent_slug, document=document, files=files, request_options=request_options
         )
         return _response.data
 

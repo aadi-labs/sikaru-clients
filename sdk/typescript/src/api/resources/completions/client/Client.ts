@@ -81,7 +81,6 @@ export class CompletionsClient {
      *
      * @example
      *     await client.completions.create({
-     *         model: "model",
      *         prompt: "prompt"
      *     })
      */

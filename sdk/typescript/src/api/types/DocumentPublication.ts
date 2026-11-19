@@ -14,8 +14,13 @@ export interface DocumentPublication {
     createdAt?: (string | null) | undefined;
     earlierSessions: Sikaru.EarlierDocumentSession[];
     harnessVersionId: string;
+    next?: (string | null) | undefined;
     priorVersionId?: (string | null) | undefined;
+    /** The pending publication; a release check that blocks it is overridden with Publish Anyway on this id. */
+    publicationId?: (string | null) | undefined;
     publicationStatus?: DocumentPublication.PublicationStatus | undefined;
+    reconcilePlan?: Record<string, unknown> | undefined;
+    releaseCheck?: (Sikaru.ReleaseCheckReceipt | null) | undefined;
     revision?: (number | null) | undefined;
     unchanged?: boolean | undefined;
 }

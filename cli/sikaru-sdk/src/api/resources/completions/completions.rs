@@ -29,7 +29,6 @@ impl CompletionsClient {
     ///         .completions
     ///         .create_stream(
     ///             &CompletionCreateParamsStreaming {
-    ///                 model: "model".to_string(),
     ///                 prompt: CreateCompletionsStreamRequestPrompt::String("prompt".to_string()),
     ///                 stream: true,
     ///                 best_of: None,
@@ -39,6 +38,7 @@ impl CompletionsClient {
     ///                 logprobs: None,
     ///                 max_tokens: None,
     ///                 min_p: None,
+    ///                 model: None,
     ///                 models: None,
     ///                 n: None,
     ///                 presence_penalty: None,
@@ -107,7 +107,6 @@ impl CompletionsClient {
     ///         .completions
     ///         .create(
     ///             &CompletionCreateParams {
-    ///                 model: "model".to_string(),
     ///                 prompt: CreateCompletionsRequestPrompt::String("prompt".to_string()),
     ///                 stream: false,
     ///                 best_of: None,
@@ -117,6 +116,7 @@ impl CompletionsClient {
     ///                 logprobs: None,
     ///                 max_tokens: None,
     ///                 min_p: None,
+    ///                 model: None,
     ///                 models: None,
     ///                 n: None,
     ///                 presence_penalty: None,

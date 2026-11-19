@@ -32,13 +32,13 @@ struct Saved {
 }
 /// `sikaru agent run`: managed by default; `--compute local` serves the attachment here.
 pub fn command() -> clap::Command {
-    clap::Command::new("run")
+    super::super::agent_folder::options(clap::Command::new("run")
         .about("Run an agent: one task, or a conversation when no task is given")
         .after_help("Runs on Sikaru by default. With --compute local, tools run in your workspace with your OS permissions.\nIn a terminal without a task, each message continues the same session. Commands: /help, /status, /exit.\nPiped input and --format json run one task and print one JSON result.")
         .arg(
             clap::Arg::new("agent")
-                .required(true)
-                .help("Agent slug; a resumed session must name its original agent"),
+                .default_value(".")
+                .help("Agent slug; defaults to the current folder name"),
         )
         .arg(
             clap::Arg::new("task")
@@ -107,7 +107,10 @@ pub fn command() -> clap::Command {
                 .long("no-workspace-checkpoints")
                 .action(clap::ArgAction::SetTrue)
                 .hide(true),
-        )
+        ))
+        .arg(clap::Arg::new("schedule").long("schedule").conflicts_with_all(["task","prompt","prompt-file"]).help("Run a declared schedule's prompt once"))
+        .arg(clap::Arg::new("access-digest").long("access-digest"))
+        .arg(clap::Arg::new("acknowledge-widening").long("acknowledge-widening").action(clap::ArgAction::SetTrue))
 }
 /// `--dry-run` validates input only; it never reads remote readiness or a resume journal.
 pub fn dry_run(m: &clap::ArgMatches, workspace: Option<&std::path::Path>) -> Option<Value> {
@@ -126,7 +129,11 @@ pub async fn execute(
     m: &clap::ArgMatches,
     ctx: &fern_cli_sdk::openapi::AppContext,
 ) -> Result<Value> {
-    let text = super::input::prompt(m)?;
+    let client = super::super::agent_transport::client(ctx);
+    let text = match super::super::agent_folder::schedule_prompt(m, &client)? {
+        Some(prompt) => Some(prompt),
+        None => super::input::prompt(m)?,
+    };
     let workspace = PathBuf::from(m.get_one::<String>("workspace").unwrap())
         .canonicalize()
         .map_err(|_| {
@@ -144,7 +151,7 @@ pub async fn execute(
         "Opening workspace…",
         json!({"event":"workspace_opened","state_dir":path}),
     );
-    let client = crate::sdk::client(ctx);
+    let client = super::super::agent_transport::client(ctx);
     let outcome = execute_saved(m, ctx, &client, &mut saved, &path, text).await;
     let mut result = outcome
         .unwrap_or_else(|error| super::diagnostics::failure(&error, "controller_or_resume_failed"));
@@ -177,7 +184,7 @@ fn open_state(
         &path,
         Some(Saved {
             project,
-            agent: m.get_one::<String>("agent").unwrap().clone(),
+            agent: super::super::agent_folder::slug(m)?,
             model: m.get_one::<String>("model").cloned(),
             anchor: Anchor::capture(workspace)?,
             key,
@@ -224,7 +231,7 @@ fn validate_resume(m: &clap::ArgMatches, saved: &Saved, path: &std::path::Path) 
         bail!("resume requires original cleaned journal");
     }
     if let Some(agent) = m.get_one::<String>("agent") {
-        if agent != &saved.agent {
+        if agent != "." && agent != &saved.agent {
             bail!("resume agent mismatch");
         }
     }
@@ -233,18 +240,25 @@ fn validate_resume(m: &clap::ArgMatches, saved: &Saved, path: &std::path::Path) 
 
 async fn provision(m: &clap::ArgMatches, c: &ApiClient, s: &mut State<Saved>) -> Result<()> {
     if s.value.session.is_none() {
-        let response = super::diagnostics::session_admission(c.execution_sessions.create(
-            &s.value.project,
-            &s.value.agent,
-            &SessionInput {
-                tenant_id: Some(m.get_one::<String>("tenant").unwrap().clone()),
-                user_id: Some(m.get_one::<String>("user").unwrap().clone()),
-                idempotency_key: Some(s.value.key.clone()),
-                model: s.value.model.clone(),
-                ..Default::default()
-            },
-            None,
-        ))
+        let response = super::diagnostics::session_admission(
+            m,
+            c.execution_sessions.create(
+                &s.value.project,
+                &s.value.agent,
+                &super::super::agent_folder::draft_request(
+                    m,
+                    c,
+                    SessionInput {
+                        tenant_id: Some(m.get_one::<String>("tenant").unwrap().clone()),
+                        user_id: Some(m.get_one::<String>("user").unwrap().clone()),
+                        idempotency_key: Some(s.value.key.clone()),
+                        model: s.value.model.clone(),
+                        ..Default::default()
+                    },
+                )?,
+                None,
+            ),
+        )
         .await?;
         s.value.session = Some(response.session.id);
         s.save()?;
@@ -399,6 +413,7 @@ async fn run_attached(
         stop: Some(receiver),
         admission: Some(admission),
         skip_checkpoints: m.get_flag("no-workspace-checkpoints"),
+        restore_product_workspace: false,
         private_dirs: vec![path.to_owned()],
 
         interactive: super::chat::is_interactive(m),

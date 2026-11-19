@@ -15,6 +15,10 @@ export interface ManagedAgentView {
     learningLocked: boolean;
     /** Most turns the agent runs at once; null follows the default. */
     maxConcurrentTurns: number | null;
+    /** Whether memory dreams run automatically after conversations go idle. */
+    memoryDreamAuto: boolean;
+    /** Idle seconds before an automatic dream; null follows the default (900). */
+    memoryDreamIdleSeconds: number | null;
     organizationId: string;
     personal: boolean;
     projectId: string;

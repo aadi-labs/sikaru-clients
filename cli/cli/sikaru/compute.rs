@@ -12,6 +12,9 @@ pub mod process;
 #[path = "compute_runtime.rs"]
 pub mod runtime;
 #[cfg(unix)]
+#[path = "compute_serve.rs"]
+mod serve;
+#[cfg(unix)]
 #[path = "compute_transport.rs"]
 pub mod transport;
 
@@ -55,6 +58,16 @@ pub fn install(app: CliApp) -> CliApp {
                     tokio::runtime::Handle::current().block_on(doctor::execute(m, ctx))
                 });
                 emit(Ok(result));
+                Ok(())
+            }),
+        )
+        .command(
+            serve::command(),
+            OpenApiBinding::handler(|m, ctx| {
+                let result = tokio::task::block_in_place(|| {
+                    tokio::runtime::Handle::current().block_on(serve::execute(m, ctx))
+                });
+                emit(result);
                 Ok(())
             }),
         );

@@ -87,6 +87,8 @@ impl RunSchedulesClient {
     ///             &ScheduleInput {
     ///                 input: HashMap::from([("key".to_string(), serde_json::json!("value"))]),
     ///                 agent_slug: None,
+    ///                 at: None,
+    ///                 callback_url: None,
     ///                 cron: None,
     ///                 environment: None,
     ///                 idempotency_key: None,
@@ -94,6 +96,7 @@ impl RunSchedulesClient {
     ///                 session_id: None,
     ///                 session_mode: None,
     ///                 timezone: None,
+    ///                 tool_provider_id: None,
     ///             },
     ///             None,
     ///         )
@@ -143,16 +146,16 @@ impl RunSchedulesClient {
     ///     let client = SikaruClient::new(config).expect("Failed to build client");
     ///     client
     ///         .run_schedules
-    ///         .delete_schedule(&"project_id".to_string(), &"schedule_id".to_string(), None)
+    ///         .inspect_schedule(&"project_id".to_string(), &"schedule_id".to_string(), None)
     ///         .await;
     /// }
     /// ```
-    pub async fn delete_schedule(
+    pub async fn inspect_schedule(
         &self,
         project_id: &str,
         schedule_id: &str,
         options: Option<RequestOptions>,
-    ) -> Result<ScheduleDeleted, ApiError> {
+    ) -> Result<ScheduleResponse, ApiError> {
         let endpoint_auth_headers = self
             .http_client
             .resolve_endpoint_auth_headers(&options, &[&["BearerAuth"] as &[&str]])
@@ -162,12 +165,11 @@ impl RunSchedulesClient {
             for (header_key, header_value) in endpoint_auth_headers {
                 o.additional_headers.insert(header_key, header_value);
             }
-            o.max_retries = Some(0);
             Some(o)
         };
         self.http_client
             .execute_request(
-                Method::DELETE,
+                Method::GET,
                 &format!("v1/projects/{}/run-schedules/{}", project_id, schedule_id),
                 None,
                 None,
@@ -190,10 +192,133 @@ impl RunSchedulesClient {
     ///     let client = SikaruClient::new(config).expect("Failed to build client");
     ///     client
     ///         .run_schedules
+    ///         .update_schedule(
+    ///             &"project_id".to_string(),
+    ///             &"schedule_id".to_string(),
+    ///             &ScheduleUpdate {
+    ///                 expected_revision: 1,
+    ///                 idempotency_key: "idempotency_key".to_string(),
+    ///                 at: None,
+    ///                 cron: None,
+    ///                 input: None,
+    ///                 interval_seconds: None,
+    ///                 timezone: None,
+    ///             },
+    ///             None,
+    ///         )
+    ///         .await;
+    /// }
+    /// ```
+    pub async fn update_schedule(
+        &self,
+        project_id: &str,
+        schedule_id: &str,
+        request: &ScheduleUpdate,
+        options: Option<RequestOptions>,
+    ) -> Result<ScheduleResponse, ApiError> {
+        let endpoint_auth_headers = self
+            .http_client
+            .resolve_endpoint_auth_headers(&options, &[&["BearerAuth"] as &[&str]])
+            .await?;
+        let options = {
+            let mut o = options.unwrap_or_default();
+            for (header_key, header_value) in endpoint_auth_headers {
+                o.additional_headers.insert(header_key, header_value);
+            }
+            o.max_retries = Some(0);
+            Some(o)
+        };
+        self.http_client
+            .execute_request(
+                Method::PUT,
+                &format!("v1/projects/{}/run-schedules/{}", project_id, schedule_id),
+                Some(serde_json::to_value(request).map_err(ApiError::Serialization)?),
+                None,
+                options,
+            )
+            .await
+    }
+
+    /// # Examples
+    ///
+    /// ```no_run
+    /// use sikaru_sdk::prelude::*;
+    ///
+    /// #[tokio::main]
+    /// async fn main() {
+    ///     let config = ClientConfig {
+    ///         token: Some("<token>".to_string()),
+    ///         ..Default::default()
+    ///     };
+    ///     let client = SikaruClient::new(config).expect("Failed to build client");
+    ///     client
+    ///         .run_schedules
+    ///         .delete_schedule(
+    ///             &"project_id".to_string(),
+    ///             &"schedule_id".to_string(),
+    ///             &DeleteScheduleQueryRequest {
+    ///                 ..Default::default()
+    ///             },
+    ///             None,
+    ///         )
+    ///         .await;
+    /// }
+    /// ```
+    pub async fn delete_schedule(
+        &self,
+        project_id: &str,
+        schedule_id: &str,
+        request: &DeleteScheduleQueryRequest,
+        options: Option<RequestOptions>,
+    ) -> Result<ScheduleDeleted, ApiError> {
+        let endpoint_auth_headers = self
+            .http_client
+            .resolve_endpoint_auth_headers(&options, &[&["BearerAuth"] as &[&str]])
+            .await?;
+        let options = {
+            let mut o = options.unwrap_or_default();
+            for (header_key, header_value) in endpoint_auth_headers {
+                o.additional_headers.insert(header_key, header_value);
+            }
+            o.max_retries = Some(0);
+            Some(o)
+        };
+        self.http_client
+            .execute_request(
+                Method::DELETE,
+                &format!("v1/projects/{}/run-schedules/{}", project_id, schedule_id),
+                None,
+                QueryBuilder::new()
+                    .serialize("expected_revision", request.expected_revision.clone())
+                    .serialize("idempotency_key", request.idempotency_key.clone())
+                    .build(),
+                options,
+            )
+            .await
+    }
+
+    /// # Examples
+    ///
+    /// ```no_run
+    /// use sikaru_sdk::prelude::*;
+    ///
+    /// #[tokio::main]
+    /// async fn main() {
+    ///     let config = ClientConfig {
+    ///         token: Some("<token>".to_string()),
+    ///         ..Default::default()
+    ///     };
+    ///     let client = SikaruClient::new(config).expect("Failed to build client");
+    ///     client
+    ///         .run_schedules
     ///         .pause_schedule(
     ///             &"project_id".to_string(),
     ///             &"schedule_id".to_string(),
-    ///             &PauseInput { paused: true },
+    ///             &PauseInput {
+    ///                 paused: true,
+    ///                 expected_revision: None,
+    ///                 idempotency_key: None,
+    ///             },
     ///             None,
     ///         )
     ///         .await;

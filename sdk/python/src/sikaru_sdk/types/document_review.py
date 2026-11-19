@@ -43,11 +43,18 @@ class DocumentReview(UniversalBaseModel):
         FieldMetadata(alias="earlierSessions"),
         pydantic.Field(alias="earlierSessions"),
     ]
+    files: typing.Optional[typing.Dict[str, str]] = None
     harness_version_id: typing_extensions.Annotated[
         typing.Optional[str], FieldMetadata(alias="harnessVersionId"), pydantic.Field(alias="harnessVersionId")
     ] = None
     live_version_id: typing_extensions.Annotated[
         typing.Optional[str], FieldMetadata(alias="liveVersionId"), pydantic.Field(alias="liveVersionId")
+    ] = None
+    next: typing.Optional[str] = None
+    reconcile_plan: typing_extensions.Annotated[
+        typing.Optional[typing.Dict[str, typing.Any]],
+        FieldMetadata(alias="reconcilePlan"),
+        pydantic.Field(alias="reconcilePlan"),
     ] = None
     revision: int
     validation: DocumentValidationView

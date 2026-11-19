@@ -10,7 +10,7 @@ describe("EndUsersClient", () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         
-        const rawResponseBody = { "facts" : [ { "content" : "content" , "etag" : "etag" , "path" : "path" } ] , "optIn" : true , "personaSummary" : { "content" : "content" , "etag" : "etag" , "path" : "path" } , "tenantId" : "tenantId" , "timezone" : "timezone" , "userId" : "userId" };
+        const rawResponseBody = { "optIn" : true , "personaSummary" : { "content" : "content" , "etag" : "etag" , "path" : "path" } , "sleepEnabled" : true , "tenantId" : "tenantId" , "timezone" : "timezone" , "userId" : "userId" };
         
         server
             .mockEndpoint()
@@ -102,7 +102,7 @@ describe("EndUsersClient", () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         const rawRequestBody = { };
-        const rawResponseBody = { "facts" : [ { "content" : "content" , "etag" : "etag" , "path" : "path" } ] , "optIn" : true , "personaSummary" : { "content" : "content" , "etag" : "etag" , "path" : "path" } , "tenantId" : "tenantId" , "timezone" : "timezone" , "userId" : "userId" };
+        const rawResponseBody = { "optIn" : true , "personaSummary" : { "content" : "content" , "etag" : "etag" , "path" : "path" } , "sleepEnabled" : true , "tenantId" : "tenantId" , "timezone" : "timezone" , "userId" : "userId" };
         
         server
             .mockEndpoint()
@@ -177,6 +177,25 @@ describe("EndUsersClient", () => {
     });
           
     test("upsert (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        const rawRequestBody = { };
+        const rawResponseBody = { "code" : "code" , "detail" : "detail" };
+        
+        server
+            .mockEndpoint()
+            .put("/v1/projects/project_id/managed-agents/agent_slug/end-users/tenant_id/user_id").jsonBody(rawRequestBody)
+                .respondWith()
+            .statusCode(409).jsonBody(rawResponseBody)
+                .build();
+
+        
+            await expect(async () => {
+                return await client.endUsers.upsert("project_id", "agent_slug", "tenant_id", "user_id")
+            }).rejects.toThrow(Sikaru.ConflictError);
+    });
+          
+    test("upsert (6)", async () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         const rawRequestBody = { };
@@ -287,119 +306,443 @@ describe("EndUsersClient", () => {
             }).rejects.toThrow(Sikaru.UnprocessableEntityError);
     });
           
-    test("update_fact (1)", async () => {
+    test("import_state (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
-        const rawRequestBody = { "content" : "content" , "path" : "path" };
-        const rawResponseBody = { "content" : "content" , "etag" : "etag" , "path" : "path" };
+        const rawRequestBody = { "digest" : "digest" , "files" : [ { "content" : "content" , "path" : "path" , "provenance" : "provenance" } ] , "importId" : "importId" , "sourceRevision" : "sourceRevision" };
+        const rawResponseBody = { "digest" : "digest" , "evaluationStatus" : "ready" , "importId" : "importId" , "paths" : [ "paths" ] , "sourceRevision" : "sourceRevision" };
         
         server
             .mockEndpoint()
-            .put("/v1/projects/project_id/managed-agents/agent_slug/end-users/tenant_id/user_id/facts").jsonBody(rawRequestBody)
+            .post("/v1/projects/project_id/managed-agents/agent_slug/end-users/tenant_id/user_id/imports").jsonBody(rawRequestBody)
                 .respondWith()
             .statusCode(200).jsonBody(rawResponseBody)
                 .build();
 
         
                         
-                                const response = await client.endUsers.updateFact("project_id", "agent_slug", "tenant_id", "user_id", {
-    content: "content",
-    path: "path"
+                                const response = await client.endUsers.importState("project_id", "agent_slug", "tenant_id", "user_id", {
+    digest: "digest",
+    files: [{
+            content: "content",
+            path: "path",
+            provenance: "provenance"
+        }],
+    importId: "importId",
+    sourceRevision: "sourceRevision"
 });
                                 expect(response).toEqual(rawResponseBody);
                               
                     
     });
           
-    test("update_fact (2)", async () => {
+    test("import_state (2)", async () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
-        const rawRequestBody = { "content" : "x" , "path" : "path" };
+        const rawRequestBody = { "digest" : "digest" , "files" : [ { "content" : "content" , "path" : "x" , "provenance" : "provenance" } , { "content" : "content" , "path" : "x" , "provenance" : "provenance" } ] , "importId" : "x" , "sourceRevision" : "x" };
         const rawResponseBody = { "code" : "code" , "detail" : "detail" };
         
         server
             .mockEndpoint()
-            .put("/v1/projects/project_id/managed-agents/agent_slug/end-users/tenant_id/user_id/facts").jsonBody(rawRequestBody)
+            .post("/v1/projects/project_id/managed-agents/agent_slug/end-users/tenant_id/user_id/imports").jsonBody(rawRequestBody)
                 .respondWith()
             .statusCode(401).jsonBody(rawResponseBody)
                 .build();
 
         
             await expect(async () => {
-                return await client.endUsers.updateFact("project_id", "agent_slug", "tenant_id", "user_id", {
-    content: "x",
-    path: "path"
+                return await client.endUsers.importState("project_id", "agent_slug", "tenant_id", "user_id", {
+    digest: "digest",
+    files: [{
+            content: "content",
+            path: "x",
+            provenance: "provenance"
+        }, {
+            content: "content",
+            path: "x",
+            provenance: "provenance"
+        }],
+    importId: "x",
+    sourceRevision: "x"
 })
             }).rejects.toThrow(Sikaru.UnauthorizedError);
     });
           
-    test("update_fact (3)", async () => {
+    test("import_state (3)", async () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
-        const rawRequestBody = { "content" : "x" , "path" : "path" };
+        const rawRequestBody = { "digest" : "digest" , "files" : [ { "content" : "content" , "path" : "x" , "provenance" : "provenance" } , { "content" : "content" , "path" : "x" , "provenance" : "provenance" } ] , "importId" : "x" , "sourceRevision" : "x" };
         const rawResponseBody = { "code" : "code" , "detail" : "detail" };
         
         server
             .mockEndpoint()
-            .put("/v1/projects/project_id/managed-agents/agent_slug/end-users/tenant_id/user_id/facts").jsonBody(rawRequestBody)
+            .post("/v1/projects/project_id/managed-agents/agent_slug/end-users/tenant_id/user_id/imports").jsonBody(rawRequestBody)
                 .respondWith()
             .statusCode(403).jsonBody(rawResponseBody)
                 .build();
 
         
             await expect(async () => {
-                return await client.endUsers.updateFact("project_id", "agent_slug", "tenant_id", "user_id", {
-    content: "x",
-    path: "path"
+                return await client.endUsers.importState("project_id", "agent_slug", "tenant_id", "user_id", {
+    digest: "digest",
+    files: [{
+            content: "content",
+            path: "x",
+            provenance: "provenance"
+        }, {
+            content: "content",
+            path: "x",
+            provenance: "provenance"
+        }],
+    importId: "x",
+    sourceRevision: "x"
 })
             }).rejects.toThrow(Sikaru.ForbiddenError);
     });
           
-    test("update_fact (4)", async () => {
+    test("import_state (4)", async () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
-        const rawRequestBody = { "content" : "x" , "path" : "path" };
+        const rawRequestBody = { "digest" : "digest" , "files" : [ { "content" : "content" , "path" : "x" , "provenance" : "provenance" } , { "content" : "content" , "path" : "x" , "provenance" : "provenance" } ] , "importId" : "x" , "sourceRevision" : "x" };
         const rawResponseBody = { "code" : "code" , "detail" : "detail" };
         
         server
             .mockEndpoint()
-            .put("/v1/projects/project_id/managed-agents/agent_slug/end-users/tenant_id/user_id/facts").jsonBody(rawRequestBody)
+            .post("/v1/projects/project_id/managed-agents/agent_slug/end-users/tenant_id/user_id/imports").jsonBody(rawRequestBody)
                 .respondWith()
             .statusCode(404).jsonBody(rawResponseBody)
                 .build();
 
         
             await expect(async () => {
-                return await client.endUsers.updateFact("project_id", "agent_slug", "tenant_id", "user_id", {
-    content: "x",
-    path: "path"
+                return await client.endUsers.importState("project_id", "agent_slug", "tenant_id", "user_id", {
+    digest: "digest",
+    files: [{
+            content: "content",
+            path: "x",
+            provenance: "provenance"
+        }, {
+            content: "content",
+            path: "x",
+            provenance: "provenance"
+        }],
+    importId: "x",
+    sourceRevision: "x"
 })
             }).rejects.toThrow(Sikaru.NotFoundError);
     });
           
-    test("update_fact (5)", async () => {
+    test("import_state (5)", async () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
-        const rawRequestBody = { "content" : "x" , "path" : "path" };
+        const rawRequestBody = { "digest" : "digest" , "files" : [ { "content" : "content" , "path" : "x" , "provenance" : "provenance" } , { "content" : "content" , "path" : "x" , "provenance" : "provenance" } ] , "importId" : "x" , "sourceRevision" : "x" };
         const rawResponseBody = { "key" : "value" };
         
         server
             .mockEndpoint()
-            .put("/v1/projects/project_id/managed-agents/agent_slug/end-users/tenant_id/user_id/facts").jsonBody(rawRequestBody)
+            .post("/v1/projects/project_id/managed-agents/agent_slug/end-users/tenant_id/user_id/imports").jsonBody(rawRequestBody)
                 .respondWith()
             .statusCode(422).jsonBody(rawResponseBody)
                 .build();
 
         
             await expect(async () => {
-                return await client.endUsers.updateFact("project_id", "agent_slug", "tenant_id", "user_id", {
-    content: "x",
-    path: "path"
+                return await client.endUsers.importState("project_id", "agent_slug", "tenant_id", "user_id", {
+    digest: "digest",
+    files: [{
+            content: "content",
+            path: "x",
+            provenance: "provenance"
+        }, {
+            content: "content",
+            path: "x",
+            provenance: "provenance"
+        }],
+    importId: "x",
+    sourceRevision: "x"
 })
             }).rejects.toThrow(Sikaru.UnprocessableEntityError);
     });
           
-    test("delete_fact (1)", async () => {
+    test("start_learning_run (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        const rawRequestBody = { "evidence" : [ { "content" : "content" , "digest" : "digest" , "learningEligible" : true , "provenance" : "user_message" , "sourceId" : "sourceId" } ] , "invocationId" : "invocationId" , "sourceRevision" : "sourceRevision" , "workflow" : { "name" : "name" } };
+        const rawResponseBody = { "admissionStatus" : "admissionStatus" , "childOutputs" : [ { "completedAt" : "2024-01-15T09:30:00Z" , "id" : "id" , "productOutputs" : { "key" : "value" } , "role" : "role" , "workflow" : "workflow" } ] , "completedAt" : "2024-01-15T09:30:00Z" , "invocationId" : "invocationId" , "pendingDescendants" : 1 , "pendingTools" : [ { "arguments" : { "key" : "value" } , "capabilityName" : "capabilityName" , "requestId" : "requestId" , "runId" : "runId" , "toolCallId" : "toolCallId" , "toolProviderId" : "toolProviderId" } ] , "productOutputs" : { "key" : "value" } , "runId" : "runId" , "status" : "status" };
+        
+        server
+            .mockEndpoint()
+            .post("/v1/projects/project_id/managed-agents/agent_slug/end-users/tenant_id/user_id/learning-runs").jsonBody(rawRequestBody)
+                .respondWith()
+            .statusCode(200).jsonBody(rawResponseBody)
+                .build();
+
+        
+                        
+                                const response = await client.endUsers.startLearningRun("project_id", "agent_slug", "tenant_id", "user_id", {
+    evidence: [{
+            content: "content",
+            digest: "digest",
+            learningEligible: true,
+            provenance: "user_message",
+            sourceId: "sourceId"
+        }],
+    invocationId: "invocationId",
+    sourceRevision: "sourceRevision",
+    workflow: {
+        name: "name"
+    }
+});
+                                expect(response).toEqual(rawResponseBody);
+                              
+                    
+    });
+          
+    test("start_learning_run (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        const rawRequestBody = { "evidence" : [ { "content" : "x" , "digest" : "digest" , "learningEligible" : true , "provenance" : "user_message" , "sourceId" : "x" } , { "content" : "x" , "digest" : "digest" , "learningEligible" : true , "provenance" : "user_message" , "sourceId" : "x" } ] , "invocationId" : "x" , "sourceRevision" : "x" , "workflow" : { "name" : "x" } };
+        const rawResponseBody = { "code" : "code" , "detail" : "detail" };
+        
+        server
+            .mockEndpoint()
+            .post("/v1/projects/project_id/managed-agents/agent_slug/end-users/tenant_id/user_id/learning-runs").jsonBody(rawRequestBody)
+                .respondWith()
+            .statusCode(401).jsonBody(rawResponseBody)
+                .build();
+
+        
+            await expect(async () => {
+                return await client.endUsers.startLearningRun("project_id", "agent_slug", "tenant_id", "user_id", {
+    evidence: [{
+            content: "x",
+            digest: "digest",
+            learningEligible: true,
+            provenance: "user_message",
+            sourceId: "x"
+        }, {
+            content: "x",
+            digest: "digest",
+            learningEligible: true,
+            provenance: "user_message",
+            sourceId: "x"
+        }],
+    invocationId: "x",
+    sourceRevision: "x",
+    workflow: {
+        name: "x"
+    }
+})
+            }).rejects.toThrow(Sikaru.UnauthorizedError);
+    });
+          
+    test("start_learning_run (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        const rawRequestBody = { "evidence" : [ { "content" : "x" , "digest" : "digest" , "learningEligible" : true , "provenance" : "user_message" , "sourceId" : "x" } , { "content" : "x" , "digest" : "digest" , "learningEligible" : true , "provenance" : "user_message" , "sourceId" : "x" } ] , "invocationId" : "x" , "sourceRevision" : "x" , "workflow" : { "name" : "x" } };
+        const rawResponseBody = { "code" : "code" , "detail" : "detail" };
+        
+        server
+            .mockEndpoint()
+            .post("/v1/projects/project_id/managed-agents/agent_slug/end-users/tenant_id/user_id/learning-runs").jsonBody(rawRequestBody)
+                .respondWith()
+            .statusCode(403).jsonBody(rawResponseBody)
+                .build();
+
+        
+            await expect(async () => {
+                return await client.endUsers.startLearningRun("project_id", "agent_slug", "tenant_id", "user_id", {
+    evidence: [{
+            content: "x",
+            digest: "digest",
+            learningEligible: true,
+            provenance: "user_message",
+            sourceId: "x"
+        }, {
+            content: "x",
+            digest: "digest",
+            learningEligible: true,
+            provenance: "user_message",
+            sourceId: "x"
+        }],
+    invocationId: "x",
+    sourceRevision: "x",
+    workflow: {
+        name: "x"
+    }
+})
+            }).rejects.toThrow(Sikaru.ForbiddenError);
+    });
+          
+    test("start_learning_run (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        const rawRequestBody = { "evidence" : [ { "content" : "x" , "digest" : "digest" , "learningEligible" : true , "provenance" : "user_message" , "sourceId" : "x" } , { "content" : "x" , "digest" : "digest" , "learningEligible" : true , "provenance" : "user_message" , "sourceId" : "x" } ] , "invocationId" : "x" , "sourceRevision" : "x" , "workflow" : { "name" : "x" } };
+        const rawResponseBody = { "code" : "code" , "detail" : "detail" };
+        
+        server
+            .mockEndpoint()
+            .post("/v1/projects/project_id/managed-agents/agent_slug/end-users/tenant_id/user_id/learning-runs").jsonBody(rawRequestBody)
+                .respondWith()
+            .statusCode(404).jsonBody(rawResponseBody)
+                .build();
+
+        
+            await expect(async () => {
+                return await client.endUsers.startLearningRun("project_id", "agent_slug", "tenant_id", "user_id", {
+    evidence: [{
+            content: "x",
+            digest: "digest",
+            learningEligible: true,
+            provenance: "user_message",
+            sourceId: "x"
+        }, {
+            content: "x",
+            digest: "digest",
+            learningEligible: true,
+            provenance: "user_message",
+            sourceId: "x"
+        }],
+    invocationId: "x",
+    sourceRevision: "x",
+    workflow: {
+        name: "x"
+    }
+})
+            }).rejects.toThrow(Sikaru.NotFoundError);
+    });
+          
+    test("start_learning_run (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        const rawRequestBody = { "evidence" : [ { "content" : "x" , "digest" : "digest" , "learningEligible" : true , "provenance" : "user_message" , "sourceId" : "x" } , { "content" : "x" , "digest" : "digest" , "learningEligible" : true , "provenance" : "user_message" , "sourceId" : "x" } ] , "invocationId" : "x" , "sourceRevision" : "x" , "workflow" : { "name" : "x" } };
+        const rawResponseBody = { "key" : "value" };
+        
+        server
+            .mockEndpoint()
+            .post("/v1/projects/project_id/managed-agents/agent_slug/end-users/tenant_id/user_id/learning-runs").jsonBody(rawRequestBody)
+                .respondWith()
+            .statusCode(422).jsonBody(rawResponseBody)
+                .build();
+
+        
+            await expect(async () => {
+                return await client.endUsers.startLearningRun("project_id", "agent_slug", "tenant_id", "user_id", {
+    evidence: [{
+            content: "x",
+            digest: "digest",
+            learningEligible: true,
+            provenance: "user_message",
+            sourceId: "x"
+        }, {
+            content: "x",
+            digest: "digest",
+            learningEligible: true,
+            provenance: "user_message",
+            sourceId: "x"
+        }],
+    invocationId: "x",
+    sourceRevision: "x",
+    workflow: {
+        name: "x"
+    }
+})
+            }).rejects.toThrow(Sikaru.UnprocessableEntityError);
+    });
+          
+    test("get_learning_run (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        
+        const rawResponseBody = { "admissionStatus" : "admissionStatus" , "childOutputs" : [ { "completedAt" : "2024-01-15T09:30:00Z" , "id" : "id" , "productOutputs" : { "key" : "value" } , "role" : "role" , "workflow" : "workflow" } ] , "completedAt" : "2024-01-15T09:30:00Z" , "invocationId" : "invocationId" , "pendingDescendants" : 1 , "pendingTools" : [ { "arguments" : { "key" : "value" } , "capabilityName" : "capabilityName" , "requestId" : "requestId" , "runId" : "runId" , "toolCallId" : "toolCallId" , "toolProviderId" : "toolProviderId" } ] , "productOutputs" : { "key" : "value" } , "runId" : "runId" , "status" : "status" };
+        
+        server
+            .mockEndpoint()
+            .get("/v1/projects/project_id/managed-agents/agent_slug/end-users/tenant_id/user_id/learning-runs/invocation_id").respondWith()
+            .statusCode(200).jsonBody(rawResponseBody)
+                .build();
+
+        
+                        
+                                const response = await client.endUsers.getLearningRun("project_id", "agent_slug", "tenant_id", "user_id", "invocation_id");
+                                expect(response).toEqual(rawResponseBody);
+                              
+                    
+    });
+          
+    test("get_learning_run (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        
+        const rawResponseBody = { "code" : "code" , "detail" : "detail" };
+        
+        server
+            .mockEndpoint()
+            .get("/v1/projects/project_id/managed-agents/agent_slug/end-users/tenant_id/user_id/learning-runs/invocation_id").respondWith()
+            .statusCode(401).jsonBody(rawResponseBody)
+                .build();
+
+        
+            await expect(async () => {
+                return await client.endUsers.getLearningRun("project_id", "agent_slug", "tenant_id", "user_id", "invocation_id")
+            }).rejects.toThrow(Sikaru.UnauthorizedError);
+    });
+          
+    test("get_learning_run (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        
+        const rawResponseBody = { "code" : "code" , "detail" : "detail" };
+        
+        server
+            .mockEndpoint()
+            .get("/v1/projects/project_id/managed-agents/agent_slug/end-users/tenant_id/user_id/learning-runs/invocation_id").respondWith()
+            .statusCode(403).jsonBody(rawResponseBody)
+                .build();
+
+        
+            await expect(async () => {
+                return await client.endUsers.getLearningRun("project_id", "agent_slug", "tenant_id", "user_id", "invocation_id")
+            }).rejects.toThrow(Sikaru.ForbiddenError);
+    });
+          
+    test("get_learning_run (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        
+        const rawResponseBody = { "code" : "code" , "detail" : "detail" };
+        
+        server
+            .mockEndpoint()
+            .get("/v1/projects/project_id/managed-agents/agent_slug/end-users/tenant_id/user_id/learning-runs/invocation_id").respondWith()
+            .statusCode(404).jsonBody(rawResponseBody)
+                .build();
+
+        
+            await expect(async () => {
+                return await client.endUsers.getLearningRun("project_id", "agent_slug", "tenant_id", "user_id", "invocation_id")
+            }).rejects.toThrow(Sikaru.NotFoundError);
+    });
+          
+    test("get_learning_run (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        
+        const rawResponseBody = { "key" : "value" };
+        
+        server
+            .mockEndpoint()
+            .get("/v1/projects/project_id/managed-agents/agent_slug/end-users/tenant_id/user_id/learning-runs/invocation_id").respondWith()
+            .statusCode(422).jsonBody(rawResponseBody)
+                .build();
+
+        
+            await expect(async () => {
+                return await client.endUsers.getLearningRun("project_id", "agent_slug", "tenant_id", "user_id", "invocation_id")
+            }).rejects.toThrow(Sikaru.UnprocessableEntityError);
+    });
+          
+    test("revoke_learning_source (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         
@@ -407,20 +750,18 @@ describe("EndUsersClient", () => {
         
         server
             .mockEndpoint()
-            .delete("/v1/projects/project_id/managed-agents/agent_slug/end-users/tenant_id/user_id/facts").respondWith()
+            .post("/v1/projects/project_id/managed-agents/agent_slug/end-users/tenant_id/user_id/learning-sources/source_id/revoke").respondWith()
             .statusCode(200).build();
 
         
                         
-                                const response = await client.endUsers.deleteFact("project_id", "agent_slug", "tenant_id", "user_id", {
-    path: "path"
-});
+                                const response = await client.endUsers.revokeLearningSource("project_id", "agent_slug", "tenant_id", "user_id", "source_id");
                                 expect(response).toEqual(undefined);
                               
                     
     });
           
-    test("delete_fact (2)", async () => {
+    test("revoke_learning_source (2)", async () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         
@@ -428,19 +769,17 @@ describe("EndUsersClient", () => {
         
         server
             .mockEndpoint()
-            .delete("/v1/projects/project_id/managed-agents/agent_slug/end-users/tenant_id/user_id/facts").respondWith()
+            .post("/v1/projects/project_id/managed-agents/agent_slug/end-users/tenant_id/user_id/learning-sources/source_id/revoke").respondWith()
             .statusCode(401).jsonBody(rawResponseBody)
                 .build();
 
         
             await expect(async () => {
-                return await client.endUsers.deleteFact("project_id", "agent_slug", "tenant_id", "user_id", {
-    path: "path"
-})
+                return await client.endUsers.revokeLearningSource("project_id", "agent_slug", "tenant_id", "user_id", "source_id")
             }).rejects.toThrow(Sikaru.UnauthorizedError);
     });
           
-    test("delete_fact (3)", async () => {
+    test("revoke_learning_source (3)", async () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         
@@ -448,19 +787,17 @@ describe("EndUsersClient", () => {
         
         server
             .mockEndpoint()
-            .delete("/v1/projects/project_id/managed-agents/agent_slug/end-users/tenant_id/user_id/facts").respondWith()
+            .post("/v1/projects/project_id/managed-agents/agent_slug/end-users/tenant_id/user_id/learning-sources/source_id/revoke").respondWith()
             .statusCode(403).jsonBody(rawResponseBody)
                 .build();
 
         
             await expect(async () => {
-                return await client.endUsers.deleteFact("project_id", "agent_slug", "tenant_id", "user_id", {
-    path: "path"
-})
+                return await client.endUsers.revokeLearningSource("project_id", "agent_slug", "tenant_id", "user_id", "source_id")
             }).rejects.toThrow(Sikaru.ForbiddenError);
     });
           
-    test("delete_fact (4)", async () => {
+    test("revoke_learning_source (4)", async () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         
@@ -468,19 +805,17 @@ describe("EndUsersClient", () => {
         
         server
             .mockEndpoint()
-            .delete("/v1/projects/project_id/managed-agents/agent_slug/end-users/tenant_id/user_id/facts").respondWith()
+            .post("/v1/projects/project_id/managed-agents/agent_slug/end-users/tenant_id/user_id/learning-sources/source_id/revoke").respondWith()
             .statusCode(404).jsonBody(rawResponseBody)
                 .build();
 
         
             await expect(async () => {
-                return await client.endUsers.deleteFact("project_id", "agent_slug", "tenant_id", "user_id", {
-    path: "path"
-})
+                return await client.endUsers.revokeLearningSource("project_id", "agent_slug", "tenant_id", "user_id", "source_id")
             }).rejects.toThrow(Sikaru.NotFoundError);
     });
           
-    test("delete_fact (5)", async () => {
+    test("revoke_learning_source (5)", async () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         
@@ -488,15 +823,13 @@ describe("EndUsersClient", () => {
         
         server
             .mockEndpoint()
-            .delete("/v1/projects/project_id/managed-agents/agent_slug/end-users/tenant_id/user_id/facts").respondWith()
+            .post("/v1/projects/project_id/managed-agents/agent_slug/end-users/tenant_id/user_id/learning-sources/source_id/revoke").respondWith()
             .statusCode(422).jsonBody(rawResponseBody)
                 .build();
 
         
             await expect(async () => {
-                return await client.endUsers.deleteFact("project_id", "agent_slug", "tenant_id", "user_id", {
-    path: "path"
-})
+                return await client.endUsers.revokeLearningSource("project_id", "agent_slug", "tenant_id", "user_id", "source_id")
             }).rejects.toThrow(Sikaru.UnprocessableEntityError);
     });
           

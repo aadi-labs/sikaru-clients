@@ -6,34 +6,16 @@ import pydantic
 import typing_extensions
 from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
 from ..core.serialization import FieldMetadata
-from .agent_definition import AgentDefinition
-from .create_managed_agent_source_request_export_policy import CreateManagedAgentSourceRequestExportPolicy
 from .create_managed_agent_source_request_source_kind import CreateManagedAgentSourceRequestSourceKind
 
 
 class CreateManagedAgentSourceRequest(UniversalBaseModel):
-    analysis_summary: typing_extensions.Annotated[
-        typing.Optional[typing.Dict[str, typing.Any]],
-        FieldMetadata(alias="analysisSummary"),
-        pydantic.Field(alias="analysisSummary"),
-    ] = None
-    content_digest: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="contentDigest"), pydantic.Field(alias="contentDigest")
-    ] = None
-    definition: typing.Optional[AgentDefinition] = None
     document: typing.Optional[str] = None
-    export_policy: typing_extensions.Annotated[
-        typing.Optional[CreateManagedAgentSourceRequestExportPolicy],
-        FieldMetadata(alias="exportPolicy"),
-        pydantic.Field(alias="exportPolicy"),
-    ] = None
+    files: typing.Optional[typing.Dict[str, typing.Optional[str]]] = None
     source_kind: typing_extensions.Annotated[
         typing.Optional[CreateManagedAgentSourceRequestSourceKind],
         FieldMetadata(alias="sourceKind"),
         pydantic.Field(alias="sourceKind"),
-    ] = None
-    storage_ref: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="storageRef"), pydantic.Field(alias="storageRef")
     ] = None
 
     if IS_PYDANTIC_V2:

@@ -11,7 +11,7 @@ export interface CreateContextRegistryChangeRequest {
     action?: CreateContextRegistryChangeRequest.Action;
     files?: string[];
     kind?: string | null;
-    linkedSignal?: string | null;
+    linkedGrader?: string | null;
     name: string;
     owner?: string | null;
     productionCommit?: string | null;

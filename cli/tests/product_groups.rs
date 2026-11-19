@@ -1,14 +1,15 @@
 use std::collections::BTreeSet;
 use std::process::Command;
 
-// The top level is product-shaped: six products plus account utilities. Every
+// The top level is product-shaped: seven products plus account utilities. Every
 // generated API group is nested, hidden, under its product and still dispatches.
-const PRODUCTS: [&str; 6] = [
+const PRODUCTS: [&str; 7] = [
     "inference",
     "decision",
     "agent",
     "eval",
     "traces",
+    "trajectories",
     "environment",
 ];
 const UTILITIES: [&str; 7] = [

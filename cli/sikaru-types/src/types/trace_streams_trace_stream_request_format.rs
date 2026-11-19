@@ -8,6 +8,9 @@ pub enum TraceStreamRequestFormat {
     OpeninferenceV1,
     OpentelemetryOtlpV1,
     HarborAtifV1,
+    LangfuseObservationsV1,
+    LangsmithRunsV1,
+    BraintrustSpansV1,
     /// This variant is used for forward compatibility.
     /// If the server sends a value not recognized by the current SDK version,
     /// it will be captured here with the raw string value.
@@ -19,6 +22,9 @@ impl Serialize for TraceStreamRequestFormat {
             Self::OpeninferenceV1 => serializer.serialize_str("openinference.v1"),
             Self::OpentelemetryOtlpV1 => serializer.serialize_str("opentelemetry.otlp.v1"),
             Self::HarborAtifV1 => serializer.serialize_str("harbor.atif.v1"),
+            Self::LangfuseObservationsV1 => serializer.serialize_str("langfuse.observations.v1"),
+            Self::LangsmithRunsV1 => serializer.serialize_str("langsmith.runs.v1"),
+            Self::BraintrustSpansV1 => serializer.serialize_str("braintrust.spans.v1"),
             Self::__Unknown(val) => serializer.serialize_str(val),
         }
     }
@@ -31,6 +37,9 @@ impl<'de> Deserialize<'de> for TraceStreamRequestFormat {
             "openinference.v1" => Ok(Self::OpeninferenceV1),
             "opentelemetry.otlp.v1" => Ok(Self::OpentelemetryOtlpV1),
             "harbor.atif.v1" => Ok(Self::HarborAtifV1),
+            "langfuse.observations.v1" => Ok(Self::LangfuseObservationsV1),
+            "langsmith.runs.v1" => Ok(Self::LangsmithRunsV1),
+            "braintrust.spans.v1" => Ok(Self::BraintrustSpansV1),
             _ => Ok(Self::__Unknown(value)),
         }
     }
@@ -42,6 +51,9 @@ impl fmt::Display for TraceStreamRequestFormat {
             Self::OpeninferenceV1 => write!(f, "openinference.v1"),
             Self::OpentelemetryOtlpV1 => write!(f, "opentelemetry.otlp.v1"),
             Self::HarborAtifV1 => write!(f, "harbor.atif.v1"),
+            Self::LangfuseObservationsV1 => write!(f, "langfuse.observations.v1"),
+            Self::LangsmithRunsV1 => write!(f, "langsmith.runs.v1"),
+            Self::BraintrustSpansV1 => write!(f, "braintrust.spans.v1"),
             Self::__Unknown(val) => write!(f, "{}", val),
         }
     }

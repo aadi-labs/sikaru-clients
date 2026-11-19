@@ -11,6 +11,7 @@ export interface ModelSpecs {
     max_output_tokens: number;
     modalities: Sikaru.Modalities;
     reasoning: Sikaru.PublishedReasoning | null;
+    sampling_defaults?: (Sikaru.SamplingDefaults | null) | undefined;
     supported_parameters: string[];
     supports_reasoning: boolean;
 }

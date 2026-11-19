@@ -17,6 +17,7 @@ class ScheduleOccurrence(UniversalBaseModel):
     harness_version_id: typing_extensions.Annotated[
         typing.Optional[str], FieldMetadata(alias="harnessVersionId"), pydantic.Field(alias="harnessVersionId")
     ] = None
+    revision: typing.Optional[int] = None
     run_id: typing_extensions.Annotated[
         typing.Optional[str], FieldMetadata(alias="runId"), pydantic.Field(alias="runId")
     ] = None

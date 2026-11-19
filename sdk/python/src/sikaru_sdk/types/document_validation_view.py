@@ -12,6 +12,7 @@ from .resolved_mention import ResolvedMention
 class DocumentValidationView(UniversalBaseModel):
     editor: typing.Optional[DocumentEditorMetadata] = None
     errors: typing.List[DocumentIssue]
+    folder: typing.Optional[typing.Dict[str, typing.Any]] = None
     mentions: typing.List[ResolvedMention]
     publishable: bool
 

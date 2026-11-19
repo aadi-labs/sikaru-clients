@@ -36,7 +36,7 @@ impl ContextRegistryClient {
     ///                 action: None,
     ///                 files: None,
     ///                 kind: None,
-    ///                 linked_signal: None,
+    ///                 linked_grader: None,
     ///                 owner: None,
     ///                 production_commit: None,
     ///                 production_tag: None,

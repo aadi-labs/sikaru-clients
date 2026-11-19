@@ -339,6 +339,59 @@ class ChangesetsClient:
         )
         return _response.data
 
+    def publish_changeset_anyway(
+        self,
+        project_id: str,
+        changeset_id: str,
+        publication_id: str,
+        *,
+        reason: str,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> typing.Dict[str, typing.Any]:
+        """
+        Promote a Try a Fix changeset its agent's release check blocked or couldn't verify, recording who, when and
+        why (grader release check R10, R33, R36). The contract of an agent document's Publish Anyway: owner credentials
+        and a reason, refused while the check still runs or when the live version or check settings changed since.
+
+        Parameters
+        ----------
+        project_id : str
+
+        changeset_id : str
+
+        publication_id : str
+
+        reason : str
+            Why this version goes live although its release check held it.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        typing.Dict[str, typing.Any]
+            Successful Response
+
+        Examples
+        --------
+        from sikaru_sdk import SikaruApi
+
+        client = SikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+        client.changesets.publish_changeset_anyway(
+            project_id="project_id",
+            changeset_id="changeset_id",
+            publication_id="publication_id",
+            reason="reason",
+        )
+        """
+        _response = self._raw_client.publish_changeset_anyway(
+            project_id, changeset_id, publication_id, reason=reason, request_options=request_options
+        )
+        return _response.data
+
     def reject_changeset(
         self,
         project_id: str,
@@ -854,6 +907,67 @@ class AsyncChangesetsClient:
         """
         _response = await self._raw_client.promote_changeset(
             project_id, changeset_id, request=request, request_options=request_options
+        )
+        return _response.data
+
+    async def publish_changeset_anyway(
+        self,
+        project_id: str,
+        changeset_id: str,
+        publication_id: str,
+        *,
+        reason: str,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> typing.Dict[str, typing.Any]:
+        """
+        Promote a Try a Fix changeset its agent's release check blocked or couldn't verify, recording who, when and
+        why (grader release check R10, R33, R36). The contract of an agent document's Publish Anyway: owner credentials
+        and a reason, refused while the check still runs or when the live version or check settings changed since.
+
+        Parameters
+        ----------
+        project_id : str
+
+        changeset_id : str
+
+        publication_id : str
+
+        reason : str
+            Why this version goes live although its release check held it.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        typing.Dict[str, typing.Any]
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sikaru_sdk import AsyncSikaruApi
+
+        client = AsyncSikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+
+
+        async def main() -> None:
+            await client.changesets.publish_changeset_anyway(
+                project_id="project_id",
+                changeset_id="changeset_id",
+                publication_id="publication_id",
+                reason="reason",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.publish_changeset_anyway(
+            project_id, changeset_id, publication_id, reason=reason, request_options=request_options
         )
         return _response.data
 

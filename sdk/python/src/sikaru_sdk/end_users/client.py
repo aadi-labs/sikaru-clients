@@ -4,9 +4,14 @@ import typing
 
 from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ..core.request_options import RequestOptions
+from ..types.authored_learning_receipt import AuthoredLearningReceipt
+from ..types.authored_learning_workflow import AuthoredLearningWorkflow
+from ..types.authored_tool_provider_ref import AuthoredToolProviderRef
 from ..types.end_user import EndUser
 from ..types.end_user_deletion import EndUserDeletion
-from ..types.end_user_file import EndUserFile
+from ..types.import_file import ImportFile
+from ..types.import_receipt import ImportReceipt
+from ..types.product_learning_evidence import ProductLearningEvidence
 from ..types.recorded_correction import RecordedCorrection
 from .raw_client import AsyncRawEndUsersClient, RawEndUsersClient
 
@@ -39,7 +44,7 @@ class EndUsersClient:
         request_options: typing.Optional[RequestOptions] = None,
     ) -> EndUser:
         """
-        What the agent knows about this end user: facts and the persona summary, never the persona prompt.
+        What the agent knows about this end user: the persona summary, never the persona prompt.
 
         Parameters
         ----------
@@ -84,7 +89,9 @@ class EndUsersClient:
         tenant_id: str,
         user_id: str,
         *,
+        create_only: typing.Optional[bool] = OMIT,
         opt_in: typing.Optional[bool] = OMIT,
+        sleep_enabled: typing.Optional[bool] = OMIT,
         timezone: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> EndUser:
@@ -101,8 +108,14 @@ class EndUsersClient:
 
         user_id : str
 
+        create_only : typing.Optional[bool]
+            Apply settings only when creating a cell. Return existing cells unchanged.
+
         opt_in : typing.Optional[bool]
             Opting out removes this user's contributed traces and eval cases from population material. Omit it to keep the current choice.
+
+        sleep_enabled : typing.Optional[bool]
+            Allow automatic nightly sleep; omit to preserve the setting.
 
         timezone : typing.Optional[str]
             IANA timezone, such as Europe/Berlin. Explicit null clears it; omit it to keep the current value.
@@ -135,7 +148,9 @@ class EndUsersClient:
             agent_slug,
             tenant_id,
             user_id,
+            create_only=create_only,
             opt_in=opt_in,
+            sleep_enabled=sleep_enabled,
             timezone=timezone,
             request_options=request_options,
         )
@@ -148,6 +163,7 @@ class EndUsersClient:
         tenant_id: str,
         user_id: str,
         *,
+        terminal: typing.Optional[bool] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> EndUserDeletion:
         """
@@ -162,6 +178,9 @@ class EndUsersClient:
         tenant_id : str
 
         user_id : str
+
+        terminal : typing.Optional[bool]
+            Permanently reject cell creation and new work for this end user.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -186,23 +205,32 @@ class EndUsersClient:
             user_id="user_id",
         )
         """
-        _response = self._raw_client.delete(project_id, agent_slug, tenant_id, user_id, request_options=request_options)
+        _response = self._raw_client.delete(
+            project_id, agent_slug, tenant_id, user_id, terminal=terminal, request_options=request_options
+        )
         return _response.data
 
-    def update_fact(
+    def import_state(
         self,
         project_id: str,
         agent_slug: str,
         tenant_id: str,
         user_id: str,
         *,
-        content: str,
-        path: str,
-        expected_etag: typing.Optional[str] = OMIT,
+        digest: str,
+        files: typing.Sequence[ImportFile],
+        import_id: str,
+        source_revision: str,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> EndUserFile:
+    ) -> ImportReceipt:
         """
-        Correct or add one fact. It serves from the next turn and becomes a held-out case for this user.
+        Import a versioned product snapshot atomically, preserving correction provenance.
+
+        The cell must already exist. Every file requires expectedEtag (null for an
+        absent destination). Reusing an importId requires the identical manifest.
+        The digest is SHA-256 of canonical JSON {sourceRevision, files}, with sorted
+        keys, compact separators and the supplied file order. Private layers are
+        accepted as input but are never returned in the receipt or end-user view.
 
         Parameters
         ----------
@@ -214,20 +242,187 @@ class EndUsersClient:
 
         user_id : str
 
-        content : str
+        digest : str
 
-        path : str
-            USER.md or memories/<name>.md.
+        files : typing.Sequence[ImportFile]
 
-        expected_etag : typing.Optional[str]
-            Refuse with 409 unless the fact still has this etag.
+        import_id : str
+
+        source_revision : str
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        EndUserFile
+        ImportReceipt
+            Successful Response
+
+        Examples
+        --------
+        from sikaru_sdk import ImportFile, SikaruApi
+
+        client = SikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+        client.end_users.import_state(
+            project_id="project_id",
+            agent_slug="agent_slug",
+            tenant_id="tenant_id",
+            user_id="user_id",
+            digest="digest",
+            files=[
+                ImportFile(
+                    content="content",
+                    path="path",
+                    provenance="provenance",
+                )
+            ],
+            import_id="importId",
+            source_revision="sourceRevision",
+        )
+        """
+        _response = self._raw_client.import_state(
+            project_id,
+            agent_slug,
+            tenant_id,
+            user_id,
+            digest=digest,
+            files=files,
+            import_id=import_id,
+            source_revision=source_revision,
+            request_options=request_options,
+        )
+        return _response.data
+
+    def start_learning_run(
+        self,
+        project_id: str,
+        agent_slug: str,
+        tenant_id: str,
+        user_id: str,
+        *,
+        evidence: typing.Sequence[ProductLearningEvidence],
+        invocation_id: str,
+        source_revision: str,
+        workflow: AuthoredLearningWorkflow,
+        capability_grants: typing.Optional[typing.Sequence[str]] = OMIT,
+        context: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
+        tool_provider_refs: typing.Optional[typing.Sequence[AuthoredToolProviderRef]] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AuthoredLearningReceipt:
+        """
+        Parameters
+        ----------
+        project_id : str
+
+        agent_slug : str
+
+        tenant_id : str
+
+        user_id : str
+
+        evidence : typing.Sequence[ProductLearningEvidence]
+
+        invocation_id : str
+
+        source_revision : str
+
+        workflow : AuthoredLearningWorkflow
+
+        capability_grants : typing.Optional[typing.Sequence[str]]
+
+        context : typing.Optional[typing.Dict[str, typing.Any]]
+
+        tool_provider_refs : typing.Optional[typing.Sequence[AuthoredToolProviderRef]]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AuthoredLearningReceipt
+            Successful Response
+
+        Examples
+        --------
+        from sikaru_sdk import (
+            AuthoredLearningWorkflow,
+            ProductLearningEvidence,
+            SikaruApi,
+        )
+
+        client = SikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+        client.end_users.start_learning_run(
+            project_id="project_id",
+            agent_slug="agent_slug",
+            tenant_id="tenant_id",
+            user_id="user_id",
+            evidence=[
+                ProductLearningEvidence(
+                    content="content",
+                    digest="digest",
+                    learning_eligible=True,
+                    provenance="user_message",
+                    source_id="sourceId",
+                )
+            ],
+            invocation_id="invocationId",
+            source_revision="sourceRevision",
+            workflow=AuthoredLearningWorkflow(
+                name="name",
+            ),
+        )
+        """
+        _response = self._raw_client.start_learning_run(
+            project_id,
+            agent_slug,
+            tenant_id,
+            user_id,
+            evidence=evidence,
+            invocation_id=invocation_id,
+            source_revision=source_revision,
+            workflow=workflow,
+            capability_grants=capability_grants,
+            context=context,
+            tool_provider_refs=tool_provider_refs,
+            request_options=request_options,
+        )
+        return _response.data
+
+    def get_learning_run(
+        self,
+        project_id: str,
+        agent_slug: str,
+        tenant_id: str,
+        user_id: str,
+        invocation_id: str,
+        *,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AuthoredLearningReceipt:
+        """
+        Parameters
+        ----------
+        project_id : str
+
+        agent_slug : str
+
+        tenant_id : str
+
+        user_id : str
+
+        invocation_id : str
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AuthoredLearningReceipt
             Successful Response
 
         Examples
@@ -238,40 +433,30 @@ class EndUsersClient:
             channel_credential="YOUR_CHANNEL_CREDENTIAL",
             api_key="YOUR_API_KEY",
         )
-        client.end_users.update_fact(
+        client.end_users.get_learning_run(
             project_id="project_id",
             agent_slug="agent_slug",
             tenant_id="tenant_id",
             user_id="user_id",
-            content="content",
-            path="path",
+            invocation_id="invocation_id",
         )
         """
-        _response = self._raw_client.update_fact(
-            project_id,
-            agent_slug,
-            tenant_id,
-            user_id,
-            content=content,
-            path=path,
-            expected_etag=expected_etag,
-            request_options=request_options,
+        _response = self._raw_client.get_learning_run(
+            project_id, agent_slug, tenant_id, user_id, invocation_id, request_options=request_options
         )
         return _response.data
 
-    def delete_fact(
+    def revoke_learning_source(
         self,
         project_id: str,
         agent_slug: str,
         tenant_id: str,
         user_id: str,
+        source_id: str,
         *,
-        path: str,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> None:
         """
-        Forget one memory, or clear the profile.
-
         Parameters
         ----------
         project_id : str
@@ -282,8 +467,7 @@ class EndUsersClient:
 
         user_id : str
 
-        path : str
-            USER.md or memories/<name>.md.
+        source_id : str
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -300,16 +484,16 @@ class EndUsersClient:
             channel_credential="YOUR_CHANNEL_CREDENTIAL",
             api_key="YOUR_API_KEY",
         )
-        client.end_users.delete_fact(
+        client.end_users.revoke_learning_source(
             project_id="project_id",
             agent_slug="agent_slug",
             tenant_id="tenant_id",
             user_id="user_id",
-            path="path",
+            source_id="source_id",
         )
         """
-        _response = self._raw_client.delete_fact(
-            project_id, agent_slug, tenant_id, user_id, path=path, request_options=request_options
+        _response = self._raw_client.revoke_learning_source(
+            project_id, agent_slug, tenant_id, user_id, source_id, request_options=request_options
         )
         return _response.data
 
@@ -394,7 +578,7 @@ class AsyncEndUsersClient:
         request_options: typing.Optional[RequestOptions] = None,
     ) -> EndUser:
         """
-        What the agent knows about this end user: facts and the persona summary, never the persona prompt.
+        What the agent knows about this end user: the persona summary, never the persona prompt.
 
         Parameters
         ----------
@@ -449,7 +633,9 @@ class AsyncEndUsersClient:
         tenant_id: str,
         user_id: str,
         *,
+        create_only: typing.Optional[bool] = OMIT,
         opt_in: typing.Optional[bool] = OMIT,
+        sleep_enabled: typing.Optional[bool] = OMIT,
         timezone: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> EndUser:
@@ -466,8 +652,14 @@ class AsyncEndUsersClient:
 
         user_id : str
 
+        create_only : typing.Optional[bool]
+            Apply settings only when creating a cell. Return existing cells unchanged.
+
         opt_in : typing.Optional[bool]
             Opting out removes this user's contributed traces and eval cases from population material. Omit it to keep the current choice.
+
+        sleep_enabled : typing.Optional[bool]
+            Allow automatic nightly sleep; omit to preserve the setting.
 
         timezone : typing.Optional[str]
             IANA timezone, such as Europe/Berlin. Explicit null clears it; omit it to keep the current value.
@@ -508,7 +700,9 @@ class AsyncEndUsersClient:
             agent_slug,
             tenant_id,
             user_id,
+            create_only=create_only,
             opt_in=opt_in,
+            sleep_enabled=sleep_enabled,
             timezone=timezone,
             request_options=request_options,
         )
@@ -521,6 +715,7 @@ class AsyncEndUsersClient:
         tenant_id: str,
         user_id: str,
         *,
+        terminal: typing.Optional[bool] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> EndUserDeletion:
         """
@@ -535,6 +730,9 @@ class AsyncEndUsersClient:
         tenant_id : str
 
         user_id : str
+
+        terminal : typing.Optional[bool]
+            Permanently reject cell creation and new work for this end user.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -568,24 +766,31 @@ class AsyncEndUsersClient:
         asyncio.run(main())
         """
         _response = await self._raw_client.delete(
-            project_id, agent_slug, tenant_id, user_id, request_options=request_options
+            project_id, agent_slug, tenant_id, user_id, terminal=terminal, request_options=request_options
         )
         return _response.data
 
-    async def update_fact(
+    async def import_state(
         self,
         project_id: str,
         agent_slug: str,
         tenant_id: str,
         user_id: str,
         *,
-        content: str,
-        path: str,
-        expected_etag: typing.Optional[str] = OMIT,
+        digest: str,
+        files: typing.Sequence[ImportFile],
+        import_id: str,
+        source_revision: str,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> EndUserFile:
+    ) -> ImportReceipt:
         """
-        Correct or add one fact. It serves from the next turn and becomes a held-out case for this user.
+        Import a versioned product snapshot atomically, preserving correction provenance.
+
+        The cell must already exist. Every file requires expectedEtag (null for an
+        absent destination). Reusing an importId requires the identical manifest.
+        The digest is SHA-256 of canonical JSON {sourceRevision, files}, with sorted
+        keys, compact separators and the supplied file order. Private layers are
+        accepted as input but are never returned in the receipt or end-user view.
 
         Parameters
         ----------
@@ -597,20 +802,203 @@ class AsyncEndUsersClient:
 
         user_id : str
 
-        content : str
+        digest : str
 
-        path : str
-            USER.md or memories/<name>.md.
+        files : typing.Sequence[ImportFile]
 
-        expected_etag : typing.Optional[str]
-            Refuse with 409 unless the fact still has this etag.
+        import_id : str
+
+        source_revision : str
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        EndUserFile
+        ImportReceipt
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sikaru_sdk import AsyncSikaruApi, ImportFile
+
+        client = AsyncSikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+
+
+        async def main() -> None:
+            await client.end_users.import_state(
+                project_id="project_id",
+                agent_slug="agent_slug",
+                tenant_id="tenant_id",
+                user_id="user_id",
+                digest="digest",
+                files=[
+                    ImportFile(
+                        content="content",
+                        path="path",
+                        provenance="provenance",
+                    )
+                ],
+                import_id="importId",
+                source_revision="sourceRevision",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.import_state(
+            project_id,
+            agent_slug,
+            tenant_id,
+            user_id,
+            digest=digest,
+            files=files,
+            import_id=import_id,
+            source_revision=source_revision,
+            request_options=request_options,
+        )
+        return _response.data
+
+    async def start_learning_run(
+        self,
+        project_id: str,
+        agent_slug: str,
+        tenant_id: str,
+        user_id: str,
+        *,
+        evidence: typing.Sequence[ProductLearningEvidence],
+        invocation_id: str,
+        source_revision: str,
+        workflow: AuthoredLearningWorkflow,
+        capability_grants: typing.Optional[typing.Sequence[str]] = OMIT,
+        context: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
+        tool_provider_refs: typing.Optional[typing.Sequence[AuthoredToolProviderRef]] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AuthoredLearningReceipt:
+        """
+        Parameters
+        ----------
+        project_id : str
+
+        agent_slug : str
+
+        tenant_id : str
+
+        user_id : str
+
+        evidence : typing.Sequence[ProductLearningEvidence]
+
+        invocation_id : str
+
+        source_revision : str
+
+        workflow : AuthoredLearningWorkflow
+
+        capability_grants : typing.Optional[typing.Sequence[str]]
+
+        context : typing.Optional[typing.Dict[str, typing.Any]]
+
+        tool_provider_refs : typing.Optional[typing.Sequence[AuthoredToolProviderRef]]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AuthoredLearningReceipt
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sikaru_sdk import (
+            AsyncSikaruApi,
+            AuthoredLearningWorkflow,
+            ProductLearningEvidence,
+        )
+
+        client = AsyncSikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+
+
+        async def main() -> None:
+            await client.end_users.start_learning_run(
+                project_id="project_id",
+                agent_slug="agent_slug",
+                tenant_id="tenant_id",
+                user_id="user_id",
+                evidence=[
+                    ProductLearningEvidence(
+                        content="content",
+                        digest="digest",
+                        learning_eligible=True,
+                        provenance="user_message",
+                        source_id="sourceId",
+                    )
+                ],
+                invocation_id="invocationId",
+                source_revision="sourceRevision",
+                workflow=AuthoredLearningWorkflow(
+                    name="name",
+                ),
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.start_learning_run(
+            project_id,
+            agent_slug,
+            tenant_id,
+            user_id,
+            evidence=evidence,
+            invocation_id=invocation_id,
+            source_revision=source_revision,
+            workflow=workflow,
+            capability_grants=capability_grants,
+            context=context,
+            tool_provider_refs=tool_provider_refs,
+            request_options=request_options,
+        )
+        return _response.data
+
+    async def get_learning_run(
+        self,
+        project_id: str,
+        agent_slug: str,
+        tenant_id: str,
+        user_id: str,
+        invocation_id: str,
+        *,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AuthoredLearningReceipt:
+        """
+        Parameters
+        ----------
+        project_id : str
+
+        agent_slug : str
+
+        tenant_id : str
+
+        user_id : str
+
+        invocation_id : str
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AuthoredLearningReceipt
             Successful Response
 
         Examples
@@ -626,43 +1014,33 @@ class AsyncEndUsersClient:
 
 
         async def main() -> None:
-            await client.end_users.update_fact(
+            await client.end_users.get_learning_run(
                 project_id="project_id",
                 agent_slug="agent_slug",
                 tenant_id="tenant_id",
                 user_id="user_id",
-                content="content",
-                path="path",
+                invocation_id="invocation_id",
             )
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.update_fact(
-            project_id,
-            agent_slug,
-            tenant_id,
-            user_id,
-            content=content,
-            path=path,
-            expected_etag=expected_etag,
-            request_options=request_options,
+        _response = await self._raw_client.get_learning_run(
+            project_id, agent_slug, tenant_id, user_id, invocation_id, request_options=request_options
         )
         return _response.data
 
-    async def delete_fact(
+    async def revoke_learning_source(
         self,
         project_id: str,
         agent_slug: str,
         tenant_id: str,
         user_id: str,
+        source_id: str,
         *,
-        path: str,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> None:
         """
-        Forget one memory, or clear the profile.
-
         Parameters
         ----------
         project_id : str
@@ -673,8 +1051,7 @@ class AsyncEndUsersClient:
 
         user_id : str
 
-        path : str
-            USER.md or memories/<name>.md.
+        source_id : str
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -696,19 +1073,19 @@ class AsyncEndUsersClient:
 
 
         async def main() -> None:
-            await client.end_users.delete_fact(
+            await client.end_users.revoke_learning_source(
                 project_id="project_id",
                 agent_slug="agent_slug",
                 tenant_id="tenant_id",
                 user_id="user_id",
-                path="path",
+                source_id="source_id",
             )
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.delete_fact(
-            project_id, agent_slug, tenant_id, user_id, path=path, request_options=request_options
+        _response = await self._raw_client.revoke_learning_source(
+            project_id, agent_slug, tenant_id, user_id, source_id, request_options=request_options
         )
         return _response.data
 

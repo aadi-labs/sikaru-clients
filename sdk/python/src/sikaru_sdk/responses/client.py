@@ -36,7 +36,6 @@ class ResponsesClient:
     def create_stream(
         self,
         *,
-        model: str,
         access_programs: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
         background: typing.Optional[bool] = OMIT,
         context_management: typing.Optional[typing.Sequence[typing.Dict[str, typing.Any]]] = OMIT,
@@ -47,6 +46,7 @@ class ResponsesClient:
         max_output_tokens: typing.Optional[int] = OMIT,
         max_tool_calls: typing.Optional[int] = OMIT,
         metadata: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
+        model: typing.Optional[str] = OMIT,
         models: typing.Optional[typing.Sequence[str]] = OMIT,
         moderation: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
         parallel_tool_calls: typing.Optional[bool] = OMIT,
@@ -77,8 +77,6 @@ class ResponsesClient:
         """
         Parameters
         ----------
-        model : str
-
         access_programs : typing.Optional[typing.Dict[str, typing.Any]]
 
         background : typing.Optional[bool]
@@ -98,6 +96,8 @@ class ResponsesClient:
         max_tool_calls : typing.Optional[int]
 
         metadata : typing.Optional[typing.Dict[str, typing.Any]]
+
+        model : typing.Optional[str]
 
         models : typing.Optional[typing.Sequence[str]]
 
@@ -165,14 +165,11 @@ class ResponsesClient:
             channel_credential="YOUR_CHANNEL_CREDENTIAL",
             api_key="YOUR_API_KEY",
         )
-        response = client.responses.create_stream(
-            model="model",
-        )
+        response = client.responses.create_stream()
         for chunk in response:
             yield chunk
         """
         with self._raw_client.create_stream(
-            model=model,
             access_programs=access_programs,
             background=background,
             context_management=context_management,
@@ -183,6 +180,7 @@ class ResponsesClient:
             max_output_tokens=max_output_tokens,
             max_tool_calls=max_tool_calls,
             metadata=metadata,
+            model=model,
             models=models,
             moderation=moderation,
             parallel_tool_calls=parallel_tool_calls,
@@ -215,7 +213,6 @@ class ResponsesClient:
     def create(
         self,
         *,
-        model: str,
         access_programs: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
         background: typing.Optional[bool] = OMIT,
         context_management: typing.Optional[typing.Sequence[typing.Dict[str, typing.Any]]] = OMIT,
@@ -226,6 +223,7 @@ class ResponsesClient:
         max_output_tokens: typing.Optional[int] = OMIT,
         max_tool_calls: typing.Optional[int] = OMIT,
         metadata: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
+        model: typing.Optional[str] = OMIT,
         models: typing.Optional[typing.Sequence[str]] = OMIT,
         moderation: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
         parallel_tool_calls: typing.Optional[bool] = OMIT,
@@ -256,8 +254,6 @@ class ResponsesClient:
         """
         Parameters
         ----------
-        model : str
-
         access_programs : typing.Optional[typing.Dict[str, typing.Any]]
 
         background : typing.Optional[bool]
@@ -277,6 +273,8 @@ class ResponsesClient:
         max_tool_calls : typing.Optional[int]
 
         metadata : typing.Optional[typing.Dict[str, typing.Any]]
+
+        model : typing.Optional[str]
 
         models : typing.Optional[typing.Sequence[str]]
 
@@ -344,12 +342,9 @@ class ResponsesClient:
             channel_credential="YOUR_CHANNEL_CREDENTIAL",
             api_key="YOUR_API_KEY",
         )
-        client.responses.create(
-            model="model",
-        )
+        client.responses.create()
         """
         _response = self._raw_client.create(
-            model=model,
             access_programs=access_programs,
             background=background,
             context_management=context_management,
@@ -360,6 +355,7 @@ class ResponsesClient:
             max_output_tokens=max_output_tokens,
             max_tool_calls=max_tool_calls,
             metadata=metadata,
+            model=model,
             models=models,
             moderation=moderation,
             parallel_tool_calls=parallel_tool_calls,
@@ -408,7 +404,6 @@ class AsyncResponsesClient:
     async def create_stream(
         self,
         *,
-        model: str,
         access_programs: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
         background: typing.Optional[bool] = OMIT,
         context_management: typing.Optional[typing.Sequence[typing.Dict[str, typing.Any]]] = OMIT,
@@ -419,6 +414,7 @@ class AsyncResponsesClient:
         max_output_tokens: typing.Optional[int] = OMIT,
         max_tool_calls: typing.Optional[int] = OMIT,
         metadata: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
+        model: typing.Optional[str] = OMIT,
         models: typing.Optional[typing.Sequence[str]] = OMIT,
         moderation: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
         parallel_tool_calls: typing.Optional[bool] = OMIT,
@@ -449,8 +445,6 @@ class AsyncResponsesClient:
         """
         Parameters
         ----------
-        model : str
-
         access_programs : typing.Optional[typing.Dict[str, typing.Any]]
 
         background : typing.Optional[bool]
@@ -470,6 +464,8 @@ class AsyncResponsesClient:
         max_tool_calls : typing.Optional[int]
 
         metadata : typing.Optional[typing.Dict[str, typing.Any]]
+
+        model : typing.Optional[str]
 
         models : typing.Optional[typing.Sequence[str]]
 
@@ -542,9 +538,7 @@ class AsyncResponsesClient:
 
 
         async def main() -> None:
-            response = client.responses.create_stream(
-                model="model",
-            )
+            response = client.responses.create_stream()
             async for chunk in response:
                 yield chunk
 
@@ -552,7 +546,6 @@ class AsyncResponsesClient:
         asyncio.run(main())
         """
         async with self._raw_client.create_stream(
-            model=model,
             access_programs=access_programs,
             background=background,
             context_management=context_management,
@@ -563,6 +556,7 @@ class AsyncResponsesClient:
             max_output_tokens=max_output_tokens,
             max_tool_calls=max_tool_calls,
             metadata=metadata,
+            model=model,
             models=models,
             moderation=moderation,
             parallel_tool_calls=parallel_tool_calls,
@@ -596,7 +590,6 @@ class AsyncResponsesClient:
     async def create(
         self,
         *,
-        model: str,
         access_programs: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
         background: typing.Optional[bool] = OMIT,
         context_management: typing.Optional[typing.Sequence[typing.Dict[str, typing.Any]]] = OMIT,
@@ -607,6 +600,7 @@ class AsyncResponsesClient:
         max_output_tokens: typing.Optional[int] = OMIT,
         max_tool_calls: typing.Optional[int] = OMIT,
         metadata: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
+        model: typing.Optional[str] = OMIT,
         models: typing.Optional[typing.Sequence[str]] = OMIT,
         moderation: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
         parallel_tool_calls: typing.Optional[bool] = OMIT,
@@ -637,8 +631,6 @@ class AsyncResponsesClient:
         """
         Parameters
         ----------
-        model : str
-
         access_programs : typing.Optional[typing.Dict[str, typing.Any]]
 
         background : typing.Optional[bool]
@@ -658,6 +650,8 @@ class AsyncResponsesClient:
         max_tool_calls : typing.Optional[int]
 
         metadata : typing.Optional[typing.Dict[str, typing.Any]]
+
+        model : typing.Optional[str]
 
         models : typing.Optional[typing.Sequence[str]]
 
@@ -730,15 +724,12 @@ class AsyncResponsesClient:
 
 
         async def main() -> None:
-            await client.responses.create(
-                model="model",
-            )
+            await client.responses.create()
 
 
         asyncio.run(main())
         """
         _response = await self._raw_client.create(
-            model=model,
             access_programs=access_programs,
             background=background,
             context_management=context_management,
@@ -749,6 +740,7 @@ class AsyncResponsesClient:
             max_output_tokens=max_output_tokens,
             max_tool_calls=max_tool_calls,
             metadata=metadata,
+            model=model,
             models=models,
             moderation=moderation,
             parallel_tool_calls=parallel_tool_calls,

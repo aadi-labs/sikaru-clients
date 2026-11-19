@@ -1,6 +1,5 @@
-//! Native executor acceptance. `runtime::serve_with_options` runs in a child copy of this test
-//! binary (see `in_process_executor_child`), so each case observes real stdout, stderr, exit
-//! status and signals without a CLI serve command.
+//! Native executor acceptance. Cases drive a child process and observe its stdout, stderr,
+//! exit status and signals. The ephemeral case exercises the actual CLI entry point.
 #![allow(dead_code)]
 use std::process::Command;
 #[test]
@@ -44,7 +43,6 @@ mod transport;
 
 /// Selects child mode and carries the fake gateway's base URL.
 const CHILD_BASE_URL: &str = "SIKARU_TEST_EXECUTOR_BASE_URL";
-const CHILD_SKIP_CHECKPOINTS: &str = "SIKARU_TEST_EXECUTOR_SKIP_CHECKPOINTS";
 
 /// The executor process each case drives: a no-op unless the parent test selected child mode. It
 /// reads the private bootstrap from stdin, serves the attachment in-process, prints the result and
@@ -55,15 +53,11 @@ fn in_process_executor_child() {
     let Ok(base_url) = std::env::var(CHILD_BASE_URL) else {
         return;
     };
-    let options = runtime::RunOptions {
-        skip_checkpoints: std::env::var_os(CHILD_SKIP_CHECKPOINTS).is_some(),
-        ..Default::default()
-    };
     let served = tokio::runtime::Runtime::new().unwrap().block_on(async {
         let bootstrap: config::Bootstrap = serde_json::from_reader(std::io::stdin())?;
         let config = fern_cli_sdk::http::HttpConfig::new("sikaru")?;
         let http = transport::HttpIdentity::from_config(&config)?;
-        runtime::serve_with_options(bootstrap, base_url, http, options).await
+        runtime::serve_with_options(bootstrap, base_url, http, Default::default()).await
     });
     let result = served.unwrap_or_else(|_| {
         serde_json::json!({"status":"recovery_required","reason":"bootstrap_or_journal_rejected"})
@@ -176,6 +170,23 @@ mod wire {
             let path = request.url.path();
             if let Some(response) = self.fault(&mut state, path, &body) {
                 return response;
+            }
+            if path.ends_with("/workspace-restore") {
+                if !matches!(self.scenario, "git_product_restore" | "git_product_large") {
+                    return ResponseTemplate::new(409);
+                }
+                use sha2::{Digest, Sha256};
+                let contents = b"restored content";
+                let manifest = json!({"files":{"retained.txt":{
+                    "sha256":format!("{:x}", Sha256::digest(contents)), "size":contents.len(), "mode":0o644,
+                }}}).to_string();
+                let data = [
+                    (manifest.len() as u32).to_be_bytes().as_slice(),
+                    manifest.as_bytes(),
+                    contents,
+                ]
+                .concat();
+                return ResponseTemplate::new(200).set_body_bytes(data);
             }
             if path.ends_with("/workspace-policy") {
                 if state.lease_lost {
@@ -337,6 +348,12 @@ mod wire {
             let expiring = matches!(self.scenario, "expiry" | "git_lease_lost");
             let a = attachment("ready", if expiring { 1 } else { 3 });
             if path.ends_with("/ready") {
+                if self.scenario == "git_product_restore" {
+                    assert_eq!(
+                        std::fs::read(self.effect.with_file_name("retained.txt")).unwrap(),
+                        b"restored content"
+                    );
+                }
                 s.ready = true;
                 s.ready_body = Some(body);
                 return ok(a);
@@ -442,6 +459,7 @@ mod wire {
                 let command=match self.scenario {
                     "credential_outage"|"renew_denied"|"credential_expiry"|"expiry"|"signal"|"revoked"|"git_lease_lost"=>"touch started; sleep 2; touch escaped",
                     "git_force_added"=>"mkdir -p .venv && echo pkg > .venv/pkg.py && git add -f .venv/pkg.py && git -c user.name=agent -c user.email=agent@example.com commit -qm agent && echo once >> effect; head -c 65536 /dev/zero",
+                    "git_product_large"=>"dd if=/dev/zero of=large bs=1000000 count=33 2>/dev/null; head -c 65536 /dev/zero",
                     "renew_retry"=>"sleep 4; echo once >> effect; head -c 65536 /dev/zero",
                     _=>"echo once >> effect; printf '%s' \"${SIKARU_API_KEY-unset}\" > env; head -c 65536 /dev/zero",
                 };
@@ -786,7 +804,14 @@ mod wire {
     #[tokio::test]
     async fn disabled_checkpoints_skip_checkpoint_remote_and_private_repository() {
         let l = prepare_launch("git_task_repo").await;
-        let child = spawn_executor_with(&l.path, &l.base_url, 10, 1, true).await;
+        let child = spawn_executor_with(
+            &l.path,
+            &l.base_url,
+            10,
+            1,
+            Some("--no-workspace-checkpoints"),
+        )
+        .await;
         let output = result(child).await;
         completed(&output);
         assert_eq!(
@@ -801,40 +826,101 @@ mod wire {
         assert!(git.head().is_none());
         assert_eq!(git.seen.lock().unwrap().uploads_started, 0);
     }
+    #[tokio::test]
+    async fn product_attachment_restores_before_readiness_and_publishes_a_checkpoint() {
+        let l = prepare_launch("git_product_restore").await;
+        let child = spawn_executor_with(
+            &l.path,
+            &l.base_url,
+            10,
+            1,
+            Some("--restore-product-workspace"),
+        )
+        .await;
+        let output = result(child).await;
+        completed(&output);
+        let result: Value = serde_json::from_slice(&output.stdout).unwrap();
+        assert_eq!(result["workspace_checkpoint"], "saved");
+        let git = l.oracle.git.as_ref().unwrap();
+        let head = git.head().unwrap();
+        assert_eq!(git.read(&head, "retained.txt"), b"restored content");
+        assert_eq!(git.read(&head, "effect"), b"once\n");
+    }
+    #[tokio::test]
+    async fn refused_product_attachment_never_serves_work_or_captures_workspace() {
+        let l = prepare_launch("git_product_refused").await;
+        let child = spawn_executor_with(
+            &l.path,
+            &l.base_url,
+            10,
+            1,
+            Some("--restore-product-workspace"),
+        )
+        .await;
+        let output = result(child).await;
+        let result: Value = serde_json::from_slice(&output.stdout).unwrap();
+        assert_eq!(result["status"], "recovery_required");
+        let state = l.oracle.state.lock().unwrap();
+        assert!(state.ready_body.is_none());
+        assert!(state.records.is_empty());
+        assert!(!l.oracle.effect.exists());
+    }
+    #[tokio::test]
+    async fn product_attachment_never_publishes_an_oversized_file_as_a_partial_checkpoint() {
+        let l = prepare_launch("git_product_large").await;
+        let child = spawn_executor_with(
+            &l.path,
+            &l.base_url,
+            10,
+            1,
+            Some("--restore-product-workspace"),
+        )
+        .await;
+        let output = result(child).await;
+        completed(&output);
+        let result: Value = serde_json::from_slice(&output.stdout).unwrap();
+        assert_eq!(result["workspace_checkpoint"], "failed");
+        assert!(l.oracle.state.lock().unwrap().records.is_empty());
+    }
     async fn spawn_executor(
         path: &std::path::Path,
         base_url: &str,
         command_timeout: u64,
         owner_epoch: i64,
     ) -> tokio::process::Child {
-        spawn_executor_with(path, base_url, command_timeout, owner_epoch, false).await
+        spawn_executor_with(path, base_url, command_timeout, owner_epoch, None).await
     }
     async fn spawn_executor_with(
         path: &std::path::Path,
         base_url: &str,
         command_timeout: u64,
         owner_epoch: i64,
-        skip_checkpoints: bool,
+        attachment_flag: Option<&str>,
     ) -> tokio::process::Child {
         let bootstrap = json!({"project_id":"project","session_id":"session","attachment_id":"attachment","owner_epoch":owner_epoch,"workspace_generation":"generation","journal_id":"journal","credential_id":"credential",
             "token":"restricted-executor-secret","workspace_provenance":{"kind":"existing_directory","identity":"original"},"workspace":path.join("workspace"),"state_dir":path.join("state"),"command_timeout_seconds":command_timeout});
-        let mut command = tokio::process::Command::new(std::env::current_exe().unwrap());
+        let mut command = if let Some(flag) = attachment_flag {
+            let mut cli = tokio::process::Command::new(env!("CARGO_BIN_EXE_sikaru"));
+            cli.args(["serve-attachment", "--base-url", base_url, flag]);
+            cli
+        } else {
+            let mut harness = tokio::process::Command::new(std::env::current_exe().unwrap());
+            harness
+                .args([
+                    "in_process_executor_child",
+                    "--nocapture",
+                    "--test-threads=1",
+                    "-q",
+                ])
+                .env(super::CHILD_BASE_URL, base_url);
+            harness
+        };
         command
-            .args([
-                "in_process_executor_child",
-                "--nocapture",
-                "--test-threads=1",
-                "-q",
-            ])
-            .env(super::CHILD_BASE_URL, base_url)
             .env("SIKARU_API_KEY", "controller-secret")
             .stdin(Stdio::piped())
             .stdout(Stdio::piped())
             .stderr(Stdio::piped())
             .kill_on_drop(true);
-        if skip_checkpoints {
-            command.env(super::CHILD_SKIP_CHECKPOINTS, "1");
-        }
         let mut child = command.spawn().unwrap();
         child
             .stdin

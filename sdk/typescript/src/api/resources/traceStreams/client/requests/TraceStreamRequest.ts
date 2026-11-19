@@ -19,6 +19,8 @@ export interface TraceStreamRequest {
     dataset?: string;
     format: TraceStreamRequest.Format;
     metadata: Sikaru.TraceMetadata;
+    /** Rows of a trace export, unchanged, for `langfuse.observations.v1` (observations), `langsmith.runs.v1` (runs) or `braintrust.spans.v1` (spans). The service rebuilds each trace or agent run only from the rows in one request, so keep all of its rows together. */
+    records?: Record<string, unknown>[];
     resourceSpans?: Record<string, unknown>[];
     spans?: Sikaru.OpenInferenceSpan[];
     trajectories?: Record<string, unknown>[];
@@ -29,7 +31,10 @@ export namespace TraceStreamRequest {
     export const Format = {
             OpeninferenceV1: "openinference.v1",
             OpentelemetryOtlpV1: "opentelemetry.otlp.v1",
-            HarborAtifV1: "harbor.atif.v1"
+            HarborAtifV1: "harbor.atif.v1",
+            LangfuseObservationsV1: "langfuse.observations.v1",
+            LangsmithRunsV1: "langsmith.runs.v1",
+            BraintrustSpansV1: "braintrust.spans.v1"
         } as const;
     export type Format = typeof Format[keyof typeof Format];
 }

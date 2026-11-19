@@ -47,7 +47,6 @@ def test_agentDocuments_edit_setting() -> None:
     client = get_client(test_id)
     client.agent_documents.edit_setting(
         project_id="project_id",
-        document="document",
         path=["path"],
     )
     verify_request_count(test_id, "POST", "/v1/projects/project_id/agent-documents/settings", None, 1)
@@ -75,7 +74,6 @@ def test_agentDocuments_validate_text() -> None:
     client = get_client(test_id)
     client.agent_documents.validate_text(
         project_id="project_id",
-        document="document",
     )
     verify_request_count(test_id, "POST", "/v1/projects/project_id/agent-documents/validate", None, 1)
     verify_auth_headers(
@@ -108,8 +106,7 @@ def test_agentDocuments_save() -> None:
     client.agent_documents.save(
         project_id="project_id",
         agent_slug="agent_slug",
-        document="document",
-        expected_revision=1,
+        base_revision=1,
     )
     verify_request_count(test_id, "PUT", "/v1/projects/project_id/managed-agents/agent_slug/document", None, 1)
     verify_auth_headers(
@@ -146,13 +143,64 @@ def test_agentDocuments_discard() -> None:
     client.agent_documents.discard(
         project_id="project_id",
         agent_slug="agent_slug",
-        expected_revision=1,
+        base_revision=1,
     )
     verify_request_count(test_id, "POST", "/v1/projects/project_id/managed-agents/agent_slug/document/discard", None, 1)
     verify_auth_headers(
         test_id,
         "POST",
         "/v1/projects/project_id/managed-agents/agent_slug/document/discard",
+        {"Authorization": r"Bearer .+"},
+        [],
+    )
+
+
+def test_agentDocuments_get_publication() -> None:
+    """Test get_publication endpoint with WireMock"""
+    test_id = "agent_documents.get_publication.0"
+    client = get_client(test_id)
+    client.agent_documents.get_publication(
+        project_id="project_id",
+        agent_slug="agent_slug",
+        publication_id="publication_id",
+    )
+    verify_request_count(
+        test_id,
+        "GET",
+        "/v1/projects/project_id/managed-agents/agent_slug/document/publications/publication_id",
+        None,
+        1,
+    )
+    verify_auth_headers(
+        test_id,
+        "GET",
+        "/v1/projects/project_id/managed-agents/agent_slug/document/publications/publication_id",
+        {"Authorization": r"Bearer .+"},
+        [],
+    )
+
+
+def test_agentDocuments_publish_anyway() -> None:
+    """Test publish_anyway endpoint with WireMock"""
+    test_id = "agent_documents.publish_anyway.0"
+    client = get_client(test_id)
+    client.agent_documents.publish_anyway(
+        project_id="project_id",
+        agent_slug="agent_slug",
+        publication_id="publication_id",
+        reason="reason",
+    )
+    verify_request_count(
+        test_id,
+        "POST",
+        "/v1/projects/project_id/managed-agents/agent_slug/document/publications/publication_id/publish-anyway",
+        None,
+        1,
+    )
+    verify_auth_headers(
+        test_id,
+        "POST",
+        "/v1/projects/project_id/managed-agents/agent_slug/document/publications/publication_id/publish-anyway",
         {"Authorization": r"Bearer .+"},
         [],
     )
@@ -262,7 +310,7 @@ def test_agentDocuments_adopt_suggestion() -> None:
         project_id="project_id",
         agent_slug="agent_slug",
         suggestion_id="suggestion_id",
-        expected_revision=1,
+        base_revision=1,
     )
     verify_request_count(
         test_id,
@@ -312,7 +360,6 @@ def test_agentDocuments_validate() -> None:
     client.agent_documents.validate(
         project_id="project_id",
         agent_slug="agent_slug",
-        document="document",
     )
     verify_request_count(
         test_id, "POST", "/v1/projects/project_id/managed-agents/agent_slug/document/validate", None, 1

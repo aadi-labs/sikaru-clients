@@ -2,7 +2,7 @@ pub use crate::prelude::*;
 #[allow(unused_imports)]
 use super::*;
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, PartialEq)]
 pub struct DocumentTemplate {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub checks: Option<Vec<StarterCheck>>,
@@ -13,6 +13,8 @@ pub struct DocumentTemplate {
     pub description: String,
     #[serde(default)]
     pub document: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub files: Option<HashMap<String, Option<String>>>,
     #[serde(default)]
     pub id: String,
     #[serde(default)]
@@ -32,6 +34,7 @@ pub struct DocumentTemplateBuilder {
     connectors: Option<Vec<String>>,
     description: Option<String>,
     document: Option<String>,
+    files: Option<HashMap<String, Option<String>>>,
     id: Option<String>,
     name: Option<String>,
 }
@@ -57,6 +60,11 @@ impl DocumentTemplateBuilder {
         self
     }
 
+    pub fn files(mut self, value: HashMap<String, Option<String>>) -> Self {
+        self.files = Some(value);
+        self
+    }
+
     pub fn id(mut self, value: impl Into<String>) -> Self {
         self.id = Some(value.into());
         self
@@ -79,6 +87,7 @@ impl DocumentTemplateBuilder {
             connectors: self.connectors,
             description: self.description.ok_or_else(|| BuildError::missing_field("description"))?,
             document: self.document.ok_or_else(|| BuildError::missing_field("document"))?,
+            files: self.files,
             id: self.id.ok_or_else(|| BuildError::missing_field("id"))?,
             name: self.name.ok_or_else(|| BuildError::missing_field("name"))?,
         })

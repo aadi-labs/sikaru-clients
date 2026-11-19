@@ -81,6 +81,8 @@ class RunSchedulesClient:
         *,
         input: typing.Dict[str, typing.Any],
         agent_slug: typing.Optional[str] = OMIT,
+        at: typing.Optional[str] = OMIT,
+        callback_url: typing.Optional[str] = OMIT,
         cron: typing.Optional[str] = OMIT,
         environment: typing.Optional[ScheduleInputEnvironment] = OMIT,
         idempotency_key: typing.Optional[str] = OMIT,
@@ -88,6 +90,7 @@ class RunSchedulesClient:
         session_id: typing.Optional[str] = OMIT,
         session_mode: typing.Optional[ScheduleInputSessionMode] = OMIT,
         timezone: typing.Optional[str] = OMIT,
+        tool_provider_id: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> ScheduleResponse:
         """
@@ -98,6 +101,11 @@ class RunSchedulesClient:
         input : typing.Dict[str, typing.Any]
 
         agent_slug : typing.Optional[str]
+
+        at : typing.Optional[str]
+
+        callback_url : typing.Optional[str]
+            HTTPS callback on the registered provider's origin.
 
         cron : typing.Optional[str]
 
@@ -112,6 +120,9 @@ class RunSchedulesClient:
         session_mode : typing.Optional[ScheduleInputSessionMode]
 
         timezone : typing.Optional[str]
+
+        tool_provider_id : typing.Optional[str]
+            Registered provider target for signed occurrence delivery.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -138,6 +149,8 @@ class RunSchedulesClient:
             project_id,
             input=input,
             agent_slug=agent_slug,
+            at=at,
+            callback_url=callback_url,
             cron=cron,
             environment=environment,
             idempotency_key=idempotency_key,
@@ -145,12 +158,125 @@ class RunSchedulesClient:
             session_id=session_id,
             session_mode=session_mode,
             timezone=timezone,
+            tool_provider_id=tool_provider_id,
+            request_options=request_options,
+        )
+        return _response.data
+
+    def inspect_schedule(
+        self, project_id: str, schedule_id: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> ScheduleResponse:
+        """
+        Parameters
+        ----------
+        project_id : str
+
+        schedule_id : str
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        ScheduleResponse
+            Successful Response
+
+        Examples
+        --------
+        from sikaru_sdk import SikaruApi
+
+        client = SikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+        client.run_schedules.inspect_schedule(
+            project_id="project_id",
+            schedule_id="schedule_id",
+        )
+        """
+        _response = self._raw_client.inspect_schedule(project_id, schedule_id, request_options=request_options)
+        return _response.data
+
+    def update_schedule(
+        self,
+        project_id: str,
+        schedule_id: str,
+        *,
+        expected_revision: int,
+        idempotency_key: str,
+        at: typing.Optional[str] = OMIT,
+        cron: typing.Optional[str] = OMIT,
+        input: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
+        interval_seconds: typing.Optional[int] = OMIT,
+        timezone: typing.Optional[str] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> ScheduleResponse:
+        """
+        Parameters
+        ----------
+        project_id : str
+
+        schedule_id : str
+
+        expected_revision : int
+
+        idempotency_key : str
+
+        at : typing.Optional[str]
+
+        cron : typing.Optional[str]
+
+        input : typing.Optional[typing.Dict[str, typing.Any]]
+
+        interval_seconds : typing.Optional[int]
+
+        timezone : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        ScheduleResponse
+            Successful Response
+
+        Examples
+        --------
+        from sikaru_sdk import SikaruApi
+
+        client = SikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+        client.run_schedules.update_schedule(
+            project_id="project_id",
+            schedule_id="schedule_id",
+            expected_revision=1,
+            idempotency_key="idempotency_key",
+        )
+        """
+        _response = self._raw_client.update_schedule(
+            project_id,
+            schedule_id,
+            expected_revision=expected_revision,
+            idempotency_key=idempotency_key,
+            at=at,
+            cron=cron,
+            input=input,
+            interval_seconds=interval_seconds,
+            timezone=timezone,
             request_options=request_options,
         )
         return _response.data
 
     def delete_schedule(
-        self, project_id: str, schedule_id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        project_id: str,
+        schedule_id: str,
+        *,
+        expected_revision: typing.Optional[int] = None,
+        idempotency_key: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> ScheduleDeleted:
         """
         Parameters
@@ -158,6 +284,10 @@ class RunSchedulesClient:
         project_id : str
 
         schedule_id : str
+
+        expected_revision : typing.Optional[int]
+
+        idempotency_key : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -180,7 +310,13 @@ class RunSchedulesClient:
             schedule_id="schedule_id",
         )
         """
-        _response = self._raw_client.delete_schedule(project_id, schedule_id, request_options=request_options)
+        _response = self._raw_client.delete_schedule(
+            project_id,
+            schedule_id,
+            expected_revision=expected_revision,
+            idempotency_key=idempotency_key,
+            request_options=request_options,
+        )
         return _response.data
 
     def pause_schedule(
@@ -189,6 +325,8 @@ class RunSchedulesClient:
         schedule_id: str,
         *,
         paused: bool,
+        expected_revision: typing.Optional[int] = OMIT,
+        idempotency_key: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> SchedulePaused:
         """
@@ -199,6 +337,10 @@ class RunSchedulesClient:
         schedule_id : str
 
         paused : bool
+
+        expected_revision : typing.Optional[int]
+
+        idempotency_key : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -223,7 +365,12 @@ class RunSchedulesClient:
         )
         """
         _response = self._raw_client.pause_schedule(
-            project_id, schedule_id, paused=paused, request_options=request_options
+            project_id,
+            schedule_id,
+            paused=paused,
+            expected_revision=expected_revision,
+            idempotency_key=idempotency_key,
+            request_options=request_options,
         )
         return _response.data
 
@@ -379,6 +526,8 @@ class AsyncRunSchedulesClient:
         *,
         input: typing.Dict[str, typing.Any],
         agent_slug: typing.Optional[str] = OMIT,
+        at: typing.Optional[str] = OMIT,
+        callback_url: typing.Optional[str] = OMIT,
         cron: typing.Optional[str] = OMIT,
         environment: typing.Optional[ScheduleInputEnvironment] = OMIT,
         idempotency_key: typing.Optional[str] = OMIT,
@@ -386,6 +535,7 @@ class AsyncRunSchedulesClient:
         session_id: typing.Optional[str] = OMIT,
         session_mode: typing.Optional[ScheduleInputSessionMode] = OMIT,
         timezone: typing.Optional[str] = OMIT,
+        tool_provider_id: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> ScheduleResponse:
         """
@@ -396,6 +546,11 @@ class AsyncRunSchedulesClient:
         input : typing.Dict[str, typing.Any]
 
         agent_slug : typing.Optional[str]
+
+        at : typing.Optional[str]
+
+        callback_url : typing.Optional[str]
+            HTTPS callback on the registered provider's origin.
 
         cron : typing.Optional[str]
 
@@ -410,6 +565,9 @@ class AsyncRunSchedulesClient:
         session_mode : typing.Optional[ScheduleInputSessionMode]
 
         timezone : typing.Optional[str]
+
+        tool_provider_id : typing.Optional[str]
+            Registered provider target for signed occurrence delivery.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -444,6 +602,8 @@ class AsyncRunSchedulesClient:
             project_id,
             input=input,
             agent_slug=agent_slug,
+            at=at,
+            callback_url=callback_url,
             cron=cron,
             environment=environment,
             idempotency_key=idempotency_key,
@@ -451,12 +611,141 @@ class AsyncRunSchedulesClient:
             session_id=session_id,
             session_mode=session_mode,
             timezone=timezone,
+            tool_provider_id=tool_provider_id,
+            request_options=request_options,
+        )
+        return _response.data
+
+    async def inspect_schedule(
+        self, project_id: str, schedule_id: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> ScheduleResponse:
+        """
+        Parameters
+        ----------
+        project_id : str
+
+        schedule_id : str
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        ScheduleResponse
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sikaru_sdk import AsyncSikaruApi
+
+        client = AsyncSikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+
+
+        async def main() -> None:
+            await client.run_schedules.inspect_schedule(
+                project_id="project_id",
+                schedule_id="schedule_id",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.inspect_schedule(project_id, schedule_id, request_options=request_options)
+        return _response.data
+
+    async def update_schedule(
+        self,
+        project_id: str,
+        schedule_id: str,
+        *,
+        expected_revision: int,
+        idempotency_key: str,
+        at: typing.Optional[str] = OMIT,
+        cron: typing.Optional[str] = OMIT,
+        input: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
+        interval_seconds: typing.Optional[int] = OMIT,
+        timezone: typing.Optional[str] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> ScheduleResponse:
+        """
+        Parameters
+        ----------
+        project_id : str
+
+        schedule_id : str
+
+        expected_revision : int
+
+        idempotency_key : str
+
+        at : typing.Optional[str]
+
+        cron : typing.Optional[str]
+
+        input : typing.Optional[typing.Dict[str, typing.Any]]
+
+        interval_seconds : typing.Optional[int]
+
+        timezone : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        ScheduleResponse
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sikaru_sdk import AsyncSikaruApi
+
+        client = AsyncSikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+
+
+        async def main() -> None:
+            await client.run_schedules.update_schedule(
+                project_id="project_id",
+                schedule_id="schedule_id",
+                expected_revision=1,
+                idempotency_key="idempotency_key",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.update_schedule(
+            project_id,
+            schedule_id,
+            expected_revision=expected_revision,
+            idempotency_key=idempotency_key,
+            at=at,
+            cron=cron,
+            input=input,
+            interval_seconds=interval_seconds,
+            timezone=timezone,
             request_options=request_options,
         )
         return _response.data
 
     async def delete_schedule(
-        self, project_id: str, schedule_id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        project_id: str,
+        schedule_id: str,
+        *,
+        expected_revision: typing.Optional[int] = None,
+        idempotency_key: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> ScheduleDeleted:
         """
         Parameters
@@ -464,6 +753,10 @@ class AsyncRunSchedulesClient:
         project_id : str
 
         schedule_id : str
+
+        expected_revision : typing.Optional[int]
+
+        idempotency_key : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -494,7 +787,13 @@ class AsyncRunSchedulesClient:
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.delete_schedule(project_id, schedule_id, request_options=request_options)
+        _response = await self._raw_client.delete_schedule(
+            project_id,
+            schedule_id,
+            expected_revision=expected_revision,
+            idempotency_key=idempotency_key,
+            request_options=request_options,
+        )
         return _response.data
 
     async def pause_schedule(
@@ -503,6 +802,8 @@ class AsyncRunSchedulesClient:
         schedule_id: str,
         *,
         paused: bool,
+        expected_revision: typing.Optional[int] = OMIT,
+        idempotency_key: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> SchedulePaused:
         """
@@ -513,6 +814,10 @@ class AsyncRunSchedulesClient:
         schedule_id : str
 
         paused : bool
+
+        expected_revision : typing.Optional[int]
+
+        idempotency_key : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -545,7 +850,12 @@ class AsyncRunSchedulesClient:
         asyncio.run(main())
         """
         _response = await self._raw_client.pause_schedule(
-            project_id, schedule_id, paused=paused, request_options=request_options
+            project_id,
+            schedule_id,
+            paused=paused,
+            expected_revision=expected_revision,
+            idempotency_key=idempotency_key,
+            request_options=request_options,
         )
         return _response.data
 

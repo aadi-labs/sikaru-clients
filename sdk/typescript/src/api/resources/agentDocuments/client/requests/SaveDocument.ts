@@ -3,11 +3,11 @@
 /**
  * @example
  *     {
- *         document: "document",
- *         expectedRevision: 1
+ *         baseRevision: 1
  *     }
  */
 export interface SaveDocument {
-    document: string;
-    expectedRevision: number;
+    baseRevision: number;
+    document?: string | null;
+    files?: Record<string, string | null> | null;
 }

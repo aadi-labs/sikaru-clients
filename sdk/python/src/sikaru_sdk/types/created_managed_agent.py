@@ -6,20 +6,13 @@ import pydantic
 import typing_extensions
 from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
 from ..core.serialization import FieldMetadata
-from .staged_definition_revision import StagedDefinitionRevision
 
 
 class CreatedManagedAgent(UniversalBaseModel):
     """
-    The created or existing agent. `definitionRevision` is present when a changed
-    definition for an existing agent was staged as a draft revision.
+    The created or existing managed agent.
     """
 
-    definition_revision: typing_extensions.Annotated[
-        typing.Optional[StagedDefinitionRevision],
-        FieldMetadata(alias="definitionRevision"),
-        pydantic.Field(alias="definitionRevision"),
-    ] = None
     harness_version: typing_extensions.Annotated[
         typing.Optional[typing.Dict[str, typing.Any]],
         FieldMetadata(alias="harnessVersion"),

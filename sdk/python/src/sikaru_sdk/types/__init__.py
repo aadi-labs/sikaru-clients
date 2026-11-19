@@ -6,13 +6,7 @@ import typing
 from importlib import import_module
 
 if typing.TYPE_CHECKING:
-    from .agent_definition import AgentDefinition
-    from .agent_definition_schema import AgentDefinitionSchema
-    from .agent_definition_source import AgentDefinitionSource
-    from .agent_definition_source_encoding import AgentDefinitionSourceEncoding
-    from .agent_definition_source_kind import AgentDefinitionSourceKind
     from .agent_document import AgentDocument
-    from .agent_document_budget import AgentDocumentBudget
     from .agent_document_draft import AgentDocumentDraft
     from .agent_import_eval_suite_request import AgentImportEvalSuiteRequest
     from .agent_import_improve_request import AgentImportImproveRequest
@@ -20,30 +14,31 @@ if typing.TYPE_CHECKING:
     from .agent_import_runner_request import AgentImportRunnerRequest
     from .agent_import_source_ref_request import AgentImportSourceRefRequest
     from .agent_import_source_ref_request_export_policy import AgentImportSourceRefRequestExportPolicy
-    from .agent_setup import AgentSetup
-    from .agent_setup_packages import AgentSetupPackages
-    from .agent_setup_repo import AgentSetupRepo
     from .agent_snippets import AgentSnippets
-    from .agent_tool_capabilities import AgentToolCapabilities
-    from .agent_web_capabilities import AgentWebCapabilities
-    from .agent_web_capabilities_provider import AgentWebCapabilitiesProvider
-    from .agent_web_capabilities_provider_zero import AgentWebCapabilitiesProviderZero
+    from .always_cap import AlwaysCap
     from .answer_ref import AnswerRef
     from .approval_input import ApprovalInput
     from .approval_input_decision import ApprovalInputDecision
     from .attachment_view import AttachmentView
     from .attachment_view_cleanup_status import AttachmentViewCleanupStatus
     from .attachment_view_status import AttachmentViewStatus
+    from .authored_learning_child_output import AuthoredLearningChildOutput
+    from .authored_learning_receipt import AuthoredLearningReceipt
+    from .authored_learning_workflow import AuthoredLearningWorkflow
+    from .authored_tool_provider_ref import AuthoredToolProviderRef
     from .authorization import Authorization
     from .availability import Availability
+    from .bar import Bar
     from .batch_counts import BatchCounts
     from .batch_item import BatchItem
     from .batch_item_outcome import BatchItemOutcome
     from .batch_result import BatchResult
     from .binding import Binding
     from .binding_transport import BindingTransport
-    from .built_in_tool_setting import BuiltInToolSetting
-    from .built_in_tool_setting_policy import BuiltInToolSettingPolicy
+    from .browser_rule import BrowserRule
+    from .browser_rule_list import BrowserRuleList
+    from .browser_rule_scope import BrowserRuleScope
+    from .browser_rule_state import BrowserRuleState
     from .capability_ceilings import CapabilityCeilings
     from .capability_ceilings_disallowed_tools_item import CapabilityCeilingsDisallowedToolsItem
     from .capability_ceilings_view import CapabilityCeilingsView
@@ -60,6 +55,7 @@ if typing.TYPE_CHECKING:
     from .chat_completion_message import ChatCompletionMessage
     from .check import Check
     from .check_agent import CheckAgent
+    from .check_choice import CheckChoice
     from .check_environment import CheckEnvironment
     from .check_environment_kind import CheckEnvironmentKind
     from .check_environment_view import CheckEnvironmentView
@@ -94,10 +90,10 @@ if typing.TYPE_CHECKING:
     from .connection_tool import ConnectionTool
     from .connection_tool_load import ConnectionToolLoad
     from .connection_tool_load_status import ConnectionToolLoadStatus
-    from .connection_tool_ref import ConnectionToolRef
     from .connection_usage import ConnectionUsage
+    from .cost_estimate import CostEstimate
+    from .cost_estimate_judge import CostEstimateJudge
     from .create_managed_agent_source_request import CreateManagedAgentSourceRequest
-    from .create_managed_agent_source_request_export_policy import CreateManagedAgentSourceRequestExportPolicy
     from .create_managed_agent_source_request_source_kind import CreateManagedAgentSourceRequestSourceKind
     from .create_parity_run_request import CreateParityRunRequest
     from .created_managed_agent import CreatedManagedAgent
@@ -110,6 +106,7 @@ if typing.TYPE_CHECKING:
     from .credit_balance_state import CreditBalanceState
     from .credit_top_up import CreditTopUp
     from .credit_top_up_status import CreditTopUpStatus
+    from .criterion_view import CriterionView
     from .dataset import Dataset
     from .dataset_check_failure import DatasetCheckFailure
     from .dataset_check_group import DatasetCheckGroup
@@ -137,7 +134,6 @@ if typing.TYPE_CHECKING:
     from .decision_usage import DecisionUsage
     from .definition_change import DefinitionChange
     from .definition_revision import DefinitionRevision
-    from .definition_revision_result import DefinitionRevisionResult
     from .definition_revision_view import DefinitionRevisionView
     from .delivery import Delivery
     from .delivery_status import DeliveryStatus
@@ -171,9 +167,11 @@ if typing.TYPE_CHECKING:
     from .environment_view import EnvironmentView
     from .environment_view_status import EnvironmentViewStatus
     from .error_response import ErrorResponse
+    from .error_response_detail import ErrorResponseDetail
     from .event_delivery_request import EventDeliveryRequest
     from .example_source import ExampleSource
     from .example_source_kind import ExampleSourceKind
+    from .excerpt_step import ExcerptStep
     from .execution_input_receipt import ExecutionInputReceipt
     from .execution_session_page import ExecutionSessionPage
     from .execution_session_record import ExecutionSessionRecord
@@ -183,14 +181,31 @@ if typing.TYPE_CHECKING:
     from .execution_turn_response import ExecutionTurnResponse
     from .execution_turn_run import ExecutionTurnRun
     from .execution_view import ExecutionView
+    from .feedback_configuration import FeedbackConfiguration
+    from .forget_memory import ForgetMemory
     from .funding_wait import FundingWait
     from .funding_wait_reason import FundingWaitReason
     from .git_credential import GitCredential
+    from .grader_detail import GraderDetail
+    from .grader_detail_status import GraderDetailStatus
+    from .grader_file_view import GraderFileView
+    from .grader_list import GraderList
+    from .grader_summary import GraderSummary
+    from .grader_summary_status import GraderSummaryStatus
+    from .grader_version_view import GraderVersionView
+    from .grader_version_view_status import GraderVersionViewStatus
+    from .grading_view import GradingView
+    from .grading_view_status import GradingViewStatus
     from .harbor_task_files import HarborTaskFiles
+    from .held_result import HeldResult
+    from .held_result_outcome import HeldResultOutcome
     from .http_credential import HttpCredential
     from .http_output import HttpOutput
     from .http_receipt import HttpReceipt
     from .http_receipt_status import HttpReceiptStatus
+    from .import_file import ImportFile
+    from .import_receipt import ImportReceipt
+    from .import_receipt_evaluation_status import ImportReceiptEvaluationStatus
     from .imported_document import ImportedDocument
     from .initial_http_channel import InitialHttpChannel
     from .initial_http_channel_transport import InitialHttpChannelTransport
@@ -201,18 +216,41 @@ if typing.TYPE_CHECKING:
     from .initial_slack_room_destination_kind import InitialSlackRoomDestinationKind
     from .initial_slack_room_transport import InitialSlackRoomTransport
     from .installation import Installation
+    from .invocation_policy import InvocationPolicy
+    from .invocation_policy_tools import InvocationPolicyTools
     from .invoice_budget import InvoiceBudget
+    from .judge_choice import JudgeChoice
+    from .judge_choice_kind import JudgeChoiceKind
+    from .judge_view import JudgeView
+    from .judge_view_kind import JudgeViewKind
     from .judgment_context import JudgmentContext
     from .judgment_target import JudgmentTarget
     from .judgment_target_kind import JudgmentTargetKind
+    from .label_counts import LabelCounts
+    from .label_queue import LabelQueue
+    from .label_view import LabelView
+    from .label_view_verdict import LabelViewVerdict
+    from .labeled import Labeled
+    from .labeled_grader_verdict import LabeledGraderVerdict
+    from .learning_pending_tool import LearningPendingTool
     from .live_handle import LiveHandle
+    from .live_link import LiveLink
     from .managed_agent_read import ManagedAgentRead
     from .managed_agent_view import ManagedAgentView
     from .managed_run import ManagedRun
     from .managed_run_measurement_status import ManagedRunMeasurementStatus
     from .managed_run_pause import ManagedRunPause
-    from .memory_tool_setting import MemoryToolSetting
-    from .memory_tool_setting_policy import MemoryToolSettingPolicy
+    from .memory_dream import MemoryDream
+    from .memory_dream_status import MemoryDreamStatus
+    from .memory_file import MemoryFile
+    from .memory_file_entry import MemoryFileEntry
+    from .memory_files import MemoryFiles
+    from .memory_forget import MemoryForget
+    from .memory_forget_status import MemoryForgetStatus
+    from .memory_forgets import MemoryForgets
+    from .memory_head import MemoryHead
+    from .memory_version import MemoryVersion
+    from .memory_versions import MemoryVersions
     from .mention import Mention
     from .mention_resource import MentionResource
     from .modalities import Modalities
@@ -240,11 +278,13 @@ if typing.TYPE_CHECKING:
     from .output_preview_state import OutputPreviewState
     from .output_preview_tool_calls_item import OutputPreviewToolCallsItem
     from .output_preview_tool_calls_item_function import OutputPreviewToolCallsItemFunction
+    from .pause_view import PauseView
     from .personal_access_configuration import PersonalAccessConfiguration
     from .personal_channel_action import PersonalChannelAction
     from .personal_channel_approval import PersonalChannelApproval
     from .personal_channel_approval_decision import PersonalChannelApprovalDecision
     from .personal_channel_approval_decision_decision import PersonalChannelApprovalDecisionDecision
+    from .personal_channel_approval_rule import PersonalChannelApprovalRule
     from .personal_channel_connection import PersonalChannelConnection
     from .personal_channel_file import PersonalChannelFile
     from .personal_channel_files import PersonalChannelFiles
@@ -254,22 +294,32 @@ if typing.TYPE_CHECKING:
     from .personal_slack_challenge import PersonalSlackChallenge
     from .personal_slack_status import PersonalSlackStatus
     from .personal_slack_status_status import PersonalSlackStatusStatus
+    from .playbook import Playbook
+    from .playbook_list import PlaybookList
     from .process_observation import ProcessObservation
     from .process_observation_status import ProcessObservationStatus
+    from .product_learning_evidence import ProductLearningEvidence
+    from .product_learning_evidence_provenance import ProductLearningEvidenceProvenance
     from .public_model import PublicModel
     from .public_model_object import PublicModelObject
+    from .publication_state import PublicationState
+    from .publication_state_status import PublicationStateStatus
+    from .publish_anyway import PublishAnyway
     from .published_reasoning import PublishedReasoning
     from .published_reasoning_default_effort import PublishedReasoningDefaultEffort
     from .published_reasoning_default_history import PublishedReasoningDefaultHistory
     from .published_reasoning_efforts_item import PublishedReasoningEffortsItem
     from .published_reasoning_history_item import PublishedReasoningHistoryItem
     from .published_reasoning_normalization_value import PublishedReasoningNormalizationValue
+    from .queue_item import QueueItem
     from .ready_input import ReadyInput
     from .ready_input_capabilities_item import ReadyInputCapabilitiesItem
     from .ready_input_protocol_version import ReadyInputProtocolVersion
+    from .receipt import Receipt
     from .receipt_input import ReceiptInput
     from .receipt_input_capability_name import ReceiptInputCapabilityName
     from .receipt_input_status import ReceiptInputStatus
+    from .receipt_line import ReceiptLine
     from .receipt_summary import ReceiptSummary
     from .receipt_view import ReceiptView
     from .receipt_view_status import ReceiptViewStatus
@@ -277,6 +327,11 @@ if typing.TYPE_CHECKING:
     from .recorded_correction import RecordedCorrection
     from .recover_run_request import RecoverRunRequest
     from .release_action_request import ReleaseActionRequest
+    from .release_check_override import ReleaseCheckOverride
+    from .release_check_receipt import ReleaseCheckReceipt
+    from .release_check_receipt_status import ReleaseCheckReceiptStatus
+    from .release_check_view import ReleaseCheckView
+    from .remembered import Remembered
     from .renamed_managed_agent import RenamedManagedAgent
     from .replace_credentials import ReplaceCredentials
     from .resolved_mention import ResolvedMention
@@ -292,13 +347,24 @@ if typing.TYPE_CHECKING:
     from .resume_results import ResumeResults
     from .reviewed_access import ReviewedAccess
     from .room import Room
+    from .run_comparison import RunComparison
     from .run_error import RunError
     from .run_error_stage import RunErrorStage
     from .run_event import RunEvent
     from .run_events import RunEvents
+    from .run_report import RunReport
+    from .run_report_status import RunReportStatus
     from .run_spend import RunSpend
+    from .run_started import RunStarted
+    from .run_tally import RunTally
     from .run_transcript import RunTranscript
     from .run_transcript_evidence import RunTranscriptEvidence
+    from .sample import Sample
+    from .sample_verdict import SampleVerdict
+    from .samples import Samples
+    from .sampling_defaults import SamplingDefaults
+    from .saved_login import SavedLogin
+    from .saved_logins import SavedLogins
     from .schedule_deleted import ScheduleDeleted
     from .schedule_history import ScheduleHistory
     from .schedule_list import ScheduleList
@@ -313,16 +379,30 @@ if typing.TYPE_CHECKING:
     from .scope_type import ScopeType
     from .score_answer import ScoreAnswer
     from .session_spend import SessionSpend
+    from .skill_source_receipt import SkillSourceReceipt
     from .slack_link import SlackLink
     from .source_type import SourceType
-    from .specialist_receipt import SpecialistReceipt
-    from .specialist_thread import SpecialistThread
-    from .specialist_threads import SpecialistThreads
-    from .staged_definition_revision import StagedDefinitionRevision
     from .started_check import StartedCheck
     from .started_check_outcome import StartedCheckOutcome
     from .starter_check import StarterCheck
+    from .take_over_request import TakeOverRequest
     from .target_input import TargetInput
+    from .task import Task
+    from .task_approval_receipt import TaskApprovalReceipt
+    from .task_cancel import TaskCancel
+    from .task_change import TaskChange
+    from .task_changes import TaskChanges
+    from .task_integration_receipt import TaskIntegrationReceipt
+    from .task_integration_receipts import TaskIntegrationReceipts
+    from .task_model_tokens import TaskModelTokens
+    from .task_receipt import TaskReceipt
+    from .task_settlement import TaskSettlement
+    from .task_settlement_status import TaskSettlementStatus
+    from .tasks import Tasks
+    from .test_report import TestReport
+    from .test_report_status import TestReportStatus
+    from .tested import Tested
+    from .tested_verdict import TestedVerdict
     from .tool_provider_ref_request import ToolProviderRefRequest
     from .tool_skill_source_request import ToolSkillSourceRequest
     from .toolkit_category import ToolkitCategory
@@ -360,13 +440,7 @@ if typing.TYPE_CHECKING:
     from .workspace_provenance import WorkspaceProvenance
     from .workspace_provenance_kind import WorkspaceProvenanceKind
 _dynamic_imports: typing.Dict[str, str] = {
-    "AgentDefinition": ".agent_definition",
-    "AgentDefinitionSchema": ".agent_definition_schema",
-    "AgentDefinitionSource": ".agent_definition_source",
-    "AgentDefinitionSourceEncoding": ".agent_definition_source_encoding",
-    "AgentDefinitionSourceKind": ".agent_definition_source_kind",
     "AgentDocument": ".agent_document",
-    "AgentDocumentBudget": ".agent_document_budget",
     "AgentDocumentDraft": ".agent_document_draft",
     "AgentImportEvalSuiteRequest": ".agent_import_eval_suite_request",
     "AgentImportImproveRequest": ".agent_import_improve_request",
@@ -374,30 +448,31 @@ _dynamic_imports: typing.Dict[str, str] = {
     "AgentImportRunnerRequest": ".agent_import_runner_request",
     "AgentImportSourceRefRequest": ".agent_import_source_ref_request",
     "AgentImportSourceRefRequestExportPolicy": ".agent_import_source_ref_request_export_policy",
-    "AgentSetup": ".agent_setup",
-    "AgentSetupPackages": ".agent_setup_packages",
-    "AgentSetupRepo": ".agent_setup_repo",
     "AgentSnippets": ".agent_snippets",
-    "AgentToolCapabilities": ".agent_tool_capabilities",
-    "AgentWebCapabilities": ".agent_web_capabilities",
-    "AgentWebCapabilitiesProvider": ".agent_web_capabilities_provider",
-    "AgentWebCapabilitiesProviderZero": ".agent_web_capabilities_provider_zero",
+    "AlwaysCap": ".always_cap",
     "AnswerRef": ".answer_ref",
     "ApprovalInput": ".approval_input",
     "ApprovalInputDecision": ".approval_input_decision",
     "AttachmentView": ".attachment_view",
     "AttachmentViewCleanupStatus": ".attachment_view_cleanup_status",
     "AttachmentViewStatus": ".attachment_view_status",
+    "AuthoredLearningChildOutput": ".authored_learning_child_output",
+    "AuthoredLearningReceipt": ".authored_learning_receipt",
+    "AuthoredLearningWorkflow": ".authored_learning_workflow",
+    "AuthoredToolProviderRef": ".authored_tool_provider_ref",
     "Authorization": ".authorization",
     "Availability": ".availability",
+    "Bar": ".bar",
     "BatchCounts": ".batch_counts",
     "BatchItem": ".batch_item",
     "BatchItemOutcome": ".batch_item_outcome",
     "BatchResult": ".batch_result",
     "Binding": ".binding",
     "BindingTransport": ".binding_transport",
-    "BuiltInToolSetting": ".built_in_tool_setting",
-    "BuiltInToolSettingPolicy": ".built_in_tool_setting_policy",
+    "BrowserRule": ".browser_rule",
+    "BrowserRuleList": ".browser_rule_list",
+    "BrowserRuleScope": ".browser_rule_scope",
+    "BrowserRuleState": ".browser_rule_state",
     "CapabilityCeilings": ".capability_ceilings",
     "CapabilityCeilingsDisallowedToolsItem": ".capability_ceilings_disallowed_tools_item",
     "CapabilityCeilingsView": ".capability_ceilings_view",
@@ -414,6 +489,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ChatCompletionMessage": ".chat_completion_message",
     "Check": ".check",
     "CheckAgent": ".check_agent",
+    "CheckChoice": ".check_choice",
     "CheckEnvironment": ".check_environment",
     "CheckEnvironmentKind": ".check_environment_kind",
     "CheckEnvironmentView": ".check_environment_view",
@@ -448,10 +524,10 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ConnectionTool": ".connection_tool",
     "ConnectionToolLoad": ".connection_tool_load",
     "ConnectionToolLoadStatus": ".connection_tool_load_status",
-    "ConnectionToolRef": ".connection_tool_ref",
     "ConnectionUsage": ".connection_usage",
+    "CostEstimate": ".cost_estimate",
+    "CostEstimateJudge": ".cost_estimate_judge",
     "CreateManagedAgentSourceRequest": ".create_managed_agent_source_request",
-    "CreateManagedAgentSourceRequestExportPolicy": ".create_managed_agent_source_request_export_policy",
     "CreateManagedAgentSourceRequestSourceKind": ".create_managed_agent_source_request_source_kind",
     "CreateParityRunRequest": ".create_parity_run_request",
     "CreatedManagedAgent": ".created_managed_agent",
@@ -464,6 +540,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "CreditBalanceState": ".credit_balance_state",
     "CreditTopUp": ".credit_top_up",
     "CreditTopUpStatus": ".credit_top_up_status",
+    "CriterionView": ".criterion_view",
     "Dataset": ".dataset",
     "DatasetCheckFailure": ".dataset_check_failure",
     "DatasetCheckGroup": ".dataset_check_group",
@@ -489,7 +566,6 @@ _dynamic_imports: typing.Dict[str, str] = {
     "DecisionUsage": ".decision_usage",
     "DefinitionChange": ".definition_change",
     "DefinitionRevision": ".definition_revision",
-    "DefinitionRevisionResult": ".definition_revision_result",
     "DefinitionRevisionView": ".definition_revision_view",
     "Delivery": ".delivery",
     "DeliveryStatus": ".delivery_status",
@@ -523,9 +599,11 @@ _dynamic_imports: typing.Dict[str, str] = {
     "EnvironmentView": ".environment_view",
     "EnvironmentViewStatus": ".environment_view_status",
     "ErrorResponse": ".error_response",
+    "ErrorResponseDetail": ".error_response_detail",
     "EventDeliveryRequest": ".event_delivery_request",
     "ExampleSource": ".example_source",
     "ExampleSourceKind": ".example_source_kind",
+    "ExcerptStep": ".excerpt_step",
     "ExecutionInputReceipt": ".execution_input_receipt",
     "ExecutionSessionPage": ".execution_session_page",
     "ExecutionSessionRecord": ".execution_session_record",
@@ -535,14 +613,31 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ExecutionTurnResponse": ".execution_turn_response",
     "ExecutionTurnRun": ".execution_turn_run",
     "ExecutionView": ".execution_view",
+    "FeedbackConfiguration": ".feedback_configuration",
+    "ForgetMemory": ".forget_memory",
     "FundingWait": ".funding_wait",
     "FundingWaitReason": ".funding_wait_reason",
     "GitCredential": ".git_credential",
+    "GraderDetail": ".grader_detail",
+    "GraderDetailStatus": ".grader_detail_status",
+    "GraderFileView": ".grader_file_view",
+    "GraderList": ".grader_list",
+    "GraderSummary": ".grader_summary",
+    "GraderSummaryStatus": ".grader_summary_status",
+    "GraderVersionView": ".grader_version_view",
+    "GraderVersionViewStatus": ".grader_version_view_status",
+    "GradingView": ".grading_view",
+    "GradingViewStatus": ".grading_view_status",
     "HarborTaskFiles": ".harbor_task_files",
+    "HeldResult": ".held_result",
+    "HeldResultOutcome": ".held_result_outcome",
     "HttpCredential": ".http_credential",
     "HttpOutput": ".http_output",
     "HttpReceipt": ".http_receipt",
     "HttpReceiptStatus": ".http_receipt_status",
+    "ImportFile": ".import_file",
+    "ImportReceipt": ".import_receipt",
+    "ImportReceiptEvaluationStatus": ".import_receipt_evaluation_status",
     "ImportedDocument": ".imported_document",
     "InitialHttpChannel": ".initial_http_channel",
     "InitialHttpChannelTransport": ".initial_http_channel_transport",
@@ -553,18 +648,41 @@ _dynamic_imports: typing.Dict[str, str] = {
     "InitialSlackRoomDestinationKind": ".initial_slack_room_destination_kind",
     "InitialSlackRoomTransport": ".initial_slack_room_transport",
     "Installation": ".installation",
+    "InvocationPolicy": ".invocation_policy",
+    "InvocationPolicyTools": ".invocation_policy_tools",
     "InvoiceBudget": ".invoice_budget",
+    "JudgeChoice": ".judge_choice",
+    "JudgeChoiceKind": ".judge_choice_kind",
+    "JudgeView": ".judge_view",
+    "JudgeViewKind": ".judge_view_kind",
     "JudgmentContext": ".judgment_context",
     "JudgmentTarget": ".judgment_target",
     "JudgmentTargetKind": ".judgment_target_kind",
+    "LabelCounts": ".label_counts",
+    "LabelQueue": ".label_queue",
+    "LabelView": ".label_view",
+    "LabelViewVerdict": ".label_view_verdict",
+    "Labeled": ".labeled",
+    "LabeledGraderVerdict": ".labeled_grader_verdict",
+    "LearningPendingTool": ".learning_pending_tool",
     "LiveHandle": ".live_handle",
+    "LiveLink": ".live_link",
     "ManagedAgentRead": ".managed_agent_read",
     "ManagedAgentView": ".managed_agent_view",
     "ManagedRun": ".managed_run",
     "ManagedRunMeasurementStatus": ".managed_run_measurement_status",
     "ManagedRunPause": ".managed_run_pause",
-    "MemoryToolSetting": ".memory_tool_setting",
-    "MemoryToolSettingPolicy": ".memory_tool_setting_policy",
+    "MemoryDream": ".memory_dream",
+    "MemoryDreamStatus": ".memory_dream_status",
+    "MemoryFile": ".memory_file",
+    "MemoryFileEntry": ".memory_file_entry",
+    "MemoryFiles": ".memory_files",
+    "MemoryForget": ".memory_forget",
+    "MemoryForgetStatus": ".memory_forget_status",
+    "MemoryForgets": ".memory_forgets",
+    "MemoryHead": ".memory_head",
+    "MemoryVersion": ".memory_version",
+    "MemoryVersions": ".memory_versions",
     "Mention": ".mention",
     "MentionResource": ".mention_resource",
     "Modalities": ".modalities",
@@ -592,11 +710,13 @@ _dynamic_imports: typing.Dict[str, str] = {
     "OutputPreviewState": ".output_preview_state",
     "OutputPreviewToolCallsItem": ".output_preview_tool_calls_item",
     "OutputPreviewToolCallsItemFunction": ".output_preview_tool_calls_item_function",
+    "PauseView": ".pause_view",
     "PersonalAccessConfiguration": ".personal_access_configuration",
     "PersonalChannelAction": ".personal_channel_action",
     "PersonalChannelApproval": ".personal_channel_approval",
     "PersonalChannelApprovalDecision": ".personal_channel_approval_decision",
     "PersonalChannelApprovalDecisionDecision": ".personal_channel_approval_decision_decision",
+    "PersonalChannelApprovalRule": ".personal_channel_approval_rule",
     "PersonalChannelConnection": ".personal_channel_connection",
     "PersonalChannelFile": ".personal_channel_file",
     "PersonalChannelFiles": ".personal_channel_files",
@@ -606,22 +726,32 @@ _dynamic_imports: typing.Dict[str, str] = {
     "PersonalSlackChallenge": ".personal_slack_challenge",
     "PersonalSlackStatus": ".personal_slack_status",
     "PersonalSlackStatusStatus": ".personal_slack_status_status",
+    "Playbook": ".playbook",
+    "PlaybookList": ".playbook_list",
     "ProcessObservation": ".process_observation",
     "ProcessObservationStatus": ".process_observation_status",
+    "ProductLearningEvidence": ".product_learning_evidence",
+    "ProductLearningEvidenceProvenance": ".product_learning_evidence_provenance",
     "PublicModel": ".public_model",
     "PublicModelObject": ".public_model_object",
+    "PublicationState": ".publication_state",
+    "PublicationStateStatus": ".publication_state_status",
+    "PublishAnyway": ".publish_anyway",
     "PublishedReasoning": ".published_reasoning",
     "PublishedReasoningDefaultEffort": ".published_reasoning_default_effort",
     "PublishedReasoningDefaultHistory": ".published_reasoning_default_history",
     "PublishedReasoningEffortsItem": ".published_reasoning_efforts_item",
     "PublishedReasoningHistoryItem": ".published_reasoning_history_item",
     "PublishedReasoningNormalizationValue": ".published_reasoning_normalization_value",
+    "QueueItem": ".queue_item",
     "ReadyInput": ".ready_input",
     "ReadyInputCapabilitiesItem": ".ready_input_capabilities_item",
     "ReadyInputProtocolVersion": ".ready_input_protocol_version",
+    "Receipt": ".receipt",
     "ReceiptInput": ".receipt_input",
     "ReceiptInputCapabilityName": ".receipt_input_capability_name",
     "ReceiptInputStatus": ".receipt_input_status",
+    "ReceiptLine": ".receipt_line",
     "ReceiptSummary": ".receipt_summary",
     "ReceiptView": ".receipt_view",
     "ReceiptViewStatus": ".receipt_view_status",
@@ -629,6 +759,11 @@ _dynamic_imports: typing.Dict[str, str] = {
     "RecordedCorrection": ".recorded_correction",
     "RecoverRunRequest": ".recover_run_request",
     "ReleaseActionRequest": ".release_action_request",
+    "ReleaseCheckOverride": ".release_check_override",
+    "ReleaseCheckReceipt": ".release_check_receipt",
+    "ReleaseCheckReceiptStatus": ".release_check_receipt_status",
+    "ReleaseCheckView": ".release_check_view",
+    "Remembered": ".remembered",
     "RenamedManagedAgent": ".renamed_managed_agent",
     "ReplaceCredentials": ".replace_credentials",
     "ResolvedMention": ".resolved_mention",
@@ -644,13 +779,24 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ResumeResults": ".resume_results",
     "ReviewedAccess": ".reviewed_access",
     "Room": ".room",
+    "RunComparison": ".run_comparison",
     "RunError": ".run_error",
     "RunErrorStage": ".run_error_stage",
     "RunEvent": ".run_event",
     "RunEvents": ".run_events",
+    "RunReport": ".run_report",
+    "RunReportStatus": ".run_report_status",
     "RunSpend": ".run_spend",
+    "RunStarted": ".run_started",
+    "RunTally": ".run_tally",
     "RunTranscript": ".run_transcript",
     "RunTranscriptEvidence": ".run_transcript_evidence",
+    "Sample": ".sample",
+    "SampleVerdict": ".sample_verdict",
+    "Samples": ".samples",
+    "SamplingDefaults": ".sampling_defaults",
+    "SavedLogin": ".saved_login",
+    "SavedLogins": ".saved_logins",
     "ScheduleDeleted": ".schedule_deleted",
     "ScheduleHistory": ".schedule_history",
     "ScheduleList": ".schedule_list",
@@ -665,16 +811,30 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ScopeType": ".scope_type",
     "ScoreAnswer": ".score_answer",
     "SessionSpend": ".session_spend",
+    "SkillSourceReceipt": ".skill_source_receipt",
     "SlackLink": ".slack_link",
     "SourceType": ".source_type",
-    "SpecialistReceipt": ".specialist_receipt",
-    "SpecialistThread": ".specialist_thread",
-    "SpecialistThreads": ".specialist_threads",
-    "StagedDefinitionRevision": ".staged_definition_revision",
     "StartedCheck": ".started_check",
     "StartedCheckOutcome": ".started_check_outcome",
     "StarterCheck": ".starter_check",
+    "TakeOverRequest": ".take_over_request",
     "TargetInput": ".target_input",
+    "Task": ".task",
+    "TaskApprovalReceipt": ".task_approval_receipt",
+    "TaskCancel": ".task_cancel",
+    "TaskChange": ".task_change",
+    "TaskChanges": ".task_changes",
+    "TaskIntegrationReceipt": ".task_integration_receipt",
+    "TaskIntegrationReceipts": ".task_integration_receipts",
+    "TaskModelTokens": ".task_model_tokens",
+    "TaskReceipt": ".task_receipt",
+    "TaskSettlement": ".task_settlement",
+    "TaskSettlementStatus": ".task_settlement_status",
+    "Tasks": ".tasks",
+    "TestReport": ".test_report",
+    "TestReportStatus": ".test_report_status",
+    "Tested": ".tested",
+    "TestedVerdict": ".tested_verdict",
     "ToolProviderRefRequest": ".tool_provider_ref_request",
     "ToolSkillSourceRequest": ".tool_skill_source_request",
     "ToolkitCategory": ".toolkit_category",
@@ -736,13 +896,7 @@ def __dir__():
 
 
 __all__ = [
-    "AgentDefinition",
-    "AgentDefinitionSchema",
-    "AgentDefinitionSource",
-    "AgentDefinitionSourceEncoding",
-    "AgentDefinitionSourceKind",
     "AgentDocument",
-    "AgentDocumentBudget",
     "AgentDocumentDraft",
     "AgentImportEvalSuiteRequest",
     "AgentImportImproveRequest",
@@ -750,30 +904,31 @@ __all__ = [
     "AgentImportRunnerRequest",
     "AgentImportSourceRefRequest",
     "AgentImportSourceRefRequestExportPolicy",
-    "AgentSetup",
-    "AgentSetupPackages",
-    "AgentSetupRepo",
     "AgentSnippets",
-    "AgentToolCapabilities",
-    "AgentWebCapabilities",
-    "AgentWebCapabilitiesProvider",
-    "AgentWebCapabilitiesProviderZero",
+    "AlwaysCap",
     "AnswerRef",
     "ApprovalInput",
     "ApprovalInputDecision",
     "AttachmentView",
     "AttachmentViewCleanupStatus",
     "AttachmentViewStatus",
+    "AuthoredLearningChildOutput",
+    "AuthoredLearningReceipt",
+    "AuthoredLearningWorkflow",
+    "AuthoredToolProviderRef",
     "Authorization",
     "Availability",
+    "Bar",
     "BatchCounts",
     "BatchItem",
     "BatchItemOutcome",
     "BatchResult",
     "Binding",
     "BindingTransport",
-    "BuiltInToolSetting",
-    "BuiltInToolSettingPolicy",
+    "BrowserRule",
+    "BrowserRuleList",
+    "BrowserRuleScope",
+    "BrowserRuleState",
     "CapabilityCeilings",
     "CapabilityCeilingsDisallowedToolsItem",
     "CapabilityCeilingsView",
@@ -790,6 +945,7 @@ __all__ = [
     "ChatCompletionMessage",
     "Check",
     "CheckAgent",
+    "CheckChoice",
     "CheckEnvironment",
     "CheckEnvironmentKind",
     "CheckEnvironmentView",
@@ -824,10 +980,10 @@ __all__ = [
     "ConnectionTool",
     "ConnectionToolLoad",
     "ConnectionToolLoadStatus",
-    "ConnectionToolRef",
     "ConnectionUsage",
+    "CostEstimate",
+    "CostEstimateJudge",
     "CreateManagedAgentSourceRequest",
-    "CreateManagedAgentSourceRequestExportPolicy",
     "CreateManagedAgentSourceRequestSourceKind",
     "CreateParityRunRequest",
     "CreatedManagedAgent",
@@ -840,6 +996,7 @@ __all__ = [
     "CreditBalanceState",
     "CreditTopUp",
     "CreditTopUpStatus",
+    "CriterionView",
     "Dataset",
     "DatasetCheckFailure",
     "DatasetCheckGroup",
@@ -865,7 +1022,6 @@ __all__ = [
     "DecisionUsage",
     "DefinitionChange",
     "DefinitionRevision",
-    "DefinitionRevisionResult",
     "DefinitionRevisionView",
     "Delivery",
     "DeliveryStatus",
@@ -899,9 +1055,11 @@ __all__ = [
     "EnvironmentView",
     "EnvironmentViewStatus",
     "ErrorResponse",
+    "ErrorResponseDetail",
     "EventDeliveryRequest",
     "ExampleSource",
     "ExampleSourceKind",
+    "ExcerptStep",
     "ExecutionInputReceipt",
     "ExecutionSessionPage",
     "ExecutionSessionRecord",
@@ -911,14 +1069,31 @@ __all__ = [
     "ExecutionTurnResponse",
     "ExecutionTurnRun",
     "ExecutionView",
+    "FeedbackConfiguration",
+    "ForgetMemory",
     "FundingWait",
     "FundingWaitReason",
     "GitCredential",
+    "GraderDetail",
+    "GraderDetailStatus",
+    "GraderFileView",
+    "GraderList",
+    "GraderSummary",
+    "GraderSummaryStatus",
+    "GraderVersionView",
+    "GraderVersionViewStatus",
+    "GradingView",
+    "GradingViewStatus",
     "HarborTaskFiles",
+    "HeldResult",
+    "HeldResultOutcome",
     "HttpCredential",
     "HttpOutput",
     "HttpReceipt",
     "HttpReceiptStatus",
+    "ImportFile",
+    "ImportReceipt",
+    "ImportReceiptEvaluationStatus",
     "ImportedDocument",
     "InitialHttpChannel",
     "InitialHttpChannelTransport",
@@ -929,18 +1104,41 @@ __all__ = [
     "InitialSlackRoomDestinationKind",
     "InitialSlackRoomTransport",
     "Installation",
+    "InvocationPolicy",
+    "InvocationPolicyTools",
     "InvoiceBudget",
+    "JudgeChoice",
+    "JudgeChoiceKind",
+    "JudgeView",
+    "JudgeViewKind",
     "JudgmentContext",
     "JudgmentTarget",
     "JudgmentTargetKind",
+    "LabelCounts",
+    "LabelQueue",
+    "LabelView",
+    "LabelViewVerdict",
+    "Labeled",
+    "LabeledGraderVerdict",
+    "LearningPendingTool",
     "LiveHandle",
+    "LiveLink",
     "ManagedAgentRead",
     "ManagedAgentView",
     "ManagedRun",
     "ManagedRunMeasurementStatus",
     "ManagedRunPause",
-    "MemoryToolSetting",
-    "MemoryToolSettingPolicy",
+    "MemoryDream",
+    "MemoryDreamStatus",
+    "MemoryFile",
+    "MemoryFileEntry",
+    "MemoryFiles",
+    "MemoryForget",
+    "MemoryForgetStatus",
+    "MemoryForgets",
+    "MemoryHead",
+    "MemoryVersion",
+    "MemoryVersions",
     "Mention",
     "MentionResource",
     "Modalities",
@@ -968,11 +1166,13 @@ __all__ = [
     "OutputPreviewState",
     "OutputPreviewToolCallsItem",
     "OutputPreviewToolCallsItemFunction",
+    "PauseView",
     "PersonalAccessConfiguration",
     "PersonalChannelAction",
     "PersonalChannelApproval",
     "PersonalChannelApprovalDecision",
     "PersonalChannelApprovalDecisionDecision",
+    "PersonalChannelApprovalRule",
     "PersonalChannelConnection",
     "PersonalChannelFile",
     "PersonalChannelFiles",
@@ -982,22 +1182,32 @@ __all__ = [
     "PersonalSlackChallenge",
     "PersonalSlackStatus",
     "PersonalSlackStatusStatus",
+    "Playbook",
+    "PlaybookList",
     "ProcessObservation",
     "ProcessObservationStatus",
+    "ProductLearningEvidence",
+    "ProductLearningEvidenceProvenance",
     "PublicModel",
     "PublicModelObject",
+    "PublicationState",
+    "PublicationStateStatus",
+    "PublishAnyway",
     "PublishedReasoning",
     "PublishedReasoningDefaultEffort",
     "PublishedReasoningDefaultHistory",
     "PublishedReasoningEffortsItem",
     "PublishedReasoningHistoryItem",
     "PublishedReasoningNormalizationValue",
+    "QueueItem",
     "ReadyInput",
     "ReadyInputCapabilitiesItem",
     "ReadyInputProtocolVersion",
+    "Receipt",
     "ReceiptInput",
     "ReceiptInputCapabilityName",
     "ReceiptInputStatus",
+    "ReceiptLine",
     "ReceiptSummary",
     "ReceiptView",
     "ReceiptViewStatus",
@@ -1005,6 +1215,11 @@ __all__ = [
     "RecordedCorrection",
     "RecoverRunRequest",
     "ReleaseActionRequest",
+    "ReleaseCheckOverride",
+    "ReleaseCheckReceipt",
+    "ReleaseCheckReceiptStatus",
+    "ReleaseCheckView",
+    "Remembered",
     "RenamedManagedAgent",
     "ReplaceCredentials",
     "ResolvedMention",
@@ -1020,13 +1235,24 @@ __all__ = [
     "ResumeResults",
     "ReviewedAccess",
     "Room",
+    "RunComparison",
     "RunError",
     "RunErrorStage",
     "RunEvent",
     "RunEvents",
+    "RunReport",
+    "RunReportStatus",
     "RunSpend",
+    "RunStarted",
+    "RunTally",
     "RunTranscript",
     "RunTranscriptEvidence",
+    "Sample",
+    "SampleVerdict",
+    "Samples",
+    "SamplingDefaults",
+    "SavedLogin",
+    "SavedLogins",
     "ScheduleDeleted",
     "ScheduleHistory",
     "ScheduleList",
@@ -1041,16 +1267,30 @@ __all__ = [
     "ScopeType",
     "ScoreAnswer",
     "SessionSpend",
+    "SkillSourceReceipt",
     "SlackLink",
     "SourceType",
-    "SpecialistReceipt",
-    "SpecialistThread",
-    "SpecialistThreads",
-    "StagedDefinitionRevision",
     "StartedCheck",
     "StartedCheckOutcome",
     "StarterCheck",
+    "TakeOverRequest",
     "TargetInput",
+    "Task",
+    "TaskApprovalReceipt",
+    "TaskCancel",
+    "TaskChange",
+    "TaskChanges",
+    "TaskIntegrationReceipt",
+    "TaskIntegrationReceipts",
+    "TaskModelTokens",
+    "TaskReceipt",
+    "TaskSettlement",
+    "TaskSettlementStatus",
+    "Tasks",
+    "TestReport",
+    "TestReportStatus",
+    "Tested",
+    "TestedVerdict",
     "ToolProviderRefRequest",
     "ToolSkillSourceRequest",
     "ToolkitCategory",

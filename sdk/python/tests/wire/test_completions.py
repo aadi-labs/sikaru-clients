@@ -6,7 +6,6 @@ def test_completions_create_stream() -> None:
     test_id = "completions.create_stream.0"
     client = get_client(test_id)
     for _ in client.completions.create_stream(
-        model="model",
         prompt="prompt",
     ):
         pass
@@ -19,7 +18,6 @@ def test_completions_create() -> None:
     test_id = "completions.create.0"
     client = get_client(test_id)
     client.completions.create(
-        model="model",
         prompt="prompt",
     )
     verify_request_count(test_id, "POST", "/v1/completions", None, 1)

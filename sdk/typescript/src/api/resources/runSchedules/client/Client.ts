@@ -162,21 +162,146 @@ export class RunSchedulesClient {
      * @throws {@link errors.SikaruTimeoutError}
      *
      * @example
-     *     await client.runSchedules.deleteSchedule("project_id", "schedule_id")
+     *     await client.runSchedules.inspectSchedule("project_id", "schedule_id")
      */
-    public deleteSchedule(project_id: string, schedule_id: string, requestOptions?: RunSchedulesClient.RequestOptions): core.HttpResponsePromise<Sikaru.ScheduleDeleted> {
-        return core.HttpResponsePromise.fromPromise(this.__deleteSchedule(project_id, schedule_id, requestOptions));
+    public inspectSchedule(project_id: string, schedule_id: string, requestOptions?: RunSchedulesClient.RequestOptions): core.HttpResponsePromise<Sikaru.ScheduleResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__inspectSchedule(project_id, schedule_id, requestOptions));
     }
 
-    private async __deleteSchedule(project_id: string, schedule_id: string, requestOptions?: RunSchedulesClient.RequestOptions): Promise<core.WithRawResponse<Sikaru.ScheduleDeleted>> {
+    private async __inspectSchedule(project_id: string, schedule_id: string, requestOptions?: RunSchedulesClient.RequestOptions): Promise<core.WithRawResponse<Sikaru.ScheduleResponse>> {
         const _metadata: core.EndpointMetadata = { security: [{ BearerAuth: [] }] };
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest({ endpointMetadata: _metadata });
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(_authRequest.headers, this._options?.headers, requestOptions?.headers);
+        const _response = await core.fetcher({
+            url: core.url.join(await core.Supplier.get(this._options.baseUrl) ?? (await core.Supplier.get(this._options.environment) ?? environments.SikaruEnvironment.Default), `v1/projects/${core.url.encodePathParam(project_id)}/run-schedules/${core.url.encodePathParam(schedule_id)}`),
+            method: "GET",
+            headers: _headers,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            endpointMetadata: _metadata,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging
+        });
+        if (_response.ok) {
+            return { data: _response.body as Sikaru.ScheduleResponse, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401: throw new Sikaru.UnauthorizedError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 403: throw new Sikaru.ForbiddenError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 404: throw new Sikaru.NotFoundError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as unknown, _response.rawResponse);
+                default: throw new errors.SikaruError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.body,
+                    rawResponse: _response.rawResponse
+                });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/v1/projects/{project_id}/run-schedules/{schedule_id}");
+    }
+
+    /**
+     * @param {string} project_id
+     * @param {string} schedule_id
+     * @param {Sikaru.ScheduleUpdate} request
+     * @param {RunSchedulesClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Sikaru.UnauthorizedError}
+     * @throws {@link Sikaru.ForbiddenError}
+     * @throws {@link Sikaru.NotFoundError}
+     * @throws {@link Sikaru.UnprocessableEntityError}
+     * @throws {@link errors.SikaruError}
+     * @throws {@link errors.SikaruTimeoutError}
+     *
+     * @example
+     *     await client.runSchedules.updateSchedule("project_id", "schedule_id", {
+     *         expected_revision: 1,
+     *         idempotency_key: "idempotency_key"
+     *     })
+     */
+    public updateSchedule(project_id: string, schedule_id: string, request: Sikaru.ScheduleUpdate, requestOptions?: RunSchedulesClient.RequestOptions): core.HttpResponsePromise<Sikaru.ScheduleResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__updateSchedule(project_id, schedule_id, request, requestOptions));
+    }
+
+    private async __updateSchedule(project_id: string, schedule_id: string, request: Sikaru.ScheduleUpdate, requestOptions?: RunSchedulesClient.RequestOptions): Promise<core.WithRawResponse<Sikaru.ScheduleResponse>> {
+        const _metadata: core.EndpointMetadata = { security: [{ BearerAuth: [] }] };
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest({ endpointMetadata: _metadata });
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(_authRequest.headers, this._options?.headers, requestOptions?.headers);
+        const _response = await core.fetcher({
+            url: core.url.join(await core.Supplier.get(this._options.baseUrl) ?? (await core.Supplier.get(this._options.environment) ?? environments.SikaruEnvironment.Default), `v1/projects/${core.url.encodePathParam(project_id)}/run-schedules/${core.url.encodePathParam(schedule_id)}`),
+            method: "PUT",
+            headers: _headers,
+            contentType: "application/json",
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            requestType: "json",
+            body: mergeAdditionalBodyParameters(request, requestOptions?.additionalBodyParameters),
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: 0,
+            abortSignal: requestOptions?.abortSignal,
+            endpointMetadata: _metadata,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging
+        });
+        if (_response.ok) {
+            return { data: _response.body as Sikaru.ScheduleResponse, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401: throw new Sikaru.UnauthorizedError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 403: throw new Sikaru.ForbiddenError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 404: throw new Sikaru.NotFoundError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as unknown, _response.rawResponse);
+                default: throw new errors.SikaruError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.body,
+                    rawResponse: _response.rawResponse
+                });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "PUT", "/v1/projects/{project_id}/run-schedules/{schedule_id}");
+    }
+
+    /**
+     * @param {string} project_id
+     * @param {string} schedule_id
+     * @param {Sikaru.DeleteScheduleRunSchedulesRequest} request
+     * @param {RunSchedulesClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Sikaru.UnauthorizedError}
+     * @throws {@link Sikaru.ForbiddenError}
+     * @throws {@link Sikaru.NotFoundError}
+     * @throws {@link Sikaru.UnprocessableEntityError}
+     * @throws {@link errors.SikaruError}
+     * @throws {@link errors.SikaruTimeoutError}
+     *
+     * @example
+     *     await client.runSchedules.deleteSchedule("project_id", "schedule_id")
+     */
+    public deleteSchedule(project_id: string, schedule_id: string, request: Sikaru.DeleteScheduleRunSchedulesRequest = {}, requestOptions?: RunSchedulesClient.RequestOptions): core.HttpResponsePromise<Sikaru.ScheduleDeleted> {
+        return core.HttpResponsePromise.fromPromise(this.__deleteSchedule(project_id, schedule_id, request, requestOptions));
+    }
+
+    private async __deleteSchedule(project_id: string, schedule_id: string, request: Sikaru.DeleteScheduleRunSchedulesRequest = {}, requestOptions?: RunSchedulesClient.RequestOptions): Promise<core.WithRawResponse<Sikaru.ScheduleDeleted>> {
+        const _metadata: core.EndpointMetadata = { security: [{ BearerAuth: [] }] };
+        const { "expected_revision": expectedRevision, "idempotency_key": idempotencyKey } = request;
+        const _queryParams: Record<string, unknown> = {
+            expected_revision: expectedRevision,
+            idempotency_key: idempotencyKey
+        };
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest({ endpointMetadata: _metadata });
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(_authRequest.headers, this._options?.headers, requestOptions?.headers);
         const _response = await core.fetcher({
             url: core.url.join(await core.Supplier.get(this._options.baseUrl) ?? (await core.Supplier.get(this._options.environment) ?? environments.SikaruEnvironment.Default), `v1/projects/${core.url.encodePathParam(project_id)}/run-schedules/${core.url.encodePathParam(schedule_id)}`),
             method: "DELETE",
             headers: _headers,
-            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            queryString: core.url.queryBuilder().addMany(_queryParams).mergeAdditional(requestOptions?.queryParams).build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: 0,
             abortSignal: requestOptions?.abortSignal,

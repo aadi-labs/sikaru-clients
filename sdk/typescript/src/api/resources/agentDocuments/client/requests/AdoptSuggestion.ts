@@ -3,9 +3,9 @@
 /**
  * @example
  *     {
- *         expectedRevision: 1
+ *         baseRevision: 1
  *     }
  */
 export interface AdoptSuggestion {
-    expectedRevision: number;
+    baseRevision: number;
 }

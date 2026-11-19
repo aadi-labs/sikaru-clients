@@ -2,23 +2,4 @@
 
 import typing
 
-CreateManagedAgentSourceRequestSourceKind = typing.Union[
-    typing.Literal[
-        "agent_document",
-        "workflow_json",
-        "langgraph",
-        "n8n_json",
-        "yaml_dag",
-        "source_bundle",
-        "repo_ref",
-        "container_ref",
-        "adapter_endpoint",
-        "prompt_bundle",
-        "skill_tree",
-        "memory_profile",
-        "eval_suite",
-        "trace_bundle",
-        "natural_language",
-    ],
-    typing.Any,
-]
+CreateManagedAgentSourceRequestSourceKind = typing.Union[typing.Literal["agent_document"], typing.Any]

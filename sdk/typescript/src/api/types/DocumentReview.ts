@@ -13,8 +13,11 @@ export interface DocumentReview {
     diff: string;
     document: string;
     earlierSessions: Sikaru.EarlierDocumentSession[];
+    files?: Record<string, string> | undefined;
     harnessVersionId: string | null;
     liveVersionId: string | null;
+    next?: (string | null) | undefined;
+    reconcilePlan?: Record<string, unknown> | undefined;
     revision: number;
     validation: Sikaru.DocumentValidationView;
 }

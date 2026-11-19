@@ -5,8 +5,7 @@
  *     {
  *         messages: [{
  *                 "key": "value"
- *             }],
- *         model: "model"
+ *             }]
  *     }
  */
 export interface ChatCompletionCreateParams {
@@ -23,7 +22,7 @@ export interface ChatCompletionCreateParams {
     metadata?: Record<string, unknown> | null;
     min_p?: number | null;
     modalities?: string[] | null;
-    model: string;
+    model?: string | null;
     models?: string[] | null;
     moderation?: Record<string, unknown> | null;
     n?: number | null;

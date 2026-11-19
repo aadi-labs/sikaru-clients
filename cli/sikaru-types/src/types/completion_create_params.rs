@@ -18,8 +18,8 @@ pub struct CompletionCreateParams {
     pub max_tokens: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub min_p: Option<f64>,
-    #[serde(default)]
-    pub model: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub models: Option<Vec<String>>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -234,7 +234,6 @@ impl CompletionCreateParamsBuilder {
 
     /// Consumes the builder and constructs a [`CompletionCreateParams`].
     /// This method will fail if any of the following fields are not set:
-    /// - [`model`](CompletionCreateParamsBuilder::model)
     /// - [`prompt`](CompletionCreateParamsBuilder::prompt)
     /// - [`stream`](CompletionCreateParamsBuilder::stream)
     pub fn build(self) -> Result<CompletionCreateParams, BuildError> {
@@ -246,7 +245,7 @@ impl CompletionCreateParamsBuilder {
             logprobs: self.logprobs,
             max_tokens: self.max_tokens,
             min_p: self.min_p,
-            model: self.model.ok_or_else(|| BuildError::missing_field("model"))?,
+            model: self.model,
             models: self.models,
             n: self.n,
             presence_penalty: self.presence_penalty,

@@ -2,16 +2,25 @@
 
 export interface ScheduleRecord {
     agentId?: (string | null) | undefined;
+    at?: (number | null) | undefined;
+    callbackUrl?: (string | null) | undefined;
     creator?: (string | null) | undefined;
     cron?: (string | null) | undefined;
+    declaredPath?: (string | null) | undefined;
+    deleted?: boolean | undefined;
+    destination?: string | undefined;
     environment?: (string | null) | undefined;
+    exhausted?: boolean | undefined;
     id: string;
+    input?: (Record<string, unknown> | null) | undefined;
     intervalSeconds?: (number | null) | undefined;
     nextAt?: (number | null) | undefined;
     paused?: (boolean | null) | undefined;
+    revision?: number | undefined;
     sessionId?: (string | null) | undefined;
     sessionMode: ScheduleRecord.SessionMode;
     timezone: string;
+    toolProviderId?: (string | null) | undefined;
 }
 
 export namespace ScheduleRecord {

@@ -2,10 +2,12 @@ pub use crate::prelude::*;
 #[allow(unused_imports)]
 use super::*;
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, PartialEq)]
 pub struct DocumentInput {
-    #[serde(default)]
-    pub document: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub document: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub files: Option<HashMap<String, Option<String>>>,
 }
 
 impl DocumentInput {
@@ -18,6 +20,7 @@ impl DocumentInput {
 #[non_exhaustive]
 pub struct DocumentInputBuilder {
     document: Option<String>,
+    files: Option<HashMap<String, Option<String>>>,
 }
 
 impl DocumentInputBuilder {
@@ -26,12 +29,16 @@ impl DocumentInputBuilder {
         self
     }
 
+    pub fn files(mut self, value: HashMap<String, Option<String>>) -> Self {
+        self.files = Some(value);
+        self
+    }
+
     /// Consumes the builder and constructs a [`DocumentInput`].
-    /// This method will fail if any of the following fields are not set:
-    /// - [`document`](DocumentInputBuilder::document)
     pub fn build(self) -> Result<DocumentInput, BuildError> {
         Ok(DocumentInput {
-            document: self.document.ok_or_else(|| BuildError::missing_field("document"))?,
+            document: self.document,
+            files: self.files,
         })
     }
 }

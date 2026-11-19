@@ -1,6 +1,6 @@
 {
     "name": "@aadi-labs/sikaru-sdk",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "private": false,
     "type": "commonjs",
     "main": "./dist/cjs/index.js",
@@ -116,6 +116,17 @@
                 "default": "./dist/cjs/api/resources/agentImports/exports.js"
             },
             "default": "./dist/cjs/api/resources/agentImports/exports.js"
+        },
+        "./graders": {
+            "import": {
+                "types": "./dist/esm/api/resources/graders/exports.d.mts",
+                "default": "./dist/esm/api/resources/graders/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/api/resources/graders/exports.d.ts",
+                "default": "./dist/cjs/api/resources/graders/exports.js"
+            },
+            "default": "./dist/cjs/api/resources/graders/exports.js"
         },
         "./agents": {
             "import": {
@@ -370,16 +381,16 @@
             },
             "default": "./dist/cjs/api/resources/executionSessions/exports.js"
         },
-        "./specialists": {
+        "./tasks": {
             "import": {
-                "types": "./dist/esm/api/resources/specialists/exports.d.mts",
-                "default": "./dist/esm/api/resources/specialists/exports.mjs"
+                "types": "./dist/esm/api/resources/tasks/exports.d.mts",
+                "default": "./dist/esm/api/resources/tasks/exports.mjs"
             },
             "require": {
-                "types": "./dist/cjs/api/resources/specialists/exports.d.ts",
-                "default": "./dist/cjs/api/resources/specialists/exports.js"
+                "types": "./dist/cjs/api/resources/tasks/exports.d.ts",
+                "default": "./dist/cjs/api/resources/tasks/exports.js"
             },
-            "default": "./dist/cjs/api/resources/specialists/exports.js"
+            "default": "./dist/cjs/api/resources/tasks/exports.js"
         },
         "./executions": {
             "import": {
@@ -458,17 +469,6 @@
             },
             "default": "./dist/cjs/api/resources/issueClusters/exports.js"
         },
-        "./judgeAlignment": {
-            "import": {
-                "types": "./dist/esm/api/resources/judgeAlignment/exports.d.mts",
-                "default": "./dist/esm/api/resources/judgeAlignment/exports.mjs"
-            },
-            "require": {
-                "types": "./dist/cjs/api/resources/judgeAlignment/exports.d.ts",
-                "default": "./dist/cjs/api/resources/judgeAlignment/exports.js"
-            },
-            "default": "./dist/cjs/api/resources/judgeAlignment/exports.js"
-        },
         "./managedAgents": {
             "import": {
                 "types": "./dist/esm/api/resources/managedAgents/exports.d.mts",
@@ -502,16 +502,16 @@
             },
             "default": "./dist/cjs/api/resources/endUsers/exports.js"
         },
-        "./memoryRegistry": {
+        "./memory": {
             "import": {
-                "types": "./dist/esm/api/resources/memoryRegistry/exports.d.mts",
-                "default": "./dist/esm/api/resources/memoryRegistry/exports.mjs"
+                "types": "./dist/esm/api/resources/memory/exports.d.mts",
+                "default": "./dist/esm/api/resources/memory/exports.mjs"
             },
             "require": {
-                "types": "./dist/cjs/api/resources/memoryRegistry/exports.d.ts",
-                "default": "./dist/cjs/api/resources/memoryRegistry/exports.js"
+                "types": "./dist/cjs/api/resources/memory/exports.d.ts",
+                "default": "./dist/cjs/api/resources/memory/exports.js"
             },
-            "default": "./dist/cjs/api/resources/memoryRegistry/exports.js"
+            "default": "./dist/cjs/api/resources/memory/exports.js"
         },
         "./modelGateway": {
             "import": {
@@ -534,17 +534,6 @@
                 "default": "./dist/cjs/api/resources/modelSettings/exports.js"
             },
             "default": "./dist/cjs/api/resources/modelSettings/exports.js"
-        },
-        "./onlineEvaluations": {
-            "import": {
-                "types": "./dist/esm/api/resources/onlineEvaluations/exports.d.mts",
-                "default": "./dist/esm/api/resources/onlineEvaluations/exports.mjs"
-            },
-            "require": {
-                "types": "./dist/cjs/api/resources/onlineEvaluations/exports.d.ts",
-                "default": "./dist/cjs/api/resources/onlineEvaluations/exports.js"
-            },
-            "default": "./dist/cjs/api/resources/onlineEvaluations/exports.js"
         },
         "./releaseWatches": {
             "import": {

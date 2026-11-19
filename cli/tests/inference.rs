@@ -89,6 +89,8 @@ async fn chat_sends_one_request_by_default_and_prints_the_reply_and_usage() {
             "Be brief",
             "-t",
             "0.5",
+            "--top-p",
+            "0.9",
             "--max-tokens",
             "100",
             "--reasoning-effort",
@@ -105,6 +107,7 @@ async fn chat_sends_one_request_by_default_and_prints_the_reply_and_usage() {
     assert_eq!(body["model"], "m");
     assert_eq!(body["max_tokens"], 100);
     assert_eq!(body["temperature"], 0.5);
+    assert_eq!(body["top_p"], 0.9);
     assert_eq!(body["reasoning_effort"], "max");
     assert_eq!(
         body["messages"],
@@ -254,7 +257,10 @@ fn card(id: &str, name: &str, input: Value, output: f64, reasoning: bool) -> Val
             "modalities": {"input": ["text", "image"], "output": ["text"]},
             "endpoints": ["chat"], "supports_reasoning": reasoning,
             "reasoning": if reasoning { effort } else { Value::Null },
-            "supported_parameters": ["max_tokens", "reasoning_effort", "temperature"]}})
+            "supported_parameters": ["max_tokens", "reasoning_effort", "temperature"],
+            "sampling_defaults": if reasoning {
+                json!({"temperature": 1.0, "top_p": 0.95, "top_k": null, "min_p": null})
+            } else { Value::Null }}})
 }
 
 fn catalog() -> Vec<Value> {
@@ -394,6 +400,7 @@ async fn one_model_describes_specs_and_effort_normalization() {
         "input modalities: text, image",
         "endpoints: chat",
         "parameters: max_tokens, reasoning_effort, temperature",
+        "sampling defaults: temperature=1.0, top_p=0.95",
         "reasoning efforts: low, high, max (default max)",
         "max      -> max",
         "medium   -> low",
@@ -417,6 +424,7 @@ async fn a_model_without_reasoning_says_so() {
     assert!(output.status.success(), "{}", text(&output.stderr));
     let shown = text(&output.stdout);
     assert!(shown.contains("reasoning: not supported"), "{shown}");
+    assert!(shown.contains("sampling defaults: provider default"), "{shown}");
     assert!(!shown.contains("normalization"), "{shown}");
 }
 
@@ -481,6 +489,7 @@ fn inference_help_lists_chat_and_catalog_flags() {
     for flag in [
         "-s, --system",
         "-t, --temperature",
+        "--top-p",
         "--max-tokens",
         "--reasoning-effort",
         "--stream",

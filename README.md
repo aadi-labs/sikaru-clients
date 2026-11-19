@@ -60,7 +60,7 @@ under each product.
 | [`sdk/python`](sdk/python) | Python SDK (`sikaru_sdk` on PyPI) |
 | [`sdk/typescript`](sdk/typescript) | TypeScript SDK, published as `@aadi-labs/sikaru-sdk` |
 | [`cli`](cli) | The `sikaru` command-line tool |
-| [`shared`](shared) | Authoring companions and cross-language contracts |
+| [`shared`](shared) | Cross-language contracts |
 | [`examples`](examples) | Runnable examples for the Python SDK, the TypeScript SDK and the CLI |
 | [`scripts`](scripts) | Release and CI checks |
 
@@ -69,9 +69,6 @@ than editing them by hand.
 
 ## Shared
 
-[`shared/authoring`](shared/authoring/README.md) packages an agent's source files
-(instructions, skills, assets, eval notes) from a `sikaru.json` manifest, in Python and
-Rust, ready to send through the SDK or CLI.
 [`shared/compute-contracts`](shared/compute-contracts/README.md) holds the contracts
 that keep the Python, TypeScript and CLI clients consistent when you attach your own
 compute.

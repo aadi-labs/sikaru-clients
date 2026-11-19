@@ -4,6 +4,18 @@ use fern_cli_sdk::app::CliApp;
 #[path = "compute.rs"]
 mod compute;
 
+#[path = "agent_transport.rs"]
+mod agent_transport;
+
+#[path = "agent_folder.rs"]
+mod agent_folder;
+
+#[path = "agent_publish.rs"]
+mod agent_publish;
+
+#[path = "agent_grader.rs"]
+mod agent_grader;
+
 #[path = "agent.rs"]
 mod agent;
 
@@ -20,6 +32,9 @@ mod environment;
 #[path = "traces.rs"]
 mod traces;
 
+#[path = "trajectories.rs"]
+mod trajectories;
+
 #[path = "user_auth.rs"]
 mod user_auth;
 
@@ -35,7 +50,7 @@ mod account;
 #[path = "credits.rs"]
 mod credits;
 
-const DESCRIPTION: &str = "Sikaru: model inference, decisions, managed agents, evals, traces and environments. Run a product with --help to see its commands; every API operation stays callable under its product.";
+const DESCRIPTION: &str = "Sikaru: model inference, decisions, managed agents, evals, traces, trajectories and environments. Run a product with --help to see its commands; every API operation stays callable under its product.";
 
 pub fn register(app: CliApp) -> CliApp {
     account::apply_saved_project();
@@ -44,6 +59,7 @@ pub fn register(app: CliApp) -> CliApp {
         eval::install,
         environment::install,
         traces::install,
+        trajectories::install,
     ]
     .into_iter()
     .fold(compute::install(user_auth::install(app)), |app, install| {

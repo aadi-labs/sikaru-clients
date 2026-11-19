@@ -340,6 +340,52 @@ class ChannelsClient:
         _response = self._raw_client.issue_http_credential(project_id, binding_id, request_options=request_options)
         return _response.data
 
+    def configure_feedback(
+        self,
+        project_id: str,
+        binding_id: str,
+        *,
+        emojis: typing.Optional[typing.Dict[str, str]] = OMIT,
+        enabled: typing.Optional[bool] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> Binding:
+        """
+        Parameters
+        ----------
+        project_id : str
+
+        binding_id : str
+
+        emojis : typing.Optional[typing.Dict[str, str]]
+
+        enabled : typing.Optional[bool]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        Binding
+            Successful Response
+
+        Examples
+        --------
+        from sikaru_sdk import SikaruApi
+
+        client = SikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+        client.channels.configure_feedback(
+            project_id="project_id",
+            binding_id="binding_id",
+        )
+        """
+        _response = self._raw_client.configure_feedback(
+            project_id, binding_id, emojis=emojis, enabled=enabled, request_options=request_options
+        )
+        return _response.data
+
     def configure_personal_access(
         self,
         project_id: str,
@@ -1606,6 +1652,60 @@ class AsyncChannelsClient:
         """
         _response = await self._raw_client.issue_http_credential(
             project_id, binding_id, request_options=request_options
+        )
+        return _response.data
+
+    async def configure_feedback(
+        self,
+        project_id: str,
+        binding_id: str,
+        *,
+        emojis: typing.Optional[typing.Dict[str, str]] = OMIT,
+        enabled: typing.Optional[bool] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> Binding:
+        """
+        Parameters
+        ----------
+        project_id : str
+
+        binding_id : str
+
+        emojis : typing.Optional[typing.Dict[str, str]]
+
+        enabled : typing.Optional[bool]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        Binding
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sikaru_sdk import AsyncSikaruApi
+
+        client = AsyncSikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+
+
+        async def main() -> None:
+            await client.channels.configure_feedback(
+                project_id="project_id",
+                binding_id="binding_id",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.configure_feedback(
+            project_id, binding_id, emojis=emojis, enabled=enabled, request_options=request_options
         )
         return _response.data
 

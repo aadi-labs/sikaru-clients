@@ -2,14 +2,20 @@ pub use crate::prelude::*;
 #[allow(unused_imports)]
 use super::*;
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct Binding {
     #[serde(default)]
     pub agent_id: String,
     #[serde(skip_serializing_if = "Option::is_none")]
+    pub declared_path: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub destination_id: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub destination_kind: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub feedback: Option<FeedbackConfiguration>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub feedback_notice: Option<String>,
     #[serde(default)]
     pub generation: i64,
     #[serde(default)]
@@ -45,8 +51,11 @@ impl Binding {
 #[non_exhaustive]
 pub struct BindingBuilder {
     agent_id: Option<String>,
+    declared_path: Option<String>,
     destination_id: Option<String>,
     destination_kind: Option<String>,
+    feedback: Option<FeedbackConfiguration>,
+    feedback_notice: Option<String>,
     generation: Option<i64>,
     id: Option<String>,
     identity_app_ids: Option<Vec<String>>,
@@ -67,6 +76,11 @@ impl BindingBuilder {
         self
     }
 
+    pub fn declared_path(mut self, value: impl Into<String>) -> Self {
+        self.declared_path = Some(value.into());
+        self
+    }
+
     pub fn destination_id(mut self, value: impl Into<String>) -> Self {
         self.destination_id = Some(value.into());
         self
@@ -74,6 +88,16 @@ impl BindingBuilder {
 
     pub fn destination_kind(mut self, value: impl Into<String>) -> Self {
         self.destination_kind = Some(value.into());
+        self
+    }
+
+    pub fn feedback(mut self, value: FeedbackConfiguration) -> Self {
+        self.feedback = Some(value);
+        self
+    }
+
+    pub fn feedback_notice(mut self, value: impl Into<String>) -> Self {
+        self.feedback_notice = Some(value.into());
         self
     }
 
@@ -147,8 +171,11 @@ impl BindingBuilder {
     pub fn build(self) -> Result<Binding, BuildError> {
         Ok(Binding {
             agent_id: self.agent_id.ok_or_else(|| BuildError::missing_field("agent_id"))?,
+            declared_path: self.declared_path,
             destination_id: self.destination_id,
             destination_kind: self.destination_kind,
+            feedback: self.feedback,
+            feedback_notice: self.feedback_notice,
             generation: self.generation.ok_or_else(|| BuildError::missing_field("generation"))?,
             id: self.id.ok_or_else(|| BuildError::missing_field("id"))?,
             identity_app_ids: self.identity_app_ids,

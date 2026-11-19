@@ -44,6 +44,232 @@ describe("PersonalChannelsClient", () => {
             }).rejects.toThrow(Sikaru.UnprocessableEntityError);
     });
           
+    test("list_browser_logins (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        
+        const rawResponseBody = { "key" : "value" };
+        
+        server
+            .mockEndpoint()
+            .get("/v1/personal-channel-bindings/binding_id/messages/receipt_id/browser-logins").respondWith()
+            .statusCode(200).jsonBody(rawResponseBody)
+                .build();
+
+        
+                        
+                                const response = await client.personalChannels.listBrowserLogins("binding_id", "receipt_id");
+                                expect(response).toEqual(rawResponseBody);
+                              
+                    
+    });
+          
+    test("list_browser_logins (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        
+        const rawResponseBody = { "key" : "value" };
+        
+        server
+            .mockEndpoint()
+            .get("/v1/personal-channel-bindings/binding_id/messages/receipt_id/browser-logins").respondWith()
+            .statusCode(422).jsonBody(rawResponseBody)
+                .build();
+
+        
+            await expect(async () => {
+                return await client.personalChannels.listBrowserLogins("binding_id", "receipt_id")
+            }).rejects.toThrow(Sikaru.UnprocessableEntityError);
+    });
+          
+    test("delete_browser_login (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        
+        
+        
+        server
+            .mockEndpoint()
+            .delete("/v1/personal-channel-bindings/binding_id/messages/receipt_id/browser-logins/login_id").respondWith()
+            .statusCode(200).build();
+
+        
+                        
+                                const response = await client.personalChannels.deleteBrowserLogin("binding_id", "receipt_id", "login_id");
+                                expect(response).toEqual(undefined);
+                              
+                    
+    });
+          
+    test("delete_browser_login (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        
+        const rawResponseBody = { "key" : "value" };
+        
+        server
+            .mockEndpoint()
+            .delete("/v1/personal-channel-bindings/binding_id/messages/receipt_id/browser-logins/login_id").respondWith()
+            .statusCode(422).jsonBody(rawResponseBody)
+                .build();
+
+        
+            await expect(async () => {
+                return await client.personalChannels.deleteBrowserLogin("binding_id", "receipt_id", "login_id")
+            }).rejects.toThrow(Sikaru.UnprocessableEntityError);
+    });
+          
+    test("get_browser_preview (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        
+        const rawResponseBody = { "key" : "value" };
+        
+        server
+            .mockEndpoint()
+            .get("/v1/personal-channel-bindings/binding_id/messages/receipt_id/browser-previews/digest").respondWith()
+            .statusCode(200).jsonBody(rawResponseBody)
+                .build();
+
+        
+                        
+                                const response = await client.personalChannels.getBrowserPreview("binding_id", "receipt_id", "digest");
+                                expect(response).toEqual(rawResponseBody);
+                              
+                    
+    });
+          
+    test("get_browser_preview (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        
+        const rawResponseBody = { "key" : "value" };
+        
+        server
+            .mockEndpoint()
+            .get("/v1/personal-channel-bindings/binding_id/messages/receipt_id/browser-previews/digest").respondWith()
+            .statusCode(422).jsonBody(rawResponseBody)
+                .build();
+
+        
+            await expect(async () => {
+                return await client.personalChannels.getBrowserPreview("binding_id", "receipt_id", "digest")
+            }).rejects.toThrow(Sikaru.UnprocessableEntityError);
+    });
+          
+    test("get_browser_receipt (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        
+        const rawResponseBody = { "key" : "value" };
+        
+        server
+            .mockEndpoint()
+            .get("/v1/personal-channel-bindings/binding_id/messages/receipt_id/browser-receipt").respondWith()
+            .statusCode(200).jsonBody(rawResponseBody)
+                .build();
+
+        
+                        
+                                const response = await client.personalChannels.getBrowserReceipt("binding_id", "receipt_id");
+                                expect(response).toEqual(rawResponseBody);
+                              
+                    
+    });
+          
+    test("get_browser_receipt (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        
+        const rawResponseBody = { "key" : "value" };
+        
+        server
+            .mockEndpoint()
+            .get("/v1/personal-channel-bindings/binding_id/messages/receipt_id/browser-receipt").respondWith()
+            .statusCode(422).jsonBody(rawResponseBody)
+                .build();
+
+        
+            await expect(async () => {
+                return await client.personalChannels.getBrowserReceipt("binding_id", "receipt_id")
+            }).rejects.toThrow(Sikaru.UnprocessableEntityError);
+    });
+          
+    test("list_browser_rules (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        
+        const rawResponseBody = { "rules" : [ { "cap" : { "key" : "value" } , "control" : "control" , "grantedBy" : "grantedBy" , "id" : "id" , "lastUsedAt" : "lastUsedAt" , "playbook" : "playbook" , "scope" : "agent" , "site" : "site" , "state" : "active" , "step" : 1 , "uses" : 1 } ] };
+        
+        server
+            .mockEndpoint()
+            .get("/v1/personal-channel-bindings/binding_id/messages/receipt_id/browser-rules").respondWith()
+            .statusCode(200).jsonBody(rawResponseBody)
+                .build();
+
+        
+                        
+                                const response = await client.personalChannels.listBrowserRules("binding_id", "receipt_id");
+                                expect(response).toEqual(rawResponseBody);
+                              
+                    
+    });
+          
+    test("list_browser_rules (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        
+        const rawResponseBody = { "key" : "value" };
+        
+        server
+            .mockEndpoint()
+            .get("/v1/personal-channel-bindings/binding_id/messages/receipt_id/browser-rules").respondWith()
+            .statusCode(422).jsonBody(rawResponseBody)
+                .build();
+
+        
+            await expect(async () => {
+                return await client.personalChannels.listBrowserRules("binding_id", "receipt_id")
+            }).rejects.toThrow(Sikaru.UnprocessableEntityError);
+    });
+          
+    test("delete_browser_rule (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        
+        
+        
+        server
+            .mockEndpoint()
+            .delete("/v1/personal-channel-bindings/binding_id/messages/receipt_id/browser-rules/rule_id").respondWith()
+            .statusCode(200).build();
+
+        
+                        
+                                const response = await client.personalChannels.deleteBrowserRule("binding_id", "receipt_id", "rule_id");
+                                expect(response).toEqual(undefined);
+                              
+                    
+    });
+          
+    test("delete_browser_rule (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        
+        const rawResponseBody = { "key" : "value" };
+        
+        server
+            .mockEndpoint()
+            .delete("/v1/personal-channel-bindings/binding_id/messages/receipt_id/browser-rules/rule_id").respondWith()
+            .statusCode(422).jsonBody(rawResponseBody)
+                .build();
+
+        
+            await expect(async () => {
+                return await client.personalChannels.deleteBrowserRule("binding_id", "receipt_id", "rule_id")
+            }).rejects.toThrow(Sikaru.UnprocessableEntityError);
+    });
+          
     test("authorize_connection (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
@@ -220,7 +446,7 @@ describe("PersonalChannelsClient", () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         const rawRequestBody = { "decision" : "approved" , "idempotency_key" : "idempotency_key" };
-        const rawResponseBody = { "approval" : { "capability_name" : "capability_name" , "decision" : "approved" , "idempotency_key" : "idempotency_key" , "tool_call_id" : "tool_call_id" , "tool_provider_id" : "tool_provider_id" } };
+        const rawResponseBody = { "approval" : { "capability_name" : "capability_name" , "decision" : "approved" , "idempotency_key" : "idempotency_key" , "tool_call_id" : "tool_call_id" , "tool_provider_id" : "tool_provider_id" } , "rule" : "saved" };
         
         server
             .mockEndpoint()
@@ -263,6 +489,44 @@ describe("PersonalChannelsClient", () => {
         idempotency_key: "x"
     }
 })
+            }).rejects.toThrow(Sikaru.UnprocessableEntityError);
+    });
+          
+    test("create_browser_handoff (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        
+        const rawResponseBody = { "key" : "value" };
+        
+        server
+            .mockEndpoint()
+            .post("/v1/personal-channel-bindings/binding_id/messages/receipt_id/tool-calls/tool_call_id/browser-handoff").respondWith()
+            .statusCode(200).jsonBody(rawResponseBody)
+                .build();
+
+        
+                        
+                                const response = await client.personalChannels.createBrowserHandoff("binding_id", "receipt_id", "tool_call_id");
+                                expect(response).toEqual(rawResponseBody);
+                              
+                    
+    });
+          
+    test("create_browser_handoff (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        
+        const rawResponseBody = { "key" : "value" };
+        
+        server
+            .mockEndpoint()
+            .post("/v1/personal-channel-bindings/binding_id/messages/receipt_id/tool-calls/tool_call_id/browser-handoff").respondWith()
+            .statusCode(422).jsonBody(rawResponseBody)
+                .build();
+
+        
+            await expect(async () => {
+                return await client.personalChannels.createBrowserHandoff("binding_id", "receipt_id", "tool_call_id")
             }).rejects.toThrow(Sikaru.UnprocessableEntityError);
     });
           

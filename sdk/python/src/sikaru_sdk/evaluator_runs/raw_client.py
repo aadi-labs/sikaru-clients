@@ -35,10 +35,10 @@ class RawEvaluatorRunsClient:
         dataset_name: typing.Optional[str] = OMIT,
         evaluator_name: typing.Optional[str] = OMIT,
         filter_expression: typing.Optional[str] = OMIT,
+        grader_tags: typing.Optional[typing.Sequence[str]] = OMIT,
         issue_id: typing.Optional[str] = OMIT,
         issue_title: typing.Optional[str] = OMIT,
         sample_rate: typing.Optional[str] = OMIT,
-        signal_tags: typing.Optional[typing.Sequence[str]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[typing.Dict[str, typing.Any]]:
         """
@@ -58,13 +58,13 @@ class RawEvaluatorRunsClient:
 
         filter_expression : typing.Optional[str]
 
+        grader_tags : typing.Optional[typing.Sequence[str]]
+
         issue_id : typing.Optional[str]
 
         issue_title : typing.Optional[str]
 
         sample_rate : typing.Optional[str]
-
-        signal_tags : typing.Optional[typing.Sequence[str]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -87,10 +87,10 @@ class RawEvaluatorRunsClient:
                 "datasetName": dataset_name,
                 "evaluatorName": evaluator_name,
                 "filterExpression": filter_expression,
+                "graderTags": grader_tags,
                 "issueId": issue_id,
                 "issueTitle": issue_title,
                 "sampleRate": sample_rate,
-                "signalTags": signal_tags,
                 "traceIds": trace_ids,
             },
             headers={
@@ -178,10 +178,10 @@ class AsyncRawEvaluatorRunsClient:
         dataset_name: typing.Optional[str] = OMIT,
         evaluator_name: typing.Optional[str] = OMIT,
         filter_expression: typing.Optional[str] = OMIT,
+        grader_tags: typing.Optional[typing.Sequence[str]] = OMIT,
         issue_id: typing.Optional[str] = OMIT,
         issue_title: typing.Optional[str] = OMIT,
         sample_rate: typing.Optional[str] = OMIT,
-        signal_tags: typing.Optional[typing.Sequence[str]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[typing.Dict[str, typing.Any]]:
         """
@@ -201,13 +201,13 @@ class AsyncRawEvaluatorRunsClient:
 
         filter_expression : typing.Optional[str]
 
+        grader_tags : typing.Optional[typing.Sequence[str]]
+
         issue_id : typing.Optional[str]
 
         issue_title : typing.Optional[str]
 
         sample_rate : typing.Optional[str]
-
-        signal_tags : typing.Optional[typing.Sequence[str]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -232,10 +232,10 @@ class AsyncRawEvaluatorRunsClient:
                 "datasetName": dataset_name,
                 "evaluatorName": evaluator_name,
                 "filterExpression": filter_expression,
+                "graderTags": grader_tags,
                 "issueId": issue_id,
                 "issueTitle": issue_title,
                 "sampleRate": sample_rate,
-                "signalTags": signal_tags,
                 "traceIds": trace_ids,
             },
             headers={

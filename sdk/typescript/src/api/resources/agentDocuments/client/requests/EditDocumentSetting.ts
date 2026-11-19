@@ -3,12 +3,12 @@
 /**
  * @example
  *     {
- *         document: "document",
  *         path: ["path"]
  *     }
  */
 export interface EditDocumentSetting {
-    document: string;
+    document?: string | null;
+    files?: Record<string, string | null> | null;
     op?: EditDocumentSetting.Op;
     path: string[];
     value?: unknown;

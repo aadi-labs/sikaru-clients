@@ -1,6 +1,7 @@
 //! `sikaru agent`: managed agents, their runs, and document authoring over the generated public
 //! client. The agent (or run) is positional; `-p/--project` resolves flag, `SIKARU_PROJECT`, then
 //! the saved project. Results render through the framework's `--format`.
+use super::agent_folder as folder;
 use clap::{Arg, ArgAction, ArgMatches, Command};
 use fern_cli_sdk::{
     app::CliApp,
@@ -27,7 +28,10 @@ const EVENT_PAGE: i64 = 1000;
 type Handler = fn(&ArgMatches, &AppContext) -> Result<(), CliError>;
 
 pub fn install(app: CliApp) -> CliApp {
-    let verbs: [(Command, Handler); 11] = [
+    let verbs: [(Command, Handler); 15] = [
+        (folder::init_command(), folder::init),
+        (folder::add_command(), folder::add),
+        (folder::info_command(), folder::info),
         (list_command(), list),
         (get_command(), get),
         (create_command(), create),
@@ -39,6 +43,7 @@ pub fn install(app: CliApp) -> CliApp {
         (review_command(), review),
         (publish_command(), publish),
         (snippets_command(), snippets),
+        (super::agent_grader::command(), super::agent_grader::handle),
     ];
     let app = verbs.into_iter().fold(app, |app, (command, handler)| {
         app.command_under(&["agent"], command, OpenApiBinding::handler(handler))
@@ -78,7 +83,7 @@ fn run_command(name: &'static str, about: &'static str) -> Command {
 }
 
 fn file(command: Command) -> Command {
-    command.arg(Arg::new("file").long("file").default_value("agent.md"))
+    folder::options(command.arg(Arg::new("file").long("file").default_value("agent.md")))
 }
 
 fn revision(command: Command) -> Command {
@@ -150,17 +155,26 @@ pub(super) fn stop_command() -> Command {
 }
 
 fn pull_command() -> Command {
-    file(agent_command(
-        "pull",
-        "Write the agent's saved draft to a file",
-    ))
+    flag(
+        file(agent_command(
+            "pull",
+            "Pull the saved folder; refuse conflicting local edits",
+        )),
+        "force",
+        "Replace conflicting local files, including removed tracked siblings",
+    )
 }
 
 fn push_command() -> Command {
-    revision(file(agent_command(
+    file(agent_command(
         "push",
-        "Save a file as the agent's draft; never creates an agent",
-    )))
+        "Save the complete folder as the agent's draft",
+    ))
+    .arg(
+        Arg::new("revision")
+            .long("revision")
+            .value_parser(clap::value_parser!(i64)),
+    )
 }
 
 fn validate_command() -> Command {
@@ -175,25 +189,55 @@ fn review_command() -> Command {
 }
 
 fn publish_command() -> Command {
-    let command = live_version(revision(agent_command(
-        "publish",
-        "Publish a reviewed draft revision",
-    )))
-    .arg(
-        Arg::new("access-digest")
-            .long("access-digest")
-            .required(true)
-            .help("accessDigest returned by the access review you approved"),
+    let command = folder::options(
+        Command::new("publish")
+            .about("Preview and publish the local agent folder")
+            .after_help(super::agent_publish::PUBLISH_EXITS)
+            .arg(project())
+            .arg(Arg::new("agent").env("SIKARU_AGENT"))
+            .arg(
+                Arg::new("revision")
+                    .long("revision")
+                    .value_parser(clap::value_parser!(i64)),
+            )
+            .arg(Arg::new("live-version").long("live-version"))
+            .arg(
+                Arg::new("access-digest")
+                    .long("access-digest")
+                    .help("Exact reviewed reach digest"),
+            ),
+    );
+    let command = flag(
+        command,
+        "yes",
+        "Skip the preview confirmation; never approves reach changes",
     );
     let command = flag(
         command,
         "acknowledge-widening",
-        "Accept access the revision widens",
+        "Accept the exact reviewed added or changed reach",
+    );
+    let command = flag(
+        command,
+        "acknowledge-removals",
+        "Accept the exact reviewed removed reach",
     );
     flag(
         command,
-        "acknowledge-removals",
-        "Accept access the revision removes",
+        "no-wait",
+        "Return once the release is queued instead of following its release checks",
+    )
+    .arg(
+        Arg::new("publication")
+            .long("publication")
+            .help("The publication a release check held, for --anyway"),
+    )
+    .arg(
+        Arg::new("anyway")
+            .long("anyway")
+            .value_name("REASON")
+            .requires("publication")
+            .help("Publish a version its release check held, recording why"),
     )
 }
 
@@ -215,13 +259,15 @@ pub(super) fn invalid(error: impl std::fmt::Display) -> CliError {
     CliError::Validation(error.to_string())
 }
 
-fn read_file(m: &ArgMatches) -> Result<String, CliError> {
-    std::fs::read_to_string(value(m, "file")).map_err(invalid)
-}
-
 /// Renders through the framework pipeline, so `--format table|json` behaves as in every group.
 pub(super) fn emit(m: &ArgMatches, result: &impl Serialize) -> Result<(), CliError> {
     let value = serde_json::to_value(result).map_err(invalid)?;
+    if folder::optional(m, "folder-output") == Some("json")
+        || m.try_get_one::<bool>("non-interactive").ok().flatten() == Some(&true)
+    {
+        println!("{}", serde_json::to_string(&value).map_err(invalid)?);
+        return Ok(());
+    }
     pipeline(m)?
         .emit(&mut std::io::stdout(), &value, false, true)
         .map_err(invalid)
@@ -232,7 +278,7 @@ pub(super) fn pipeline(m: &ArgMatches) -> Result<OutputPipeline, CliError> {
 }
 
 fn list(m: &ArgMatches, ctx: &AppContext) -> Result<(), CliError> {
-    let client = crate::sdk::client(ctx);
+    let client = super::agent_transport::client(ctx);
     let mut listed = crate::sdk::block_on(
         client
             .managed_agents
@@ -247,7 +293,7 @@ fn list(m: &ArgMatches, ctx: &AppContext) -> Result<(), CliError> {
 }
 
 fn get(m: &ArgMatches, ctx: &AppContext) -> Result<(), CliError> {
-    let client = crate::sdk::client(ctx);
+    let client = super::agent_transport::client(ctx);
     let read = crate::sdk::block_on(client.managed_agents.get(
         value(m, "project"),
         value(m, "agent"),
@@ -257,18 +303,16 @@ fn get(m: &ArgMatches, ctx: &AppContext) -> Result<(), CliError> {
 }
 
 fn create(m: &ArgMatches, ctx: &AppContext) -> Result<(), CliError> {
+    let files = folder::read(m)?;
+    let source = serde_json::from_value(serde_json::json!({"sourceKind":"agent_document","document":files["agent.md"],"files":files})).map_err(invalid)?;
     let request = CreateManagedAgentRequest {
         agent_slug: value(m, "agent").to_owned(),
         display_name: m.get_one::<String>("name").cloned(),
         personal: m.get_flag("personal").then_some(true),
-        source: Some(CreateManagedAgentSourceRequest {
-            source_kind: Some(CreateManagedAgentSourceRequestSourceKind::AgentDocument),
-            document: Some(read_file(m)?),
-            ..Default::default()
-        }),
+        source: Some(source),
         ..Default::default()
     };
-    let client = crate::sdk::client(ctx);
+    let client = super::agent_transport::client(ctx);
     let created = crate::sdk::block_on(client.managed_agents.create_managed_agent(
         value(m, "project"),
         &request,
@@ -278,7 +322,7 @@ fn create(m: &ArgMatches, ctx: &AppContext) -> Result<(), CliError> {
 }
 
 pub(super) fn stop(m: &ArgMatches, ctx: &AppContext) -> Result<(), CliError> {
-    let client = crate::sdk::client(ctx);
+    let client = super::agent_transport::client(ctx);
     let cancelled = crate::sdk::block_on(client.runs.cancel(
         value(m, "project"),
         value(m, "run"),
@@ -314,7 +358,7 @@ impl EventPrinter {
 }
 
 pub(super) fn logs(m: &ArgMatches, ctx: &AppContext) -> Result<(), CliError> {
-    let client = crate::sdk::client(ctx);
+    let client = super::agent_transport::client(ctx);
     let mut printer = EventPrinter::new(pipeline(m)?, Box::new(std::io::stdout()));
     let (project, run) = (value(m, "project"), value(m, "run"));
     if m.get_flag("follow") {
@@ -366,7 +410,8 @@ const STREAM_RETRIES: u32 = 5;
 fn stops_at(event: &RunEvent, stops: &[&str]) -> bool {
     let reason = event.payload.get("reason").and_then(|value| value.as_str());
     stops.contains(&event.event_type.as_str())
-        && !(event.event_type == "run.paused" && reason.is_some_and(|r| SELF_CLEARING_PAUSES.contains(&r)))
+        && !(event.event_type == "run.paused"
+            && reason.is_some_and(|r| SELF_CLEARING_PAUSES.contains(&r)))
 }
 
 /// Follows until one of `stops`, returning it, or until `deadline` passes, returning `None`.
@@ -433,36 +478,64 @@ fn next_event(stream: &mut Pin<Box<SseStream<RunEvent>>>) -> Result<Option<RunEv
 }
 
 fn pull(m: &ArgMatches, ctx: &AppContext) -> Result<(), CliError> {
-    let client = crate::sdk::client(ctx);
+    let client = super::agent_transport::client(ctx);
     let draft = crate::sdk::block_on(client.agent_documents.get(
         value(m, "project"),
         value(m, "agent"),
         None,
     ))?;
-    std::fs::write(value(m, "file"), draft.document.as_bytes()).map_err(invalid)?;
+    let files = draft
+        .files
+        .clone()
+        .unwrap_or_default()
+        .into_iter()
+        .collect::<folder::Files>();
+    let files = if files.is_empty() {
+        folder::Files::from([("agent.md".into(), draft.document.clone())])
+    } else {
+        files
+    };
+    folder::materialize(m, &files)?;
+    folder::save_metadata(
+        m,
+        value(m, "agent"),
+        draft.revision,
+        draft.base_live_version_id.clone(),
+        &files,
+    )?;
     emit(m, &draft)
 }
 
 fn push(m: &ArgMatches, ctx: &AppContext) -> Result<(), CliError> {
-    let request = SaveDocument {
-        document: read_file(m)?,
-        expected_revision: revision_of(m),
+    let files = folder::read(m)?;
+    let base = match m.get_one::<i64>("revision") {
+        Some(revision) => *revision,
+        None => {
+            let saved = folder::metadata(&folder::root(m))?;
+            super::agent_publish::check_identity(m, value(m, "agent"), &saved)?;
+            saved.revision
+        }
     };
-    let client = crate::sdk::client(ctx);
-    let saved = crate::sdk::block_on(client.agent_documents.save(
-        value(m, "project"),
+    let saved = super::agent_publish::save(
+        m,
+        &super::agent_transport::client(ctx),
         value(m, "agent"),
-        &request,
-        None,
-    ))?;
+        base,
+        &files,
+    )?;
+    folder::save_metadata(
+        m,
+        value(m, "agent"),
+        saved.revision,
+        saved.base_live_version_id.clone(),
+        &files,
+    )?;
     emit(m, &saved)
 }
 
 fn validate(m: &ArgMatches, ctx: &AppContext) -> Result<(), CliError> {
-    let request = DocumentInput {
-        document: read_file(m)?,
-    };
-    let client = crate::sdk::client(ctx);
+    let request = folder::input(&folder::read(m)?)?;
+    let client = super::agent_transport::client(ctx);
     let validation = crate::sdk::block_on(client.agent_documents.validate(
         value(m, "project"),
         value(m, "agent"),
@@ -478,7 +551,7 @@ fn review(m: &ArgMatches, ctx: &AppContext) -> Result<(), CliError> {
         expected_live_version_id: m.get_one::<String>("live-version").cloned(),
         ..Default::default()
     };
-    let client = crate::sdk::client(ctx);
+    let client = super::agent_transport::client(ctx);
     let reviewed = crate::sdk::block_on(client.agent_documents.review(
         value(m, "project"),
         value(m, "agent"),
@@ -489,26 +562,11 @@ fn review(m: &ArgMatches, ctx: &AppContext) -> Result<(), CliError> {
 }
 
 fn publish(m: &ArgMatches, ctx: &AppContext) -> Result<(), CliError> {
-    let request = PublishDocument {
-        revision: revision_of(m),
-        expected_live_version_id: m.get_one::<String>("live-version").cloned(),
-        expected_access_digest: Some(value(m, "access-digest").to_owned()),
-        acknowledge_widening: Some(m.get_flag("acknowledge-widening")),
-        acknowledge_removals: Some(m.get_flag("acknowledge-removals")),
-        ..Default::default()
-    };
-    let client = crate::sdk::client(ctx);
-    let published = crate::sdk::block_on(client.agent_documents.publish(
-        value(m, "project"),
-        value(m, "agent"),
-        &request,
-        None,
-    ))?;
-    emit(m, &published)
+    super::agent_publish::publish(m, ctx)
 }
 
 fn snippets(m: &ArgMatches, ctx: &AppContext) -> Result<(), CliError> {
-    let client = crate::sdk::client(ctx);
+    let client = super::agent_transport::client(ctx);
     let snippets = crate::sdk::block_on(client.agent_documents.snippets(
         value(m, "project"),
         value(m, "agent"),

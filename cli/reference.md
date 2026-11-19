@@ -39,17 +39,16 @@ Full command reference for `sikaru`.
 - [`sikaru executions`](#sikaru-executions)
 - [`sikaru feedback`](#sikaru-feedback)
 - [`sikaru git-credentials`](#sikaru-git-credentials)
+- [`sikaru graders`](#sikaru-graders)
 - [`sikaru harnesses`](#sikaru-harnesses)
 - [`sikaru http-channels`](#sikaru-http-channels)
 - [`sikaru import-sessions`](#sikaru-import-sessions)
 - [`sikaru issue-clusters`](#sikaru-issue-clusters)
-- [`sikaru judge-alignment`](#sikaru-judge-alignment)
 - [`sikaru managed-agents`](#sikaru-managed-agents)
-- [`sikaru memory-registry`](#sikaru-memory-registry)
+- [`sikaru memory`](#sikaru-memory)
 - [`sikaru model-gateway`](#sikaru-model-gateway)
 - [`sikaru model-settings`](#sikaru-model-settings)
 - [`sikaru models`](#sikaru-models)
-- [`sikaru online-evaluations`](#sikaru-online-evaluations)
 - [`sikaru personal-channels`](#sikaru-personal-channels)
 - [`sikaru projects`](#sikaru-projects)
 - [`sikaru release-watches`](#sikaru-release-watches)
@@ -61,7 +60,7 @@ Full command reference for `sikaru`.
 - [`sikaru run-webhooks`](#sikaru-run-webhooks)
 - [`sikaru runs`](#sikaru-runs)
 - [`sikaru sessions`](#sikaru-sessions)
-- [`sikaru specialists`](#sikaru-specialists)
+- [`sikaru tasks`](#sikaru-tasks)
 - [`sikaru tool-providers`](#sikaru-tool-providers)
 - [`sikaru trace-import-connections`](#sikaru-trace-import-connections)
 - [`sikaru trace-imports`](#sikaru-trace-imports)
@@ -169,6 +168,19 @@ Get Document
 | `--project-id` | `string` | Yes |  |
 | `--agent-slug` | `string` | Yes |  |
 
+#### `sikaru agent-documents get-publication`
+
+A publication's state, read without publishing again: follow a pending publish here until its release check
+settles.
+
+`GET /v1/projects/{project_id}/managed-agents/{agent_slug}/document/publications/{publication_id}`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--publication-id` | `string` | Yes |  |
+| `--project-id` | `string` | Yes |  |
+| `--agent-slug` | `string` | Yes |  |
+
 #### `sikaru agent-documents import-files`
 
 Import Document Files
@@ -230,6 +242,20 @@ Publish
 
 | Flag | Type | Required | Description |
 |------|------|----------|-------------|
+| `--project-id` | `string` | Yes |  |
+| `--agent-slug` | `string` | Yes |  |
+| `--json` | `JSON` | Yes | Request body as JSON (or use individual body-field flags) |
+
+#### `sikaru agent-documents publish-anyway`
+
+Release a publication its release check blocked or couldn't verify, recording who, when and why (R10, R33).
+Only a release check is overridden: an agent's measured evaluation still runs (R34).
+
+`POST /v1/projects/{project_id}/managed-agents/{agent_slug}/document/publications/{publication_id}/publish-anyway`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--publication-id` | `string` | Yes |  |
 | `--project-id` | `string` | Yes |  |
 | `--agent-slug` | `string` | Yes |  |
 | `--json` | `JSON` | Yes | Request body as JSON (or use individual body-field flags) |
@@ -464,6 +490,21 @@ Promote Changeset
 | `--changeset-id` | `string` | Yes |  |
 | `--json` | `JSON` | No | Request body as JSON (or use individual body-field flags) |
 
+#### `sikaru changesets publish-changeset-anyway`
+
+Promote a Try a Fix changeset its agent's release check blocked or couldn't verify, recording who, when and
+why (grader release check R10, R33, R36). The contract of an agent document's Publish Anyway: owner credentials
+and a reason, refused while the check still runs or when the live version or check settings changed since.
+
+`POST /v1/projects/{project_id}/changesets/{changeset_id}/publications/{publication_id}/publish-anyway`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--project-id` | `string` | Yes |  |
+| `--changeset-id` | `string` | Yes |  |
+| `--publication-id` | `string` | Yes |  |
+| `--json` | `JSON` | Yes | Request body as JSON (or use individual body-field flags) |
+
 #### `sikaru changesets reject-changeset`
 
 Reject Changeset
@@ -533,6 +574,18 @@ Complete
 
 | Flag | Type | Required | Description |
 |------|------|----------|-------------|
+| `--project-id` | `string` | Yes |  |
+| `--json` | `JSON` | Yes | Request body as JSON (or use individual body-field flags) |
+
+#### `sikaru channels configure-feedback`
+
+Configure Feedback
+
+`PATCH /v1/projects/{project_id}/channels/bindings/{binding_id}/feedback`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--binding-id` | `string` | Yes |  |
 | `--project-id` | `string` | Yes |  |
 | `--json` | `JSON` | Yes | Request body as JSON (or use individual body-field flags) |
 
@@ -1751,24 +1804,11 @@ Purge this user from every agent of the product, with every trace or eval case t
 | `--agent-slug` | `string` | Yes |  |
 | `--tenant-id` | `string` | Yes |  |
 | `--user-id` | `string` | Yes |  |
-
-#### `sikaru end-users delete-fact`
-
-Forget one memory, or clear the profile.
-
-`DELETE /v1/projects/{project_id}/managed-agents/{agent_slug}/end-users/{tenant_id}/{user_id}/facts`
-
-| Flag | Type | Required | Description |
-|------|------|----------|-------------|
-| `--project-id` | `string` | Yes |  |
-| `--agent-slug` | `string` | Yes |  |
-| `--tenant-id` | `string` | Yes |  |
-| `--user-id` | `string` | Yes |  |
-| `--path` | `string` | Yes | USER.md or memories/<name>.md. |
+| `--terminal` | `boolean` | No | Permanently reject cell creation and new work for this end user. |
 
 #### `sikaru end-users get`
 
-What the agent knows about this end user: facts and the persona summary, never the persona prompt.
+What the agent knows about this end user: the persona summary, never the persona prompt.
 
 `GET /v1/projects/{project_id}/managed-agents/{agent_slug}/end-users/{tenant_id}/{user_id}`
 
@@ -1779,11 +1819,59 @@ What the agent knows about this end user: facts and the persona summary, never t
 | `--tenant-id` | `string` | Yes |  |
 | `--user-id` | `string` | Yes |  |
 
-#### `sikaru end-users update-fact`
+#### `sikaru end-users get-learning-run`
 
-Correct or add one fact. It serves from the next turn and becomes a held-out case for this user.
+Get End User Learning
 
-`PUT /v1/projects/{project_id}/managed-agents/{agent_slug}/end-users/{tenant_id}/{user_id}/facts`
+`GET /v1/projects/{project_id}/managed-agents/{agent_slug}/end-users/{tenant_id}/{user_id}/learning-runs/{invocation_id}`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--project-id` | `string` | Yes |  |
+| `--agent-slug` | `string` | Yes |  |
+| `--tenant-id` | `string` | Yes |  |
+| `--user-id` | `string` | Yes |  |
+| `--invocation-id` | `string` | Yes |  |
+
+#### `sikaru end-users import-state`
+
+Import a versioned product snapshot atomically, preserving correction provenance.
+
+The cell must already exist. Every file requires expectedEtag (null for an
+absent destination). Reusing an importId requires the identical manifest.
+The digest is SHA-256 of canonical JSON {sourceRevision, files}, with sorted
+keys, compact separators and the supplied file order. Private layers are
+accepted as input but are never returned in the receipt or end-user view.
+
+`POST /v1/projects/{project_id}/managed-agents/{agent_slug}/end-users/{tenant_id}/{user_id}/imports`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--project-id` | `string` | Yes |  |
+| `--agent-slug` | `string` | Yes |  |
+| `--tenant-id` | `string` | Yes |  |
+| `--user-id` | `string` | Yes |  |
+| `--json` | `JSON` | Yes | Request body as JSON (or use individual body-field flags) |
+
+#### `sikaru end-users revoke-learning-source`
+
+Revoke End User Learning Source
+
+`POST /v1/projects/{project_id}/managed-agents/{agent_slug}/end-users/{tenant_id}/{user_id}/learning-sources/{source_id}/revoke`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--project-id` | `string` | Yes |  |
+| `--agent-slug` | `string` | Yes |  |
+| `--tenant-id` | `string` | Yes |  |
+| `--user-id` | `string` | Yes |  |
+| `--source-id` | `string` | Yes |  |
+
+#### `sikaru end-users start-learning-run`
+
+Start End User Learning
+
+`POST /v1/projects/{project_id}/managed-agents/{agent_slug}/end-users/{tenant_id}/{user_id}/learning-runs`
 
 | Flag | Type | Required | Description |
 |------|------|----------|-------------|
@@ -2282,6 +2370,153 @@ The project's git credentials and their grants, without values.
 
 ---
 
+### `sikaru graders`
+
+#### `sikaru graders estimate-cost`
+
+What judging every conversation with the LLM judge or a project agent is expected to cost (R4).
+
+`GET /v1/projects/{project_id}/agents/{agent_id}/graders/{grader_id}/cost-estimate`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--grader-id` | `string` | Yes |  |
+| `--project-id` | `string` | Yes |  |
+| `--agent-id` | `string` | Yes |  |
+| `--judge` | `llm | agent` | Yes |  |
+| `--judge-agent-id` | `string` | No |  |
+
+#### `sikaru graders get`
+
+One Grader: its status, criteria, judge, release check, versions and label counts.
+
+`GET /v1/projects/{project_id}/agents/{agent_id}/graders/{grader_id}`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--grader-id` | `string` | Yes |  |
+| `--project-id` | `string` | Yes |  |
+| `--agent-id` | `string` | Yes |  |
+
+#### `sikaru graders get-run`
+
+Follow a recent-production re-score to completion or a useful failure message.
+
+`GET /v1/projects/{project_id}/agents/{agent_id}/graders/{grader_id}/runs/{run_id}`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--grader-id` | `string` | Yes |  |
+| `--run-id` | `string` | Yes |  |
+| `--project-id` | `string` | Yes |  |
+| `--agent-id` | `string` | Yes |  |
+
+#### `sikaru graders get-test`
+
+Read a pending, completed or failed unsaved test. Reports expire after one day.
+
+`GET /v1/projects/{project_id}/agents/{agent_id}/graders/tests/{test_id}`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--test-id` | `string` | Yes |  |
+| `--project-id` | `string` | Yes |  |
+| `--agent-id` | `string` | Yes |  |
+
+#### `sikaru graders label`
+
+Mark one conversation Flagged or Looks Fine with an optional reason; labeling it again replaces the label.
+The response then shows what the Grader itself said.
+
+`PUT /v1/projects/{project_id}/agents/{agent_id}/graders/{grader_id}/labels`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--grader-id` | `string` | Yes |  |
+| `--project-id` | `string` | Yes |  |
+| `--agent-id` | `string` | Yes |  |
+| `--json` | `JSON` | Yes | Request body as JSON (or use individual body-field flags) |
+
+#### `sikaru graders label-queue`
+
+Conversations the Grader is least sure about, unlabeled, each with an excerpt and without its verdict.
+
+`GET /v1/projects/{project_id}/agents/{agent_id}/graders/{grader_id}/label-queue`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--grader-id` | `string` | Yes |  |
+| `--project-id` | `string` | Yes |  |
+| `--agent-id` | `string` | Yes |  |
+| `--limit` | `integer` | No |  |
+
+#### `sikaru graders list`
+
+The agent's Graders, presets included, and whether the agent is graded at all.
+
+`GET /v1/projects/{project_id}/agents/{agent_id}/graders`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--project-id` | `string` | Yes |  |
+| `--agent-id` | `string` | Yes |  |
+
+#### `sikaru graders run`
+
+Re-score recent production conversations using this Grader version's own judge.
+
+`POST /v1/projects/{project_id}/agents/{agent_id}/graders/{grader_id}/run`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--grader-id` | `string` | Yes |  |
+| `--project-id` | `string` | Yes |  |
+| `--agent-id` | `string` | Yes |  |
+| `--idempotency-key` | `string` | No |  |
+| `--json` | `JSON` | No | Request body as JSON (or use individual body-field flags) |
+
+#### `sikaru graders samples`
+
+The Grader's recent verdicts, flagged conversations first.
+
+`GET /v1/projects/{project_id}/agents/{agent_id}/graders/{grader_id}/samples`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--grader-id` | `string` | Yes |  |
+| `--project-id` | `string` | Yes |  |
+| `--agent-id` | `string` | Yes |  |
+| `--limit` | `integer` | No |  |
+
+#### `sikaru graders test`
+
+Score an unsaved file with its own judge. Poll a pending test; no Grader or verdict is saved.
+
+`POST /v1/projects/{project_id}/agents/{agent_id}/graders/test`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--project-id` | `string` | Yes |  |
+| `--agent-id` | `string` | Yes |  |
+| `--idempotency-key` | `string` | No |  |
+| `--json` | `JSON` | Yes | Request body as JSON (or use individual body-field flags) |
+
+#### `sikaru graders update`
+
+Change the description, judge, escalation or release check. A judge or escalation change saves a provisional
+version that goes live only once it clears the promotion rule; the other settings change no verdict.
+
+`PATCH /v1/projects/{project_id}/agents/{agent_id}/graders/{grader_id}`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--grader-id` | `string` | Yes |  |
+| `--project-id` | `string` | Yes |  |
+| `--agent-id` | `string` | Yes |  |
+| `--json` | `JSON` | Yes | Request body as JSON (or use individual body-field flags) |
+
+---
+
 ### `sikaru harnesses`
 
 #### `sikaru harnesses get-improvement`
@@ -2616,30 +2851,13 @@ Upsert Issue Cluster
 
 ---
 
-### `sikaru judge-alignment`
-
-#### `sikaru judge-alignment get-judge-alignment`
-
-Get Judge Alignment
-
-`GET /v1/projects/{project_id}/judge-alignment`
-
-| Flag | Type | Required | Description |
-|------|------|----------|-------------|
-| `--project-id` | `string` | Yes |  |
-| `--evaluator` | `string` | Yes |  |
-| `--revision` | `string` | Yes |  |
-| `--environment` | `production | staging | development` | No |  |
-
----
-
 ### `sikaru managed-agents`
 
-#### `sikaru managed-agents create-definition-revision`
+#### `sikaru managed-agents add-agent-login`
 
-Stage a changed definition as a draft revision; the live definition is a no-op.
+An operator signs the agent in to a company account once; every run then uses it.
 
-`POST /v1/projects/{project_id}/managed-agents/{agent_slug}/definition-revisions`
+`POST /v1/projects/{project_id}/managed-agents/{agent_slug}/browser-logins`
 
 | Flag | Type | Required | Description |
 |------|------|----------|-------------|
@@ -2658,6 +2876,18 @@ Create Managed Agent
 | `--project-id` | `string` | Yes |  |
 | `--json` | `JSON` | Yes | Request body as JSON (or use individual body-field flags) |
 
+#### `sikaru managed-agents delete-agent-login`
+
+Delete Agent Login
+
+`DELETE /v1/projects/{project_id}/managed-agents/{agent_slug}/browser-logins/{login_id}`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--project-id` | `string` | Yes |  |
+| `--agent-slug` | `string` | Yes |  |
+| `--login-id` | `string` | Yes |  |
+
 #### `sikaru managed-agents delete-managed-agent`
 
 Delete an agent that has never gone live, with its drafts, checks and schedules.
@@ -2668,6 +2898,30 @@ Delete an agent that has never gone live, with its drafts, checks and schedules.
 |------|------|----------|-------------|
 | `--project-id` | `string` | Yes |  |
 | `--agent-slug` | `string` | Yes |  |
+
+#### `sikaru managed-agents delete-playbook`
+
+Delete Playbook
+
+`DELETE /v1/projects/{project_id}/managed-agents/{agent_slug}/browser-playbooks/{playbook_id}`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--project-id` | `string` | Yes |  |
+| `--agent-slug` | `string` | Yes |  |
+| `--playbook-id` | `string` | Yes |  |
+
+#### `sikaru managed-agents delete-rule`
+
+Delete Rule
+
+`DELETE /v1/projects/{project_id}/managed-agents/{agent_slug}/browser-rules/{rule_id}`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--project-id` | `string` | Yes |  |
+| `--agent-slug` | `string` | Yes |  |
+| `--rule-id` | `string` | Yes |  |
 
 #### `sikaru managed-agents get`
 
@@ -2692,6 +2946,17 @@ Get Definition Revision
 | `--agent-slug` | `string` | Yes |  |
 | `--changeset-id` | `string` | Yes |  |
 
+#### `sikaru managed-agents list-agent-logins`
+
+List Agent Logins
+
+`GET /v1/projects/{project_id}/managed-agents/{agent_slug}/browser-logins`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--project-id` | `string` | Yes |  |
+| `--agent-slug` | `string` | Yes |  |
+
 #### `sikaru managed-agents list-managed-agents`
 
 List Managed Agents
@@ -2702,9 +2967,31 @@ List Managed Agents
 |------|------|----------|-------------|
 | `--project-id` | `string` | Yes |  |
 
+#### `sikaru managed-agents list-playbooks`
+
+List Playbooks
+
+`GET /v1/projects/{project_id}/managed-agents/{agent_slug}/browser-playbooks`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--project-id` | `string` | Yes |  |
+| `--agent-slug` | `string` | Yes |  |
+
+#### `sikaru managed-agents list-rules`
+
+Every always-allow rule on the agent; a rule personal to one end user does not say whose.
+
+`GET /v1/projects/{project_id}/managed-agents/{agent_slug}/browser-rules`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--project-id` | `string` | Yes |  |
+| `--agent-slug` | `string` | Yes |  |
+
 #### `sikaru managed-agents update`
 
-Change the agent's display name or turn capacity. The slug and every reference to the agent stay the same.
+Change the agent's display name, turn capacity or memory dreaming. The slug and every reference to the agent stay the same.
 
 Personal and end-user-cell choices are fixed at creation.
 
@@ -2716,19 +3003,230 @@ Personal and end-user-cell choices are fixed at creation.
 | `--agent-slug` | `string` | Yes |  |
 | `--json` | `JSON` | Yes | Request body as JSON (or use individual body-field flags) |
 
----
+#### `sikaru managed-agents update-end-user-skill-source`
 
-### `sikaru memory-registry`
+Replace or enable a customer-authored source using its own revision CAS.
 
-#### `sikaru memory-registry create-memory-registry-change`
+Private optimized methodology and optimizer digests are never returned.
+Replaying an operation returns its original receipt without reverting later work.
 
-Create Memory Registry Change
-
-`POST /v1/projects/{project_id}/memory-registry`
+`PUT /v1/projects/{project_id}/managed-agents/{agent_slug}/end-users/{tenant_id}/{user_id}/skill-sources/{skill_id}`
 
 | Flag | Type | Required | Description |
 |------|------|----------|-------------|
 | `--project-id` | `string` | Yes |  |
+| `--agent-slug` | `string` | Yes |  |
+| `--tenant-id` | `string` | Yes |  |
+| `--user-id` | `string` | Yes |  |
+| `--skill-id` | `string` | Yes |  |
+| `--json` | `JSON` | Yes | Request body as JSON (or use individual body-field flags) |
+
+---
+
+### `sikaru memory`
+
+#### `sikaru memory delete-file`
+
+Delete Memory File
+
+`DELETE /v1/projects/{project_id}/managed-agents/{agent_slug}/memory/files/content`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--project-id` | `string` | Yes |  |
+| `--agent-slug` | `string` | Yes |  |
+| `--path` | `string` | Yes | Path inside the directory, such as MEMORY.md or notes/trip.md. |
+| `--base` | `string` | Yes | The head the deletion was made from. |
+| `--directory` | `agent | user` | No | The shared agent directory, or one end user's directory. |
+| `--environment` | `published | draft` | No |  |
+| `--tenant-id` | `string` | No |  |
+| `--user-id` | `string` | No |  |
+
+#### `sikaru memory dream`
+
+Dream now: consolidate this directory without waiting for idle time, even with automatic dreaming off.
+
+`POST /v1/projects/{project_id}/managed-agents/{agent_slug}/memory/dreams`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--project-id` | `string` | Yes |  |
+| `--agent-slug` | `string` | Yes |  |
+| `--directory` | `agent | user` | No | The shared agent directory, or one end user's directory. |
+| `--environment` | `published | draft` | No |  |
+| `--tenant-id` | `string` | No |  |
+| `--user-id` | `string` | No |  |
+
+#### `sikaru memory forget`
+
+Remove something from this user's memory, its retained history and past-session search, in the background.
+
+`POST /v1/projects/{project_id}/managed-agents/{agent_slug}/memory/forgets`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--project-id` | `string` | Yes |  |
+| `--agent-slug` | `string` | Yes |  |
+| `--directory` | `agent | user` | No | The shared agent directory, or one end user's directory. |
+| `--environment` | `published | draft` | No |  |
+| `--tenant-id` | `string` | No |  |
+| `--user-id` | `string` | No |  |
+| `--json` | `JSON` | Yes | Request body as JSON (or use individual body-field flags) |
+
+#### `sikaru memory get-dream`
+
+The directory's latest dream job.
+
+`GET /v1/projects/{project_id}/managed-agents/{agent_slug}/memory/dreams`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--project-id` | `string` | Yes |  |
+| `--agent-slug` | `string` | Yes |  |
+| `--directory` | `agent | user` | No | The shared agent directory, or one end user's directory. |
+| `--environment` | `published | draft` | No |  |
+| `--tenant-id` | `string` | No |  |
+| `--user-id` | `string` | No |  |
+
+#### `sikaru memory get-forget`
+
+Get Memory Forget
+
+`GET /v1/projects/{project_id}/managed-agents/{agent_slug}/memory/forgets/{job_id}`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--job-id` | `string` | Yes |  |
+| `--project-id` | `string` | Yes |  |
+| `--agent-slug` | `string` | Yes |  |
+| `--directory` | `agent | user` | No | The shared agent directory, or one end user's directory. |
+| `--environment` | `published | draft` | No |  |
+| `--tenant-id` | `string` | No |  |
+| `--user-id` | `string` | No |  |
+
+#### `sikaru memory list-files`
+
+The directory's files and its current head.
+
+`GET /v1/projects/{project_id}/managed-agents/{agent_slug}/memory/files`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--project-id` | `string` | Yes |  |
+| `--agent-slug` | `string` | Yes |  |
+| `--directory` | `agent | user` | No | The shared agent directory, or one end user's directory. |
+| `--environment` | `published | draft` | No |  |
+| `--tenant-id` | `string` | No |  |
+| `--user-id` | `string` | No |  |
+
+#### `sikaru memory list-forgets`
+
+List Memory Forgets
+
+`GET /v1/projects/{project_id}/managed-agents/{agent_slug}/memory/forgets`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--project-id` | `string` | Yes |  |
+| `--agent-slug` | `string` | Yes |  |
+| `--directory` | `agent | user` | No | The shared agent directory, or one end user's directory. |
+| `--environment` | `published | draft` | No |  |
+| `--tenant-id` | `string` | No |  |
+| `--user-id` | `string` | No |  |
+
+#### `sikaru memory list-versions`
+
+List Memory Versions
+
+`GET /v1/projects/{project_id}/managed-agents/{agent_slug}/memory/versions`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--project-id` | `string` | Yes |  |
+| `--agent-slug` | `string` | Yes |  |
+| `--directory` | `agent | user` | No | The shared agent directory, or one end user's directory. |
+| `--environment` | `published | draft` | No |  |
+| `--tenant-id` | `string` | No |  |
+| `--user-id` | `string` | No |  |
+
+#### `sikaru memory move-file`
+
+Move or rename one file; the destination must not exist.
+
+`POST /v1/projects/{project_id}/managed-agents/{agent_slug}/memory/files/move`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--project-id` | `string` | Yes |  |
+| `--agent-slug` | `string` | Yes |  |
+| `--directory` | `agent | user` | No | The shared agent directory, or one end user's directory. |
+| `--environment` | `published | draft` | No |  |
+| `--tenant-id` | `string` | No |  |
+| `--user-id` | `string` | No |  |
+| `--json` | `JSON` | Yes | Request body as JSON (or use individual body-field flags) |
+
+#### `sikaru memory read-file`
+
+Read Memory File
+
+`GET /v1/projects/{project_id}/managed-agents/{agent_slug}/memory/files/content`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--project-id` | `string` | Yes |  |
+| `--agent-slug` | `string` | Yes |  |
+| `--path` | `string` | Yes | Path inside the directory, such as MEMORY.md or notes/trip.md. |
+| `--directory` | `agent | user` | No | The shared agent directory, or one end user's directory. |
+| `--environment` | `published | draft` | No |  |
+| `--tenant-id` | `string` | No |  |
+| `--user-id` | `string` | No |  |
+
+#### `sikaru memory remember`
+
+Remember again: finished forgets of this target stop hiding it from future search and dreams.
+
+`POST /v1/projects/{project_id}/managed-agents/{agent_slug}/memory/remember`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--project-id` | `string` | Yes |  |
+| `--agent-slug` | `string` | Yes |  |
+| `--directory` | `agent | user` | No | The shared agent directory, or one end user's directory. |
+| `--environment` | `published | draft` | No |  |
+| `--tenant-id` | `string` | No |  |
+| `--user-id` | `string` | No |  |
+| `--json` | `JSON` | Yes | Request body as JSON (or use individual body-field flags) |
+
+#### `sikaru memory rollback`
+
+Make a retained version the head again; the rollback is kept as the newest version.
+
+`POST /v1/projects/{project_id}/managed-agents/{agent_slug}/memory/versions/{version}/rollback`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--version` | `integer` | Yes |  |
+| `--project-id` | `string` | Yes |  |
+| `--agent-slug` | `string` | Yes |  |
+| `--directory` | `agent | user` | No | The shared agent directory, or one end user's directory. |
+| `--environment` | `published | draft` | No |  |
+| `--tenant-id` | `string` | No |  |
+| `--user-id` | `string` | No |  |
+
+#### `sikaru memory write-file`
+
+Create or replace one file.
+
+`PUT /v1/projects/{project_id}/managed-agents/{agent_slug}/memory/files/content`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--project-id` | `string` | Yes |  |
+| `--agent-slug` | `string` | Yes |  |
+| `--directory` | `agent | user` | No | The shared agent directory, or one end user's directory. |
+| `--environment` | `published | draft` | No |  |
+| `--tenant-id` | `string` | No |  |
+| `--user-id` | `string` | No |  |
 | `--json` | `JSON` | Yes | Request body as JSON (or use individual body-field flags) |
 
 ---
@@ -2794,55 +3292,6 @@ Model
 
 ---
 
-### `sikaru online-evaluations`
-
-#### `sikaru online-evaluations create-policy`
-
-Create Policy
-
-`POST /v1/projects/{project_id}/online-evaluations`
-
-| Flag | Type | Required | Description |
-|------|------|----------|-------------|
-| `--project-id` | `string` | Yes |  |
-| `--json` | `JSON` | Yes | Request body as JSON (or use individual body-field flags) |
-
-#### `sikaru online-evaluations list-policies`
-
-List Policies
-
-`GET /v1/projects/{project_id}/online-evaluations`
-
-| Flag | Type | Required | Description |
-|------|------|----------|-------------|
-| `--project-id` | `string` | Yes |  |
-| `--after` | `string` | No |  |
-
-#### `sikaru online-evaluations preview-policy-eligibility`
-
-Preview Policy Eligibility
-
-`GET /v1/projects/{project_id}/online-evaluations/preview`
-
-| Flag | Type | Required | Description |
-|------|------|----------|-------------|
-| `--project-id` | `string` | Yes |  |
-| `--environment` | `production | staging | development` | No |  |
-
-#### `sikaru online-evaluations update-policy`
-
-Update Policy
-
-`PATCH /v1/projects/{project_id}/online-evaluations/{policy_id}`
-
-| Flag | Type | Required | Description |
-|------|------|----------|-------------|
-| `--project-id` | `string` | Yes |  |
-| `--policy-id` | `string` | Yes |  |
-| `--json` | `JSON` | Yes | Request body as JSON (or use individual body-field flags) |
-
----
-
 ### `sikaru personal-channels`
 
 #### `sikaru personal-channels authorize-connection`
@@ -2876,6 +3325,21 @@ Complete
 | `--x-sikaru-member-authorization` | `string` | No |  |
 | `--json` | `JSON` | Yes | Request body as JSON (or use individual body-field flags) |
 
+#### `sikaru personal-channels create-browser-handoff`
+
+A one-time link to sign in, in a live browser, to the sites a parked browser call needs.
+
+`POST /v1/personal-channel-bindings/{binding_id}/messages/{receipt_id}/tool-calls/{tool_call_id}/browser-handoff`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--tool-call-id` | `string` | Yes |  |
+| `--binding-id` | `string` | Yes |  |
+| `--receipt-id` | `string` | Yes |  |
+| `--authorization` | `string` | No |  |
+| `--x-sikaru-user-assertion` | `string` | No |  |
+| `--x-sikaru-member-authorization` | `string` | No |  |
+
 #### `sikaru personal-channels decide-approval`
 
 Approve
@@ -2892,6 +3356,36 @@ Approve
 | `--x-sikaru-member-authorization` | `string` | No |  |
 | `--json` | `JSON` | Yes | Request body as JSON (or use individual body-field flags) |
 
+#### `sikaru personal-channels delete-browser-login`
+
+Delete Browser Login
+
+`DELETE /v1/personal-channel-bindings/{binding_id}/messages/{receipt_id}/browser-logins/{login_id}`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--login-id` | `string` | Yes |  |
+| `--binding-id` | `string` | Yes |  |
+| `--receipt-id` | `string` | Yes |  |
+| `--authorization` | `string` | No |  |
+| `--x-sikaru-user-assertion` | `string` | No |  |
+| `--x-sikaru-member-authorization` | `string` | No |  |
+
+#### `sikaru personal-channels delete-browser-rule`
+
+Delete Browser Rule
+
+`DELETE /v1/personal-channel-bindings/{binding_id}/messages/{receipt_id}/browser-rules/{rule_id}`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--rule-id` | `string` | Yes |  |
+| `--binding-id` | `string` | Yes |  |
+| `--receipt-id` | `string` | Yes |  |
+| `--authorization` | `string` | No |  |
+| `--x-sikaru-user-assertion` | `string` | No |  |
+| `--x-sikaru-member-authorization` | `string` | No |  |
+
 #### `sikaru personal-channels download-file`
 
 Download
@@ -2901,6 +3395,65 @@ Download
 | Flag | Type | Required | Description |
 |------|------|----------|-------------|
 | `--file-id` | `string` | Yes |  |
+| `--binding-id` | `string` | Yes |  |
+| `--receipt-id` | `string` | Yes |  |
+| `--authorization` | `string` | No |  |
+| `--x-sikaru-user-assertion` | `string` | No |  |
+| `--x-sikaru-member-authorization` | `string` | No |  |
+
+#### `sikaru personal-channels get-browser-preview`
+
+Everything this user is asked to approve, typed values included.
+
+`GET /v1/personal-channel-bindings/{binding_id}/messages/{receipt_id}/browser-previews/{digest}`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--digest` | `string` | Yes |  |
+| `--binding-id` | `string` | Yes |  |
+| `--receipt-id` | `string` | Yes |  |
+| `--authorization` | `string` | No |  |
+| `--x-sikaru-user-assertion` | `string` | No |  |
+| `--x-sikaru-member-authorization` | `string` | No |  |
+
+#### `sikaru personal-channels get-browser-preview-screenshot`
+
+The page this user is asked to approve, password fields masked.
+
+`GET /v1/personal-channel-bindings/{binding_id}/messages/{receipt_id}/browser-previews/{digest}/screenshot`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--digest` | `string` | Yes |  |
+| `--binding-id` | `string` | Yes |  |
+| `--receipt-id` | `string` | Yes |  |
+| `--authorization` | `string` | No |  |
+| `--x-sikaru-user-assertion` | `string` | No |  |
+| `--x-sikaru-member-authorization` | `string` | No |  |
+
+#### `sikaru personal-channels get-browser-receipt`
+
+What this run's browser did for this user, with their own pages' screenshots.
+
+`GET /v1/personal-channel-bindings/{binding_id}/messages/{receipt_id}/browser-receipt`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--binding-id` | `string` | Yes |  |
+| `--receipt-id` | `string` | Yes |  |
+| `--authorization` | `string` | No |  |
+| `--x-sikaru-user-assertion` | `string` | No |  |
+| `--x-sikaru-member-authorization` | `string` | No |  |
+
+#### `sikaru personal-channels get-browser-receipt-screenshot`
+
+Browser Receipt Screenshot
+
+`GET /v1/personal-channel-bindings/{binding_id}/messages/{receipt_id}/browser-receipt/screenshots/{digest}`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--digest` | `string` | Yes |  |
 | `--binding-id` | `string` | Yes |  |
 | `--receipt-id` | `string` | Yes |  |
 | `--authorization` | `string` | No |  |
@@ -2931,6 +3484,34 @@ Status
 |------|------|----------|-------------|
 | `--binding-id` | `string` | Yes |  |
 | `--verification-id` | `string` | Yes |  |
+| `--authorization` | `string` | No |  |
+| `--x-sikaru-user-assertion` | `string` | No |  |
+| `--x-sikaru-member-authorization` | `string` | No |  |
+
+#### `sikaru personal-channels list-browser-logins`
+
+The sites this user's agents may open signed in as them.
+
+`GET /v1/personal-channel-bindings/{binding_id}/messages/{receipt_id}/browser-logins`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--binding-id` | `string` | Yes |  |
+| `--receipt-id` | `string` | Yes |  |
+| `--authorization` | `string` | No |  |
+| `--x-sikaru-user-assertion` | `string` | No |  |
+| `--x-sikaru-member-authorization` | `string` | No |  |
+
+#### `sikaru personal-channels list-browser-rules`
+
+The browser actions this user always allows this agent to take for them.
+
+`GET /v1/personal-channel-bindings/{binding_id}/messages/{receipt_id}/browser-rules`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--binding-id` | `string` | Yes |  |
+| `--receipt-id` | `string` | Yes |  |
 | `--authorization` | `string` | No |  |
 | `--x-sikaru-user-assertion` | `string` | No |  |
 | `--x-sikaru-member-authorization` | `string` | No |  |
@@ -3103,6 +3684,19 @@ Delete Schedule
 |------|------|----------|-------------|
 | `--project-id` | `string` | Yes |  |
 | `--schedule-id` | `string` | Yes |  |
+| `--expected-revision` | `string` | No |  |
+| `--idempotency-key` | `string` | No |  |
+
+#### `sikaru run-schedules inspect-schedule`
+
+Inspect Schedule
+
+`GET /v1/projects/{project_id}/run-schedules/{schedule_id}`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--project-id` | `string` | Yes |  |
+| `--schedule-id` | `string` | Yes |  |
 
 #### `sikaru run-schedules list-schedules`
 
@@ -3151,6 +3745,18 @@ Schedule Notices
 |------|------|----------|-------------|
 | `--project-id` | `string` | Yes |  |
 | `--schedule-id` | `string` | Yes |  |
+
+#### `sikaru run-schedules update-schedule`
+
+Update Schedule
+
+`PUT /v1/projects/{project_id}/run-schedules/{schedule_id}`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--project-id` | `string` | Yes |  |
+| `--schedule-id` | `string` | Yes |  |
+| `--json` | `JSON` | Yes | Request body as JSON (or use individual body-field flags) |
 
 ---
 
@@ -3203,6 +3809,18 @@ Cancel Run
 | `--project-id` | `string` | Yes |  |
 | `--run-id` | `string` | Yes |  |
 
+#### `sikaru runs create-handoff`
+
+Create Handoff
+
+`POST /v1/projects/{project_id}/runs/{run_id}/browser/handoffs/{tool_call_id}`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--project-id` | `string` | Yes |  |
+| `--run-id` | `string` | Yes |  |
+| `--tool-call-id` | `string` | Yes |  |
+
 #### `sikaru runs decide-approval`
 
 Decide Approval
@@ -3215,6 +3833,17 @@ Decide Approval
 | `--run-id` | `string` | Yes |  |
 | `--tool-call-id` | `string` | Yes |  |
 | `--json` | `JSON` | Yes | Request body as JSON (or use individual body-field flags) |
+
+#### `sikaru runs end-take-over`
+
+Withdraw a take over, or hand back the browser the run is waiting on.
+
+`DELETE /v1/projects/{project_id}/runs/{run_id}/browser/takeover`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--project-id` | `string` | Yes |  |
+| `--run-id` | `string` | Yes |  |
 
 #### `sikaru runs events`
 
@@ -3239,6 +3868,41 @@ Managed Run Summary
 |------|------|----------|-------------|
 | `--project-id` | `string` | Yes |  |
 | `--run-id` | `string` | Yes |  |
+
+#### `sikaru runs get-preview`
+
+Everything a browser approval asks about, typed values included, for its owner only.
+
+`GET /v1/projects/{project_id}/runs/{run_id}/browser/previews/{digest}`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--project-id` | `string` | Yes |  |
+| `--run-id` | `string` | Yes |  |
+| `--digest` | `string` | Yes |  |
+
+#### `sikaru runs get-receipt`
+
+What the run's browser did: pages visited, actions committed, and sign-ins by people.
+
+`GET /v1/projects/{project_id}/runs/{run_id}/browser/receipt`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--project-id` | `string` | Yes |  |
+| `--run-id` | `string` | Yes |  |
+
+#### `sikaru runs get-receipt-screenshot`
+
+Get Receipt Screenshot
+
+`GET /v1/projects/{project_id}/runs/{run_id}/browser/receipt/screenshots/{digest}`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--project-id` | `string` | Yes |  |
+| `--run-id` | `string` | Yes |  |
+| `--digest` | `string` | Yes |  |
 
 #### `sikaru runs get-trajectory`
 
@@ -3276,6 +3940,18 @@ Pending Actions
 |------|------|----------|-------------|
 | `--project-id` | `string` | Yes |  |
 | `--run-id` | `string` | Yes |  |
+
+#### `sikaru runs preview-screenshot`
+
+The page an approver is asked about, password fields masked.
+
+`GET /v1/projects/{project_id}/runs/{run_id}/browser/previews/{digest}/screenshot`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--project-id` | `string` | Yes |  |
+| `--run-id` | `string` | Yes |  |
+| `--digest` | `string` | Yes |  |
 
 #### `sikaru runs record`
 
@@ -3404,6 +4080,30 @@ Submit Tool Result
 | `--run-id` | `string` | Yes |  |
 | `--json` | `JSON` | Yes | Request body as JSON (or use individual body-field flags) |
 
+#### `sikaru runs take-over`
+
+Take over a run's browser after the agent's current action; the link drives it until handed back.
+
+`POST /v1/projects/{project_id}/runs/{run_id}/browser/takeover`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--project-id` | `string` | Yes |  |
+| `--run-id` | `string` | Yes |  |
+| `--json` | `JSON` | No | Request body as JSON (or use individual body-field flags) |
+
+#### `sikaru runs watch-run`
+
+Watch a run's browser read-only. Pages signed in with an end user's own login stay hidden
+from everyone but that user.
+
+`POST /v1/projects/{project_id}/runs/{run_id}/browser/watch`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--project-id` | `string` | Yes |  |
+| `--run-id` | `string` | Yes |  |
+
 ---
 
 ### `sikaru sessions`
@@ -3456,55 +4156,130 @@ List Managed Session Plan
 
 ---
 
-### `sikaru specialists`
+### `sikaru tasks`
 
-#### `sikaru specialists cancel`
+#### `sikaru tasks actions`
 
-Cancel Specialist
+Task Actions
 
-`POST /v1/projects/{project_id}/execution-sessions/{session_id}/specialists/{thread_id}/cancel`
+`GET /v1/projects/{project_id}/execution-sessions/{session_id}/tasks/{task_id}/actions`
 
 | Flag | Type | Required | Description |
 |------|------|----------|-------------|
 | `--project-id` | `string` | Yes |  |
 | `--session-id` | `string` | Yes |  |
-| `--thread-id` | `string` | Yes |  |
+| `--task-id` | `string` | Yes |  |
+
+#### `sikaru tasks approve-action`
+
+Approve Task Action
+
+`POST /v1/projects/{project_id}/execution-sessions/{session_id}/tasks/{task_id}/actions/{action_id}/approval`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--project-id` | `string` | Yes |  |
+| `--session-id` | `string` | Yes |  |
+| `--task-id` | `string` | Yes |  |
+| `--action-id` | `string` | Yes |  |
 | `--json` | `JSON` | Yes | Request body as JSON (or use individual body-field flags) |
 
-#### `sikaru specialists get`
+#### `sikaru tasks cancel`
 
-Get Specialist
+Cancel Task
 
-`GET /v1/projects/{project_id}/execution-sessions/{session_id}/specialists/{thread_id}`
-
-| Flag | Type | Required | Description |
-|------|------|----------|-------------|
-| `--project-id` | `string` | Yes |  |
-| `--session-id` | `string` | Yes |  |
-| `--thread-id` | `string` | Yes |  |
-
-#### `sikaru specialists list`
-
-List Specialists
-
-`GET /v1/projects/{project_id}/execution-sessions/{session_id}/specialists`
+`POST /v1/projects/{project_id}/execution-sessions/{session_id}/tasks/{task_id}/cancel`
 
 | Flag | Type | Required | Description |
 |------|------|----------|-------------|
 | `--project-id` | `string` | Yes |  |
 | `--session-id` | `string` | Yes |  |
+| `--task-id` | `string` | Yes |  |
+| `--json` | `JSON` | Yes | Request body as JSON (or use individual body-field flags) |
 
-#### `sikaru specialists message`
+#### `sikaru tasks changes`
 
-Message Specialist
+Task Changes
 
-`POST /v1/projects/{project_id}/execution-sessions/{session_id}/specialists/{thread_id}/messages`
+`GET /v1/projects/{project_id}/execution-sessions/{session_id}/tasks/{task_id}/changes`
 
 | Flag | Type | Required | Description |
 |------|------|----------|-------------|
 | `--project-id` | `string` | Yes |  |
 | `--session-id` | `string` | Yes |  |
-| `--thread-id` | `string` | Yes |  |
+| `--task-id` | `string` | Yes |  |
+
+#### `sikaru tasks get`
+
+Get Task
+
+`GET /v1/projects/{project_id}/execution-sessions/{session_id}/tasks/{task_id}`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--project-id` | `string` | Yes |  |
+| `--session-id` | `string` | Yes |  |
+| `--task-id` | `string` | Yes |  |
+
+#### `sikaru tasks integrate`
+
+Integrate Task
+
+`POST /v1/projects/{project_id}/execution-sessions/{session_id}/tasks/{task_id}/integrations`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--project-id` | `string` | Yes |  |
+| `--session-id` | `string` | Yes |  |
+| `--task-id` | `string` | Yes |  |
+| `--json` | `JSON` | Yes | Request body as JSON (or use individual body-field flags) |
+
+#### `sikaru tasks integrations`
+
+Task Integrations
+
+`GET /v1/projects/{project_id}/execution-sessions/{session_id}/tasks/{task_id}/integrations`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--project-id` | `string` | Yes |  |
+| `--session-id` | `string` | Yes |  |
+| `--task-id` | `string` | Yes |  |
+
+#### `sikaru tasks list`
+
+List Tasks
+
+`GET /v1/projects/{project_id}/execution-sessions/{session_id}/tasks`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--project-id` | `string` | Yes |  |
+| `--session-id` | `string` | Yes |  |
+
+#### `sikaru tasks message`
+
+Message Task
+
+`POST /v1/projects/{project_id}/execution-sessions/{session_id}/tasks/{task_id}/messages`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--project-id` | `string` | Yes |  |
+| `--session-id` | `string` | Yes |  |
+| `--task-id` | `string` | Yes |  |
+| `--json` | `JSON` | Yes | Request body as JSON (or use individual body-field flags) |
+
+#### `sikaru tasks stop-all`
+
+Stop Background Tasks
+
+`POST /v1/projects/{project_id}/execution-sessions/{session_id}/tasks/stop-all`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--project-id` | `string` | Yes |  |
+| `--session-id` | `string` | Yes |  |
 | `--json` | `JSON` | Yes | Request body as JSON (or use individual body-field flags) |
 
 ---

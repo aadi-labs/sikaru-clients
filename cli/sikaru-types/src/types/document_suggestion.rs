@@ -34,15 +34,15 @@ pub struct DocumentSuggestion {
     pub diff: Option<String>,
     #[serde(default)]
     pub document: String,
+    /// The linked issue, when the change came from one.
+    #[serde(rename = "graderId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub grader_id: Option<String>,
     #[serde(default)]
     pub id: String,
     /// Why it was suggested, in at most 280 characters.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub rationale: Option<String>,
-    /// The linked issue, when the change came from one.
-    #[serde(rename = "signalId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub signal_id: Option<String>,
     #[serde(default)]
     pub status: String,
     /// The change this suggestion came from, when it has one.
@@ -69,9 +69,9 @@ pub struct DocumentSuggestionBuilder {
     created_at: Option<String>,
     diff: Option<String>,
     document: Option<String>,
+    grader_id: Option<String>,
     id: Option<String>,
     rationale: Option<String>,
-    signal_id: Option<String>,
     status: Option<String>,
     title: Option<String>,
 }
@@ -127,6 +127,11 @@ impl DocumentSuggestionBuilder {
         self
     }
 
+    pub fn grader_id(mut self, value: impl Into<String>) -> Self {
+        self.grader_id = Some(value.into());
+        self
+    }
+
     pub fn id(mut self, value: impl Into<String>) -> Self {
         self.id = Some(value.into());
         self
@@ -134,11 +139,6 @@ impl DocumentSuggestionBuilder {
 
     pub fn rationale(mut self, value: impl Into<String>) -> Self {
         self.rationale = Some(value.into());
-        self
-    }
-
-    pub fn signal_id(mut self, value: impl Into<String>) -> Self {
-        self.signal_id = Some(value.into());
         self
     }
 
@@ -174,9 +174,9 @@ impl DocumentSuggestionBuilder {
             created_at: self.created_at.ok_or_else(|| BuildError::missing_field("created_at"))?,
             diff: self.diff,
             document: self.document.ok_or_else(|| BuildError::missing_field("document"))?,
+            grader_id: self.grader_id,
             id: self.id.ok_or_else(|| BuildError::missing_field("id"))?,
             rationale: self.rationale,
-            signal_id: self.signal_id,
             status: self.status.ok_or_else(|| BuildError::missing_field("status"))?,
             title: self.title,
         })

@@ -10,4 +10,8 @@ export interface UpdateAgent {
     displayName?: string | null;
     /** Most turns the agent runs at once; null restores the default. */
     maxConcurrentTurns?: number | null;
+    /** Whether memory dreams run automatically once conversations go idle. "Dream now" works either way. */
+    memoryDreamAuto?: boolean;
+    /** Seconds a user's conversations stay idle before an automatic dream; null restores the default of 900. */
+    memoryDreamIdleSeconds?: number | null;
 }

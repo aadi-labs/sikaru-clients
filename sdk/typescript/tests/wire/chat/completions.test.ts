@@ -8,7 +8,7 @@ describe("CompletionsClient", () => {
     test("create_stream", async () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
-        const rawRequestBody = { "messages" : [ { "key" : "value" } ] , "model" : "model" , "stream" : true };
+        const rawRequestBody = { "messages" : [ { "key" : "value" } ] , "stream" : true };
         const rawResponseBody = "event: \ndata: {\"choices\":[{\"finish_reason\":\"finish_reason\",\"index\":1,\"logprobs\":{\"key\":\"value\"}}],\"created\":1,\"id\":\"id\",\"model\":\"model\",\"object\":\"object\",\"usage\":{\"completion_tokens\":1,\"completion_tokens_details\":{\"key\":\"value\"},\"prompt_tokens\":1,\"prompt_tokens_details\":{\"key\":\"value\"},\"total_tokens\":1}}\n\n";
         
         server
@@ -22,8 +22,7 @@ describe("CompletionsClient", () => {
             const response = await client.chat.completions.createStream({
     messages: [{
             "key": "value"
-        }],
-    model: "model"
+        }]
 });
             const events: unknown[] = [];
             for await (const event of response) {
@@ -58,7 +57,7 @@ describe("CompletionsClient", () => {
     test("create", async () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
-        const rawRequestBody = { "messages" : [ { "key" : "value" } ] , "model" : "model" , "stream" : false };
+        const rawRequestBody = { "messages" : [ { "key" : "value" } ] , "stream" : false };
         const rawResponseBody = { "choices" : [ { "finish_reason" : "finish_reason" , "index" : 1 , "logprobs" : { "key" : "value" } } ] , "created" : 1 , "id" : "id" , "model" : "model" , "object" : "object" , "usage" : { "completion_tokens" : 1 , "completion_tokens_details" : { "key" : "value" } , "prompt_tokens" : 1 , "prompt_tokens_details" : { "key" : "value" } , "total_tokens" : 1 } };
         
         server
@@ -73,8 +72,7 @@ describe("CompletionsClient", () => {
                                 const response = await client.chat.completions.create({
     messages: [{
             "key": "value"
-        }],
-    model: "model"
+        }]
 });
                                 expect(response).toEqual(rawResponseBody);
                               

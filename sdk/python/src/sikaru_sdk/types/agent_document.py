@@ -23,6 +23,7 @@ class AgentDocument(UniversalBaseModel):
     ]
     created_at: typing_extensions.Annotated[str, FieldMetadata(alias="createdAt"), pydantic.Field(alias="createdAt")]
     document: str
+    files: typing.Optional[typing.Dict[str, str]] = None
     revision: int
     validation: DocumentValidationView
 

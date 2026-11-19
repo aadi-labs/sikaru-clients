@@ -9,6 +9,7 @@ export interface AgentDocument {
     contentOrigin: string;
     createdAt: string;
     document: string;
+    files?: Record<string, string> | undefined;
     revision: number;
     validation: Sikaru.DocumentValidationView;
 }

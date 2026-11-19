@@ -12,9 +12,9 @@ export interface CreateEvaluatorRunRequest {
     datasetName?: string | null;
     evaluatorName?: string | null;
     filterExpression?: string | null;
+    graderTags?: string[];
     issueId?: string | null;
     issueTitle?: string | null;
     sampleRate?: string | null;
-    signalTags?: string[];
     traceIds: string[];
 }

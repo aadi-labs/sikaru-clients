@@ -83,8 +83,7 @@ export class CompletionsClient {
      *     await client.chat.completions.create({
      *         messages: [{
      *                 "key": "value"
-     *             }],
-     *         model: "model"
+     *             }]
      *     })
      */
     public create(request: Sikaru.chat.ChatCompletionCreateParams, requestOptions?: CompletionsClient.RequestOptions): core.HttpResponsePromise<Sikaru.ChatCompletion> {

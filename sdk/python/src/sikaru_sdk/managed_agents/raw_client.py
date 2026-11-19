@@ -11,18 +11,23 @@ from ..core.parse_error import ParsingError
 from ..core.pydantic_utilities import parse_obj_as
 from ..core.request_options import RequestOptions
 from ..core.serialization import convert_and_respect_annotation_metadata
+from ..errors.conflict_error import ConflictError
 from ..errors.forbidden_error import ForbiddenError
 from ..errors.not_found_error import NotFoundError
+from ..errors.service_unavailable_error import ServiceUnavailableError
 from ..errors.unauthorized_error import UnauthorizedError
 from ..errors.unprocessable_entity_error import UnprocessableEntityError
-from ..types.agent_definition import AgentDefinition
+from ..types.browser_rule_list import BrowserRuleList
 from ..types.create_managed_agent_source_request import CreateManagedAgentSourceRequest
 from ..types.created_managed_agent import CreatedManagedAgent
-from ..types.definition_revision_result import DefinitionRevisionResult
 from ..types.definition_revision_view import DefinitionRevisionView
 from ..types.error_response import ErrorResponse
+from ..types.live_link import LiveLink
 from ..types.managed_agent_read import ManagedAgentRead
+from ..types.playbook_list import PlaybookList
 from ..types.renamed_managed_agent import RenamedManagedAgent
+from ..types.saved_logins import SavedLogins
+from ..types.skill_source_receipt import SkillSourceReceipt
 from .types.create_managed_agent_request_initial_channel import CreateManagedAgentRequestInitialChannel
 from .types.create_managed_agent_request_status import CreateManagedAgentRequestStatus
 from pydantic import ValidationError
@@ -136,6 +141,8 @@ class RawManagedAgentsClient:
         harness_id: typing.Optional[str] = OMIT,
         initial_channel: typing.Optional[CreateManagedAgentRequestInitialChannel] = OMIT,
         max_concurrent_turns: typing.Optional[int] = OMIT,
+        memory_dream_auto: typing.Optional[bool] = OMIT,
+        memory_dream_idle_seconds: typing.Optional[int] = OMIT,
         personal: typing.Optional[bool] = OMIT,
         source: typing.Optional[CreateManagedAgentSourceRequest] = OMIT,
         status: typing.Optional[CreateManagedAgentRequestStatus] = OMIT,
@@ -166,6 +173,12 @@ class RawManagedAgentsClient:
 
         max_concurrent_turns : typing.Optional[int]
             Most turns the agent runs at once; omit to keep the current limit.
+
+        memory_dream_auto : typing.Optional[bool]
+            Whether memory dreams run automatically once conversations go idle; omit to keep the current choice.
+
+        memory_dream_idle_seconds : typing.Optional[int]
+            Seconds a user's conversations stay idle before an automatic dream; null means 900. Omit to keep the current delay.
 
         personal : typing.Optional[bool]
             Fixed at creation; new agents are shared unless set. A personal agent's conversations stay private to the person who runs them. Omit it to keep an existing agent's choice.
@@ -201,6 +214,8 @@ class RawManagedAgentsClient:
                     object_=initial_channel, annotation=CreateManagedAgentRequestInitialChannel, direction="write"
                 ),
                 "maxConcurrentTurns": max_concurrent_turns,
+                "memoryDreamAuto": memory_dream_auto,
+                "memoryDreamIdleSeconds": memory_dream_idle_seconds,
                 "personal": personal,
                 "source": convert_and_respect_annotation_metadata(
                     object_=source, annotation=typing.Optional[CreateManagedAgentSourceRequest], direction="write"
@@ -257,6 +272,17 @@ class RawManagedAgentsClient:
                         ),
                     ),
                 )
+            if _response.status_code == 409:
+                raise ConflictError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
             if _response.status_code == 422:
                 raise UnprocessableEntityError(
                     headers=dict(_response.headers),
@@ -264,6 +290,17 @@ class RawManagedAgentsClient:
                         typing.Any,
                         parse_obj_as(
                             type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 503:
+                raise ServiceUnavailableError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -464,10 +501,12 @@ class RawManagedAgentsClient:
         background_turn_share: typing.Optional[float] = OMIT,
         display_name: typing.Optional[str] = OMIT,
         max_concurrent_turns: typing.Optional[int] = OMIT,
+        memory_dream_auto: typing.Optional[bool] = OMIT,
+        memory_dream_idle_seconds: typing.Optional[int] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[RenamedManagedAgent]:
         """
-        Change the agent's display name or turn capacity. The slug and every reference to the agent stay the same.
+        Change the agent's display name, turn capacity or memory dreaming. The slug and every reference to the agent stay the same.
 
         Personal and end-user-cell choices are fixed at creation.
 
@@ -484,6 +523,12 @@ class RawManagedAgentsClient:
 
         max_concurrent_turns : typing.Optional[int]
             Most turns the agent runs at once; null restores the default.
+
+        memory_dream_auto : typing.Optional[bool]
+            Whether memory dreams run automatically once conversations go idle. "Dream now" works either way.
+
+        memory_dream_idle_seconds : typing.Optional[int]
+            Seconds a user's conversations stay idle before an automatic dream; null restores the default of 900.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -504,6 +549,8 @@ class RawManagedAgentsClient:
                 "backgroundTurnShare": background_turn_share,
                 "displayName": display_name,
                 "maxConcurrentTurns": max_concurrent_turns,
+                "memoryDreamAuto": memory_dream_auto,
+                "memoryDreamIdleSeconds": memory_dream_idle_seconds,
             },
             headers={
                 **_endpoint_auth_headers,
@@ -575,17 +622,101 @@ class RawManagedAgentsClient:
             )
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def create_definition_revision(
-        self,
-        project_id: str,
-        agent_slug: str,
-        *,
-        content_digest: str,
-        definition: AgentDefinition,
-        request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[DefinitionRevisionResult]:
+    def list_agent_logins(
+        self, project_id: str, agent_slug: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> HttpResponse[SavedLogins]:
         """
-        Stage a changed definition as a draft revision; the live definition is a no-op.
+        Parameters
+        ----------
+        project_id : str
+
+        agent_slug : str
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[SavedLogins]
+            Successful Response
+        """
+        _endpoint_auth_headers = self._client_wrapper.get_auth_headers_for_endpoint(security=[{"BearerAuth": []}])
+        _response = self._client_wrapper.httpx_client.request(
+            f"v1/projects/{encode_path_param(project_id)}/managed-agents/{encode_path_param(agent_slug)}/browser-logins",
+            method="GET",
+            headers={
+                **_endpoint_auth_headers,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    SavedLogins,
+                    parse_obj_as(
+                        type_=SavedLogins,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        except ValidationError as e:
+            raise ParsingError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+            )
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def add_agent_login(
+        self, project_id: str, agent_slug: str, *, url: str, request_options: typing.Optional[RequestOptions] = None
+    ) -> HttpResponse[LiveLink]:
+        """
+        An operator signs the agent in to a company account once; every run then uses it.
 
         Parameters
         ----------
@@ -593,16 +724,14 @@ class RawManagedAgentsClient:
 
         agent_slug : str
 
-        content_digest : str
-
-        definition : AgentDefinition
+        url : str
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        HttpResponse[DefinitionRevisionResult]
+        HttpResponse[LiveLink]
             Successful Response
         """
         _request_options_with_retries_disabled: typing.Optional[RequestOptions] = (
@@ -610,13 +739,10 @@ class RawManagedAgentsClient:
         )
         _endpoint_auth_headers = self._client_wrapper.get_auth_headers_for_endpoint(security=[{"BearerAuth": []}])
         _response = self._client_wrapper.httpx_client.request(
-            f"v1/projects/{encode_path_param(project_id)}/managed-agents/{encode_path_param(agent_slug)}/definition-revisions",
+            f"v1/projects/{encode_path_param(project_id)}/managed-agents/{encode_path_param(agent_slug)}/browser-logins",
             method="POST",
             json={
-                "contentDigest": content_digest,
-                "definition": convert_and_respect_annotation_metadata(
-                    object_=definition, annotation=AgentDefinition, direction="write"
-                ),
+                "url": url,
             },
             headers={
                 **_endpoint_auth_headers,
@@ -628,13 +754,466 @@ class RawManagedAgentsClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    DefinitionRevisionResult,
+                    LiveLink,
                     parse_obj_as(
-                        type_=DefinitionRevisionResult,  # type: ignore
+                        type_=LiveLink,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        except ValidationError as e:
+            raise ParsingError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+            )
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def delete_agent_login(
+        self,
+        project_id: str,
+        agent_slug: str,
+        login_id: str,
+        *,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[None]:
+        """
+        Parameters
+        ----------
+        project_id : str
+
+        agent_slug : str
+
+        login_id : str
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[None]
+        """
+        _request_options_with_retries_disabled: typing.Optional[RequestOptions] = (
+            {**request_options, "max_retries": 0} if request_options is not None else {"max_retries": 0}
+        )
+        _endpoint_auth_headers = self._client_wrapper.get_auth_headers_for_endpoint(security=[{"BearerAuth": []}])
+        _response = self._client_wrapper.httpx_client.request(
+            f"v1/projects/{encode_path_param(project_id)}/managed-agents/{encode_path_param(agent_slug)}/browser-logins/{encode_path_param(login_id)}",
+            method="DELETE",
+            headers={
+                **_endpoint_auth_headers,
+            },
+            request_options=_request_options_with_retries_disabled,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                return HttpResponse(response=_response, data=None)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        except ValidationError as e:
+            raise ParsingError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+            )
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def list_playbooks(
+        self, project_id: str, agent_slug: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> HttpResponse[PlaybookList]:
+        """
+        Parameters
+        ----------
+        project_id : str
+
+        agent_slug : str
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[PlaybookList]
+            Successful Response
+        """
+        _endpoint_auth_headers = self._client_wrapper.get_auth_headers_for_endpoint(security=[{"BearerAuth": []}])
+        _response = self._client_wrapper.httpx_client.request(
+            f"v1/projects/{encode_path_param(project_id)}/managed-agents/{encode_path_param(agent_slug)}/browser-playbooks",
+            method="GET",
+            headers={
+                **_endpoint_auth_headers,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    PlaybookList,
+                    parse_obj_as(
+                        type_=PlaybookList,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        except ValidationError as e:
+            raise ParsingError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+            )
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def delete_playbook(
+        self,
+        project_id: str,
+        agent_slug: str,
+        playbook_id: str,
+        *,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[None]:
+        """
+        Parameters
+        ----------
+        project_id : str
+
+        agent_slug : str
+
+        playbook_id : str
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[None]
+        """
+        _request_options_with_retries_disabled: typing.Optional[RequestOptions] = (
+            {**request_options, "max_retries": 0} if request_options is not None else {"max_retries": 0}
+        )
+        _endpoint_auth_headers = self._client_wrapper.get_auth_headers_for_endpoint(security=[{"BearerAuth": []}])
+        _response = self._client_wrapper.httpx_client.request(
+            f"v1/projects/{encode_path_param(project_id)}/managed-agents/{encode_path_param(agent_slug)}/browser-playbooks/{encode_path_param(playbook_id)}",
+            method="DELETE",
+            headers={
+                **_endpoint_auth_headers,
+            },
+            request_options=_request_options_with_retries_disabled,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                return HttpResponse(response=_response, data=None)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        except ValidationError as e:
+            raise ParsingError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+            )
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def list_rules(
+        self, project_id: str, agent_slug: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> HttpResponse[BrowserRuleList]:
+        """
+        Every always-allow rule on the agent; a rule personal to one end user does not say whose.
+
+        Parameters
+        ----------
+        project_id : str
+
+        agent_slug : str
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[BrowserRuleList]
+            Successful Response
+        """
+        _endpoint_auth_headers = self._client_wrapper.get_auth_headers_for_endpoint(security=[{"BearerAuth": []}])
+        _response = self._client_wrapper.httpx_client.request(
+            f"v1/projects/{encode_path_param(project_id)}/managed-agents/{encode_path_param(agent_slug)}/browser-rules",
+            method="GET",
+            headers={
+                **_endpoint_auth_headers,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    BrowserRuleList,
+                    parse_obj_as(
+                        type_=BrowserRuleList,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        except ValidationError as e:
+            raise ParsingError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+            )
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def delete_rule(
+        self, project_id: str, agent_slug: str, rule_id: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> HttpResponse[None]:
+        """
+        Parameters
+        ----------
+        project_id : str
+
+        agent_slug : str
+
+        rule_id : str
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[None]
+        """
+        _request_options_with_retries_disabled: typing.Optional[RequestOptions] = (
+            {**request_options, "max_retries": 0} if request_options is not None else {"max_retries": 0}
+        )
+        _endpoint_auth_headers = self._client_wrapper.get_auth_headers_for_endpoint(security=[{"BearerAuth": []}])
+        _response = self._client_wrapper.httpx_client.request(
+            f"v1/projects/{encode_path_param(project_id)}/managed-agents/{encode_path_param(agent_slug)}/browser-rules/{encode_path_param(rule_id)}",
+            method="DELETE",
+            headers={
+                **_endpoint_auth_headers,
+            },
+            request_options=_request_options_with_retries_disabled,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                return HttpResponse(response=_response, data=None)
             if _response.status_code == 401:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
@@ -728,6 +1307,145 @@ class RawManagedAgentsClient:
                     DefinitionRevisionView,
                     parse_obj_as(
                         type_=DefinitionRevisionView,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        except ValidationError as e:
+            raise ParsingError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+            )
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def update_end_user_skill_source(
+        self,
+        project_id: str,
+        agent_slug: str,
+        tenant_id: str,
+        user_id: str,
+        skill_id: str,
+        *,
+        enabled: bool,
+        operation_id: str,
+        source_revision: str,
+        content: typing.Optional[str] = OMIT,
+        expected_revision: typing.Optional[str] = OMIT,
+        resources: typing.Optional[typing.Dict[str, str]] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[SkillSourceReceipt]:
+        """
+        Replace or enable a customer-authored source using its own revision CAS.
+
+        Private optimized methodology and optimizer digests are never returned.
+        Replaying an operation returns its original receipt without reverting later work.
+
+        Parameters
+        ----------
+        project_id : str
+
+        agent_slug : str
+
+        tenant_id : str
+
+        user_id : str
+
+        skill_id : str
+
+        enabled : bool
+
+        operation_id : str
+
+        source_revision : str
+
+        content : typing.Optional[str]
+
+        expected_revision : typing.Optional[str]
+
+        resources : typing.Optional[typing.Dict[str, str]]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[SkillSourceReceipt]
+            Successful Response
+        """
+        _request_options_with_retries_disabled: typing.Optional[RequestOptions] = (
+            {**request_options, "max_retries": 0} if request_options is not None else {"max_retries": 0}
+        )
+        _endpoint_auth_headers = self._client_wrapper.get_auth_headers_for_endpoint(security=[{"BearerAuth": []}])
+        _response = self._client_wrapper.httpx_client.request(
+            f"v1/projects/{encode_path_param(project_id)}/managed-agents/{encode_path_param(agent_slug)}/end-users/{encode_path_param(tenant_id)}/{encode_path_param(user_id)}/skill-sources/{encode_path_param(skill_id)}",
+            method="PUT",
+            json={
+                "content": content,
+                "enabled": enabled,
+                "expectedRevision": expected_revision,
+                "operationId": operation_id,
+                "resources": resources,
+                "sourceRevision": source_revision,
+            },
+            headers={
+                **_endpoint_auth_headers,
+                "content-type": "application/json",
+            },
+            request_options=_request_options_with_retries_disabled,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    SkillSourceReceipt,
+                    parse_obj_as(
+                        type_=SkillSourceReceipt,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
@@ -893,6 +1611,8 @@ class AsyncRawManagedAgentsClient:
         harness_id: typing.Optional[str] = OMIT,
         initial_channel: typing.Optional[CreateManagedAgentRequestInitialChannel] = OMIT,
         max_concurrent_turns: typing.Optional[int] = OMIT,
+        memory_dream_auto: typing.Optional[bool] = OMIT,
+        memory_dream_idle_seconds: typing.Optional[int] = OMIT,
         personal: typing.Optional[bool] = OMIT,
         source: typing.Optional[CreateManagedAgentSourceRequest] = OMIT,
         status: typing.Optional[CreateManagedAgentRequestStatus] = OMIT,
@@ -923,6 +1643,12 @@ class AsyncRawManagedAgentsClient:
 
         max_concurrent_turns : typing.Optional[int]
             Most turns the agent runs at once; omit to keep the current limit.
+
+        memory_dream_auto : typing.Optional[bool]
+            Whether memory dreams run automatically once conversations go idle; omit to keep the current choice.
+
+        memory_dream_idle_seconds : typing.Optional[int]
+            Seconds a user's conversations stay idle before an automatic dream; null means 900. Omit to keep the current delay.
 
         personal : typing.Optional[bool]
             Fixed at creation; new agents are shared unless set. A personal agent's conversations stay private to the person who runs them. Omit it to keep an existing agent's choice.
@@ -960,6 +1686,8 @@ class AsyncRawManagedAgentsClient:
                     object_=initial_channel, annotation=CreateManagedAgentRequestInitialChannel, direction="write"
                 ),
                 "maxConcurrentTurns": max_concurrent_turns,
+                "memoryDreamAuto": memory_dream_auto,
+                "memoryDreamIdleSeconds": memory_dream_idle_seconds,
                 "personal": personal,
                 "source": convert_and_respect_annotation_metadata(
                     object_=source, annotation=typing.Optional[CreateManagedAgentSourceRequest], direction="write"
@@ -1016,6 +1744,17 @@ class AsyncRawManagedAgentsClient:
                         ),
                     ),
                 )
+            if _response.status_code == 409:
+                raise ConflictError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
             if _response.status_code == 422:
                 raise UnprocessableEntityError(
                     headers=dict(_response.headers),
@@ -1023,6 +1762,17 @@ class AsyncRawManagedAgentsClient:
                         typing.Any,
                         parse_obj_as(
                             type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 503:
+                raise ServiceUnavailableError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -1227,10 +1977,12 @@ class AsyncRawManagedAgentsClient:
         background_turn_share: typing.Optional[float] = OMIT,
         display_name: typing.Optional[str] = OMIT,
         max_concurrent_turns: typing.Optional[int] = OMIT,
+        memory_dream_auto: typing.Optional[bool] = OMIT,
+        memory_dream_idle_seconds: typing.Optional[int] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[RenamedManagedAgent]:
         """
-        Change the agent's display name or turn capacity. The slug and every reference to the agent stay the same.
+        Change the agent's display name, turn capacity or memory dreaming. The slug and every reference to the agent stay the same.
 
         Personal and end-user-cell choices are fixed at creation.
 
@@ -1247,6 +1999,12 @@ class AsyncRawManagedAgentsClient:
 
         max_concurrent_turns : typing.Optional[int]
             Most turns the agent runs at once; null restores the default.
+
+        memory_dream_auto : typing.Optional[bool]
+            Whether memory dreams run automatically once conversations go idle. "Dream now" works either way.
+
+        memory_dream_idle_seconds : typing.Optional[int]
+            Seconds a user's conversations stay idle before an automatic dream; null restores the default of 900.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -1269,6 +2027,8 @@ class AsyncRawManagedAgentsClient:
                 "backgroundTurnShare": background_turn_share,
                 "displayName": display_name,
                 "maxConcurrentTurns": max_concurrent_turns,
+                "memoryDreamAuto": memory_dream_auto,
+                "memoryDreamIdleSeconds": memory_dream_idle_seconds,
             },
             headers={
                 **_endpoint_auth_headers,
@@ -1340,17 +2100,103 @@ class AsyncRawManagedAgentsClient:
             )
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def create_definition_revision(
-        self,
-        project_id: str,
-        agent_slug: str,
-        *,
-        content_digest: str,
-        definition: AgentDefinition,
-        request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[DefinitionRevisionResult]:
+    async def list_agent_logins(
+        self, project_id: str, agent_slug: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> AsyncHttpResponse[SavedLogins]:
         """
-        Stage a changed definition as a draft revision; the live definition is a no-op.
+        Parameters
+        ----------
+        project_id : str
+
+        agent_slug : str
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[SavedLogins]
+            Successful Response
+        """
+        _endpoint_auth_headers = await self._client_wrapper.async_get_auth_headers_for_endpoint(
+            security=[{"BearerAuth": []}]
+        )
+        _response = await self._client_wrapper.httpx_client.request(
+            f"v1/projects/{encode_path_param(project_id)}/managed-agents/{encode_path_param(agent_slug)}/browser-logins",
+            method="GET",
+            headers={
+                **_endpoint_auth_headers,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    SavedLogins,
+                    parse_obj_as(
+                        type_=SavedLogins,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        except ValidationError as e:
+            raise ParsingError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+            )
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def add_agent_login(
+        self, project_id: str, agent_slug: str, *, url: str, request_options: typing.Optional[RequestOptions] = None
+    ) -> AsyncHttpResponse[LiveLink]:
+        """
+        An operator signs the agent in to a company account once; every run then uses it.
 
         Parameters
         ----------
@@ -1358,16 +2204,14 @@ class AsyncRawManagedAgentsClient:
 
         agent_slug : str
 
-        content_digest : str
-
-        definition : AgentDefinition
+        url : str
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        AsyncHttpResponse[DefinitionRevisionResult]
+        AsyncHttpResponse[LiveLink]
             Successful Response
         """
         _request_options_with_retries_disabled: typing.Optional[RequestOptions] = (
@@ -1377,13 +2221,10 @@ class AsyncRawManagedAgentsClient:
             security=[{"BearerAuth": []}]
         )
         _response = await self._client_wrapper.httpx_client.request(
-            f"v1/projects/{encode_path_param(project_id)}/managed-agents/{encode_path_param(agent_slug)}/definition-revisions",
+            f"v1/projects/{encode_path_param(project_id)}/managed-agents/{encode_path_param(agent_slug)}/browser-logins",
             method="POST",
             json={
-                "contentDigest": content_digest,
-                "definition": convert_and_respect_annotation_metadata(
-                    object_=definition, annotation=AgentDefinition, direction="write"
-                ),
+                "url": url,
             },
             headers={
                 **_endpoint_auth_headers,
@@ -1395,13 +2236,476 @@ class AsyncRawManagedAgentsClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    DefinitionRevisionResult,
+                    LiveLink,
                     parse_obj_as(
-                        type_=DefinitionRevisionResult,  # type: ignore
+                        type_=LiveLink,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
                 return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        except ValidationError as e:
+            raise ParsingError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+            )
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def delete_agent_login(
+        self,
+        project_id: str,
+        agent_slug: str,
+        login_id: str,
+        *,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[None]:
+        """
+        Parameters
+        ----------
+        project_id : str
+
+        agent_slug : str
+
+        login_id : str
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[None]
+        """
+        _request_options_with_retries_disabled: typing.Optional[RequestOptions] = (
+            {**request_options, "max_retries": 0} if request_options is not None else {"max_retries": 0}
+        )
+        _endpoint_auth_headers = await self._client_wrapper.async_get_auth_headers_for_endpoint(
+            security=[{"BearerAuth": []}]
+        )
+        _response = await self._client_wrapper.httpx_client.request(
+            f"v1/projects/{encode_path_param(project_id)}/managed-agents/{encode_path_param(agent_slug)}/browser-logins/{encode_path_param(login_id)}",
+            method="DELETE",
+            headers={
+                **_endpoint_auth_headers,
+            },
+            request_options=_request_options_with_retries_disabled,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                return AsyncHttpResponse(response=_response, data=None)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        except ValidationError as e:
+            raise ParsingError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+            )
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def list_playbooks(
+        self, project_id: str, agent_slug: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> AsyncHttpResponse[PlaybookList]:
+        """
+        Parameters
+        ----------
+        project_id : str
+
+        agent_slug : str
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[PlaybookList]
+            Successful Response
+        """
+        _endpoint_auth_headers = await self._client_wrapper.async_get_auth_headers_for_endpoint(
+            security=[{"BearerAuth": []}]
+        )
+        _response = await self._client_wrapper.httpx_client.request(
+            f"v1/projects/{encode_path_param(project_id)}/managed-agents/{encode_path_param(agent_slug)}/browser-playbooks",
+            method="GET",
+            headers={
+                **_endpoint_auth_headers,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    PlaybookList,
+                    parse_obj_as(
+                        type_=PlaybookList,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        except ValidationError as e:
+            raise ParsingError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+            )
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def delete_playbook(
+        self,
+        project_id: str,
+        agent_slug: str,
+        playbook_id: str,
+        *,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[None]:
+        """
+        Parameters
+        ----------
+        project_id : str
+
+        agent_slug : str
+
+        playbook_id : str
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[None]
+        """
+        _request_options_with_retries_disabled: typing.Optional[RequestOptions] = (
+            {**request_options, "max_retries": 0} if request_options is not None else {"max_retries": 0}
+        )
+        _endpoint_auth_headers = await self._client_wrapper.async_get_auth_headers_for_endpoint(
+            security=[{"BearerAuth": []}]
+        )
+        _response = await self._client_wrapper.httpx_client.request(
+            f"v1/projects/{encode_path_param(project_id)}/managed-agents/{encode_path_param(agent_slug)}/browser-playbooks/{encode_path_param(playbook_id)}",
+            method="DELETE",
+            headers={
+                **_endpoint_auth_headers,
+            },
+            request_options=_request_options_with_retries_disabled,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                return AsyncHttpResponse(response=_response, data=None)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        except ValidationError as e:
+            raise ParsingError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+            )
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def list_rules(
+        self, project_id: str, agent_slug: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> AsyncHttpResponse[BrowserRuleList]:
+        """
+        Every always-allow rule on the agent; a rule personal to one end user does not say whose.
+
+        Parameters
+        ----------
+        project_id : str
+
+        agent_slug : str
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[BrowserRuleList]
+            Successful Response
+        """
+        _endpoint_auth_headers = await self._client_wrapper.async_get_auth_headers_for_endpoint(
+            security=[{"BearerAuth": []}]
+        )
+        _response = await self._client_wrapper.httpx_client.request(
+            f"v1/projects/{encode_path_param(project_id)}/managed-agents/{encode_path_param(agent_slug)}/browser-rules",
+            method="GET",
+            headers={
+                **_endpoint_auth_headers,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    BrowserRuleList,
+                    parse_obj_as(
+                        type_=BrowserRuleList,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        except ValidationError as e:
+            raise ParsingError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+            )
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def delete_rule(
+        self, project_id: str, agent_slug: str, rule_id: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> AsyncHttpResponse[None]:
+        """
+        Parameters
+        ----------
+        project_id : str
+
+        agent_slug : str
+
+        rule_id : str
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[None]
+        """
+        _request_options_with_retries_disabled: typing.Optional[RequestOptions] = (
+            {**request_options, "max_retries": 0} if request_options is not None else {"max_retries": 0}
+        )
+        _endpoint_auth_headers = await self._client_wrapper.async_get_auth_headers_for_endpoint(
+            security=[{"BearerAuth": []}]
+        )
+        _response = await self._client_wrapper.httpx_client.request(
+            f"v1/projects/{encode_path_param(project_id)}/managed-agents/{encode_path_param(agent_slug)}/browser-rules/{encode_path_param(rule_id)}",
+            method="DELETE",
+            headers={
+                **_endpoint_auth_headers,
+            },
+            request_options=_request_options_with_retries_disabled,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                return AsyncHttpResponse(response=_response, data=None)
             if _response.status_code == 401:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
@@ -1497,6 +2801,147 @@ class AsyncRawManagedAgentsClient:
                     DefinitionRevisionView,
                     parse_obj_as(
                         type_=DefinitionRevisionView,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        except ValidationError as e:
+            raise ParsingError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+            )
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def update_end_user_skill_source(
+        self,
+        project_id: str,
+        agent_slug: str,
+        tenant_id: str,
+        user_id: str,
+        skill_id: str,
+        *,
+        enabled: bool,
+        operation_id: str,
+        source_revision: str,
+        content: typing.Optional[str] = OMIT,
+        expected_revision: typing.Optional[str] = OMIT,
+        resources: typing.Optional[typing.Dict[str, str]] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[SkillSourceReceipt]:
+        """
+        Replace or enable a customer-authored source using its own revision CAS.
+
+        Private optimized methodology and optimizer digests are never returned.
+        Replaying an operation returns its original receipt without reverting later work.
+
+        Parameters
+        ----------
+        project_id : str
+
+        agent_slug : str
+
+        tenant_id : str
+
+        user_id : str
+
+        skill_id : str
+
+        enabled : bool
+
+        operation_id : str
+
+        source_revision : str
+
+        content : typing.Optional[str]
+
+        expected_revision : typing.Optional[str]
+
+        resources : typing.Optional[typing.Dict[str, str]]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[SkillSourceReceipt]
+            Successful Response
+        """
+        _request_options_with_retries_disabled: typing.Optional[RequestOptions] = (
+            {**request_options, "max_retries": 0} if request_options is not None else {"max_retries": 0}
+        )
+        _endpoint_auth_headers = await self._client_wrapper.async_get_auth_headers_for_endpoint(
+            security=[{"BearerAuth": []}]
+        )
+        _response = await self._client_wrapper.httpx_client.request(
+            f"v1/projects/{encode_path_param(project_id)}/managed-agents/{encode_path_param(agent_slug)}/end-users/{encode_path_param(tenant_id)}/{encode_path_param(user_id)}/skill-sources/{encode_path_param(skill_id)}",
+            method="PUT",
+            json={
+                "content": content,
+                "enabled": enabled,
+                "expectedRevision": expected_revision,
+                "operationId": operation_id,
+                "resources": resources,
+                "sourceRevision": source_revision,
+            },
+            headers={
+                **_endpoint_auth_headers,
+                "content-type": "application/json",
+            },
+            request_options=_request_options_with_retries_disabled,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    SkillSourceReceipt,
+                    parse_obj_as(
+                        type_=SkillSourceReceipt,  # type: ignore
                         object_=_response.json(),
                     ),
                 )

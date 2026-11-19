@@ -10,11 +10,6 @@ from .end_user_file import EndUserFile
 
 
 class EndUser(UniversalBaseModel):
-    facts: typing.List[EndUserFile] = pydantic.Field()
-    """
-    The profile (USER.md) and long-term memories (memories/*.md).
-    """
-
     opt_in: typing_extensions.Annotated[
         bool,
         FieldMetadata(alias="optIn"),
@@ -33,6 +28,18 @@ class EndUser(UniversalBaseModel):
     ] = None
     """
     A plain-language summary of how the agent sees this user.
+    """
+
+    sleep_enabled: typing_extensions.Annotated[
+        bool,
+        FieldMetadata(alias="sleepEnabled"),
+        pydantic.Field(
+            alias="sleepEnabled",
+            description="Whether this cell may run automatic nightly sleep, independent of population opt-in.",
+        ),
+    ]
+    """
+    Whether this cell may run automatic nightly sleep, independent of population opt-in.
     """
 
     tenant_id: typing_extensions.Annotated[str, FieldMetadata(alias="tenantId"), pydantic.Field(alias="tenantId")]

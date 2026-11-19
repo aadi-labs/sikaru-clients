@@ -77,10 +77,10 @@ class IssueClustersClient:
         label: str,
         trace_ids: typing.Sequence[str],
         agent_id: typing.Optional[str] = OMIT,
+        grader_tags: typing.Optional[typing.Sequence[str]] = OMIT,
         impact: typing.Optional[int] = OMIT,
         issue_id: typing.Optional[str] = OMIT,
         issue_title: typing.Optional[str] = OMIT,
-        signal_tags: typing.Optional[typing.Sequence[str]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> typing.Dict[str, typing.Any]:
         """
@@ -94,13 +94,13 @@ class IssueClustersClient:
 
         agent_id : typing.Optional[str]
 
+        grader_tags : typing.Optional[typing.Sequence[str]]
+
         impact : typing.Optional[int]
 
         issue_id : typing.Optional[str]
 
         issue_title : typing.Optional[str]
-
-        signal_tags : typing.Optional[typing.Sequence[str]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -129,10 +129,10 @@ class IssueClustersClient:
             label=label,
             trace_ids=trace_ids,
             agent_id=agent_id,
+            grader_tags=grader_tags,
             impact=impact,
             issue_id=issue_id,
             issue_title=issue_title,
-            signal_tags=signal_tags,
             request_options=request_options,
         )
         return _response.data
@@ -328,10 +328,10 @@ class AsyncIssueClustersClient:
         label: str,
         trace_ids: typing.Sequence[str],
         agent_id: typing.Optional[str] = OMIT,
+        grader_tags: typing.Optional[typing.Sequence[str]] = OMIT,
         impact: typing.Optional[int] = OMIT,
         issue_id: typing.Optional[str] = OMIT,
         issue_title: typing.Optional[str] = OMIT,
-        signal_tags: typing.Optional[typing.Sequence[str]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> typing.Dict[str, typing.Any]:
         """
@@ -345,13 +345,13 @@ class AsyncIssueClustersClient:
 
         agent_id : typing.Optional[str]
 
+        grader_tags : typing.Optional[typing.Sequence[str]]
+
         impact : typing.Optional[int]
 
         issue_id : typing.Optional[str]
 
         issue_title : typing.Optional[str]
-
-        signal_tags : typing.Optional[typing.Sequence[str]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -388,10 +388,10 @@ class AsyncIssueClustersClient:
             label=label,
             trace_ids=trace_ids,
             agent_id=agent_id,
+            grader_tags=grader_tags,
             impact=impact,
             issue_id=issue_id,
             issue_title=issue_title,
-            signal_tags=signal_tags,
             request_options=request_options,
         )
         return _response.data

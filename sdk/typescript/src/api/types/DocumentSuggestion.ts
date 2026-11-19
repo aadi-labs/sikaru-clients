@@ -14,11 +14,11 @@ export interface DocumentSuggestion {
     createdAt: string;
     diff?: (string | null) | undefined;
     document: string;
+    /** The linked issue, when the change came from one. */
+    graderId?: (string | null) | undefined;
     id: string;
     /** Why it was suggested, in at most 280 characters. */
     rationale?: (string | null) | undefined;
-    /** The linked issue, when the change came from one. */
-    signalId?: (string | null) | undefined;
     status: string;
     /** The change this suggestion came from, when it has one. */
     title?: (string | null) | undefined;

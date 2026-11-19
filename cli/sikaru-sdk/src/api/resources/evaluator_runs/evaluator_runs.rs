@@ -37,10 +37,10 @@ impl EvaluatorRunsClient {
     ///                 dataset_name: None,
     ///                 evaluator_name: None,
     ///                 filter_expression: None,
+    ///                 grader_tags: None,
     ///                 issue_id: None,
     ///                 issue_title: None,
     ///                 sample_rate: None,
-    ///                 signal_tags: None,
     ///             },
     ///             None,
     ///         )

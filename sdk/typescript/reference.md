@@ -309,7 +309,6 @@ await client.httpChannels.unlinkSlackIdentity("binding_id", "installation_id");
 
 ```typescript
 const response = await client.completions.createStream({
-    model: "model",
     prompt: "prompt"
 });
 for await (const item of response) {
@@ -364,7 +363,6 @@ for await (const item of response) {
 
 ```typescript
 await client.completions.create({
-    model: "model",
     prompt: "prompt"
 });
 
@@ -540,6 +538,636 @@ await client.personalChannels.getMessage("binding_id", "receipt_id");
 <dd>
 
 **request:** `Sikaru.GetMessagePersonalChannelsRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `PersonalChannelsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.personalChannels.<a href="/src/api/resources/personalChannels/client/Client.ts">listBrowserLogins</a>(binding_id, receipt_id, { ...params }) -> Record&lt;string, unknown&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+The sites this user's agents may open signed in as them.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.personalChannels.listBrowserLogins("binding_id", "receipt_id");
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**binding_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**receipt_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Sikaru.ListBrowserLoginsPersonalChannelsRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `PersonalChannelsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.personalChannels.<a href="/src/api/resources/personalChannels/client/Client.ts">deleteBrowserLogin</a>(binding_id, receipt_id, login_id, { ...params }) -> void</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.personalChannels.deleteBrowserLogin("binding_id", "receipt_id", "login_id");
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**binding_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**receipt_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**login_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Sikaru.DeleteBrowserLoginPersonalChannelsRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `PersonalChannelsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.personalChannels.<a href="/src/api/resources/personalChannels/client/Client.ts">getBrowserPreview</a>(binding_id, receipt_id, digest, { ...params }) -> Record&lt;string, unknown&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Everything this user is asked to approve, typed values included.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.personalChannels.getBrowserPreview("binding_id", "receipt_id", "digest");
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**binding_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**receipt_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**digest:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Sikaru.GetBrowserPreviewPersonalChannelsRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `PersonalChannelsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.personalChannels.<a href="/src/api/resources/personalChannels/client/Client.ts">getBrowserPreviewScreenshot</a>(binding_id, receipt_id, digest, { ...params }) -> core.BinaryResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+The page this user is asked to approve, password fields masked.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.personalChannels.getBrowserPreviewScreenshot("binding_id", "receipt_id", "digest");
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**binding_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**receipt_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**digest:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Sikaru.GetBrowserPreviewScreenshotPersonalChannelsRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `PersonalChannelsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.personalChannels.<a href="/src/api/resources/personalChannels/client/Client.ts">getBrowserReceipt</a>(binding_id, receipt_id, { ...params }) -> Record&lt;string, unknown&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+What this run's browser did for this user, with their own pages' screenshots.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.personalChannels.getBrowserReceipt("binding_id", "receipt_id");
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**binding_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**receipt_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Sikaru.GetBrowserReceiptPersonalChannelsRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `PersonalChannelsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.personalChannels.<a href="/src/api/resources/personalChannels/client/Client.ts">getBrowserReceiptScreenshot</a>(binding_id, receipt_id, digest, { ...params }) -> core.BinaryResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.personalChannels.getBrowserReceiptScreenshot("binding_id", "receipt_id", "digest");
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**binding_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**receipt_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**digest:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Sikaru.GetBrowserReceiptScreenshotPersonalChannelsRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `PersonalChannelsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.personalChannels.<a href="/src/api/resources/personalChannels/client/Client.ts">listBrowserRules</a>(binding_id, receipt_id, { ...params }) -> Sikaru.BrowserRuleList</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+The browser actions this user always allows this agent to take for them.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.personalChannels.listBrowserRules("binding_id", "receipt_id");
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**binding_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**receipt_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Sikaru.ListBrowserRulesPersonalChannelsRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `PersonalChannelsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.personalChannels.<a href="/src/api/resources/personalChannels/client/Client.ts">deleteBrowserRule</a>(binding_id, receipt_id, rule_id, { ...params }) -> void</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.personalChannels.deleteBrowserRule("binding_id", "receipt_id", "rule_id");
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**binding_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**receipt_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**rule_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Sikaru.DeleteBrowserRulePersonalChannelsRequest` 
     
 </dd>
 </dl>
@@ -983,6 +1611,93 @@ await client.personalChannels.decideApproval("binding_id", "receipt_id", "tool_c
 <dd>
 
 **request:** `Sikaru.DecideApprovalPersonalChannelsRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `PersonalChannelsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.personalChannels.<a href="/src/api/resources/personalChannels/client/Client.ts">createBrowserHandoff</a>(binding_id, receipt_id, tool_call_id, { ...params }) -> Record&lt;string, unknown&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+A one-time link to sign in, in a live browser, to the sites a parked browser call needs.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.personalChannels.createBrowserHandoff("binding_id", "receipt_id", "tool_call_id");
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**binding_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**receipt_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**tool_call_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Sikaru.CreateBrowserHandoffPersonalChannelsRequest` 
     
 </dd>
 </dl>
@@ -1509,7 +2224,6 @@ Set or remove one setting without rewriting the rest of the document.
 
 ```typescript
 await client.agentDocuments.editSetting("project_id", {
-    document: "document",
     path: ["path"]
 });
 
@@ -1617,9 +2331,7 @@ await client.agentDocuments.listTemplates("project_id");
 <dd>
 
 ```typescript
-await client.agentDocuments.validateText("project_id", {
-    document: "document"
-});
+await client.agentDocuments.validateText("project_id", {});
 
 ```
 </dd>
@@ -1734,8 +2446,7 @@ await client.agentDocuments.get("project_id", "agent_slug");
 
 ```typescript
 await client.agentDocuments.save("project_id", "agent_slug", {
-    document: "document",
-    expectedRevision: 1
+    baseRevision: 1
 });
 
 ```
@@ -1859,7 +2570,7 @@ await client.agentDocuments.compare("project_id", "agent_slug");
 
 ```typescript
 await client.agentDocuments.discard("project_id", "agent_slug", {
-    expectedRevision: 1
+    baseRevision: 1
 });
 
 ```
@@ -1893,6 +2604,176 @@ await client.agentDocuments.discard("project_id", "agent_slug", {
 <dd>
 
 **request:** `Sikaru.DiscardDocument` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `AgentDocumentsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.agentDocuments.<a href="/src/api/resources/agentDocuments/client/Client.ts">getPublication</a>(project_id, agent_slug, publication_id) -> Sikaru.PublicationState</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+A publication's state, read without publishing again: follow a pending publish here until its release check
+settles.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.agentDocuments.getPublication("project_id", "agent_slug", "publication_id");
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_slug:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**publication_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `AgentDocumentsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.agentDocuments.<a href="/src/api/resources/agentDocuments/client/Client.ts">publishAnyway</a>(project_id, agent_slug, publication_id, { ...params }) -> Sikaru.DocumentPublication</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Release a publication its release check blocked or couldn't verify, recording who, when and why (R10, R33).
+Only a release check is overridden: an agent's measured evaluation still runs (R34).
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.agentDocuments.publishAnyway("project_id", "agent_slug", "publication_id", {
+    reason: "reason"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_slug:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**publication_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Sikaru.PublishAnyway` 
     
 </dd>
 </dl>
@@ -2242,7 +3123,7 @@ await client.agentDocuments.listSuggestions("project_id", "agent_slug");
 
 ```typescript
 await client.agentDocuments.adoptSuggestion("project_id", "agent_slug", "suggestion_id", {
-    expectedRevision: 1
+    baseRevision: 1
 });
 
 ```
@@ -2381,9 +3262,7 @@ await client.agentDocuments.dismissSuggestion("project_id", "agent_slug", "sugge
 <dd>
 
 ```typescript
-await client.agentDocuments.validate("project_id", "agent_slug", {
-    document: "document"
-});
+await client.agentDocuments.validate("project_id", "agent_slug", {});
 
 ```
 </dd>
@@ -2595,6 +3474,934 @@ await client.agentImports.createAgentImport("project_id", {
 <dd>
 
 **requestOptions:** `AgentImportsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## Graders
+<details><summary><code>client.graders.<a href="/src/api/resources/graders/client/Client.ts">list</a>(project_id, agent_id) -> Sikaru.GraderList</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+The agent's Graders, presets included, and whether the agent is graded at all.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.graders.list("project_id", "agent_id");
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `GradersClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.graders.<a href="/src/api/resources/graders/client/Client.ts">test</a>(project_id, agent_id, { ...params }) -> Sikaru.TestReport</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Score an unsaved file with its own judge. Poll a pending test; no Grader or verdict is saved.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.graders.test("project_id", "agent_id", {
+    file: "file",
+    name: "name"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Sikaru.TestBody` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `GradersClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.graders.<a href="/src/api/resources/graders/client/Client.ts">getTest</a>(project_id, agent_id, test_id) -> Sikaru.TestReport</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Read a pending, completed or failed unsaved test. Reports expire after one day.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.graders.getTest("project_id", "agent_id", "test_id");
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**test_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `GradersClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.graders.<a href="/src/api/resources/graders/client/Client.ts">get</a>(project_id, agent_id, grader_id) -> Sikaru.GraderDetail</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+One Grader: its status, criteria, judge, release check, versions and label counts.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.graders.get("project_id", "agent_id", "grader_id");
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**grader_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `GradersClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.graders.<a href="/src/api/resources/graders/client/Client.ts">update</a>(project_id, agent_id, grader_id, { ...params }) -> Sikaru.GraderDetail</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Change the description, judge, escalation or release check. A judge or escalation change saves a provisional
+version that goes live only once it clears the promotion rule; the other settings change no verdict.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.graders.update("project_id", "agent_id", "grader_id");
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**grader_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Sikaru.SettingsBody` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `GradersClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.graders.<a href="/src/api/resources/graders/client/Client.ts">estimateCost</a>(project_id, agent_id, grader_id, { ...params }) -> Sikaru.CostEstimate</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+What judging every conversation with the LLM judge or a project agent is expected to cost (R4).
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.graders.estimateCost("project_id", "agent_id", "grader_id", {
+    judge: "llm"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**grader_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Sikaru.EstimateCostGradersRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `GradersClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.graders.<a href="/src/api/resources/graders/client/Client.ts">labelQueue</a>(project_id, agent_id, grader_id, { ...params }) -> Sikaru.LabelQueue</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Conversations the Grader is least sure about, unlabeled, each with an excerpt and without its verdict.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.graders.labelQueue("project_id", "agent_id", "grader_id");
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**grader_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Sikaru.LabelQueueGradersRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `GradersClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.graders.<a href="/src/api/resources/graders/client/Client.ts">label</a>(project_id, agent_id, grader_id, { ...params }) -> Sikaru.Labeled</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Mark one conversation Flagged or Looks Fine with an optional reason; labeling it again replaces the label.
+The response then shows what the Grader itself said.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.graders.label("project_id", "agent_id", "grader_id", {
+    conversationKey: "conversationKey",
+    verdict: "flagged"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**grader_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Sikaru.LabelBody` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `GradersClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.graders.<a href="/src/api/resources/graders/client/Client.ts">run</a>(project_id, agent_id, grader_id, { ...params }) -> Sikaru.RunStarted</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Re-score recent production conversations using this Grader version's own judge.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.graders.run("project_id", "agent_id", "grader_id");
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**grader_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Sikaru.RunBody` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `GradersClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.graders.<a href="/src/api/resources/graders/client/Client.ts">getRun</a>(project_id, agent_id, grader_id, run_id) -> Sikaru.RunReport</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Follow a recent-production re-score to completion or a useful failure message.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.graders.getRun("project_id", "agent_id", "grader_id", "run_id");
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**grader_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**run_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `GradersClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.graders.<a href="/src/api/resources/graders/client/Client.ts">samples</a>(project_id, agent_id, grader_id, { ...params }) -> Sikaru.Samples</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+The Grader's recent verdicts, flagged conversations first.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.graders.samples("project_id", "agent_id", "grader_id");
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**grader_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Sikaru.SamplesGradersRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `GradersClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -3184,6 +4991,97 @@ await client.changesets.promoteChangeset("project_id", "changeset_id", {});
 <dd>
 
 **request:** `Sikaru.ReleaseActionRequest | null` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ChangesetsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.changesets.<a href="/src/api/resources/changesets/client/Client.ts">publishChangesetAnyway</a>(project_id, changeset_id, publication_id, { ...params }) -> Record&lt;string, unknown&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Promote a Try a Fix changeset its agent's release check blocked or couldn't verify, recording who, when and
+why (grader release check R10, R33, R36). The contract of an agent document's Publish Anyway: owner credentials
+and a reason, refused while the check still runs or when the live version or check settings changed since.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.changesets.publishChangesetAnyway("project_id", "changeset_id", "publication_id", {
+    reason: "reason"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**changeset_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**publication_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Sikaru.PublishAnyway` 
     
 </dd>
 </dl>
@@ -3794,6 +5692,71 @@ await client.channels.issueHttpCredential("project_id", "binding_id");
 <dd>
 
 **binding_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ChannelsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.channels.<a href="/src/api/resources/channels/client/Client.ts">configureFeedback</a>(project_id, binding_id, { ...params }) -> Sikaru.Binding</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.channels.configureFeedback("project_id", "binding_id", {});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**binding_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Sikaru.FeedbackConfiguration` 
     
 </dd>
 </dl>
@@ -11286,8 +13249,8 @@ await client.executionSessions.listEligibleReleases("project_id", "harness_id");
 </dl>
 </details>
 
-## Specialists
-<details><summary><code>client.specialists.<a href="/src/api/resources/specialists/client/Client.ts">list</a>(project_id, session_id) -> Sikaru.SpecialistThreads</code></summary>
+## Tasks
+<details><summary><code>client.tasks.<a href="/src/api/resources/tasks/client/Client.ts">list</a>(project_id, session_id) -> Sikaru.Tasks</code></summary>
 <dl>
 <dd>
 
@@ -11300,7 +13263,7 @@ await client.executionSessions.listEligibleReleases("project_id", "harness_id");
 <dd>
 
 ```typescript
-await client.specialists.list("project_id", "session_id");
+await client.tasks.list("project_id", "session_id");
 
 ```
 </dd>
@@ -11332,7 +13295,7 @@ await client.specialists.list("project_id", "session_id");
 <dl>
 <dd>
 
-**requestOptions:** `SpecialistsClient.RequestOptions` 
+**requestOptions:** `TasksClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -11344,7 +13307,7 @@ await client.specialists.list("project_id", "session_id");
 </dl>
 </details>
 
-<details><summary><code>client.specialists.<a href="/src/api/resources/specialists/client/Client.ts">get</a>(project_id, session_id, thread_id) -> Sikaru.SpecialistThread</code></summary>
+<details><summary><code>client.tasks.<a href="/src/api/resources/tasks/client/Client.ts">stopAll</a>(project_id, session_id, { ...params }) -> Sikaru.TaskReceipt</code></summary>
 <dl>
 <dd>
 
@@ -11357,72 +13320,7 @@ await client.specialists.list("project_id", "session_id");
 <dd>
 
 ```typescript
-await client.specialists.get("project_id", "session_id", "thread_id");
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**project_id:** `string` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**session_id:** `string` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**thread_id:** `string` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `SpecialistsClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.specialists.<a href="/src/api/resources/specialists/client/Client.ts">cancel</a>(project_id, session_id, thread_id, { ...params }) -> Sikaru.SpecialistReceipt</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.specialists.cancel("project_id", "session_id", "thread_id", {
+await client.tasks.stopAll("project_id", "session_id", {
     idempotency_key: "idempotency_key"
 });
 
@@ -11456,7 +13354,7 @@ await client.specialists.cancel("project_id", "session_id", "thread_id", {
 <dl>
 <dd>
 
-**thread_id:** `string` 
+**request:** `Sikaru.TaskCancel` 
     
 </dd>
 </dl>
@@ -11464,15 +13362,7 @@ await client.specialists.cancel("project_id", "session_id", "thread_id", {
 <dl>
 <dd>
 
-**request:** `Sikaru.SpecialistCancel` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `SpecialistsClient.RequestOptions` 
+**requestOptions:** `TasksClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -11484,7 +13374,7 @@ await client.specialists.cancel("project_id", "session_id", "thread_id", {
 </dl>
 </details>
 
-<details><summary><code>client.specialists.<a href="/src/api/resources/specialists/client/Client.ts">message</a>(project_id, session_id, thread_id, { ...params }) -> Sikaru.SpecialistReceipt</code></summary>
+<details><summary><code>client.tasks.<a href="/src/api/resources/tasks/client/Client.ts">get</a>(project_id, session_id, task_id) -> Sikaru.Task</code></summary>
 <dl>
 <dd>
 
@@ -11497,7 +13387,502 @@ await client.specialists.cancel("project_id", "session_id", "thread_id", {
 <dd>
 
 ```typescript
-await client.specialists.message("project_id", "session_id", "thread_id", {
+await client.tasks.get("project_id", "session_id", "task_id");
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**session_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**task_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `TasksClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.tasks.<a href="/src/api/resources/tasks/client/Client.ts">actions</a>(project_id, session_id, task_id) -> Record&lt;string, unknown&gt;</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.tasks.actions("project_id", "session_id", "task_id");
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**session_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**task_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `TasksClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.tasks.<a href="/src/api/resources/tasks/client/Client.ts">approveAction</a>(project_id, session_id, task_id, action_id, { ...params }) -> Sikaru.TaskApprovalReceipt</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.tasks.approveAction("project_id", "session_id", "task_id", "action_id", {
+    decision: "approved",
+    idempotency_key: "idempotency_key"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**session_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**task_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**action_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Sikaru.ApprovalInput` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `TasksClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.tasks.<a href="/src/api/resources/tasks/client/Client.ts">cancel</a>(project_id, session_id, task_id, { ...params }) -> Sikaru.TaskReceipt</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.tasks.cancel("project_id", "session_id", "task_id", {
+    idempotency_key: "idempotency_key"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**session_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**task_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Sikaru.TaskCancel` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `TasksClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.tasks.<a href="/src/api/resources/tasks/client/Client.ts">changes</a>(project_id, session_id, task_id) -> Sikaru.TaskChanges</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.tasks.changes("project_id", "session_id", "task_id");
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**session_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**task_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `TasksClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.tasks.<a href="/src/api/resources/tasks/client/Client.ts">integrations</a>(project_id, session_id, task_id) -> Sikaru.TaskIntegrationReceipts</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.tasks.integrations("project_id", "session_id", "task_id");
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**session_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**task_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `TasksClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.tasks.<a href="/src/api/resources/tasks/client/Client.ts">integrate</a>(project_id, session_id, task_id, { ...params }) -> Sikaru.TaskIntegrationReceipt</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.tasks.integrate("project_id", "session_id", "task_id", {
+    idempotency_key: "idempotency_key",
+    revision: 1
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**session_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**task_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Sikaru.TaskIntegration` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `TasksClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.tasks.<a href="/src/api/resources/tasks/client/Client.ts">message</a>(project_id, session_id, task_id, { ...params }) -> Sikaru.TaskReceipt</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.tasks.message("project_id", "session_id", "task_id", {
     idempotency_key: "idempotency_key",
     input: {
         "key": "value"
@@ -11534,7 +13919,7 @@ await client.specialists.message("project_id", "session_id", "thread_id", {
 <dl>
 <dd>
 
-**thread_id:** `string` 
+**task_id:** `string` 
     
 </dd>
 </dl>
@@ -11542,7 +13927,7 @@ await client.specialists.message("project_id", "session_id", "thread_id", {
 <dl>
 <dd>
 
-**request:** `Sikaru.SpecialistMessage` 
+**request:** `Sikaru.TaskMessage` 
     
 </dd>
 </dl>
@@ -11550,7 +13935,7 @@ await client.specialists.message("project_id", "session_id", "thread_id", {
 <dl>
 <dd>
 
-**requestOptions:** `SpecialistsClient.RequestOptions` 
+**requestOptions:** `TasksClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -12770,6 +15155,587 @@ await client.runs.pendingActions("project_id", "run_id");
 </dl>
 </details>
 
+<details><summary><code>client.runs.<a href="/src/api/resources/runs/client/Client.ts">createHandoff</a>(project_id, run_id, tool_call_id) -> Sikaru.LiveLink</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.runs.createHandoff("project_id", "run_id", "tool_call_id");
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**run_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**tool_call_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `RunsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.runs.<a href="/src/api/resources/runs/client/Client.ts">getPreview</a>(project_id, run_id, digest) -> Record&lt;string, unknown&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Everything a browser approval asks about, typed values included, for its owner only.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.runs.getPreview("project_id", "run_id", "digest");
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**run_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**digest:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `RunsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.runs.<a href="/src/api/resources/runs/client/Client.ts">previewScreenshot</a>(project_id, run_id, digest) -> core.BinaryResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+The page an approver is asked about, password fields masked.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.runs.previewScreenshot("project_id", "run_id", "digest");
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**run_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**digest:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `RunsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.runs.<a href="/src/api/resources/runs/client/Client.ts">getReceipt</a>(project_id, run_id) -> Sikaru.Receipt</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+What the run's browser did: pages visited, actions committed, and sign-ins by people.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.runs.getReceipt("project_id", "run_id");
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**run_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `RunsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.runs.<a href="/src/api/resources/runs/client/Client.ts">getReceiptScreenshot</a>(project_id, run_id, digest) -> core.BinaryResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.runs.getReceiptScreenshot("project_id", "run_id", "digest");
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**run_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**digest:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `RunsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.runs.<a href="/src/api/resources/runs/client/Client.ts">takeOver</a>(project_id, run_id, { ...params }) -> Sikaru.LiveLink</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Take over a run's browser after the agent's current action; the link drives it until handed back.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.runs.takeOver("project_id", "run_id", {});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**run_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Sikaru.TakeOverRequest | null` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `RunsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.runs.<a href="/src/api/resources/runs/client/Client.ts">endTakeOver</a>(project_id, run_id) -> void</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Withdraw a take over, or hand back the browser the run is waiting on.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.runs.endTakeOver("project_id", "run_id");
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**run_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `RunsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.runs.<a href="/src/api/resources/runs/client/Client.ts">watchRun</a>(project_id, run_id) -> Sikaru.LiveLink</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Watch a run's browser read-only. Pages signed in with an end user's own login stay hidden
+from everyone but that user.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.runs.watchRun("project_id", "run_id");
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**run_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `RunsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.runs.<a href="/src/api/resources/runs/client/Client.ts">cancel</a>(project_id, run_id) -> Record&lt;string, unknown&gt;</code></summary>
 <dl>
 <dd>
@@ -13188,7 +16154,7 @@ await client.runs.retry("project_id", "run_id");
 </dl>
 </details>
 
-<details><summary><code>client.runs.<a href="/src/api/resources/runs/client/Client.ts">decideApproval</a>(project_id, run_id, tool_call_id, { ...params }) -> Record&lt;string, unknown&gt;</code></summary>
+<details><summary><code>client.runs.<a href="/src/api/resources/runs/client/Client.ts">decideApproval</a>(project_id, run_id, tool_call_id, { ...params }) -> Sikaru.PersonalChannelApproval</code></summary>
 <dl>
 <dd>
 
@@ -14518,67 +17484,6 @@ await client.issueClusters.proposeIssueClusterFix("project_id", "cluster_id");
 </dl>
 </details>
 
-## JudgeAlignment
-<details><summary><code>client.judgeAlignment.<a href="/src/api/resources/judgeAlignment/client/Client.ts">getJudgeAlignment</a>(project_id, { ...params }) -> Record&lt;string, unknown&gt;</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.judgeAlignment.getJudgeAlignment("project_id", {
-    evaluator: "evaluator",
-    revision: "revision"
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**project_id:** `string` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request:** `Sikaru.GetJudgeAlignmentJudgeAlignmentRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `JudgeAlignmentClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
 ## ManagedAgents
 <details><summary><code>client.managedAgents.<a href="/src/api/resources/managedAgents/client/Client.ts">listManagedAgents</a>(project_id) -> Record&lt;string, unknown&gt;</code></summary>
 <dl>
@@ -14842,7 +17747,7 @@ await client.managedAgents.deleteManagedAgent("project_id", "agent_slug");
 <dl>
 <dd>
 
-Change the agent's display name or turn capacity. The slug and every reference to the agent stay the same.
+Change the agent's display name, turn capacity or memory dreaming. The slug and every reference to the agent stay the same.
 
 Personal and end-user-cell choices are fixed at creation.
 </dd>
@@ -14911,7 +17816,64 @@ await client.managedAgents.update("project_id", "agent_slug");
 </dl>
 </details>
 
-<details><summary><code>client.managedAgents.<a href="/src/api/resources/managedAgents/client/Client.ts">createDefinitionRevision</a>(project_id, agent_slug, { ...params }) -> Sikaru.DefinitionRevisionResult</code></summary>
+<details><summary><code>client.managedAgents.<a href="/src/api/resources/managedAgents/client/Client.ts">listAgentLogins</a>(project_id, agent_slug) -> Sikaru.SavedLogins</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.managedAgents.listAgentLogins("project_id", "agent_slug");
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_slug:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ManagedAgentsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.managedAgents.<a href="/src/api/resources/managedAgents/client/Client.ts">addAgentLogin</a>(project_id, agent_slug, { ...params }) -> Sikaru.LiveLink</code></summary>
 <dl>
 <dd>
 
@@ -14923,7 +17885,7 @@ await client.managedAgents.update("project_id", "agent_slug");
 <dl>
 <dd>
 
-Stage a changed definition as a draft revision; the live definition is a no-op.
+An operator signs the agent in to a company account once; every run then uses it.
 </dd>
 </dl>
 </dd>
@@ -14938,11 +17900,8 @@ Stage a changed definition as a draft revision; the live definition is a no-op.
 <dd>
 
 ```typescript
-await client.managedAgents.createDefinitionRevision("project_id", "agent_slug", {
-    contentDigest: "contentDigest",
-    definition: {
-        schema: "sikaru.agent.contract.v1"
-    }
+await client.managedAgents.addAgentLogin("project_id", "agent_slug", {
+    url: "url"
 });
 
 ```
@@ -14975,7 +17934,330 @@ await client.managedAgents.createDefinitionRevision("project_id", "agent_slug", 
 <dl>
 <dd>
 
-**request:** `Sikaru.DefinitionRevisionRequest` 
+**request:** `Sikaru.LoginRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ManagedAgentsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.managedAgents.<a href="/src/api/resources/managedAgents/client/Client.ts">deleteAgentLogin</a>(project_id, agent_slug, login_id) -> void</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.managedAgents.deleteAgentLogin("project_id", "agent_slug", "login_id");
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_slug:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**login_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ManagedAgentsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.managedAgents.<a href="/src/api/resources/managedAgents/client/Client.ts">listPlaybooks</a>(project_id, agent_slug) -> Sikaru.PlaybookList</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.managedAgents.listPlaybooks("project_id", "agent_slug");
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_slug:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ManagedAgentsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.managedAgents.<a href="/src/api/resources/managedAgents/client/Client.ts">deletePlaybook</a>(project_id, agent_slug, playbook_id) -> void</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.managedAgents.deletePlaybook("project_id", "agent_slug", "playbook_id");
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_slug:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**playbook_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ManagedAgentsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.managedAgents.<a href="/src/api/resources/managedAgents/client/Client.ts">listRules</a>(project_id, agent_slug) -> Sikaru.BrowserRuleList</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Every always-allow rule on the agent; a rule personal to one end user does not say whose.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.managedAgents.listRules("project_id", "agent_slug");
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_slug:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ManagedAgentsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.managedAgents.<a href="/src/api/resources/managedAgents/client/Client.ts">deleteRule</a>(project_id, agent_slug, rule_id) -> void</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.managedAgents.deleteRule("project_id", "agent_slug", "rule_id");
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_slug:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**rule_id:** `string` 
     
 </dd>
 </dl>
@@ -15041,6 +18323,116 @@ await client.managedAgents.getDefinitionRevision("project_id", "agent_slug", "ch
 <dd>
 
 **changeset_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ManagedAgentsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.managedAgents.<a href="/src/api/resources/managedAgents/client/Client.ts">updateEndUserSkillSource</a>(project_id, agent_slug, tenant_id, user_id, skill_id, { ...params }) -> Sikaru.SkillSourceReceipt</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Replace or enable a customer-authored source using its own revision CAS.
+
+Private optimized methodology and optimizer digests are never returned.
+Replaying an operation returns its original receipt without reverting later work.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.managedAgents.updateEndUserSkillSource("project_id", "agent_slug", "tenant_id", "user_id", "skill_id", {
+    enabled: true,
+    operationId: "operationId",
+    sourceRevision: "sourceRevision"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_slug:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**tenant_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**user_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**skill_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Sikaru.UpdateSkillSource` 
     
 </dd>
 </dl>
@@ -15375,7 +18767,7 @@ await client.checks.run("project_id", "agent_slug", "check_id", {
 <dl>
 <dd>
 
-What the agent knows about this end user: facts and the persona summary, never the persona prompt.
+What the agent knows about this end user: the persona summary, never the persona prompt.
 </dd>
 </dl>
 </dd>
@@ -15545,7 +18937,7 @@ await client.endUsers.upsert("project_id", "agent_slug", "tenant_id", "user_id")
 </dl>
 </details>
 
-<details><summary><code>client.endUsers.<a href="/src/api/resources/endUsers/client/Client.ts">delete</a>(project_id, agent_slug, tenant_id, user_id) -> Sikaru.EndUserDeletion</code></summary>
+<details><summary><code>client.endUsers.<a href="/src/api/resources/endUsers/client/Client.ts">delete</a>(project_id, agent_slug, tenant_id, user_id, { ...params }) -> Sikaru.EndUserDeletion</code></summary>
 <dl>
 <dd>
 
@@ -15620,6 +19012,14 @@ await client.endUsers.delete("project_id", "agent_slug", "tenant_id", "user_id")
 <dl>
 <dd>
 
+**request:** `Sikaru.DeleteEndUsersRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **requestOptions:** `EndUsersClient.RequestOptions` 
     
 </dd>
@@ -15632,7 +19032,7 @@ await client.endUsers.delete("project_id", "agent_slug", "tenant_id", "user_id")
 </dl>
 </details>
 
-<details><summary><code>client.endUsers.<a href="/src/api/resources/endUsers/client/Client.ts">updateFact</a>(project_id, agent_slug, tenant_id, user_id, { ...params }) -> Sikaru.EndUserFile</code></summary>
+<details><summary><code>client.endUsers.<a href="/src/api/resources/endUsers/client/Client.ts">importState</a>(project_id, agent_slug, tenant_id, user_id, { ...params }) -> Sikaru.ImportReceipt</code></summary>
 <dl>
 <dd>
 
@@ -15644,7 +19044,13 @@ await client.endUsers.delete("project_id", "agent_slug", "tenant_id", "user_id")
 <dl>
 <dd>
 
-Correct or add one fact. It serves from the next turn and becomes a held-out case for this user.
+Import a versioned product snapshot atomically, preserving correction provenance.
+
+The cell must already exist. Every file requires expectedEtag (null for an
+absent destination). Reusing an importId requires the identical manifest.
+The digest is SHA-256 of canonical JSON {sourceRevision, files}, with sorted
+keys, compact separators and the supplied file order. Private layers are
+accepted as input but are never returned in the receipt or end-user view.
 </dd>
 </dl>
 </dd>
@@ -15659,9 +19065,15 @@ Correct or add one fact. It serves from the next turn and becomes a held-out cas
 <dd>
 
 ```typescript
-await client.endUsers.updateFact("project_id", "agent_slug", "tenant_id", "user_id", {
-    content: "content",
-    path: "path"
+await client.endUsers.importState("project_id", "agent_slug", "tenant_id", "user_id", {
+    digest: "digest",
+    files: [{
+            content: "content",
+            path: "path",
+            provenance: "provenance"
+        }],
+    importId: "importId",
+    sourceRevision: "sourceRevision"
 });
 
 ```
@@ -15710,7 +19122,7 @@ await client.endUsers.updateFact("project_id", "agent_slug", "tenant_id", "user_
 <dl>
 <dd>
 
-**request:** `Sikaru.UpdateEndUserFact` 
+**request:** `Sikaru.CellImport` 
     
 </dd>
 </dl>
@@ -15730,23 +19142,9 @@ await client.endUsers.updateFact("project_id", "agent_slug", "tenant_id", "user_
 </dl>
 </details>
 
-<details><summary><code>client.endUsers.<a href="/src/api/resources/endUsers/client/Client.ts">deleteFact</a>(project_id, agent_slug, tenant_id, user_id, { ...params }) -> void</code></summary>
+<details><summary><code>client.endUsers.<a href="/src/api/resources/endUsers/client/Client.ts">startLearningRun</a>(project_id, agent_slug, tenant_id, user_id, { ...params }) -> Sikaru.AuthoredLearningReceipt</code></summary>
 <dl>
 <dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Forget one memory, or clear the profile.
-</dd>
-</dl>
-</dd>
-</dl>
 
 #### 🔌 Usage
 
@@ -15757,8 +19155,19 @@ Forget one memory, or clear the profile.
 <dd>
 
 ```typescript
-await client.endUsers.deleteFact("project_id", "agent_slug", "tenant_id", "user_id", {
-    path: "path"
+await client.endUsers.startLearningRun("project_id", "agent_slug", "tenant_id", "user_id", {
+    evidence: [{
+            content: "content",
+            digest: "digest",
+            learningEligible: true,
+            provenance: "user_message",
+            sourceId: "sourceId"
+        }],
+    invocationId: "invocationId",
+    sourceRevision: "sourceRevision",
+    workflow: {
+        name: "name"
+    }
 });
 
 ```
@@ -15807,7 +19216,169 @@ await client.endUsers.deleteFact("project_id", "agent_slug", "tenant_id", "user_
 <dl>
 <dd>
 
-**request:** `Sikaru.DeleteFactEndUsersRequest` 
+**request:** `Sikaru.StartAuthoredLearning` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `EndUsersClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.endUsers.<a href="/src/api/resources/endUsers/client/Client.ts">getLearningRun</a>(project_id, agent_slug, tenant_id, user_id, invocation_id) -> Sikaru.AuthoredLearningReceipt</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.endUsers.getLearningRun("project_id", "agent_slug", "tenant_id", "user_id", "invocation_id");
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_slug:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**tenant_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**user_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**invocation_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `EndUsersClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.endUsers.<a href="/src/api/resources/endUsers/client/Client.ts">revokeLearningSource</a>(project_id, agent_slug, tenant_id, user_id, source_id) -> void</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.endUsers.revokeLearningSource("project_id", "agent_slug", "tenant_id", "user_id", "source_id");
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_slug:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**tenant_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**user_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**source_id:** `string` 
     
 </dd>
 </dl>
@@ -15924,8 +19495,245 @@ await client.endUsers.correctPersonaSummary("project_id", "agent_slug", "tenant_
 </dl>
 </details>
 
-## MemoryRegistry
-<details><summary><code>client.memoryRegistry.<a href="/src/api/resources/memoryRegistry/client/Client.ts">createMemoryRegistryChange</a>(project_id, { ...params }) -> Record&lt;string, unknown&gt;</code></summary>
+## Memory
+<details><summary><code>client.memory.<a href="/src/api/resources/memory/client/Client.ts">getDream</a>(project_id, agent_slug, { ...params }) -> Sikaru.MemoryDream</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+The directory's latest dream job.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.memory.getDream("project_id", "agent_slug");
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_slug:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Sikaru.GetDreamMemoryRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `MemoryClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.memory.<a href="/src/api/resources/memory/client/Client.ts">dream</a>(project_id, agent_slug, { ...params }) -> Sikaru.MemoryDream</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Dream now: consolidate this directory without waiting for idle time, even with automatic dreaming off.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.memory.dream("project_id", "agent_slug");
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_slug:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Sikaru.DreamMemoryRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `MemoryClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.memory.<a href="/src/api/resources/memory/client/Client.ts">listFiles</a>(project_id, agent_slug, { ...params }) -> Sikaru.MemoryFiles</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+The directory's files and its current head.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.memory.listFiles("project_id", "agent_slug");
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_slug:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Sikaru.ListFilesMemoryRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `MemoryClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.memory.<a href="/src/api/resources/memory/client/Client.ts">readFile</a>(project_id, agent_slug, { ...params }) -> Sikaru.MemoryFile</code></summary>
 <dl>
 <dd>
 
@@ -15938,11 +19746,8 @@ await client.endUsers.correctPersonaSummary("project_id", "agent_slug", "tenant_
 <dd>
 
 ```typescript
-await client.memoryRegistry.createMemoryRegistryChange("project_id", {
-    memoryId: "memoryId",
-    memoryType: "memoryType",
-    name: "name",
-    scope: "scope"
+await client.memory.readFile("project_id", "agent_slug", {
+    path: "path"
 });
 
 ```
@@ -15967,7 +19772,7 @@ await client.memoryRegistry.createMemoryRegistryChange("project_id", {
 <dl>
 <dd>
 
-**request:** `Sikaru.CreateMemoryRegistryChangeRequest` 
+**agent_slug:** `string` 
     
 </dd>
 </dl>
@@ -15975,7 +19780,703 @@ await client.memoryRegistry.createMemoryRegistryChange("project_id", {
 <dl>
 <dd>
 
-**requestOptions:** `MemoryRegistryClient.RequestOptions` 
+**request:** `Sikaru.ReadFileMemoryRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `MemoryClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.memory.<a href="/src/api/resources/memory/client/Client.ts">writeFile</a>(project_id, agent_slug, { ...params }) -> Sikaru.MemoryHead</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Create or replace one file.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.memory.writeFile("project_id", "agent_slug", {
+    content: "content",
+    path: "path"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_slug:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Sikaru.WriteMemoryFile` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `MemoryClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.memory.<a href="/src/api/resources/memory/client/Client.ts">deleteFile</a>(project_id, agent_slug, { ...params }) -> Sikaru.MemoryHead</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.memory.deleteFile("project_id", "agent_slug", {
+    path: "path",
+    base: "base"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_slug:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Sikaru.DeleteFileMemoryRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `MemoryClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.memory.<a href="/src/api/resources/memory/client/Client.ts">moveFile</a>(project_id, agent_slug, { ...params }) -> Sikaru.MemoryHead</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Move or rename one file; the destination must not exist.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.memory.moveFile("project_id", "agent_slug", {
+    path: "path",
+    to: "to"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_slug:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Sikaru.MoveMemoryFile` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `MemoryClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.memory.<a href="/src/api/resources/memory/client/Client.ts">listForgets</a>(project_id, agent_slug, { ...params }) -> Sikaru.MemoryForgets</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.memory.listForgets("project_id", "agent_slug");
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_slug:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Sikaru.ListForgetsMemoryRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `MemoryClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.memory.<a href="/src/api/resources/memory/client/Client.ts">forget</a>(project_id, agent_slug, { ...params }) -> Sikaru.MemoryForget</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Remove something from this user's memory, its retained history and past-session search, in the background.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.memory.forget("project_id", "agent_slug", {
+    body: {
+        target: "target"
+    }
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_slug:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Sikaru.ForgetMemoryRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `MemoryClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.memory.<a href="/src/api/resources/memory/client/Client.ts">getForget</a>(project_id, agent_slug, job_id, { ...params }) -> Sikaru.MemoryForget</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.memory.getForget("project_id", "agent_slug", "job_id");
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_slug:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**job_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Sikaru.GetForgetMemoryRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `MemoryClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.memory.<a href="/src/api/resources/memory/client/Client.ts">remember</a>(project_id, agent_slug, { ...params }) -> Sikaru.Remembered</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Remember again: finished forgets of this target stop hiding it from future search and dreams.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.memory.remember("project_id", "agent_slug", {
+    body: {
+        target: "target"
+    }
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_slug:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Sikaru.RememberMemoryRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `MemoryClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.memory.<a href="/src/api/resources/memory/client/Client.ts">listVersions</a>(project_id, agent_slug, { ...params }) -> Sikaru.MemoryVersions</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.memory.listVersions("project_id", "agent_slug");
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_slug:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Sikaru.ListVersionsMemoryRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `MemoryClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.memory.<a href="/src/api/resources/memory/client/Client.ts">rollback</a>(project_id, agent_slug, version, { ...params }) -> Sikaru.MemoryHead</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Make a retained version the head again; the rollback is kept as the newest version.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.memory.rollback("project_id", "agent_slug", 1);
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_slug:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**version:** `number` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Sikaru.RollbackMemoryRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `MemoryClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -16155,251 +20656,6 @@ await client.modelSettings.updateModelSettings("project_id", {
 <dd>
 
 **requestOptions:** `ModelSettingsClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-## OnlineEvaluations
-<details><summary><code>client.onlineEvaluations.<a href="/src/api/resources/onlineEvaluations/client/Client.ts">listPolicies</a>(project_id, { ...params }) -> Record&lt;string, unknown&gt;</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.onlineEvaluations.listPolicies("project_id");
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**project_id:** `string` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request:** `Sikaru.ListPoliciesOnlineEvaluationsRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `OnlineEvaluationsClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.onlineEvaluations.<a href="/src/api/resources/onlineEvaluations/client/Client.ts">createPolicy</a>(project_id, { ...params }) -> Record&lt;string, unknown&gt;</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.onlineEvaluations.createPolicy("project_id", {
-    evaluator: "evaluator",
-    id: "id",
-    revision: "revision",
-    rubric: "rubric",
-    samplePercent: 1
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**project_id:** `string` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request:** `Sikaru.PolicyInput` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `OnlineEvaluationsClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.onlineEvaluations.<a href="/src/api/resources/onlineEvaluations/client/Client.ts">previewPolicyEligibility</a>(project_id, { ...params }) -> Record&lt;string, unknown&gt;</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.onlineEvaluations.previewPolicyEligibility("project_id");
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**project_id:** `string` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request:** `Sikaru.PreviewPolicyEligibilityOnlineEvaluationsRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `OnlineEvaluationsClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.onlineEvaluations.<a href="/src/api/resources/onlineEvaluations/client/Client.ts">updatePolicy</a>(project_id, policy_id, { ...params }) -> Record&lt;string, unknown&gt;</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.onlineEvaluations.updatePolicy("project_id", "policy_id", {
-    enabled: true
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**project_id:** `string` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**policy_id:** `string` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request:** `Sikaru.PolicyState` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `OnlineEvaluationsClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -16776,7 +21032,132 @@ await client.runSchedules.createSchedule("project_id", {
 </dl>
 </details>
 
-<details><summary><code>client.runSchedules.<a href="/src/api/resources/runSchedules/client/Client.ts">deleteSchedule</a>(project_id, schedule_id) -> Sikaru.ScheduleDeleted</code></summary>
+<details><summary><code>client.runSchedules.<a href="/src/api/resources/runSchedules/client/Client.ts">inspectSchedule</a>(project_id, schedule_id) -> Sikaru.ScheduleResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.runSchedules.inspectSchedule("project_id", "schedule_id");
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**schedule_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `RunSchedulesClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.runSchedules.<a href="/src/api/resources/runSchedules/client/Client.ts">updateSchedule</a>(project_id, schedule_id, { ...params }) -> Sikaru.ScheduleResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.runSchedules.updateSchedule("project_id", "schedule_id", {
+    expected_revision: 1,
+    idempotency_key: "idempotency_key"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**schedule_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Sikaru.ScheduleUpdate` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `RunSchedulesClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.runSchedules.<a href="/src/api/resources/runSchedules/client/Client.ts">deleteSchedule</a>(project_id, schedule_id, { ...params }) -> Sikaru.ScheduleDeleted</code></summary>
 <dl>
 <dd>
 
@@ -16814,6 +21195,14 @@ await client.runSchedules.deleteSchedule("project_id", "schedule_id");
 <dd>
 
 **schedule_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Sikaru.DeleteScheduleRunSchedulesRequest` 
     
 </dd>
 </dl>
@@ -18544,9 +22933,7 @@ await client.workflows.createProjectWorkflowVersion("project_id", "workflow_id")
 <dd>
 
 ```typescript
-const response = await client.responses.createStream({
-    model: "model"
-});
+const response = await client.responses.createStream({});
 for await (const item of response) {
     console.log(item);
 }
@@ -18598,9 +22985,7 @@ for await (const item of response) {
 <dd>
 
 ```typescript
-await client.responses.create({
-    model: "model"
-});
+await client.responses.create({});
 
 ```
 </dd>
@@ -18767,8 +23152,7 @@ await client.traceStreams.streamOpeninferenceSpans({
 const response = await client.chat.completions.createStream({
     messages: [{
             "key": "value"
-        }],
-    model: "model"
+        }]
 });
 for await (const item of response) {
     console.log(item);
@@ -18824,8 +23208,7 @@ for await (const item of response) {
 await client.chat.completions.create({
     messages: [{
             "key": "value"
-        }],
-    model: "model"
+        }]
 });
 
 ```

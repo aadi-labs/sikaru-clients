@@ -7,7 +7,6 @@ def test_chat_completions_create_stream() -> None:
     client = get_client(test_id)
     for _ in client.chat.completions.create_stream(
         messages=[{"key": "value"}],
-        model="model",
     ):
         pass
     verify_request_count(test_id, "POST", "/v1/chat/completions", None, 1)
@@ -20,7 +19,6 @@ def test_chat_completions_create() -> None:
     client = get_client(test_id)
     client.chat.completions.create(
         messages=[{"key": "value"}],
-        model="model",
     )
     verify_request_count(test_id, "POST", "/v1/chat/completions", None, 1)
     verify_auth_headers(test_id, "POST", "/v1/chat/completions", {"Authorization": r"Bearer .+"}, [])

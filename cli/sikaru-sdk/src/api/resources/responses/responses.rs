@@ -29,7 +29,6 @@ impl ResponsesClient {
     ///         .responses
     ///         .create_stream(
     ///             &ResponseCreateParamsStreaming {
-    ///                 model: "model".to_string(),
     ///                 stream: true,
     ///                 access_programs: None,
     ///                 background: None,
@@ -41,6 +40,7 @@ impl ResponsesClient {
     ///                 max_output_tokens: None,
     ///                 max_tool_calls: None,
     ///                 metadata: None,
+    ///                 model: None,
     ///                 models: None,
     ///                 moderation: None,
     ///                 parallel_tool_calls: None,
@@ -117,7 +117,6 @@ impl ResponsesClient {
     ///         .responses
     ///         .create(
     ///             &ResponseCreateParams {
-    ///                 model: "model".to_string(),
     ///                 stream: false,
     ///                 access_programs: None,
     ///                 background: None,
@@ -129,6 +128,7 @@ impl ResponsesClient {
     ///                 max_output_tokens: None,
     ///                 max_tool_calls: None,
     ///                 metadata: None,
+    ///                 model: None,
     ///                 models: None,
     ///                 moderation: None,
     ///                 parallel_tool_calls: None,

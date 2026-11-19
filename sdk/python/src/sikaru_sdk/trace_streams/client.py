@@ -36,6 +36,7 @@ class TraceStreamsClient:
         idempotency_key: typing.Optional[str] = None,
         sikaru_client_id: typing.Optional[str] = None,
         dataset: typing.Optional[str] = OMIT,
+        records: typing.Optional[typing.Sequence[typing.Dict[str, typing.Any]]] = OMIT,
         resource_spans: typing.Optional[typing.Sequence[typing.Dict[str, typing.Any]]] = OMIT,
         spans: typing.Optional[typing.Sequence[OpenInferenceSpan]] = OMIT,
         trajectories: typing.Optional[typing.Sequence[typing.Dict[str, typing.Any]]] = OMIT,
@@ -54,6 +55,9 @@ class TraceStreamsClient:
         sikaru_client_id : typing.Optional[str]
 
         dataset : typing.Optional[str]
+
+        records : typing.Optional[typing.Sequence[typing.Dict[str, typing.Any]]]
+            Rows of a trace export, unchanged, for `langfuse.observations.v1` (observations), `langsmith.runs.v1` (runs) or `braintrust.spans.v1` (spans). The service rebuilds each trace or agent run only from the rows in one request, so keep all of its rows together.
 
         resource_spans : typing.Optional[typing.Sequence[typing.Dict[str, typing.Any]]]
 
@@ -94,6 +98,7 @@ class TraceStreamsClient:
             idempotency_key=idempotency_key,
             sikaru_client_id=sikaru_client_id,
             dataset=dataset,
+            records=records,
             resource_spans=resource_spans,
             spans=spans,
             trajectories=trajectories,
@@ -126,6 +131,7 @@ class AsyncTraceStreamsClient:
         idempotency_key: typing.Optional[str] = None,
         sikaru_client_id: typing.Optional[str] = None,
         dataset: typing.Optional[str] = OMIT,
+        records: typing.Optional[typing.Sequence[typing.Dict[str, typing.Any]]] = OMIT,
         resource_spans: typing.Optional[typing.Sequence[typing.Dict[str, typing.Any]]] = OMIT,
         spans: typing.Optional[typing.Sequence[OpenInferenceSpan]] = OMIT,
         trajectories: typing.Optional[typing.Sequence[typing.Dict[str, typing.Any]]] = OMIT,
@@ -144,6 +150,9 @@ class AsyncTraceStreamsClient:
         sikaru_client_id : typing.Optional[str]
 
         dataset : typing.Optional[str]
+
+        records : typing.Optional[typing.Sequence[typing.Dict[str, typing.Any]]]
+            Rows of a trace export, unchanged, for `langfuse.observations.v1` (observations), `langsmith.runs.v1` (runs) or `braintrust.spans.v1` (spans). The service rebuilds each trace or agent run only from the rows in one request, so keep all of its rows together.
 
         resource_spans : typing.Optional[typing.Sequence[typing.Dict[str, typing.Any]]]
 
@@ -192,6 +201,7 @@ class AsyncTraceStreamsClient:
             idempotency_key=idempotency_key,
             sikaru_client_id=sikaru_client_id,
             dataset=dataset,
+            records=records,
             resource_spans=resource_spans,
             spans=spans,
             trajectories=trajectories,

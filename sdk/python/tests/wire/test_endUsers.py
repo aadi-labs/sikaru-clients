@@ -1,5 +1,7 @@
 from .conftest import get_client, verify_auth_headers, verify_request_count
 
+from sikaru_sdk import AuthoredLearningWorkflow, ImportFile, ProductLearningEvidence
+
 
 def test_endUsers_get() -> None:
     """Test get endpoint with WireMock"""
@@ -67,52 +69,132 @@ def test_endUsers_delete() -> None:
     )
 
 
-def test_endUsers_update_fact() -> None:
-    """Test update_fact endpoint with WireMock"""
-    test_id = "end_users.update_fact.0"
+def test_endUsers_import_state() -> None:
+    """Test import_state endpoint with WireMock"""
+    test_id = "end_users.import_state.0"
     client = get_client(test_id)
-    client.end_users.update_fact(
+    client.end_users.import_state(
         project_id="project_id",
         agent_slug="agent_slug",
         tenant_id="tenant_id",
         user_id="user_id",
-        content="content",
-        path="path",
+        digest="digest",
+        files=[
+            ImportFile(
+                content="content",
+                expected_etag=None,
+                path="path",
+                provenance="provenance",
+            )
+        ],
+        import_id="importId",
+        source_revision="sourceRevision",
     )
     verify_request_count(
-        test_id, "PUT", "/v1/projects/project_id/managed-agents/agent_slug/end-users/tenant_id/user_id/facts", None, 1
+        test_id,
+        "POST",
+        "/v1/projects/project_id/managed-agents/agent_slug/end-users/tenant_id/user_id/imports",
+        None,
+        1,
     )
     verify_auth_headers(
         test_id,
-        "PUT",
-        "/v1/projects/project_id/managed-agents/agent_slug/end-users/tenant_id/user_id/facts",
+        "POST",
+        "/v1/projects/project_id/managed-agents/agent_slug/end-users/tenant_id/user_id/imports",
         {"Authorization": r"Bearer .+"},
         [],
     )
 
 
-def test_endUsers_delete_fact() -> None:
-    """Test delete_fact endpoint with WireMock"""
-    test_id = "end_users.delete_fact.0"
+def test_endUsers_start_learning_run() -> None:
+    """Test start_learning_run endpoint with WireMock"""
+    test_id = "end_users.start_learning_run.0"
     client = get_client(test_id)
-    client.end_users.delete_fact(
+    client.end_users.start_learning_run(
         project_id="project_id",
         agent_slug="agent_slug",
         tenant_id="tenant_id",
         user_id="user_id",
-        path="path",
+        evidence=[
+            ProductLearningEvidence(
+                content="content",
+                digest="digest",
+                learning_eligible=True,
+                provenance="user_message",
+                source_id="sourceId",
+            )
+        ],
+        invocation_id="invocationId",
+        source_revision="sourceRevision",
+        workflow=AuthoredLearningWorkflow(
+            name="name",
+        ),
     )
     verify_request_count(
         test_id,
-        "DELETE",
-        "/v1/projects/project_id/managed-agents/agent_slug/end-users/tenant_id/user_id/facts",
-        {"path": "path"},
+        "POST",
+        "/v1/projects/project_id/managed-agents/agent_slug/end-users/tenant_id/user_id/learning-runs",
+        None,
         1,
     )
     verify_auth_headers(
         test_id,
-        "DELETE",
-        "/v1/projects/project_id/managed-agents/agent_slug/end-users/tenant_id/user_id/facts",
+        "POST",
+        "/v1/projects/project_id/managed-agents/agent_slug/end-users/tenant_id/user_id/learning-runs",
+        {"Authorization": r"Bearer .+"},
+        [],
+    )
+
+
+def test_endUsers_get_learning_run() -> None:
+    """Test get_learning_run endpoint with WireMock"""
+    test_id = "end_users.get_learning_run.0"
+    client = get_client(test_id)
+    client.end_users.get_learning_run(
+        project_id="project_id",
+        agent_slug="agent_slug",
+        tenant_id="tenant_id",
+        user_id="user_id",
+        invocation_id="invocation_id",
+    )
+    verify_request_count(
+        test_id,
+        "GET",
+        "/v1/projects/project_id/managed-agents/agent_slug/end-users/tenant_id/user_id/learning-runs/invocation_id",
+        None,
+        1,
+    )
+    verify_auth_headers(
+        test_id,
+        "GET",
+        "/v1/projects/project_id/managed-agents/agent_slug/end-users/tenant_id/user_id/learning-runs/invocation_id",
+        {"Authorization": r"Bearer .+"},
+        [],
+    )
+
+
+def test_endUsers_revoke_learning_source() -> None:
+    """Test revoke_learning_source endpoint with WireMock"""
+    test_id = "end_users.revoke_learning_source.0"
+    client = get_client(test_id)
+    client.end_users.revoke_learning_source(
+        project_id="project_id",
+        agent_slug="agent_slug",
+        tenant_id="tenant_id",
+        user_id="user_id",
+        source_id="source_id",
+    )
+    verify_request_count(
+        test_id,
+        "POST",
+        "/v1/projects/project_id/managed-agents/agent_slug/end-users/tenant_id/user_id/learning-sources/source_id/revoke",
+        None,
+        1,
+    )
+    verify_auth_headers(
+        test_id,
+        "POST",
+        "/v1/projects/project_id/managed-agents/agent_slug/end-users/tenant_id/user_id/learning-sources/source_id/revoke",
         {"Authorization": r"Bearer .+"},
         [],
     )

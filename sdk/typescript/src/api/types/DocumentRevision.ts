@@ -6,5 +6,6 @@ export interface DocumentRevision {
     contentOrigin: string;
     createdAt: string;
     document: string;
+    files?: Record<string, string> | undefined;
     revision: number;
 }

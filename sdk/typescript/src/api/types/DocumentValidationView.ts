@@ -5,6 +5,7 @@ import * as Sikaru from "../index.js";
 export interface DocumentValidationView {
     editor?: (Sikaru.DocumentEditorMetadata | null) | undefined;
     errors: Sikaru.DocumentIssue[];
+    folder?: Record<string, unknown> | undefined;
     mentions: Sikaru.ResolvedMention[];
     publishable: boolean;
 }

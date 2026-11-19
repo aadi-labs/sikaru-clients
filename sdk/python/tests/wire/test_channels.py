@@ -110,6 +110,24 @@ def test_channels_issue_http_credential() -> None:
     )
 
 
+def test_channels_configure_feedback() -> None:
+    """Test configure_feedback endpoint with WireMock"""
+    test_id = "channels.configure_feedback.0"
+    client = get_client(test_id)
+    client.channels.configure_feedback(
+        project_id="project_id",
+        binding_id="binding_id",
+    )
+    verify_request_count(test_id, "PATCH", "/v1/projects/project_id/channels/bindings/binding_id/feedback", None, 1)
+    verify_auth_headers(
+        test_id,
+        "PATCH",
+        "/v1/projects/project_id/channels/bindings/binding_id/feedback",
+        {"Authorization": r"Bearer .+"},
+        [],
+    )
+
+
 def test_channels_configure_personal_access() -> None:
     """Test configure_personal_access endpoint with WireMock"""
     test_id = "channels.configure_personal_access.0"

@@ -4,10 +4,17 @@ import typing
 
 import pydantic
 from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
+from .always_cap import AlwaysCap
 from .approval_input_decision import ApprovalInputDecision
 
 
 class ApprovalInput(UniversalBaseModel):
+    always: typing.Optional[bool] = pydantic.Field(default=None)
+    """
+    Also always allow this browser commit at its playbook step.
+    """
+
+    cap: typing.Optional[AlwaysCap] = None
     decision: ApprovalInputDecision
     idempotency_key: str
 

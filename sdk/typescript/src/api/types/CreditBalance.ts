@@ -3,14 +3,14 @@
 export interface CreditBalance {
     /** Credits available for new work now, after amounts held for work in progress; null unless `ready`. */
     availableUsd: string | null;
-    /** `ready`: credits fund work; `no_card`: the organization has not saved a card, so nothing funds work yet; `complimentary`: usage is covered and needs no credits. */
+    /** `ready`: credits fund work; `no_card`: the organization has no credit account yet, so nothing funds work until an agent top-up or a saved card opens one; `complimentary`: usage is covered and needs no credits. */
     state: CreditBalance.State;
     /** Largest top-up offer an agent can create now; null while agent top-ups are off or unavailable. */
     topUpMaxUsd: string | null;
 }
 
 export namespace CreditBalance {
-    /** `ready`: credits fund work; `no_card`: the organization has not saved a card, so nothing funds work yet; `complimentary`: usage is covered and needs no credits. */
+    /** `ready`: credits fund work; `no_card`: the organization has no credit account yet, so nothing funds work until an agent top-up or a saved card opens one; `complimentary`: usage is covered and needs no credits. */
     export const State = {
             Ready: "ready",
             NoCard: "no_card",

@@ -120,7 +120,7 @@ describe("ExecutionSessionsClient", () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         
-        const rawResponseBody = { "session" : { "activeRunId" : "activeRunId" , "agentSlug" : "agentSlug" , "autoImprove" : true , "channelOrigin" : "http" , "contentVisible" : true , "createdAt" : "createdAt" , "draftRevision" : 1 , "environment" : "production" , "finalOutputSchema" : { "key" : "value" } , "harnessId" : "harnessId" , "harnessVersionId" : "harnessVersionId" , "id" : "id" , "modelId" : "modelId" , "nextTurn" : 1 , "personal" : true , "pinnedGenerationId" : "pinnedGenerationId" , "preview" : "preview" , "projectId" : "projectId" , "reasoningEffort" : "reasoningEffort" } };
+        const rawResponseBody = { "session" : { "activeRunId" : "activeRunId" , "agentSlug" : "agentSlug" , "autoImprove" : true , "channelOrigin" : "http" , "contentVisible" : true , "createdAt" : "createdAt" , "draftRevision" : 1 , "environment" : "production" , "finalOutputSchema" : { "key" : "value" } , "harnessId" : "harnessId" , "harnessVersionId" : "harnessVersionId" , "id" : "id" , "invocationPolicy" : { "cross_session_recall" : true , "learning" : true , "tools" : "enabled" } , "modelId" : "modelId" , "nextTurn" : 1 , "personal" : true , "pinnedGenerationId" : "pinnedGenerationId" , "preview" : "preview" , "projectId" : "projectId" , "reasoningEffort" : "reasoningEffort" } };
         
         server
             .mockEndpoint()
@@ -1042,7 +1042,7 @@ describe("ExecutionSessionsClient", () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         const rawRequestBody = { };
-        const rawResponseBody = { "session" : { "activeRunId" : "activeRunId" , "agentSlug" : "agentSlug" , "autoImprove" : true , "channelOrigin" : "http" , "contentVisible" : true , "createdAt" : "createdAt" , "draftRevision" : 1 , "environment" : "production" , "finalOutputSchema" : { "key" : "value" } , "harnessId" : "harnessId" , "harnessVersionId" : "harnessVersionId" , "id" : "id" , "modelId" : "modelId" , "nextTurn" : 1 , "personal" : true , "pinnedGenerationId" : "pinnedGenerationId" , "preview" : "preview" , "projectId" : "projectId" , "reasoningEffort" : "reasoningEffort" } };
+        const rawResponseBody = { "session" : { "activeRunId" : "activeRunId" , "agentSlug" : "agentSlug" , "autoImprove" : true , "channelOrigin" : "http" , "contentVisible" : true , "createdAt" : "createdAt" , "draftRevision" : 1 , "environment" : "production" , "finalOutputSchema" : { "key" : "value" } , "harnessId" : "harnessId" , "harnessVersionId" : "harnessVersionId" , "id" : "id" , "invocationPolicy" : { "cross_session_recall" : true , "learning" : true , "tools" : "enabled" } , "modelId" : "modelId" , "nextTurn" : 1 , "personal" : true , "pinnedGenerationId" : "pinnedGenerationId" , "preview" : "preview" , "projectId" : "projectId" , "reasoningEffort" : "reasoningEffort" } };
         
         server
             .mockEndpoint()

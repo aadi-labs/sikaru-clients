@@ -4,5 +4,6 @@ import * as Sikaru from "../index.js";
 
 export interface ImportedDocument {
     document: string;
+    files: Record<string, string>;
     validation: Sikaru.DocumentValidationView;
 }

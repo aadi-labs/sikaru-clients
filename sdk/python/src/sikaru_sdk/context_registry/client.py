@@ -35,7 +35,7 @@ class ContextRegistryClient:
         action: typing.Optional[CreateContextRegistryChangeRequestAction] = OMIT,
         files: typing.Optional[typing.Sequence[str]] = OMIT,
         kind: typing.Optional[str] = OMIT,
-        linked_signal: typing.Optional[str] = OMIT,
+        linked_grader: typing.Optional[str] = OMIT,
         owner: typing.Optional[str] = OMIT,
         production_commit: typing.Optional[str] = OMIT,
         production_tag: typing.Optional[str] = OMIT,
@@ -63,7 +63,7 @@ class ContextRegistryClient:
 
         kind : typing.Optional[str]
 
-        linked_signal : typing.Optional[str]
+        linked_grader : typing.Optional[str]
 
         owner : typing.Optional[str]
 
@@ -114,7 +114,7 @@ class ContextRegistryClient:
             action=action,
             files=files,
             kind=kind,
-            linked_signal=linked_signal,
+            linked_grader=linked_grader,
             owner=owner,
             production_commit=production_commit,
             production_tag=production_tag,
@@ -154,7 +154,7 @@ class AsyncContextRegistryClient:
         action: typing.Optional[CreateContextRegistryChangeRequestAction] = OMIT,
         files: typing.Optional[typing.Sequence[str]] = OMIT,
         kind: typing.Optional[str] = OMIT,
-        linked_signal: typing.Optional[str] = OMIT,
+        linked_grader: typing.Optional[str] = OMIT,
         owner: typing.Optional[str] = OMIT,
         production_commit: typing.Optional[str] = OMIT,
         production_tag: typing.Optional[str] = OMIT,
@@ -182,7 +182,7 @@ class AsyncContextRegistryClient:
 
         kind : typing.Optional[str]
 
-        linked_signal : typing.Optional[str]
+        linked_grader : typing.Optional[str]
 
         owner : typing.Optional[str]
 
@@ -241,7 +241,7 @@ class AsyncContextRegistryClient:
             action=action,
             files=files,
             kind=kind,
-            linked_signal=linked_signal,
+            linked_grader=linked_grader,
             owner=owner,
             production_commit=production_commit,
             production_tag=production_tag,

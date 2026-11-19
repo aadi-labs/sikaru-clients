@@ -388,7 +388,9 @@ export class ChangesetsClient {
      * @throws {@link Sikaru.UnauthorizedError}
      * @throws {@link Sikaru.ForbiddenError}
      * @throws {@link Sikaru.NotFoundError}
+     * @throws {@link Sikaru.ConflictError}
      * @throws {@link Sikaru.UnprocessableEntityError}
+     * @throws {@link Sikaru.ServiceUnavailableError}
      * @throws {@link errors.SikaruError}
      * @throws {@link errors.SikaruTimeoutError}
      *
@@ -427,7 +429,9 @@ export class ChangesetsClient {
                 case 401: throw new Sikaru.UnauthorizedError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
                 case 403: throw new Sikaru.ForbiddenError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
                 case 404: throw new Sikaru.NotFoundError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 409: throw new Sikaru.ConflictError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
                 case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as unknown, _response.rawResponse);
+                case 503: throw new Sikaru.ServiceUnavailableError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
                 default: throw new errors.SikaruError({
                     statusCode: _response.error.statusCode,
                     body: _response.error.body,
@@ -437,6 +441,77 @@ export class ChangesetsClient {
         }
 
         return handleNonStatusCodeError(_response.error, _response.rawResponse, "POST", "/v1/projects/{project_id}/changesets/{changeset_id}/promote");
+    }
+
+    /**
+     * Promote a Try a Fix changeset its agent's release check blocked or couldn't verify, recording who, when and
+     * why (grader release check R10, R33, R36). The contract of an agent document's Publish Anyway: owner credentials
+     * and a reason, refused while the check still runs or when the live version or check settings changed since.
+     *
+     * @param {string} project_id
+     * @param {string} changeset_id
+     * @param {string} publication_id
+     * @param {Sikaru.PublishAnyway} request
+     * @param {ChangesetsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Sikaru.UnauthorizedError}
+     * @throws {@link Sikaru.ForbiddenError}
+     * @throws {@link Sikaru.NotFoundError}
+     * @throws {@link Sikaru.ConflictError}
+     * @throws {@link Sikaru.UnprocessableEntityError}
+     * @throws {@link Sikaru.ServiceUnavailableError}
+     * @throws {@link errors.SikaruError}
+     * @throws {@link errors.SikaruTimeoutError}
+     *
+     * @example
+     *     await client.changesets.publishChangesetAnyway("project_id", "changeset_id", "publication_id", {
+     *         reason: "reason"
+     *     })
+     */
+    public publishChangesetAnyway(project_id: string, changeset_id: string, publication_id: string, request: Sikaru.PublishAnyway, requestOptions?: ChangesetsClient.RequestOptions): core.HttpResponsePromise<Record<string, unknown>> {
+        return core.HttpResponsePromise.fromPromise(this.__publishChangesetAnyway(project_id, changeset_id, publication_id, request, requestOptions));
+    }
+
+    private async __publishChangesetAnyway(project_id: string, changeset_id: string, publication_id: string, request: Sikaru.PublishAnyway, requestOptions?: ChangesetsClient.RequestOptions): Promise<core.WithRawResponse<Record<string, unknown>>> {
+        const _metadata: core.EndpointMetadata = { security: [{ BearerAuth: [] }] };
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest({ endpointMetadata: _metadata });
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(_authRequest.headers, this._options?.headers, requestOptions?.headers);
+        const _response = await core.fetcher({
+            url: core.url.join(await core.Supplier.get(this._options.baseUrl) ?? (await core.Supplier.get(this._options.environment) ?? environments.SikaruEnvironment.Default), `v1/projects/${core.url.encodePathParam(project_id)}/changesets/${core.url.encodePathParam(changeset_id)}/publications/${core.url.encodePathParam(publication_id)}/publish-anyway`),
+            method: "POST",
+            headers: _headers,
+            contentType: "application/json",
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            requestType: "json",
+            body: mergeAdditionalBodyParameters(request, requestOptions?.additionalBodyParameters),
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: 0,
+            abortSignal: requestOptions?.abortSignal,
+            endpointMetadata: _metadata,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging
+        });
+        if (_response.ok) {
+            return { data: _response.body as Record<string, unknown>, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401: throw new Sikaru.UnauthorizedError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 403: throw new Sikaru.ForbiddenError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 404: throw new Sikaru.NotFoundError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 409: throw new Sikaru.ConflictError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as unknown, _response.rawResponse);
+                case 503: throw new Sikaru.ServiceUnavailableError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                default: throw new errors.SikaruError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.body,
+                    rawResponse: _response.rawResponse
+                });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "POST", "/v1/projects/{project_id}/changesets/{changeset_id}/publications/{publication_id}/publish-anyway");
     }
 
     /**

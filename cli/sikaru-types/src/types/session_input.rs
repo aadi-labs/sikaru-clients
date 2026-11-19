@@ -11,9 +11,13 @@ pub struct SessionInput {
     pub auto_improve: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub conversation_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub draft_files: Option<HashMap<String, Option<String>>>,
     /// Saved document revision to test. Required for document Draft sessions.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub draft_revision: Option<i64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub draft_schedule: Option<String>,
     /// Draft sessions test the pinned agent definition without activation. Creating or appending draft sessions also requires harness:write.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub environment: Option<SessionInputEnvironment>,
@@ -23,6 +27,8 @@ pub struct SessionInput {
     pub final_output_schema: Option<HashMap<String, serde_json::Value>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub idempotency_key: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub invocation_policy: Option<InvocationPolicy>,
     /// Default model for this session. Use a Sikaru model catalog ID, such as moonshotai/kimi-k3. Omit to inherit the project default.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub model: Option<String>,
@@ -49,11 +55,14 @@ pub struct SessionInputBuilder {
     acknowledge_widening: Option<bool>,
     auto_improve: Option<bool>,
     conversation_id: Option<String>,
+    draft_files: Option<HashMap<String, Option<String>>>,
     draft_revision: Option<i64>,
+    draft_schedule: Option<String>,
     environment: Option<SessionInputEnvironment>,
     expected_access_digest: Option<String>,
     final_output_schema: Option<HashMap<String, serde_json::Value>>,
     idempotency_key: Option<String>,
+    invocation_policy: Option<InvocationPolicy>,
     model: Option<String>,
     pinned_generation_id: Option<String>,
     reasoning_effort: Option<SessionInputReasoningEffort>,
@@ -77,8 +86,18 @@ impl SessionInputBuilder {
         self
     }
 
+    pub fn draft_files(mut self, value: HashMap<String, Option<String>>) -> Self {
+        self.draft_files = Some(value);
+        self
+    }
+
     pub fn draft_revision(mut self, value: i64) -> Self {
         self.draft_revision = Some(value);
+        self
+    }
+
+    pub fn draft_schedule(mut self, value: impl Into<String>) -> Self {
+        self.draft_schedule = Some(value.into());
         self
     }
 
@@ -99,6 +118,11 @@ impl SessionInputBuilder {
 
     pub fn idempotency_key(mut self, value: impl Into<String>) -> Self {
         self.idempotency_key = Some(value.into());
+        self
+    }
+
+    pub fn invocation_policy(mut self, value: InvocationPolicy) -> Self {
+        self.invocation_policy = Some(value);
         self
     }
 
@@ -133,11 +157,14 @@ impl SessionInputBuilder {
             acknowledge_widening: self.acknowledge_widening,
             auto_improve: self.auto_improve,
             conversation_id: self.conversation_id,
+            draft_files: self.draft_files,
             draft_revision: self.draft_revision,
+            draft_schedule: self.draft_schedule,
             environment: self.environment,
             expected_access_digest: self.expected_access_digest,
             final_output_schema: self.final_output_schema,
             idempotency_key: self.idempotency_key,
+            invocation_policy: self.invocation_policy,
             model: self.model,
             pinned_generation_id: self.pinned_generation_id,
             reasoning_effort: self.reasoning_effort,

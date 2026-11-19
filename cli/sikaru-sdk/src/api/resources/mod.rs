@@ -11,6 +11,7 @@
 //! - **Activation**
 //! - **AgentDocuments**
 //! - **AgentImports**
+//! - **Graders**
 //! - **Agents**
 //! - **CapabilityCeilings**
 //! - **Changesets**
@@ -34,7 +35,7 @@
 //! - **EvaluatorRuns**
 //! - **ExecutionObjectives**
 //! - **ExecutionSessions**
-//! - **Specialists**
+//! - **Tasks**
 //! - **Executions**
 //! - **Feedback**
 //! - **GitCredentials**
@@ -42,14 +43,12 @@
 //! - **Runs**
 //! - **ImportSessions**
 //! - **IssueClusters**
-//! - **JudgeAlignment**
 //! - **ManagedAgents**
 //! - **Checks**
 //! - **EndUsers**
-//! - **MemoryRegistry**
+//! - **Memory**
 //! - **ModelGateway**
 //! - **ModelSettings**
-//! - **OnlineEvaluations**
 //! - **ReleaseWatches**
 //! - **RetentionPolicies**
 //! - **ReviewQueue**
@@ -105,17 +104,16 @@ pub mod execution_sessions;
 pub mod executions;
 pub mod feedback;
 pub mod git_credentials;
+pub mod graders;
 pub mod harnesses;
 pub mod http_channels;
 pub mod import_sessions;
 pub mod issue_clusters;
-pub mod judge_alignment;
 pub mod managed_agents;
-pub mod memory_registry;
+pub mod memory;
 pub mod model_gateway;
 pub mod model_settings;
 pub mod models;
-pub mod online_evaluations;
 pub mod personal_channels;
 pub mod projects;
 pub mod release_watches;
@@ -127,7 +125,7 @@ pub mod run_schedules;
 pub mod run_webhooks;
 pub mod runs;
 pub mod sessions;
-pub mod specialists;
+pub mod tasks;
 pub mod tool_providers;
 pub mod trace_import_connections;
 pub mod trace_imports;
@@ -146,6 +144,7 @@ pub struct ApiClient {
     pub activation: ActivationClient,
     pub agent_documents: AgentDocumentsClient,
     pub agent_imports: AgentImportsClient,
+    pub graders: GradersClient,
     pub agents: AgentsClient,
     pub capability_ceilings: CapabilityCeilingsClient,
     pub changesets: ChangesetsClient,
@@ -169,7 +168,7 @@ pub struct ApiClient {
     pub evaluator_runs: EvaluatorRunsClient,
     pub execution_objectives: ExecutionObjectivesClient,
     pub execution_sessions: ExecutionSessionsClient,
-    pub specialists: SpecialistsClient,
+    pub tasks: TasksClient,
     pub executions: ExecutionsClient,
     pub feedback: FeedbackClient,
     pub git_credentials: GitCredentialsClient,
@@ -177,14 +176,12 @@ pub struct ApiClient {
     pub runs: RunsClient,
     pub import_sessions: ImportSessionsClient,
     pub issue_clusters: IssueClustersClient,
-    pub judge_alignment: JudgeAlignmentClient,
     pub managed_agents: ManagedAgentsClient,
     pub checks: ChecksClient,
     pub end_users: EndUsersClient,
-    pub memory_registry: MemoryRegistryClient,
+    pub memory: MemoryClient,
     pub model_gateway: ModelGatewayClient,
     pub model_settings: ModelSettingsClient,
-    pub online_evaluations: OnlineEvaluationsClient,
     pub release_watches: ReleaseWatchesClient,
     pub retention_policies: RetentionPoliciesClient,
     pub review_queue: ReviewQueueClient,
@@ -217,6 +214,7 @@ impl ApiClient {
             activation: ActivationClient::new(config.clone())?,
             agent_documents: AgentDocumentsClient::new(config.clone())?,
             agent_imports: AgentImportsClient::new(config.clone())?,
+            graders: GradersClient::new(config.clone())?,
             agents: AgentsClient::new(config.clone())?,
             capability_ceilings: CapabilityCeilingsClient::new(config.clone())?,
             changesets: ChangesetsClient::new(config.clone())?,
@@ -240,7 +238,7 @@ impl ApiClient {
             evaluator_runs: EvaluatorRunsClient::new(config.clone())?,
             execution_objectives: ExecutionObjectivesClient::new(config.clone())?,
             execution_sessions: ExecutionSessionsClient::new(config.clone())?,
-            specialists: SpecialistsClient::new(config.clone())?,
+            tasks: TasksClient::new(config.clone())?,
             executions: ExecutionsClient::new(config.clone())?,
             feedback: FeedbackClient::new(config.clone())?,
             git_credentials: GitCredentialsClient::new(config.clone())?,
@@ -248,14 +246,12 @@ impl ApiClient {
             runs: RunsClient::new(config.clone())?,
             import_sessions: ImportSessionsClient::new(config.clone())?,
             issue_clusters: IssueClustersClient::new(config.clone())?,
-            judge_alignment: JudgeAlignmentClient::new(config.clone())?,
             managed_agents: ManagedAgentsClient::new(config.clone())?,
             checks: ChecksClient::new(config.clone())?,
             end_users: EndUsersClient::new(config.clone())?,
-            memory_registry: MemoryRegistryClient::new(config.clone())?,
+            memory: MemoryClient::new(config.clone())?,
             model_gateway: ModelGatewayClient::new(config.clone())?,
             model_settings: ModelSettingsClient::new(config.clone())?,
-            online_evaluations: OnlineEvaluationsClient::new(config.clone())?,
             release_watches: ReleaseWatchesClient::new(config.clone())?,
             retention_policies: RetentionPoliciesClient::new(config.clone())?,
             review_queue: ReviewQueueClient::new(config.clone())?,
@@ -312,17 +308,16 @@ pub use execution_sessions::ExecutionSessionsClient;
 pub use executions::ExecutionsClient;
 pub use feedback::FeedbackClient;
 pub use git_credentials::GitCredentialsClient;
+pub use graders::GradersClient;
 pub use harnesses::HarnessesClient;
 pub use http_channels::HttpChannelsClient;
 pub use import_sessions::ImportSessionsClient;
 pub use issue_clusters::IssueClustersClient;
-pub use judge_alignment::JudgeAlignmentClient;
 pub use managed_agents::ManagedAgentsClient;
-pub use memory_registry::MemoryRegistryClient;
+pub use memory::MemoryClient;
 pub use model_gateway::ModelGatewayClient;
 pub use model_settings::ModelSettingsClient;
 pub use models::ModelsClient;
-pub use online_evaluations::OnlineEvaluationsClient;
 pub use personal_channels::PersonalChannelsClient;
 pub use projects::ProjectsClient;
 pub use release_watches::ReleaseWatchesClient;
@@ -334,7 +329,7 @@ pub use run_schedules::RunSchedulesClient;
 pub use run_webhooks::RunWebhooksClient;
 pub use runs::RunsClient;
 pub use sessions::SessionsClient;
-pub use specialists::SpecialistsClient;
+pub use tasks::TasksClient;
 pub use tool_providers::ToolProvidersClient;
 pub use trace_import_connections::TraceImportConnectionsClient;
 pub use trace_imports::TraceImportsClient;

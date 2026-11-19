@@ -8,7 +8,7 @@ describe("CompletionsClient", () => {
     test("create_stream", async () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
-        const rawRequestBody = { "model" : "model" , "prompt" : "prompt" , "stream" : true };
+        const rawRequestBody = { "prompt" : "prompt" , "stream" : true };
         const rawResponseBody = "event: \ndata: {\"choices\":[{\"finish_reason\":\"finish_reason\",\"index\":1,\"logprobs\":{\"key\":\"value\"},\"text\":\"text\"}],\"created\":1,\"id\":\"id\",\"model\":\"model\",\"object\":\"object\",\"usage\":{\"completion_tokens\":1,\"completion_tokens_details\":{\"key\":\"value\"},\"prompt_tokens\":1,\"prompt_tokens_details\":{\"key\":\"value\"},\"total_tokens\":1}}\n\n";
         
         server
@@ -20,7 +20,6 @@ describe("CompletionsClient", () => {
 
         
             const response = await client.completions.createStream({
-    model: "model",
     prompt: "prompt"
 });
             const events: unknown[] = [];
@@ -57,7 +56,7 @@ describe("CompletionsClient", () => {
     test("create", async () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
-        const rawRequestBody = { "model" : "model" , "prompt" : "prompt" , "stream" : false };
+        const rawRequestBody = { "prompt" : "prompt" , "stream" : false };
         const rawResponseBody = { "choices" : [ { "finish_reason" : "finish_reason" , "index" : 1 , "logprobs" : { "key" : "value" } , "text" : "text" } ] , "created" : 1 , "id" : "id" , "model" : "model" , "object" : "object" , "usage" : { "completion_tokens" : 1 , "completion_tokens_details" : { "key" : "value" } , "prompt_tokens" : 1 , "prompt_tokens_details" : { "key" : "value" } , "total_tokens" : 1 } };
         
         server
@@ -70,7 +69,6 @@ describe("CompletionsClient", () => {
         
                         
                                 const response = await client.completions.create({
-    model: "model",
     prompt: "prompt"
 });
                                 expect(response).toEqual(rawResponseBody);

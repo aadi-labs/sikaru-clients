@@ -8,6 +8,7 @@ from ..types.eligible_releases import EligibleReleases
 from ..types.execution_session_page import ExecutionSessionPage
 from ..types.execution_session_response import ExecutionSessionResponse
 from ..types.execution_turn_response import ExecutionTurnResponse
+from ..types.invocation_policy import InvocationPolicy
 from ..types.session_spend import SessionSpend
 from .raw_client import AsyncRawExecutionSessionsClient, RawExecutionSessionsClient
 from .types.list_eligible_releases_execution_sessions_request_environment import (
@@ -478,11 +479,14 @@ class ExecutionSessionsClient:
         acknowledge_widening: typing.Optional[bool] = OMIT,
         auto_improve: typing.Optional[bool] = OMIT,
         conversation_id: typing.Optional[str] = OMIT,
+        draft_files: typing.Optional[typing.Dict[str, typing.Optional[str]]] = OMIT,
         draft_revision: typing.Optional[int] = OMIT,
+        draft_schedule: typing.Optional[str] = OMIT,
         environment: typing.Optional[SessionInputEnvironment] = OMIT,
         expected_access_digest: typing.Optional[str] = OMIT,
         final_output_schema: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
         idempotency_key: typing.Optional[str] = OMIT,
+        invocation_policy: typing.Optional[InvocationPolicy] = OMIT,
         model: typing.Optional[str] = OMIT,
         pinned_generation_id: typing.Optional[str] = OMIT,
         reasoning_effort: typing.Optional[SessionInputReasoningEffort] = OMIT,
@@ -504,8 +508,12 @@ class ExecutionSessionsClient:
 
         conversation_id : typing.Optional[str]
 
+        draft_files : typing.Optional[typing.Dict[str, typing.Optional[str]]]
+
         draft_revision : typing.Optional[int]
             Saved document revision to test. Required for document Draft sessions.
+
+        draft_schedule : typing.Optional[str]
 
         environment : typing.Optional[SessionInputEnvironment]
             Draft sessions test the pinned agent definition without activation. Creating or appending draft sessions also requires harness:write.
@@ -515,6 +523,8 @@ class ExecutionSessionsClient:
         final_output_schema : typing.Optional[typing.Dict[str, typing.Any]]
 
         idempotency_key : typing.Optional[str]
+
+        invocation_policy : typing.Optional[InvocationPolicy]
 
         model : typing.Optional[str]
             Default model for this session. Use a Sikaru model catalog ID, such as moonshotai/kimi-k3. Omit to inherit the project default.
@@ -555,11 +565,14 @@ class ExecutionSessionsClient:
             acknowledge_widening=acknowledge_widening,
             auto_improve=auto_improve,
             conversation_id=conversation_id,
+            draft_files=draft_files,
             draft_revision=draft_revision,
+            draft_schedule=draft_schedule,
             environment=environment,
             expected_access_digest=expected_access_digest,
             final_output_schema=final_output_schema,
             idempotency_key=idempotency_key,
+            invocation_policy=invocation_policy,
             model=model,
             pinned_generation_id=pinned_generation_id,
             reasoning_effort=reasoning_effort,
@@ -1146,11 +1159,14 @@ class AsyncExecutionSessionsClient:
         acknowledge_widening: typing.Optional[bool] = OMIT,
         auto_improve: typing.Optional[bool] = OMIT,
         conversation_id: typing.Optional[str] = OMIT,
+        draft_files: typing.Optional[typing.Dict[str, typing.Optional[str]]] = OMIT,
         draft_revision: typing.Optional[int] = OMIT,
+        draft_schedule: typing.Optional[str] = OMIT,
         environment: typing.Optional[SessionInputEnvironment] = OMIT,
         expected_access_digest: typing.Optional[str] = OMIT,
         final_output_schema: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
         idempotency_key: typing.Optional[str] = OMIT,
+        invocation_policy: typing.Optional[InvocationPolicy] = OMIT,
         model: typing.Optional[str] = OMIT,
         pinned_generation_id: typing.Optional[str] = OMIT,
         reasoning_effort: typing.Optional[SessionInputReasoningEffort] = OMIT,
@@ -1172,8 +1188,12 @@ class AsyncExecutionSessionsClient:
 
         conversation_id : typing.Optional[str]
 
+        draft_files : typing.Optional[typing.Dict[str, typing.Optional[str]]]
+
         draft_revision : typing.Optional[int]
             Saved document revision to test. Required for document Draft sessions.
+
+        draft_schedule : typing.Optional[str]
 
         environment : typing.Optional[SessionInputEnvironment]
             Draft sessions test the pinned agent definition without activation. Creating or appending draft sessions also requires harness:write.
@@ -1183,6 +1203,8 @@ class AsyncExecutionSessionsClient:
         final_output_schema : typing.Optional[typing.Dict[str, typing.Any]]
 
         idempotency_key : typing.Optional[str]
+
+        invocation_policy : typing.Optional[InvocationPolicy]
 
         model : typing.Optional[str]
             Default model for this session. Use a Sikaru model catalog ID, such as moonshotai/kimi-k3. Omit to inherit the project default.
@@ -1231,11 +1253,14 @@ class AsyncExecutionSessionsClient:
             acknowledge_widening=acknowledge_widening,
             auto_improve=auto_improve,
             conversation_id=conversation_id,
+            draft_files=draft_files,
             draft_revision=draft_revision,
+            draft_schedule=draft_schedule,
             environment=environment,
             expected_access_digest=expected_access_digest,
             final_output_schema=final_output_schema,
             idempotency_key=idempotency_key,
+            invocation_policy=invocation_policy,
             model=model,
             pinned_generation_id=pinned_generation_id,
             reasoning_effort=reasoning_effort,

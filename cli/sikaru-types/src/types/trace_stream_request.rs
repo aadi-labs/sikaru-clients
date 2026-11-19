@@ -9,6 +9,9 @@ pub struct TraceStreamRequest {
     pub format: TraceStreamRequestFormat,
     #[serde(default)]
     pub metadata: TraceMetadata,
+    /// Rows of a trace export, unchanged, for `langfuse.observations.v1` (observations), `langsmith.runs.v1` (runs) or `braintrust.spans.v1` (spans). The service rebuilds each trace or agent run only from the rows in one request, so keep all of its rows together.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub records: Option<Vec<HashMap<String, serde_json::Value>>>,
     #[serde(rename = "resourceSpans")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_spans: Option<Vec<HashMap<String, serde_json::Value>>>,
@@ -32,6 +35,7 @@ pub struct TraceStreamRequestBuilder {
     dataset: Option<String>,
     format: Option<TraceStreamRequestFormat>,
     metadata: Option<TraceMetadata>,
+    records: Option<Vec<HashMap<String, serde_json::Value>>>,
     resource_spans: Option<Vec<HashMap<String, serde_json::Value>>>,
     spans: Option<Vec<OpenInferenceSpan>>,
     trajectories: Option<Vec<HashMap<String, serde_json::Value>>>,
@@ -51,6 +55,11 @@ impl TraceStreamRequestBuilder {
 
     pub fn metadata(mut self, value: TraceMetadata) -> Self {
         self.metadata = Some(value);
+        self
+    }
+
+    pub fn records(mut self, value: Vec<HashMap<String, serde_json::Value>>) -> Self {
+        self.records = Some(value);
         self
     }
 
@@ -83,6 +92,7 @@ impl TraceStreamRequestBuilder {
             dataset: self.dataset,
             format: self.format.ok_or_else(|| BuildError::missing_field("format"))?,
             metadata: self.metadata.ok_or_else(|| BuildError::missing_field("metadata"))?,
+            records: self.records,
             resource_spans: self.resource_spans,
             spans: self.spans,
             trajectories: self.trajectories,

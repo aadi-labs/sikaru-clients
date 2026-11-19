@@ -8,6 +8,8 @@ pub struct DocumentValidationView {
     pub editor: Option<DocumentEditorMetadata>,
     #[serde(default)]
     pub errors: Vec<DocumentIssue>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub folder: Option<HashMap<String, serde_json::Value>>,
     #[serde(default)]
     pub mentions: Vec<ResolvedMention>,
     #[serde(default)]
@@ -25,6 +27,7 @@ impl DocumentValidationView {
 pub struct DocumentValidationViewBuilder {
     editor: Option<DocumentEditorMetadata>,
     errors: Option<Vec<DocumentIssue>>,
+    folder: Option<HashMap<String, serde_json::Value>>,
     mentions: Option<Vec<ResolvedMention>>,
     publishable: Option<bool>,
 }
@@ -37,6 +40,11 @@ impl DocumentValidationViewBuilder {
 
     pub fn errors(mut self, value: Vec<DocumentIssue>) -> Self {
         self.errors = Some(value);
+        self
+    }
+
+    pub fn folder(mut self, value: HashMap<String, serde_json::Value>) -> Self {
+        self.folder = Some(value);
         self
     }
 
@@ -59,6 +67,7 @@ impl DocumentValidationViewBuilder {
         Ok(DocumentValidationView {
             editor: self.editor,
             errors: self.errors.ok_or_else(|| BuildError::missing_field("errors"))?,
+            folder: self.folder,
             mentions: self.mentions.ok_or_else(|| BuildError::missing_field("mentions"))?,
             publishable: self.publishable.ok_or_else(|| BuildError::missing_field("publishable"))?,
         })

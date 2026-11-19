@@ -10,9 +10,9 @@ pub struct CreateContextRegistryChangeRequest {
     pub files: Option<Vec<String>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kind: Option<String>,
-    #[serde(rename = "linkedSignal")]
+    #[serde(rename = "linkedGrader")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub linked_signal: Option<String>,
+    pub linked_grader: Option<String>,
     #[serde(default)]
     pub name: String,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -58,7 +58,7 @@ pub struct CreateContextRegistryChangeRequestBuilder {
     action: Option<CreateContextRegistryChangeRequestAction>,
     files: Option<Vec<String>>,
     kind: Option<String>,
-    linked_signal: Option<String>,
+    linked_grader: Option<String>,
     name: Option<String>,
     owner: Option<String>,
     production_commit: Option<String>,
@@ -89,8 +89,8 @@ impl CreateContextRegistryChangeRequestBuilder {
         self
     }
 
-    pub fn linked_signal(mut self, value: impl Into<String>) -> Self {
-        self.linked_signal = Some(value.into());
+    pub fn linked_grader(mut self, value: impl Into<String>) -> Self {
+        self.linked_grader = Some(value.into());
         self
     }
 
@@ -163,7 +163,7 @@ impl CreateContextRegistryChangeRequestBuilder {
             action: self.action,
             files: self.files,
             kind: self.kind,
-            linked_signal: self.linked_signal,
+            linked_grader: self.linked_grader,
             name: self.name.ok_or_else(|| BuildError::missing_field("name"))?,
             owner: self.owner,
             production_commit: self.production_commit,

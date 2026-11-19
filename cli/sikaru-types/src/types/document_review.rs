@@ -31,12 +31,19 @@ pub struct DocumentReview {
     #[serde(rename = "earlierSessions")]
     #[serde(default)]
     pub earlier_sessions: Vec<EarlierDocumentSession>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub files: Option<HashMap<String, String>>,
     #[serde(rename = "harnessVersionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub harness_version_id: Option<String>,
     #[serde(rename = "liveVersionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub live_version_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next: Option<String>,
+    #[serde(rename = "reconcilePlan")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reconcile_plan: Option<HashMap<String, serde_json::Value>>,
     #[serde(default)]
     pub revision: i64,
     #[serde(default)]
@@ -62,8 +69,11 @@ pub struct DocumentReviewBuilder {
     diff: Option<String>,
     document: Option<String>,
     earlier_sessions: Option<Vec<EarlierDocumentSession>>,
+    files: Option<HashMap<String, String>>,
     harness_version_id: Option<String>,
     live_version_id: Option<String>,
+    next: Option<String>,
+    reconcile_plan: Option<HashMap<String, serde_json::Value>>,
     revision: Option<i64>,
     validation: Option<DocumentValidationView>,
 }
@@ -119,6 +129,11 @@ impl DocumentReviewBuilder {
         self
     }
 
+    pub fn files(mut self, value: HashMap<String, String>) -> Self {
+        self.files = Some(value);
+        self
+    }
+
     pub fn harness_version_id(mut self, value: impl Into<String>) -> Self {
         self.harness_version_id = Some(value.into());
         self
@@ -126,6 +141,16 @@ impl DocumentReviewBuilder {
 
     pub fn live_version_id(mut self, value: impl Into<String>) -> Self {
         self.live_version_id = Some(value.into());
+        self
+    }
+
+    pub fn next(mut self, value: impl Into<String>) -> Self {
+        self.next = Some(value.into());
+        self
+    }
+
+    pub fn reconcile_plan(mut self, value: HashMap<String, serde_json::Value>) -> Self {
+        self.reconcile_plan = Some(value);
         self
     }
 
@@ -165,8 +190,11 @@ impl DocumentReviewBuilder {
             diff: self.diff.ok_or_else(|| BuildError::missing_field("diff"))?,
             document: self.document.ok_or_else(|| BuildError::missing_field("document"))?,
             earlier_sessions: self.earlier_sessions.ok_or_else(|| BuildError::missing_field("earlier_sessions"))?,
+            files: self.files,
             harness_version_id: self.harness_version_id,
             live_version_id: self.live_version_id,
+            next: self.next,
+            reconcile_plan: self.reconcile_plan,
             revision: self.revision.ok_or_else(|| BuildError::missing_field("revision"))?,
             validation: self.validation.ok_or_else(|| BuildError::missing_field("validation"))?,
         })

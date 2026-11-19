@@ -4,6 +4,6 @@ export interface EndUserFile {
     content: string;
     /** Pass as expectedEtag to replace exactly this content. */
     etag: string;
-    /** USER.md, memories/<name>.md or cell/PERSONA_SUMMARY.md. */
+    /** cell/PERSONA_SUMMARY.md. */
     path: string;
 }

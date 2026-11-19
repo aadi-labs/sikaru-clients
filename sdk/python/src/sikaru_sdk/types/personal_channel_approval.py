@@ -5,10 +5,15 @@ import typing
 import pydantic
 from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
 from .personal_channel_approval_decision import PersonalChannelApprovalDecision
+from .personal_channel_approval_rule import PersonalChannelApprovalRule
 
 
 class PersonalChannelApproval(UniversalBaseModel):
     approval: PersonalChannelApprovalDecision
+    rule: typing.Optional[PersonalChannelApprovalRule] = pydantic.Field(default=None)
+    """
+    Set when the decision also chose to always allow a browser commit.
+    """
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

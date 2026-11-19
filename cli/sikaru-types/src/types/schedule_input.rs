@@ -7,6 +7,11 @@ pub struct ScheduleInput {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub agent_slug: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    pub at: Option<String>,
+    /// HTTPS callback on the registered provider's origin.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub callback_url: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub cron: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub environment: Option<ScheduleInputEnvironment>,
@@ -22,6 +27,9 @@ pub struct ScheduleInput {
     pub session_mode: Option<ScheduleInputSessionMode>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timezone: Option<String>,
+    /// Registered provider target for signed occurrence delivery.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tool_provider_id: Option<String>,
 }
 
 impl ScheduleInput {
@@ -34,6 +42,8 @@ impl ScheduleInput {
 #[non_exhaustive]
 pub struct ScheduleInputBuilder {
     agent_slug: Option<String>,
+    at: Option<String>,
+    callback_url: Option<String>,
     cron: Option<String>,
     environment: Option<ScheduleInputEnvironment>,
     idempotency_key: Option<String>,
@@ -42,11 +52,22 @@ pub struct ScheduleInputBuilder {
     session_id: Option<String>,
     session_mode: Option<ScheduleInputSessionMode>,
     timezone: Option<String>,
+    tool_provider_id: Option<String>,
 }
 
 impl ScheduleInputBuilder {
     pub fn agent_slug(mut self, value: impl Into<String>) -> Self {
         self.agent_slug = Some(value.into());
+        self
+    }
+
+    pub fn at(mut self, value: impl Into<String>) -> Self {
+        self.at = Some(value.into());
+        self
+    }
+
+    pub fn callback_url(mut self, value: impl Into<String>) -> Self {
+        self.callback_url = Some(value.into());
         self
     }
 
@@ -90,12 +111,19 @@ impl ScheduleInputBuilder {
         self
     }
 
+    pub fn tool_provider_id(mut self, value: impl Into<String>) -> Self {
+        self.tool_provider_id = Some(value.into());
+        self
+    }
+
     /// Consumes the builder and constructs a [`ScheduleInput`].
     /// This method will fail if any of the following fields are not set:
     /// - [`input`](ScheduleInputBuilder::input)
     pub fn build(self) -> Result<ScheduleInput, BuildError> {
         Ok(ScheduleInput {
             agent_slug: self.agent_slug,
+            at: self.at,
+            callback_url: self.callback_url,
             cron: self.cron,
             environment: self.environment,
             idempotency_key: self.idempotency_key,
@@ -104,6 +132,7 @@ impl ScheduleInputBuilder {
             session_id: self.session_id,
             session_mode: self.session_mode,
             timezone: self.timezone,
+            tool_provider_id: self.tool_provider_id,
         })
     }
 }

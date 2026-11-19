@@ -7,6 +7,7 @@ from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
 from .modalities import Modalities
 from .model_specs_endpoints_item import ModelSpecsEndpointsItem
 from .published_reasoning import PublishedReasoning
+from .sampling_defaults import SamplingDefaults
 
 
 class ModelSpecs(UniversalBaseModel):
@@ -19,6 +20,7 @@ class ModelSpecs(UniversalBaseModel):
     max_output_tokens: int
     modalities: Modalities
     reasoning: typing.Optional[PublishedReasoning] = None
+    sampling_defaults: typing.Optional[SamplingDefaults] = None
     supported_parameters: typing.List[str]
     supports_reasoning: bool
 

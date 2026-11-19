@@ -9,6 +9,7 @@ from .document_validation_view import DocumentValidationView
 
 class ImportedDocument(UniversalBaseModel):
     document: str
+    files: typing.Dict[str, str]
     validation: DocumentValidationView
 
     if IS_PYDANTIC_V2:

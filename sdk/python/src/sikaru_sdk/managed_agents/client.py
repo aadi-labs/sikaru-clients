@@ -4,13 +4,16 @@ import typing
 
 from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ..core.request_options import RequestOptions
-from ..types.agent_definition import AgentDefinition
+from ..types.browser_rule_list import BrowserRuleList
 from ..types.create_managed_agent_source_request import CreateManagedAgentSourceRequest
 from ..types.created_managed_agent import CreatedManagedAgent
-from ..types.definition_revision_result import DefinitionRevisionResult
 from ..types.definition_revision_view import DefinitionRevisionView
+from ..types.live_link import LiveLink
 from ..types.managed_agent_read import ManagedAgentRead
+from ..types.playbook_list import PlaybookList
 from ..types.renamed_managed_agent import RenamedManagedAgent
+from ..types.saved_logins import SavedLogins
+from ..types.skill_source_receipt import SkillSourceReceipt
 from .raw_client import AsyncRawManagedAgentsClient, RawManagedAgentsClient
 from .types.create_managed_agent_request_initial_channel import CreateManagedAgentRequestInitialChannel
 from .types.create_managed_agent_request_status import CreateManagedAgentRequestStatus
@@ -78,6 +81,8 @@ class ManagedAgentsClient:
         harness_id: typing.Optional[str] = OMIT,
         initial_channel: typing.Optional[CreateManagedAgentRequestInitialChannel] = OMIT,
         max_concurrent_turns: typing.Optional[int] = OMIT,
+        memory_dream_auto: typing.Optional[bool] = OMIT,
+        memory_dream_idle_seconds: typing.Optional[int] = OMIT,
         personal: typing.Optional[bool] = OMIT,
         source: typing.Optional[CreateManagedAgentSourceRequest] = OMIT,
         status: typing.Optional[CreateManagedAgentRequestStatus] = OMIT,
@@ -108,6 +113,12 @@ class ManagedAgentsClient:
 
         max_concurrent_turns : typing.Optional[int]
             Most turns the agent runs at once; omit to keep the current limit.
+
+        memory_dream_auto : typing.Optional[bool]
+            Whether memory dreams run automatically once conversations go idle; omit to keep the current choice.
+
+        memory_dream_idle_seconds : typing.Optional[int]
+            Seconds a user's conversations stay idle before an automatic dream; null means 900. Omit to keep the current delay.
 
         personal : typing.Optional[bool]
             Fixed at creation; new agents are shared unless set. A personal agent's conversations stay private to the person who runs them. Omit it to keep an existing agent's choice.
@@ -148,6 +159,8 @@ class ManagedAgentsClient:
             harness_id=harness_id,
             initial_channel=initial_channel,
             max_concurrent_turns=max_concurrent_turns,
+            memory_dream_auto=memory_dream_auto,
+            memory_dream_idle_seconds=memory_dream_idle_seconds,
             personal=personal,
             source=source,
             status=status,
@@ -234,10 +247,12 @@ class ManagedAgentsClient:
         background_turn_share: typing.Optional[float] = OMIT,
         display_name: typing.Optional[str] = OMIT,
         max_concurrent_turns: typing.Optional[int] = OMIT,
+        memory_dream_auto: typing.Optional[bool] = OMIT,
+        memory_dream_idle_seconds: typing.Optional[int] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> RenamedManagedAgent:
         """
-        Change the agent's display name or turn capacity. The slug and every reference to the agent stay the same.
+        Change the agent's display name, turn capacity or memory dreaming. The slug and every reference to the agent stay the same.
 
         Personal and end-user-cell choices are fixed at creation.
 
@@ -254,6 +269,12 @@ class ManagedAgentsClient:
 
         max_concurrent_turns : typing.Optional[int]
             Most turns the agent runs at once; null restores the default.
+
+        memory_dream_auto : typing.Optional[bool]
+            Whether memory dreams run automatically once conversations go idle. "Dream now" works either way.
+
+        memory_dream_idle_seconds : typing.Optional[int]
+            Seconds a user's conversations stay idle before an automatic dream; null restores the default of 900.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -282,21 +303,51 @@ class ManagedAgentsClient:
             background_turn_share=background_turn_share,
             display_name=display_name,
             max_concurrent_turns=max_concurrent_turns,
+            memory_dream_auto=memory_dream_auto,
+            memory_dream_idle_seconds=memory_dream_idle_seconds,
             request_options=request_options,
         )
         return _response.data
 
-    def create_definition_revision(
-        self,
-        project_id: str,
-        agent_slug: str,
-        *,
-        content_digest: str,
-        definition: AgentDefinition,
-        request_options: typing.Optional[RequestOptions] = None,
-    ) -> DefinitionRevisionResult:
+    def list_agent_logins(
+        self, project_id: str, agent_slug: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> SavedLogins:
         """
-        Stage a changed definition as a draft revision; the live definition is a no-op.
+        Parameters
+        ----------
+        project_id : str
+
+        agent_slug : str
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        SavedLogins
+            Successful Response
+
+        Examples
+        --------
+        from sikaru_sdk import SikaruApi
+
+        client = SikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+        client.managed_agents.list_agent_logins(
+            project_id="project_id",
+            agent_slug="agent_slug",
+        )
+        """
+        _response = self._raw_client.list_agent_logins(project_id, agent_slug, request_options=request_options)
+        return _response.data
+
+    def add_agent_login(
+        self, project_id: str, agent_slug: str, *, url: str, request_options: typing.Optional[RequestOptions] = None
+    ) -> LiveLink:
+        """
+        An operator signs the agent in to a company account once; every run then uses it.
 
         Parameters
         ----------
@@ -304,42 +355,223 @@ class ManagedAgentsClient:
 
         agent_slug : str
 
-        content_digest : str
-
-        definition : AgentDefinition
+        url : str
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        DefinitionRevisionResult
+        LiveLink
             Successful Response
 
         Examples
         --------
-        from sikaru_sdk import AgentDefinition, SikaruApi
+        from sikaru_sdk import SikaruApi
 
         client = SikaruApi(
             channel_credential="YOUR_CHANNEL_CREDENTIAL",
             api_key="YOUR_API_KEY",
         )
-        client.managed_agents.create_definition_revision(
+        client.managed_agents.add_agent_login(
             project_id="project_id",
             agent_slug="agent_slug",
-            content_digest="contentDigest",
-            definition=AgentDefinition(
-                schema="sikaru.agent.contract.v1",
-            ),
+            url="url",
         )
         """
-        _response = self._raw_client.create_definition_revision(
-            project_id,
-            agent_slug,
-            content_digest=content_digest,
-            definition=definition,
-            request_options=request_options,
+        _response = self._raw_client.add_agent_login(project_id, agent_slug, url=url, request_options=request_options)
+        return _response.data
+
+    def delete_agent_login(
+        self,
+        project_id: str,
+        agent_slug: str,
+        login_id: str,
+        *,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> None:
+        """
+        Parameters
+        ----------
+        project_id : str
+
+        agent_slug : str
+
+        login_id : str
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        None
+
+        Examples
+        --------
+        from sikaru_sdk import SikaruApi
+
+        client = SikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
         )
+        client.managed_agents.delete_agent_login(
+            project_id="project_id",
+            agent_slug="agent_slug",
+            login_id="login_id",
+        )
+        """
+        _response = self._raw_client.delete_agent_login(
+            project_id, agent_slug, login_id, request_options=request_options
+        )
+        return _response.data
+
+    def list_playbooks(
+        self, project_id: str, agent_slug: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> PlaybookList:
+        """
+        Parameters
+        ----------
+        project_id : str
+
+        agent_slug : str
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        PlaybookList
+            Successful Response
+
+        Examples
+        --------
+        from sikaru_sdk import SikaruApi
+
+        client = SikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+        client.managed_agents.list_playbooks(
+            project_id="project_id",
+            agent_slug="agent_slug",
+        )
+        """
+        _response = self._raw_client.list_playbooks(project_id, agent_slug, request_options=request_options)
+        return _response.data
+
+    def delete_playbook(
+        self,
+        project_id: str,
+        agent_slug: str,
+        playbook_id: str,
+        *,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> None:
+        """
+        Parameters
+        ----------
+        project_id : str
+
+        agent_slug : str
+
+        playbook_id : str
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        None
+
+        Examples
+        --------
+        from sikaru_sdk import SikaruApi
+
+        client = SikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+        client.managed_agents.delete_playbook(
+            project_id="project_id",
+            agent_slug="agent_slug",
+            playbook_id="playbook_id",
+        )
+        """
+        _response = self._raw_client.delete_playbook(
+            project_id, agent_slug, playbook_id, request_options=request_options
+        )
+        return _response.data
+
+    def list_rules(
+        self, project_id: str, agent_slug: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> BrowserRuleList:
+        """
+        Every always-allow rule on the agent; a rule personal to one end user does not say whose.
+
+        Parameters
+        ----------
+        project_id : str
+
+        agent_slug : str
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        BrowserRuleList
+            Successful Response
+
+        Examples
+        --------
+        from sikaru_sdk import SikaruApi
+
+        client = SikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+        client.managed_agents.list_rules(
+            project_id="project_id",
+            agent_slug="agent_slug",
+        )
+        """
+        _response = self._raw_client.list_rules(project_id, agent_slug, request_options=request_options)
+        return _response.data
+
+    def delete_rule(
+        self, project_id: str, agent_slug: str, rule_id: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> None:
+        """
+        Parameters
+        ----------
+        project_id : str
+
+        agent_slug : str
+
+        rule_id : str
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        None
+
+        Examples
+        --------
+        from sikaru_sdk import SikaruApi
+
+        client = SikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+        client.managed_agents.delete_rule(
+            project_id="project_id",
+            agent_slug="agent_slug",
+            rule_id="rule_id",
+        )
+        """
+        _response = self._raw_client.delete_rule(project_id, agent_slug, rule_id, request_options=request_options)
         return _response.data
 
     def get_definition_revision(
@@ -383,6 +615,95 @@ class ManagedAgentsClient:
         """
         _response = self._raw_client.get_definition_revision(
             project_id, agent_slug, changeset_id, request_options=request_options
+        )
+        return _response.data
+
+    def update_end_user_skill_source(
+        self,
+        project_id: str,
+        agent_slug: str,
+        tenant_id: str,
+        user_id: str,
+        skill_id: str,
+        *,
+        enabled: bool,
+        operation_id: str,
+        source_revision: str,
+        content: typing.Optional[str] = OMIT,
+        expected_revision: typing.Optional[str] = OMIT,
+        resources: typing.Optional[typing.Dict[str, str]] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> SkillSourceReceipt:
+        """
+        Replace or enable a customer-authored source using its own revision CAS.
+
+        Private optimized methodology and optimizer digests are never returned.
+        Replaying an operation returns its original receipt without reverting later work.
+
+        Parameters
+        ----------
+        project_id : str
+
+        agent_slug : str
+
+        tenant_id : str
+
+        user_id : str
+
+        skill_id : str
+
+        enabled : bool
+
+        operation_id : str
+
+        source_revision : str
+
+        content : typing.Optional[str]
+
+        expected_revision : typing.Optional[str]
+
+        resources : typing.Optional[typing.Dict[str, str]]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        SkillSourceReceipt
+            Successful Response
+
+        Examples
+        --------
+        from sikaru_sdk import SikaruApi
+
+        client = SikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+        client.managed_agents.update_end_user_skill_source(
+            project_id="project_id",
+            agent_slug="agent_slug",
+            tenant_id="tenant_id",
+            user_id="user_id",
+            skill_id="skill_id",
+            enabled=True,
+            operation_id="operationId",
+            source_revision="sourceRevision",
+        )
+        """
+        _response = self._raw_client.update_end_user_skill_source(
+            project_id,
+            agent_slug,
+            tenant_id,
+            user_id,
+            skill_id,
+            enabled=enabled,
+            operation_id=operation_id,
+            source_revision=source_revision,
+            content=content,
+            expected_revision=expected_revision,
+            resources=resources,
+            request_options=request_options,
         )
         return _response.data
 
@@ -454,6 +775,8 @@ class AsyncManagedAgentsClient:
         harness_id: typing.Optional[str] = OMIT,
         initial_channel: typing.Optional[CreateManagedAgentRequestInitialChannel] = OMIT,
         max_concurrent_turns: typing.Optional[int] = OMIT,
+        memory_dream_auto: typing.Optional[bool] = OMIT,
+        memory_dream_idle_seconds: typing.Optional[int] = OMIT,
         personal: typing.Optional[bool] = OMIT,
         source: typing.Optional[CreateManagedAgentSourceRequest] = OMIT,
         status: typing.Optional[CreateManagedAgentRequestStatus] = OMIT,
@@ -484,6 +807,12 @@ class AsyncManagedAgentsClient:
 
         max_concurrent_turns : typing.Optional[int]
             Most turns the agent runs at once; omit to keep the current limit.
+
+        memory_dream_auto : typing.Optional[bool]
+            Whether memory dreams run automatically once conversations go idle; omit to keep the current choice.
+
+        memory_dream_idle_seconds : typing.Optional[int]
+            Seconds a user's conversations stay idle before an automatic dream; null means 900. Omit to keep the current delay.
 
         personal : typing.Optional[bool]
             Fixed at creation; new agents are shared unless set. A personal agent's conversations stay private to the person who runs them. Omit it to keep an existing agent's choice.
@@ -532,6 +861,8 @@ class AsyncManagedAgentsClient:
             harness_id=harness_id,
             initial_channel=initial_channel,
             max_concurrent_turns=max_concurrent_turns,
+            memory_dream_auto=memory_dream_auto,
+            memory_dream_idle_seconds=memory_dream_idle_seconds,
             personal=personal,
             source=source,
             status=status,
@@ -634,10 +965,12 @@ class AsyncManagedAgentsClient:
         background_turn_share: typing.Optional[float] = OMIT,
         display_name: typing.Optional[str] = OMIT,
         max_concurrent_turns: typing.Optional[int] = OMIT,
+        memory_dream_auto: typing.Optional[bool] = OMIT,
+        memory_dream_idle_seconds: typing.Optional[int] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> RenamedManagedAgent:
         """
-        Change the agent's display name or turn capacity. The slug and every reference to the agent stay the same.
+        Change the agent's display name, turn capacity or memory dreaming. The slug and every reference to the agent stay the same.
 
         Personal and end-user-cell choices are fixed at creation.
 
@@ -654,6 +987,12 @@ class AsyncManagedAgentsClient:
 
         max_concurrent_turns : typing.Optional[int]
             Most turns the agent runs at once; null restores the default.
+
+        memory_dream_auto : typing.Optional[bool]
+            Whether memory dreams run automatically once conversations go idle. "Dream now" works either way.
+
+        memory_dream_idle_seconds : typing.Optional[int]
+            Seconds a user's conversations stay idle before an automatic dream; null restores the default of 900.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -690,45 +1029,35 @@ class AsyncManagedAgentsClient:
             background_turn_share=background_turn_share,
             display_name=display_name,
             max_concurrent_turns=max_concurrent_turns,
+            memory_dream_auto=memory_dream_auto,
+            memory_dream_idle_seconds=memory_dream_idle_seconds,
             request_options=request_options,
         )
         return _response.data
 
-    async def create_definition_revision(
-        self,
-        project_id: str,
-        agent_slug: str,
-        *,
-        content_digest: str,
-        definition: AgentDefinition,
-        request_options: typing.Optional[RequestOptions] = None,
-    ) -> DefinitionRevisionResult:
+    async def list_agent_logins(
+        self, project_id: str, agent_slug: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> SavedLogins:
         """
-        Stage a changed definition as a draft revision; the live definition is a no-op.
-
         Parameters
         ----------
         project_id : str
 
         agent_slug : str
 
-        content_digest : str
-
-        definition : AgentDefinition
-
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        DefinitionRevisionResult
+        SavedLogins
             Successful Response
 
         Examples
         --------
         import asyncio
 
-        from sikaru_sdk import AgentDefinition, AsyncSikaruApi
+        from sikaru_sdk import AsyncSikaruApi
 
         client = AsyncSikaruApi(
             channel_credential="YOUR_CHANNEL_CREDENTIAL",
@@ -737,25 +1066,296 @@ class AsyncManagedAgentsClient:
 
 
         async def main() -> None:
-            await client.managed_agents.create_definition_revision(
+            await client.managed_agents.list_agent_logins(
                 project_id="project_id",
                 agent_slug="agent_slug",
-                content_digest="contentDigest",
-                definition=AgentDefinition(
-                    schema="sikaru.agent.contract.v1",
-                ),
             )
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.create_definition_revision(
-            project_id,
-            agent_slug,
-            content_digest=content_digest,
-            definition=definition,
-            request_options=request_options,
+        _response = await self._raw_client.list_agent_logins(project_id, agent_slug, request_options=request_options)
+        return _response.data
+
+    async def add_agent_login(
+        self, project_id: str, agent_slug: str, *, url: str, request_options: typing.Optional[RequestOptions] = None
+    ) -> LiveLink:
+        """
+        An operator signs the agent in to a company account once; every run then uses it.
+
+        Parameters
+        ----------
+        project_id : str
+
+        agent_slug : str
+
+        url : str
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        LiveLink
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sikaru_sdk import AsyncSikaruApi
+
+        client = AsyncSikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
         )
+
+
+        async def main() -> None:
+            await client.managed_agents.add_agent_login(
+                project_id="project_id",
+                agent_slug="agent_slug",
+                url="url",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.add_agent_login(
+            project_id, agent_slug, url=url, request_options=request_options
+        )
+        return _response.data
+
+    async def delete_agent_login(
+        self,
+        project_id: str,
+        agent_slug: str,
+        login_id: str,
+        *,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> None:
+        """
+        Parameters
+        ----------
+        project_id : str
+
+        agent_slug : str
+
+        login_id : str
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        None
+
+        Examples
+        --------
+        import asyncio
+
+        from sikaru_sdk import AsyncSikaruApi
+
+        client = AsyncSikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+
+
+        async def main() -> None:
+            await client.managed_agents.delete_agent_login(
+                project_id="project_id",
+                agent_slug="agent_slug",
+                login_id="login_id",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.delete_agent_login(
+            project_id, agent_slug, login_id, request_options=request_options
+        )
+        return _response.data
+
+    async def list_playbooks(
+        self, project_id: str, agent_slug: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> PlaybookList:
+        """
+        Parameters
+        ----------
+        project_id : str
+
+        agent_slug : str
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        PlaybookList
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sikaru_sdk import AsyncSikaruApi
+
+        client = AsyncSikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+
+
+        async def main() -> None:
+            await client.managed_agents.list_playbooks(
+                project_id="project_id",
+                agent_slug="agent_slug",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.list_playbooks(project_id, agent_slug, request_options=request_options)
+        return _response.data
+
+    async def delete_playbook(
+        self,
+        project_id: str,
+        agent_slug: str,
+        playbook_id: str,
+        *,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> None:
+        """
+        Parameters
+        ----------
+        project_id : str
+
+        agent_slug : str
+
+        playbook_id : str
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        None
+
+        Examples
+        --------
+        import asyncio
+
+        from sikaru_sdk import AsyncSikaruApi
+
+        client = AsyncSikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+
+
+        async def main() -> None:
+            await client.managed_agents.delete_playbook(
+                project_id="project_id",
+                agent_slug="agent_slug",
+                playbook_id="playbook_id",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.delete_playbook(
+            project_id, agent_slug, playbook_id, request_options=request_options
+        )
+        return _response.data
+
+    async def list_rules(
+        self, project_id: str, agent_slug: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> BrowserRuleList:
+        """
+        Every always-allow rule on the agent; a rule personal to one end user does not say whose.
+
+        Parameters
+        ----------
+        project_id : str
+
+        agent_slug : str
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        BrowserRuleList
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sikaru_sdk import AsyncSikaruApi
+
+        client = AsyncSikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+
+
+        async def main() -> None:
+            await client.managed_agents.list_rules(
+                project_id="project_id",
+                agent_slug="agent_slug",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.list_rules(project_id, agent_slug, request_options=request_options)
+        return _response.data
+
+    async def delete_rule(
+        self, project_id: str, agent_slug: str, rule_id: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> None:
+        """
+        Parameters
+        ----------
+        project_id : str
+
+        agent_slug : str
+
+        rule_id : str
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        None
+
+        Examples
+        --------
+        import asyncio
+
+        from sikaru_sdk import AsyncSikaruApi
+
+        client = AsyncSikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+
+
+        async def main() -> None:
+            await client.managed_agents.delete_rule(
+                project_id="project_id",
+                agent_slug="agent_slug",
+                rule_id="rule_id",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.delete_rule(project_id, agent_slug, rule_id, request_options=request_options)
         return _response.data
 
     async def get_definition_revision(
@@ -807,5 +1407,102 @@ class AsyncManagedAgentsClient:
         """
         _response = await self._raw_client.get_definition_revision(
             project_id, agent_slug, changeset_id, request_options=request_options
+        )
+        return _response.data
+
+    async def update_end_user_skill_source(
+        self,
+        project_id: str,
+        agent_slug: str,
+        tenant_id: str,
+        user_id: str,
+        skill_id: str,
+        *,
+        enabled: bool,
+        operation_id: str,
+        source_revision: str,
+        content: typing.Optional[str] = OMIT,
+        expected_revision: typing.Optional[str] = OMIT,
+        resources: typing.Optional[typing.Dict[str, str]] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> SkillSourceReceipt:
+        """
+        Replace or enable a customer-authored source using its own revision CAS.
+
+        Private optimized methodology and optimizer digests are never returned.
+        Replaying an operation returns its original receipt without reverting later work.
+
+        Parameters
+        ----------
+        project_id : str
+
+        agent_slug : str
+
+        tenant_id : str
+
+        user_id : str
+
+        skill_id : str
+
+        enabled : bool
+
+        operation_id : str
+
+        source_revision : str
+
+        content : typing.Optional[str]
+
+        expected_revision : typing.Optional[str]
+
+        resources : typing.Optional[typing.Dict[str, str]]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        SkillSourceReceipt
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sikaru_sdk import AsyncSikaruApi
+
+        client = AsyncSikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+
+
+        async def main() -> None:
+            await client.managed_agents.update_end_user_skill_source(
+                project_id="project_id",
+                agent_slug="agent_slug",
+                tenant_id="tenant_id",
+                user_id="user_id",
+                skill_id="skill_id",
+                enabled=True,
+                operation_id="operationId",
+                source_revision="sourceRevision",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.update_end_user_skill_source(
+            project_id,
+            agent_slug,
+            tenant_id,
+            user_id,
+            skill_id,
+            enabled=enabled,
+            operation_id=operation_id,
+            source_revision=source_revision,
+            content=content,
+            expected_revision=expected_revision,
+            resources=resources,
+            request_options=request_options,
         )
         return _response.data

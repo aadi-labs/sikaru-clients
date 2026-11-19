@@ -140,6 +140,8 @@ class RawRunSchedulesClient:
         *,
         input: typing.Dict[str, typing.Any],
         agent_slug: typing.Optional[str] = OMIT,
+        at: typing.Optional[str] = OMIT,
+        callback_url: typing.Optional[str] = OMIT,
         cron: typing.Optional[str] = OMIT,
         environment: typing.Optional[ScheduleInputEnvironment] = OMIT,
         idempotency_key: typing.Optional[str] = OMIT,
@@ -147,6 +149,7 @@ class RawRunSchedulesClient:
         session_id: typing.Optional[str] = OMIT,
         session_mode: typing.Optional[ScheduleInputSessionMode] = OMIT,
         timezone: typing.Optional[str] = OMIT,
+        tool_provider_id: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[ScheduleResponse]:
         """
@@ -157,6 +160,11 @@ class RawRunSchedulesClient:
         input : typing.Dict[str, typing.Any]
 
         agent_slug : typing.Optional[str]
+
+        at : typing.Optional[str]
+
+        callback_url : typing.Optional[str]
+            HTTPS callback on the registered provider's origin.
 
         cron : typing.Optional[str]
 
@@ -171,6 +179,9 @@ class RawRunSchedulesClient:
         session_mode : typing.Optional[ScheduleInputSessionMode]
 
         timezone : typing.Optional[str]
+
+        tool_provider_id : typing.Optional[str]
+            Registered provider target for signed occurrence delivery.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -189,6 +200,8 @@ class RawRunSchedulesClient:
             method="POST",
             json={
                 "agent_slug": agent_slug,
+                "at": at,
+                "callback_url": callback_url,
                 "cron": cron,
                 "environment": environment,
                 "idempotency_key": idempotency_key,
@@ -196,6 +209,226 @@ class RawRunSchedulesClient:
                 "interval_seconds": interval_seconds,
                 "session_id": session_id,
                 "session_mode": session_mode,
+                "timezone": timezone,
+                "tool_provider_id": tool_provider_id,
+            },
+            headers={
+                **_endpoint_auth_headers,
+                "content-type": "application/json",
+            },
+            request_options=_request_options_with_retries_disabled,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    ScheduleResponse,
+                    parse_obj_as(
+                        type_=ScheduleResponse,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        except ValidationError as e:
+            raise ParsingError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+            )
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def inspect_schedule(
+        self, project_id: str, schedule_id: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> HttpResponse[ScheduleResponse]:
+        """
+        Parameters
+        ----------
+        project_id : str
+
+        schedule_id : str
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[ScheduleResponse]
+            Successful Response
+        """
+        _endpoint_auth_headers = self._client_wrapper.get_auth_headers_for_endpoint(security=[{"BearerAuth": []}])
+        _response = self._client_wrapper.httpx_client.request(
+            f"v1/projects/{encode_path_param(project_id)}/run-schedules/{encode_path_param(schedule_id)}",
+            method="GET",
+            headers={
+                **_endpoint_auth_headers,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    ScheduleResponse,
+                    parse_obj_as(
+                        type_=ScheduleResponse,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        except ValidationError as e:
+            raise ParsingError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+            )
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def update_schedule(
+        self,
+        project_id: str,
+        schedule_id: str,
+        *,
+        expected_revision: int,
+        idempotency_key: str,
+        at: typing.Optional[str] = OMIT,
+        cron: typing.Optional[str] = OMIT,
+        input: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
+        interval_seconds: typing.Optional[int] = OMIT,
+        timezone: typing.Optional[str] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[ScheduleResponse]:
+        """
+        Parameters
+        ----------
+        project_id : str
+
+        schedule_id : str
+
+        expected_revision : int
+
+        idempotency_key : str
+
+        at : typing.Optional[str]
+
+        cron : typing.Optional[str]
+
+        input : typing.Optional[typing.Dict[str, typing.Any]]
+
+        interval_seconds : typing.Optional[int]
+
+        timezone : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[ScheduleResponse]
+            Successful Response
+        """
+        _request_options_with_retries_disabled: typing.Optional[RequestOptions] = (
+            {**request_options, "max_retries": 0} if request_options is not None else {"max_retries": 0}
+        )
+        _endpoint_auth_headers = self._client_wrapper.get_auth_headers_for_endpoint(security=[{"BearerAuth": []}])
+        _response = self._client_wrapper.httpx_client.request(
+            f"v1/projects/{encode_path_param(project_id)}/run-schedules/{encode_path_param(schedule_id)}",
+            method="PUT",
+            json={
+                "at": at,
+                "cron": cron,
+                "expected_revision": expected_revision,
+                "idempotency_key": idempotency_key,
+                "input": input,
+                "interval_seconds": interval_seconds,
                 "timezone": timezone,
             },
             headers={
@@ -269,7 +502,13 @@ class RawRunSchedulesClient:
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
     def delete_schedule(
-        self, project_id: str, schedule_id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        project_id: str,
+        schedule_id: str,
+        *,
+        expected_revision: typing.Optional[int] = None,
+        idempotency_key: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[ScheduleDeleted]:
         """
         Parameters
@@ -277,6 +516,10 @@ class RawRunSchedulesClient:
         project_id : str
 
         schedule_id : str
+
+        expected_revision : typing.Optional[int]
+
+        idempotency_key : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -293,6 +536,10 @@ class RawRunSchedulesClient:
         _response = self._client_wrapper.httpx_client.request(
             f"v1/projects/{encode_path_param(project_id)}/run-schedules/{encode_path_param(schedule_id)}",
             method="DELETE",
+            params={
+                "expected_revision": expected_revision,
+                "idempotency_key": idempotency_key,
+            },
             headers={
                 **_endpoint_auth_headers,
             },
@@ -367,6 +614,8 @@ class RawRunSchedulesClient:
         schedule_id: str,
         *,
         paused: bool,
+        expected_revision: typing.Optional[int] = OMIT,
+        idempotency_key: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[SchedulePaused]:
         """
@@ -377,6 +626,10 @@ class RawRunSchedulesClient:
         schedule_id : str
 
         paused : bool
+
+        expected_revision : typing.Optional[int]
+
+        idempotency_key : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -394,6 +647,8 @@ class RawRunSchedulesClient:
             f"v1/projects/{encode_path_param(project_id)}/run-schedules/{encode_path_param(schedule_id)}",
             method="PATCH",
             json={
+                "expected_revision": expected_revision,
+                "idempotency_key": idempotency_key,
                 "paused": paused,
             },
             headers={
@@ -774,6 +1029,8 @@ class AsyncRawRunSchedulesClient:
         *,
         input: typing.Dict[str, typing.Any],
         agent_slug: typing.Optional[str] = OMIT,
+        at: typing.Optional[str] = OMIT,
+        callback_url: typing.Optional[str] = OMIT,
         cron: typing.Optional[str] = OMIT,
         environment: typing.Optional[ScheduleInputEnvironment] = OMIT,
         idempotency_key: typing.Optional[str] = OMIT,
@@ -781,6 +1038,7 @@ class AsyncRawRunSchedulesClient:
         session_id: typing.Optional[str] = OMIT,
         session_mode: typing.Optional[ScheduleInputSessionMode] = OMIT,
         timezone: typing.Optional[str] = OMIT,
+        tool_provider_id: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[ScheduleResponse]:
         """
@@ -791,6 +1049,11 @@ class AsyncRawRunSchedulesClient:
         input : typing.Dict[str, typing.Any]
 
         agent_slug : typing.Optional[str]
+
+        at : typing.Optional[str]
+
+        callback_url : typing.Optional[str]
+            HTTPS callback on the registered provider's origin.
 
         cron : typing.Optional[str]
 
@@ -805,6 +1068,9 @@ class AsyncRawRunSchedulesClient:
         session_mode : typing.Optional[ScheduleInputSessionMode]
 
         timezone : typing.Optional[str]
+
+        tool_provider_id : typing.Optional[str]
+            Registered provider target for signed occurrence delivery.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -825,6 +1091,8 @@ class AsyncRawRunSchedulesClient:
             method="POST",
             json={
                 "agent_slug": agent_slug,
+                "at": at,
+                "callback_url": callback_url,
                 "cron": cron,
                 "environment": environment,
                 "idempotency_key": idempotency_key,
@@ -832,6 +1100,230 @@ class AsyncRawRunSchedulesClient:
                 "interval_seconds": interval_seconds,
                 "session_id": session_id,
                 "session_mode": session_mode,
+                "timezone": timezone,
+                "tool_provider_id": tool_provider_id,
+            },
+            headers={
+                **_endpoint_auth_headers,
+                "content-type": "application/json",
+            },
+            request_options=_request_options_with_retries_disabled,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    ScheduleResponse,
+                    parse_obj_as(
+                        type_=ScheduleResponse,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        except ValidationError as e:
+            raise ParsingError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+            )
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def inspect_schedule(
+        self, project_id: str, schedule_id: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> AsyncHttpResponse[ScheduleResponse]:
+        """
+        Parameters
+        ----------
+        project_id : str
+
+        schedule_id : str
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[ScheduleResponse]
+            Successful Response
+        """
+        _endpoint_auth_headers = await self._client_wrapper.async_get_auth_headers_for_endpoint(
+            security=[{"BearerAuth": []}]
+        )
+        _response = await self._client_wrapper.httpx_client.request(
+            f"v1/projects/{encode_path_param(project_id)}/run-schedules/{encode_path_param(schedule_id)}",
+            method="GET",
+            headers={
+                **_endpoint_auth_headers,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    ScheduleResponse,
+                    parse_obj_as(
+                        type_=ScheduleResponse,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        except ValidationError as e:
+            raise ParsingError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+            )
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def update_schedule(
+        self,
+        project_id: str,
+        schedule_id: str,
+        *,
+        expected_revision: int,
+        idempotency_key: str,
+        at: typing.Optional[str] = OMIT,
+        cron: typing.Optional[str] = OMIT,
+        input: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
+        interval_seconds: typing.Optional[int] = OMIT,
+        timezone: typing.Optional[str] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[ScheduleResponse]:
+        """
+        Parameters
+        ----------
+        project_id : str
+
+        schedule_id : str
+
+        expected_revision : int
+
+        idempotency_key : str
+
+        at : typing.Optional[str]
+
+        cron : typing.Optional[str]
+
+        input : typing.Optional[typing.Dict[str, typing.Any]]
+
+        interval_seconds : typing.Optional[int]
+
+        timezone : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[ScheduleResponse]
+            Successful Response
+        """
+        _request_options_with_retries_disabled: typing.Optional[RequestOptions] = (
+            {**request_options, "max_retries": 0} if request_options is not None else {"max_retries": 0}
+        )
+        _endpoint_auth_headers = await self._client_wrapper.async_get_auth_headers_for_endpoint(
+            security=[{"BearerAuth": []}]
+        )
+        _response = await self._client_wrapper.httpx_client.request(
+            f"v1/projects/{encode_path_param(project_id)}/run-schedules/{encode_path_param(schedule_id)}",
+            method="PUT",
+            json={
+                "at": at,
+                "cron": cron,
+                "expected_revision": expected_revision,
+                "idempotency_key": idempotency_key,
+                "input": input,
+                "interval_seconds": interval_seconds,
                 "timezone": timezone,
             },
             headers={
@@ -905,7 +1397,13 @@ class AsyncRawRunSchedulesClient:
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
     async def delete_schedule(
-        self, project_id: str, schedule_id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        project_id: str,
+        schedule_id: str,
+        *,
+        expected_revision: typing.Optional[int] = None,
+        idempotency_key: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[ScheduleDeleted]:
         """
         Parameters
@@ -913,6 +1411,10 @@ class AsyncRawRunSchedulesClient:
         project_id : str
 
         schedule_id : str
+
+        expected_revision : typing.Optional[int]
+
+        idempotency_key : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -931,6 +1433,10 @@ class AsyncRawRunSchedulesClient:
         _response = await self._client_wrapper.httpx_client.request(
             f"v1/projects/{encode_path_param(project_id)}/run-schedules/{encode_path_param(schedule_id)}",
             method="DELETE",
+            params={
+                "expected_revision": expected_revision,
+                "idempotency_key": idempotency_key,
+            },
             headers={
                 **_endpoint_auth_headers,
             },
@@ -1005,6 +1511,8 @@ class AsyncRawRunSchedulesClient:
         schedule_id: str,
         *,
         paused: bool,
+        expected_revision: typing.Optional[int] = OMIT,
+        idempotency_key: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[SchedulePaused]:
         """
@@ -1015,6 +1523,10 @@ class AsyncRawRunSchedulesClient:
         schedule_id : str
 
         paused : bool
+
+        expected_revision : typing.Optional[int]
+
+        idempotency_key : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -1034,6 +1546,8 @@ class AsyncRawRunSchedulesClient:
             f"v1/projects/{encode_path_param(project_id)}/run-schedules/{encode_path_param(schedule_id)}",
             method="PATCH",
             json={
+                "expected_revision": expected_revision,
+                "idempotency_key": idempotency_key,
                 "paused": paused,
             },
             headers={

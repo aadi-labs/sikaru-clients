@@ -11,6 +11,7 @@ from .document_blocker import DocumentBlocker
 from .document_issue import DocumentIssue
 from .document_publication_publication_status import DocumentPublicationPublicationStatus
 from .earlier_document_session import EarlierDocumentSession
+from .release_check_receipt import ReleaseCheckReceipt
 
 
 class DocumentPublication(UniversalBaseModel):
@@ -47,13 +48,34 @@ class DocumentPublication(UniversalBaseModel):
     harness_version_id: typing_extensions.Annotated[
         str, FieldMetadata(alias="harnessVersionId"), pydantic.Field(alias="harnessVersionId")
     ]
+    next: typing.Optional[str] = None
     prior_version_id: typing_extensions.Annotated[
         typing.Optional[str], FieldMetadata(alias="priorVersionId"), pydantic.Field(alias="priorVersionId")
     ] = None
+    publication_id: typing_extensions.Annotated[
+        typing.Optional[str],
+        FieldMetadata(alias="publicationId"),
+        pydantic.Field(
+            alias="publicationId",
+            description="The pending publication; a release check that blocks it is overridden with Publish Anyway on this id.",
+        ),
+    ] = None
+    """
+    The pending publication; a release check that blocks it is overridden with Publish Anyway on this id.
+    """
+
     publication_status: typing_extensions.Annotated[
         typing.Optional[DocumentPublicationPublicationStatus],
         FieldMetadata(alias="publicationStatus"),
         pydantic.Field(alias="publicationStatus"),
+    ] = None
+    reconcile_plan: typing_extensions.Annotated[
+        typing.Optional[typing.Dict[str, typing.Any]],
+        FieldMetadata(alias="reconcilePlan"),
+        pydantic.Field(alias="reconcilePlan"),
+    ] = None
+    release_check: typing_extensions.Annotated[
+        typing.Optional[ReleaseCheckReceipt], FieldMetadata(alias="releaseCheck"), pydantic.Field(alias="releaseCheck")
     ] = None
     revision: typing.Optional[int] = None
     unchanged: typing.Optional[bool] = None

@@ -13,10 +13,21 @@ class ScheduleRecord(UniversalBaseModel):
     agent_id: typing_extensions.Annotated[
         typing.Optional[str], FieldMetadata(alias="agentId"), pydantic.Field(alias="agentId")
     ] = None
+    at: typing.Optional[float] = None
+    callback_url: typing_extensions.Annotated[
+        typing.Optional[str], FieldMetadata(alias="callbackUrl"), pydantic.Field(alias="callbackUrl")
+    ] = None
     creator: typing.Optional[str] = None
     cron: typing.Optional[str] = None
+    declared_path: typing_extensions.Annotated[
+        typing.Optional[str], FieldMetadata(alias="declaredPath"), pydantic.Field(alias="declaredPath")
+    ] = None
+    deleted: typing.Optional[bool] = None
+    destination: typing.Optional[str] = None
     environment: typing.Optional[str] = None
+    exhausted: typing.Optional[bool] = None
     id: str
+    input: typing.Optional[typing.Dict[str, typing.Any]] = None
     interval_seconds: typing_extensions.Annotated[
         typing.Optional[int], FieldMetadata(alias="intervalSeconds"), pydantic.Field(alias="intervalSeconds")
     ] = None
@@ -24,6 +35,7 @@ class ScheduleRecord(UniversalBaseModel):
         typing.Optional[float], FieldMetadata(alias="nextAt"), pydantic.Field(alias="nextAt")
     ] = None
     paused: typing.Optional[bool] = None
+    revision: typing.Optional[int] = None
     session_id: typing_extensions.Annotated[
         typing.Optional[str], FieldMetadata(alias="sessionId"), pydantic.Field(alias="sessionId")
     ] = None
@@ -31,6 +43,9 @@ class ScheduleRecord(UniversalBaseModel):
         ScheduleRecordSessionMode, FieldMetadata(alias="sessionMode"), pydantic.Field(alias="sessionMode")
     ]
     timezone: str
+    tool_provider_id: typing_extensions.Annotated[
+        typing.Optional[str], FieldMetadata(alias="toolProviderId"), pydantic.Field(alias="toolProviderId")
+    ] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

@@ -116,7 +116,6 @@ client = SikaruApi(
 )
 
 client.completions.create_stream(
-    model="model",
     prompt="prompt",
 )
 ```

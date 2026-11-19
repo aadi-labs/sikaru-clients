@@ -17,10 +17,12 @@ export namespace CapabilityCeilings {
         export const Item = {
                 Bash: "bash",
                 Workspace: "workspace",
-                Agents: "agents",
+                Subagents: "subagents",
                 Memory: "memory",
                 WebSearch: "web_search",
-                WebFetch: "web_fetch"
+                WebFetch: "web_fetch",
+                Browser: "browser",
+                Schedules: "schedules"
             } as const;
         export type Item = typeof Item[keyof typeof Item];
     }

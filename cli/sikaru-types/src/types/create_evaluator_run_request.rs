@@ -19,6 +19,9 @@ pub struct CreateEvaluatorRunRequest {
     #[serde(rename = "filterExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filter_expression: Option<String>,
+    #[serde(rename = "graderTags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub grader_tags: Option<Vec<String>>,
     #[serde(rename = "issueId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub issue_id: Option<String>,
@@ -28,9 +31,6 @@ pub struct CreateEvaluatorRunRequest {
     #[serde(rename = "sampleRate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sample_rate: Option<String>,
-    #[serde(rename = "signalTags")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub signal_tags: Option<Vec<String>>,
     #[serde(rename = "traceIds")]
     #[serde(default)]
     pub trace_ids: Vec<String>,
@@ -50,10 +50,10 @@ pub struct CreateEvaluatorRunRequestBuilder {
     dataset_name: Option<String>,
     evaluator_name: Option<String>,
     filter_expression: Option<String>,
+    grader_tags: Option<Vec<String>>,
     issue_id: Option<String>,
     issue_title: Option<String>,
     sample_rate: Option<String>,
-    signal_tags: Option<Vec<String>>,
     trace_ids: Option<Vec<String>>,
 }
 
@@ -83,6 +83,11 @@ impl CreateEvaluatorRunRequestBuilder {
         self
     }
 
+    pub fn grader_tags(mut self, value: Vec<String>) -> Self {
+        self.grader_tags = Some(value);
+        self
+    }
+
     pub fn issue_id(mut self, value: impl Into<String>) -> Self {
         self.issue_id = Some(value.into());
         self
@@ -95,11 +100,6 @@ impl CreateEvaluatorRunRequestBuilder {
 
     pub fn sample_rate(mut self, value: impl Into<String>) -> Self {
         self.sample_rate = Some(value.into());
-        self
-    }
-
-    pub fn signal_tags(mut self, value: Vec<String>) -> Self {
-        self.signal_tags = Some(value);
         self
     }
 
@@ -118,10 +118,10 @@ impl CreateEvaluatorRunRequestBuilder {
             dataset_name: self.dataset_name,
             evaluator_name: self.evaluator_name,
             filter_expression: self.filter_expression,
+            grader_tags: self.grader_tags,
             issue_id: self.issue_id,
             issue_title: self.issue_title,
             sample_rate: self.sample_rate,
-            signal_tags: self.signal_tags,
             trace_ids: self.trace_ids.ok_or_else(|| BuildError::missing_field("trace_ids"))?,
         })
     }

@@ -36,6 +36,9 @@ pub fn command() -> Command {
 
 pub fn run(m: &ArgMatches, ctx: &AppContext) -> Result<(), CliError> {
     let conversation = chat::is_conversation(m);
+    if is_local(m) && super::agent_folder::is_folder_run(m) {
+        eprintln!("Async subagents run inline on local compute.");
+    }
     let result = if is_local(m) {
         block(local(m, ctx, conversation))
     } else {
@@ -96,11 +99,14 @@ fn managed(m: &ArgMatches, ctx: &AppContext, conversation: bool) -> Result<Value
             "--resume, --state-dir, --workspace and --approval-wait apply to --compute local."
         ));
     }
-    let client = crate::sdk::client(ctx);
+    let client = super::agent_transport::client(ctx);
     if conversation {
         return converse(m, &client);
     }
-    let text = input::prompt(m)?.context("a managed run needs a task")?;
+    let text = match super::agent_folder::schedule_prompt(m, &client)? {
+        Some(prompt) => prompt,
+        None => input::prompt(m)?.context("a managed run needs a task")?,
+    };
     if let Some(validated) = workflow::dry_run(m, None) {
         return Ok(validated);
     }
@@ -125,17 +131,23 @@ fn converse(m: &ArgMatches, client: &ApiClient) -> Result<Value> {
 }
 
 fn open_session(m: &ArgMatches, client: &ApiClient) -> Result<String> {
-    let request = SessionInput {
-        tenant_id: m.get_one::<String>("tenant").cloned(),
-        user_id: m.get_one::<String>("user").cloned(),
-        idempotency_key: Some(state::identity()),
-        model: m.get_one::<String>("model").cloned(),
-        ..Default::default()
-    };
+    let request = super::agent_folder::draft_request(
+        m,
+        client,
+        SessionInput {
+            tenant_id: m.get_one::<String>("tenant").cloned(),
+            user_id: m.get_one::<String>("user").cloned(),
+            idempotency_key: Some(state::identity()),
+            model: m.get_one::<String>("model").cloned(),
+            ..Default::default()
+        },
+    )?;
+    let agent = super::agent_folder::slug(m)?;
     let created = block(diagnostics::session_admission(
+        m,
         client
             .execution_sessions
-            .create(arg(m, "project"), arg(m, "agent"), &request, None),
+            .create(arg(m, "project"), &agent, &request, None),
     ))?;
     Ok(created.session.id)
 }
@@ -169,7 +181,9 @@ fn managed_turn(m: &ArgMatches, client: &ApiClient, session: &str, text: &str) -
         &mut result,
     ));
     match stopped {
-        Some(event) if event.event_type == "run.paused" => paused(project, &run, &event, &mut result),
+        Some(event) if event.event_type == "run.paused" => {
+            paused(project, &run, &event, &mut result)
+        }
         Some(_) => result["status"] = json!(outcome(&result["result"]["status"])),
         None => cancel_at_deadline(client, project, &run, &mut result),
     }
@@ -199,7 +213,11 @@ fn paused(project: &str, run: &str, event: &RunEvent, result: &mut Value) {
 /// The server's top-up hint for an exhausted-credits pause, as the command that creates an offer.
 fn top_up(pause: &Value) -> Option<String> {
     let hint = &pause["topUp"];
-    match (pause["reason"].as_str(), hint["cli"].as_str(), hint["minUsd"].as_str()) {
+    match (
+        pause["reason"].as_str(),
+        hint["cli"].as_str(),
+        hint["minUsd"].as_str(),
+    ) {
         (Some("credits_exhausted"), Some(cli), Some(min)) => Some(format!("{cli} --amount {min}")),
         _ => None,
     }

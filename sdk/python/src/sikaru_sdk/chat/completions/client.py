@@ -41,7 +41,6 @@ class CompletionsClient:
         self,
         *,
         messages: typing.Sequence[typing.Dict[str, typing.Any]],
-        model: str,
         audio: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
         frequency_penalty: typing.Optional[float] = OMIT,
         function_call: typing.Optional[CreateCompletionsStreamRequestFunctionCall] = OMIT,
@@ -54,6 +53,7 @@ class CompletionsClient:
         metadata: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
         min_p: typing.Optional[float] = OMIT,
         modalities: typing.Optional[typing.Sequence[str]] = OMIT,
+        model: typing.Optional[str] = OMIT,
         models: typing.Optional[typing.Sequence[str]] = OMIT,
         moderation: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
         n: typing.Optional[int] = OMIT,
@@ -96,8 +96,6 @@ class CompletionsClient:
         ----------
         messages : typing.Sequence[typing.Dict[str, typing.Any]]
 
-        model : str
-
         audio : typing.Optional[typing.Dict[str, typing.Any]]
 
         frequency_penalty : typing.Optional[float]
@@ -121,6 +119,8 @@ class CompletionsClient:
         min_p : typing.Optional[float]
 
         modalities : typing.Optional[typing.Sequence[str]]
+
+        model : typing.Optional[str]
 
         models : typing.Optional[typing.Sequence[str]]
 
@@ -210,14 +210,12 @@ class CompletionsClient:
         )
         response = client.chat.completions.create_stream(
             messages=[{"key": "value"}],
-            model="model",
         )
         for chunk in response:
             yield chunk
         """
         with self._raw_client.create_stream(
             messages=messages,
-            model=model,
             audio=audio,
             frequency_penalty=frequency_penalty,
             function_call=function_call,
@@ -230,6 +228,7 @@ class CompletionsClient:
             metadata=metadata,
             min_p=min_p,
             modalities=modalities,
+            model=model,
             models=models,
             moderation=moderation,
             n=n,
@@ -273,7 +272,6 @@ class CompletionsClient:
         self,
         *,
         messages: typing.Sequence[typing.Dict[str, typing.Any]],
-        model: str,
         audio: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
         frequency_penalty: typing.Optional[float] = OMIT,
         function_call: typing.Optional[CreateCompletionsRequestFunctionCall] = OMIT,
@@ -286,6 +284,7 @@ class CompletionsClient:
         metadata: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
         min_p: typing.Optional[float] = OMIT,
         modalities: typing.Optional[typing.Sequence[str]] = OMIT,
+        model: typing.Optional[str] = OMIT,
         models: typing.Optional[typing.Sequence[str]] = OMIT,
         moderation: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
         n: typing.Optional[int] = OMIT,
@@ -328,8 +327,6 @@ class CompletionsClient:
         ----------
         messages : typing.Sequence[typing.Dict[str, typing.Any]]
 
-        model : str
-
         audio : typing.Optional[typing.Dict[str, typing.Any]]
 
         frequency_penalty : typing.Optional[float]
@@ -353,6 +350,8 @@ class CompletionsClient:
         min_p : typing.Optional[float]
 
         modalities : typing.Optional[typing.Sequence[str]]
+
+        model : typing.Optional[str]
 
         models : typing.Optional[typing.Sequence[str]]
 
@@ -442,12 +441,10 @@ class CompletionsClient:
         )
         client.chat.completions.create(
             messages=[{"key": "value"}],
-            model="model",
         )
         """
         _response = self._raw_client.create(
             messages=messages,
-            model=model,
             audio=audio,
             frequency_penalty=frequency_penalty,
             function_call=function_call,
@@ -460,6 +457,7 @@ class CompletionsClient:
             metadata=metadata,
             min_p=min_p,
             modalities=modalities,
+            model=model,
             models=models,
             moderation=moderation,
             n=n,
@@ -519,7 +517,6 @@ class AsyncCompletionsClient:
         self,
         *,
         messages: typing.Sequence[typing.Dict[str, typing.Any]],
-        model: str,
         audio: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
         frequency_penalty: typing.Optional[float] = OMIT,
         function_call: typing.Optional[CreateCompletionsStreamRequestFunctionCall] = OMIT,
@@ -532,6 +529,7 @@ class AsyncCompletionsClient:
         metadata: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
         min_p: typing.Optional[float] = OMIT,
         modalities: typing.Optional[typing.Sequence[str]] = OMIT,
+        model: typing.Optional[str] = OMIT,
         models: typing.Optional[typing.Sequence[str]] = OMIT,
         moderation: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
         n: typing.Optional[int] = OMIT,
@@ -574,8 +572,6 @@ class AsyncCompletionsClient:
         ----------
         messages : typing.Sequence[typing.Dict[str, typing.Any]]
 
-        model : str
-
         audio : typing.Optional[typing.Dict[str, typing.Any]]
 
         frequency_penalty : typing.Optional[float]
@@ -599,6 +595,8 @@ class AsyncCompletionsClient:
         min_p : typing.Optional[float]
 
         modalities : typing.Optional[typing.Sequence[str]]
+
+        model : typing.Optional[str]
 
         models : typing.Optional[typing.Sequence[str]]
 
@@ -693,7 +691,6 @@ class AsyncCompletionsClient:
         async def main() -> None:
             response = client.chat.completions.create_stream(
                 messages=[{"key": "value"}],
-                model="model",
             )
             async for chunk in response:
                 yield chunk
@@ -703,7 +700,6 @@ class AsyncCompletionsClient:
         """
         async with self._raw_client.create_stream(
             messages=messages,
-            model=model,
             audio=audio,
             frequency_penalty=frequency_penalty,
             function_call=function_call,
@@ -716,6 +712,7 @@ class AsyncCompletionsClient:
             metadata=metadata,
             min_p=min_p,
             modalities=modalities,
+            model=model,
             models=models,
             moderation=moderation,
             n=n,
@@ -760,7 +757,6 @@ class AsyncCompletionsClient:
         self,
         *,
         messages: typing.Sequence[typing.Dict[str, typing.Any]],
-        model: str,
         audio: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
         frequency_penalty: typing.Optional[float] = OMIT,
         function_call: typing.Optional[CreateCompletionsRequestFunctionCall] = OMIT,
@@ -773,6 +769,7 @@ class AsyncCompletionsClient:
         metadata: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
         min_p: typing.Optional[float] = OMIT,
         modalities: typing.Optional[typing.Sequence[str]] = OMIT,
+        model: typing.Optional[str] = OMIT,
         models: typing.Optional[typing.Sequence[str]] = OMIT,
         moderation: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
         n: typing.Optional[int] = OMIT,
@@ -815,8 +812,6 @@ class AsyncCompletionsClient:
         ----------
         messages : typing.Sequence[typing.Dict[str, typing.Any]]
 
-        model : str
-
         audio : typing.Optional[typing.Dict[str, typing.Any]]
 
         frequency_penalty : typing.Optional[float]
@@ -840,6 +835,8 @@ class AsyncCompletionsClient:
         min_p : typing.Optional[float]
 
         modalities : typing.Optional[typing.Sequence[str]]
+
+        model : typing.Optional[str]
 
         models : typing.Optional[typing.Sequence[str]]
 
@@ -934,7 +931,6 @@ class AsyncCompletionsClient:
         async def main() -> None:
             await client.chat.completions.create(
                 messages=[{"key": "value"}],
-                model="model",
             )
 
 
@@ -942,7 +938,6 @@ class AsyncCompletionsClient:
         """
         _response = await self._raw_client.create(
             messages=messages,
-            model=model,
             audio=audio,
             frequency_penalty=frequency_penalty,
             function_call=function_call,
@@ -955,6 +950,7 @@ class AsyncCompletionsClient:
             metadata=metadata,
             min_p=min_p,
             modalities=modalities,
+            model=model,
             models=models,
             moderation=moderation,
             n=n,

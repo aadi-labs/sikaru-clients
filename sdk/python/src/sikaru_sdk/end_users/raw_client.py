@@ -10,14 +10,21 @@ from ..core.jsonable_encoder import encode_path_param
 from ..core.parse_error import ParsingError
 from ..core.pydantic_utilities import parse_obj_as
 from ..core.request_options import RequestOptions
+from ..core.serialization import convert_and_respect_annotation_metadata
+from ..errors.conflict_error import ConflictError
 from ..errors.forbidden_error import ForbiddenError
 from ..errors.not_found_error import NotFoundError
 from ..errors.unauthorized_error import UnauthorizedError
 from ..errors.unprocessable_entity_error import UnprocessableEntityError
+from ..types.authored_learning_receipt import AuthoredLearningReceipt
+from ..types.authored_learning_workflow import AuthoredLearningWorkflow
+from ..types.authored_tool_provider_ref import AuthoredToolProviderRef
 from ..types.end_user import EndUser
 from ..types.end_user_deletion import EndUserDeletion
-from ..types.end_user_file import EndUserFile
 from ..types.error_response import ErrorResponse
+from ..types.import_file import ImportFile
+from ..types.import_receipt import ImportReceipt
+from ..types.product_learning_evidence import ProductLearningEvidence
 from ..types.recorded_correction import RecordedCorrection
 from pydantic import ValidationError
 
@@ -39,7 +46,7 @@ class RawEndUsersClient:
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[EndUser]:
         """
-        What the agent knows about this end user: facts and the persona summary, never the persona prompt.
+        What the agent knows about this end user: the persona summary, never the persona prompt.
 
         Parameters
         ----------
@@ -138,7 +145,9 @@ class RawEndUsersClient:
         tenant_id: str,
         user_id: str,
         *,
+        create_only: typing.Optional[bool] = OMIT,
         opt_in: typing.Optional[bool] = OMIT,
+        sleep_enabled: typing.Optional[bool] = OMIT,
         timezone: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[EndUser]:
@@ -155,8 +164,14 @@ class RawEndUsersClient:
 
         user_id : str
 
+        create_only : typing.Optional[bool]
+            Apply settings only when creating a cell. Return existing cells unchanged.
+
         opt_in : typing.Optional[bool]
             Opting out removes this user's contributed traces and eval cases from population material. Omit it to keep the current choice.
+
+        sleep_enabled : typing.Optional[bool]
+            Allow automatic nightly sleep; omit to preserve the setting.
 
         timezone : typing.Optional[str]
             IANA timezone, such as Europe/Berlin. Explicit null clears it; omit it to keep the current value.
@@ -177,7 +192,9 @@ class RawEndUsersClient:
             f"v1/projects/{encode_path_param(project_id)}/managed-agents/{encode_path_param(agent_slug)}/end-users/{encode_path_param(tenant_id)}/{encode_path_param(user_id)}",
             method="PUT",
             json={
+                "createOnly": create_only,
                 "optIn": opt_in,
+                "sleepEnabled": sleep_enabled,
                 "timezone": timezone,
             },
             headers={
@@ -230,6 +247,17 @@ class RawEndUsersClient:
                         ),
                     ),
                 )
+            if _response.status_code == 409:
+                raise ConflictError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
             if _response.status_code == 422:
                 raise UnprocessableEntityError(
                     headers=dict(_response.headers),
@@ -257,6 +285,7 @@ class RawEndUsersClient:
         tenant_id: str,
         user_id: str,
         *,
+        terminal: typing.Optional[bool] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[EndUserDeletion]:
         """
@@ -271,6 +300,9 @@ class RawEndUsersClient:
         tenant_id : str
 
         user_id : str
+
+        terminal : typing.Optional[bool]
+            Permanently reject cell creation and new work for this end user.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -287,6 +319,9 @@ class RawEndUsersClient:
         _response = self._client_wrapper.httpx_client.request(
             f"v1/projects/{encode_path_param(project_id)}/managed-agents/{encode_path_param(agent_slug)}/end-users/{encode_path_param(tenant_id)}/{encode_path_param(user_id)}",
             method="DELETE",
+            params={
+                "terminal": terminal,
+            },
             headers={
                 **_endpoint_auth_headers,
             },
@@ -355,20 +390,27 @@ class RawEndUsersClient:
             )
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def update_fact(
+    def import_state(
         self,
         project_id: str,
         agent_slug: str,
         tenant_id: str,
         user_id: str,
         *,
-        content: str,
-        path: str,
-        expected_etag: typing.Optional[str] = OMIT,
+        digest: str,
+        files: typing.Sequence[ImportFile],
+        import_id: str,
+        source_revision: str,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[EndUserFile]:
+    ) -> HttpResponse[ImportReceipt]:
         """
-        Correct or add one fact. It serves from the next turn and becomes a held-out case for this user.
+        Import a versioned product snapshot atomically, preserving correction provenance.
+
+        The cell must already exist. Every file requires expectedEtag (null for an
+        absent destination). Reusing an importId requires the identical manifest.
+        The digest is SHA-256 of canonical JSON {sourceRevision, files}, with sorted
+        keys, compact separators and the supplied file order. Private layers are
+        accepted as input but are never returned in the receipt or end-user view.
 
         Parameters
         ----------
@@ -380,20 +422,20 @@ class RawEndUsersClient:
 
         user_id : str
 
-        content : str
+        digest : str
 
-        path : str
-            USER.md or memories/<name>.md.
+        files : typing.Sequence[ImportFile]
 
-        expected_etag : typing.Optional[str]
-            Refuse with 409 unless the fact still has this etag.
+        import_id : str
+
+        source_revision : str
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        HttpResponse[EndUserFile]
+        HttpResponse[ImportReceipt]
             Successful Response
         """
         _request_options_with_retries_disabled: typing.Optional[RequestOptions] = (
@@ -401,12 +443,15 @@ class RawEndUsersClient:
         )
         _endpoint_auth_headers = self._client_wrapper.get_auth_headers_for_endpoint(security=[{"BearerAuth": []}])
         _response = self._client_wrapper.httpx_client.request(
-            f"v1/projects/{encode_path_param(project_id)}/managed-agents/{encode_path_param(agent_slug)}/end-users/{encode_path_param(tenant_id)}/{encode_path_param(user_id)}/facts",
-            method="PUT",
+            f"v1/projects/{encode_path_param(project_id)}/managed-agents/{encode_path_param(agent_slug)}/end-users/{encode_path_param(tenant_id)}/{encode_path_param(user_id)}/imports",
+            method="POST",
             json={
-                "content": content,
-                "expectedEtag": expected_etag,
-                "path": path,
+                "digest": digest,
+                "files": convert_and_respect_annotation_metadata(
+                    object_=files, annotation=typing.Sequence[ImportFile], direction="write"
+                ),
+                "importId": import_id,
+                "sourceRevision": source_revision,
             },
             headers={
                 **_endpoint_auth_headers,
@@ -418,9 +463,9 @@ class RawEndUsersClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    EndUserFile,
+                    ImportReceipt,
                     parse_obj_as(
-                        type_=EndUserFile,  # type: ignore
+                        type_=ImportReceipt,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
@@ -478,19 +523,23 @@ class RawEndUsersClient:
             )
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def delete_fact(
+    def start_learning_run(
         self,
         project_id: str,
         agent_slug: str,
         tenant_id: str,
         user_id: str,
         *,
-        path: str,
+        evidence: typing.Sequence[ProductLearningEvidence],
+        invocation_id: str,
+        source_revision: str,
+        workflow: AuthoredLearningWorkflow,
+        capability_grants: typing.Optional[typing.Sequence[str]] = OMIT,
+        context: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
+        tool_provider_refs: typing.Optional[typing.Sequence[AuthoredToolProviderRef]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[None]:
+    ) -> HttpResponse[AuthoredLearningReceipt]:
         """
-        Forget one memory, or clear the profile.
-
         Parameters
         ----------
         project_id : str
@@ -501,8 +550,245 @@ class RawEndUsersClient:
 
         user_id : str
 
-        path : str
-            USER.md or memories/<name>.md.
+        evidence : typing.Sequence[ProductLearningEvidence]
+
+        invocation_id : str
+
+        source_revision : str
+
+        workflow : AuthoredLearningWorkflow
+
+        capability_grants : typing.Optional[typing.Sequence[str]]
+
+        context : typing.Optional[typing.Dict[str, typing.Any]]
+
+        tool_provider_refs : typing.Optional[typing.Sequence[AuthoredToolProviderRef]]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[AuthoredLearningReceipt]
+            Successful Response
+        """
+        _request_options_with_retries_disabled: typing.Optional[RequestOptions] = (
+            {**request_options, "max_retries": 0} if request_options is not None else {"max_retries": 0}
+        )
+        _endpoint_auth_headers = self._client_wrapper.get_auth_headers_for_endpoint(security=[{"BearerAuth": []}])
+        _response = self._client_wrapper.httpx_client.request(
+            f"v1/projects/{encode_path_param(project_id)}/managed-agents/{encode_path_param(agent_slug)}/end-users/{encode_path_param(tenant_id)}/{encode_path_param(user_id)}/learning-runs",
+            method="POST",
+            json={
+                "capabilityGrants": capability_grants,
+                "context": context,
+                "evidence": convert_and_respect_annotation_metadata(
+                    object_=evidence, annotation=typing.Sequence[ProductLearningEvidence], direction="write"
+                ),
+                "invocationId": invocation_id,
+                "sourceRevision": source_revision,
+                "toolProviderRefs": convert_and_respect_annotation_metadata(
+                    object_=tool_provider_refs, annotation=typing.Sequence[AuthoredToolProviderRef], direction="write"
+                ),
+                "workflow": convert_and_respect_annotation_metadata(
+                    object_=workflow, annotation=AuthoredLearningWorkflow, direction="write"
+                ),
+            },
+            headers={
+                **_endpoint_auth_headers,
+                "content-type": "application/json",
+            },
+            request_options=_request_options_with_retries_disabled,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    AuthoredLearningReceipt,
+                    parse_obj_as(
+                        type_=AuthoredLearningReceipt,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        except ValidationError as e:
+            raise ParsingError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+            )
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def get_learning_run(
+        self,
+        project_id: str,
+        agent_slug: str,
+        tenant_id: str,
+        user_id: str,
+        invocation_id: str,
+        *,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[AuthoredLearningReceipt]:
+        """
+        Parameters
+        ----------
+        project_id : str
+
+        agent_slug : str
+
+        tenant_id : str
+
+        user_id : str
+
+        invocation_id : str
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[AuthoredLearningReceipt]
+            Successful Response
+        """
+        _endpoint_auth_headers = self._client_wrapper.get_auth_headers_for_endpoint(security=[{"BearerAuth": []}])
+        _response = self._client_wrapper.httpx_client.request(
+            f"v1/projects/{encode_path_param(project_id)}/managed-agents/{encode_path_param(agent_slug)}/end-users/{encode_path_param(tenant_id)}/{encode_path_param(user_id)}/learning-runs/{encode_path_param(invocation_id)}",
+            method="GET",
+            headers={
+                **_endpoint_auth_headers,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    AuthoredLearningReceipt,
+                    parse_obj_as(
+                        type_=AuthoredLearningReceipt,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        except ValidationError as e:
+            raise ParsingError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+            )
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def revoke_learning_source(
+        self,
+        project_id: str,
+        agent_slug: str,
+        tenant_id: str,
+        user_id: str,
+        source_id: str,
+        *,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[None]:
+        """
+        Parameters
+        ----------
+        project_id : str
+
+        agent_slug : str
+
+        tenant_id : str
+
+        user_id : str
+
+        source_id : str
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -516,11 +802,8 @@ class RawEndUsersClient:
         )
         _endpoint_auth_headers = self._client_wrapper.get_auth_headers_for_endpoint(security=[{"BearerAuth": []}])
         _response = self._client_wrapper.httpx_client.request(
-            f"v1/projects/{encode_path_param(project_id)}/managed-agents/{encode_path_param(agent_slug)}/end-users/{encode_path_param(tenant_id)}/{encode_path_param(user_id)}/facts",
-            method="DELETE",
-            params={
-                "path": path,
-            },
+            f"v1/projects/{encode_path_param(project_id)}/managed-agents/{encode_path_param(agent_slug)}/end-users/{encode_path_param(tenant_id)}/{encode_path_param(user_id)}/learning-sources/{encode_path_param(source_id)}/revoke",
+            method="POST",
             headers={
                 **_endpoint_auth_headers,
             },
@@ -711,7 +994,7 @@ class AsyncRawEndUsersClient:
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[EndUser]:
         """
-        What the agent knows about this end user: facts and the persona summary, never the persona prompt.
+        What the agent knows about this end user: the persona summary, never the persona prompt.
 
         Parameters
         ----------
@@ -812,7 +1095,9 @@ class AsyncRawEndUsersClient:
         tenant_id: str,
         user_id: str,
         *,
+        create_only: typing.Optional[bool] = OMIT,
         opt_in: typing.Optional[bool] = OMIT,
+        sleep_enabled: typing.Optional[bool] = OMIT,
         timezone: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[EndUser]:
@@ -829,8 +1114,14 @@ class AsyncRawEndUsersClient:
 
         user_id : str
 
+        create_only : typing.Optional[bool]
+            Apply settings only when creating a cell. Return existing cells unchanged.
+
         opt_in : typing.Optional[bool]
             Opting out removes this user's contributed traces and eval cases from population material. Omit it to keep the current choice.
+
+        sleep_enabled : typing.Optional[bool]
+            Allow automatic nightly sleep; omit to preserve the setting.
 
         timezone : typing.Optional[str]
             IANA timezone, such as Europe/Berlin. Explicit null clears it; omit it to keep the current value.
@@ -853,7 +1144,9 @@ class AsyncRawEndUsersClient:
             f"v1/projects/{encode_path_param(project_id)}/managed-agents/{encode_path_param(agent_slug)}/end-users/{encode_path_param(tenant_id)}/{encode_path_param(user_id)}",
             method="PUT",
             json={
+                "createOnly": create_only,
                 "optIn": opt_in,
+                "sleepEnabled": sleep_enabled,
                 "timezone": timezone,
             },
             headers={
@@ -906,6 +1199,17 @@ class AsyncRawEndUsersClient:
                         ),
                     ),
                 )
+            if _response.status_code == 409:
+                raise ConflictError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
             if _response.status_code == 422:
                 raise UnprocessableEntityError(
                     headers=dict(_response.headers),
@@ -933,6 +1237,7 @@ class AsyncRawEndUsersClient:
         tenant_id: str,
         user_id: str,
         *,
+        terminal: typing.Optional[bool] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[EndUserDeletion]:
         """
@@ -947,6 +1252,9 @@ class AsyncRawEndUsersClient:
         tenant_id : str
 
         user_id : str
+
+        terminal : typing.Optional[bool]
+            Permanently reject cell creation and new work for this end user.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -965,6 +1273,9 @@ class AsyncRawEndUsersClient:
         _response = await self._client_wrapper.httpx_client.request(
             f"v1/projects/{encode_path_param(project_id)}/managed-agents/{encode_path_param(agent_slug)}/end-users/{encode_path_param(tenant_id)}/{encode_path_param(user_id)}",
             method="DELETE",
+            params={
+                "terminal": terminal,
+            },
             headers={
                 **_endpoint_auth_headers,
             },
@@ -1033,20 +1344,27 @@ class AsyncRawEndUsersClient:
             )
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def update_fact(
+    async def import_state(
         self,
         project_id: str,
         agent_slug: str,
         tenant_id: str,
         user_id: str,
         *,
-        content: str,
-        path: str,
-        expected_etag: typing.Optional[str] = OMIT,
+        digest: str,
+        files: typing.Sequence[ImportFile],
+        import_id: str,
+        source_revision: str,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[EndUserFile]:
+    ) -> AsyncHttpResponse[ImportReceipt]:
         """
-        Correct or add one fact. It serves from the next turn and becomes a held-out case for this user.
+        Import a versioned product snapshot atomically, preserving correction provenance.
+
+        The cell must already exist. Every file requires expectedEtag (null for an
+        absent destination). Reusing an importId requires the identical manifest.
+        The digest is SHA-256 of canonical JSON {sourceRevision, files}, with sorted
+        keys, compact separators and the supplied file order. Private layers are
+        accepted as input but are never returned in the receipt or end-user view.
 
         Parameters
         ----------
@@ -1058,20 +1376,20 @@ class AsyncRawEndUsersClient:
 
         user_id : str
 
-        content : str
+        digest : str
 
-        path : str
-            USER.md or memories/<name>.md.
+        files : typing.Sequence[ImportFile]
 
-        expected_etag : typing.Optional[str]
-            Refuse with 409 unless the fact still has this etag.
+        import_id : str
+
+        source_revision : str
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        AsyncHttpResponse[EndUserFile]
+        AsyncHttpResponse[ImportReceipt]
             Successful Response
         """
         _request_options_with_retries_disabled: typing.Optional[RequestOptions] = (
@@ -1081,12 +1399,15 @@ class AsyncRawEndUsersClient:
             security=[{"BearerAuth": []}]
         )
         _response = await self._client_wrapper.httpx_client.request(
-            f"v1/projects/{encode_path_param(project_id)}/managed-agents/{encode_path_param(agent_slug)}/end-users/{encode_path_param(tenant_id)}/{encode_path_param(user_id)}/facts",
-            method="PUT",
+            f"v1/projects/{encode_path_param(project_id)}/managed-agents/{encode_path_param(agent_slug)}/end-users/{encode_path_param(tenant_id)}/{encode_path_param(user_id)}/imports",
+            method="POST",
             json={
-                "content": content,
-                "expectedEtag": expected_etag,
-                "path": path,
+                "digest": digest,
+                "files": convert_and_respect_annotation_metadata(
+                    object_=files, annotation=typing.Sequence[ImportFile], direction="write"
+                ),
+                "importId": import_id,
+                "sourceRevision": source_revision,
             },
             headers={
                 **_endpoint_auth_headers,
@@ -1098,9 +1419,9 @@ class AsyncRawEndUsersClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    EndUserFile,
+                    ImportReceipt,
                     parse_obj_as(
-                        type_=EndUserFile,  # type: ignore
+                        type_=ImportReceipt,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
@@ -1158,19 +1479,23 @@ class AsyncRawEndUsersClient:
             )
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def delete_fact(
+    async def start_learning_run(
         self,
         project_id: str,
         agent_slug: str,
         tenant_id: str,
         user_id: str,
         *,
-        path: str,
+        evidence: typing.Sequence[ProductLearningEvidence],
+        invocation_id: str,
+        source_revision: str,
+        workflow: AuthoredLearningWorkflow,
+        capability_grants: typing.Optional[typing.Sequence[str]] = OMIT,
+        context: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
+        tool_provider_refs: typing.Optional[typing.Sequence[AuthoredToolProviderRef]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[None]:
+    ) -> AsyncHttpResponse[AuthoredLearningReceipt]:
         """
-        Forget one memory, or clear the profile.
-
         Parameters
         ----------
         project_id : str
@@ -1181,8 +1506,249 @@ class AsyncRawEndUsersClient:
 
         user_id : str
 
-        path : str
-            USER.md or memories/<name>.md.
+        evidence : typing.Sequence[ProductLearningEvidence]
+
+        invocation_id : str
+
+        source_revision : str
+
+        workflow : AuthoredLearningWorkflow
+
+        capability_grants : typing.Optional[typing.Sequence[str]]
+
+        context : typing.Optional[typing.Dict[str, typing.Any]]
+
+        tool_provider_refs : typing.Optional[typing.Sequence[AuthoredToolProviderRef]]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[AuthoredLearningReceipt]
+            Successful Response
+        """
+        _request_options_with_retries_disabled: typing.Optional[RequestOptions] = (
+            {**request_options, "max_retries": 0} if request_options is not None else {"max_retries": 0}
+        )
+        _endpoint_auth_headers = await self._client_wrapper.async_get_auth_headers_for_endpoint(
+            security=[{"BearerAuth": []}]
+        )
+        _response = await self._client_wrapper.httpx_client.request(
+            f"v1/projects/{encode_path_param(project_id)}/managed-agents/{encode_path_param(agent_slug)}/end-users/{encode_path_param(tenant_id)}/{encode_path_param(user_id)}/learning-runs",
+            method="POST",
+            json={
+                "capabilityGrants": capability_grants,
+                "context": context,
+                "evidence": convert_and_respect_annotation_metadata(
+                    object_=evidence, annotation=typing.Sequence[ProductLearningEvidence], direction="write"
+                ),
+                "invocationId": invocation_id,
+                "sourceRevision": source_revision,
+                "toolProviderRefs": convert_and_respect_annotation_metadata(
+                    object_=tool_provider_refs, annotation=typing.Sequence[AuthoredToolProviderRef], direction="write"
+                ),
+                "workflow": convert_and_respect_annotation_metadata(
+                    object_=workflow, annotation=AuthoredLearningWorkflow, direction="write"
+                ),
+            },
+            headers={
+                **_endpoint_auth_headers,
+                "content-type": "application/json",
+            },
+            request_options=_request_options_with_retries_disabled,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    AuthoredLearningReceipt,
+                    parse_obj_as(
+                        type_=AuthoredLearningReceipt,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        except ValidationError as e:
+            raise ParsingError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+            )
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def get_learning_run(
+        self,
+        project_id: str,
+        agent_slug: str,
+        tenant_id: str,
+        user_id: str,
+        invocation_id: str,
+        *,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[AuthoredLearningReceipt]:
+        """
+        Parameters
+        ----------
+        project_id : str
+
+        agent_slug : str
+
+        tenant_id : str
+
+        user_id : str
+
+        invocation_id : str
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[AuthoredLearningReceipt]
+            Successful Response
+        """
+        _endpoint_auth_headers = await self._client_wrapper.async_get_auth_headers_for_endpoint(
+            security=[{"BearerAuth": []}]
+        )
+        _response = await self._client_wrapper.httpx_client.request(
+            f"v1/projects/{encode_path_param(project_id)}/managed-agents/{encode_path_param(agent_slug)}/end-users/{encode_path_param(tenant_id)}/{encode_path_param(user_id)}/learning-runs/{encode_path_param(invocation_id)}",
+            method="GET",
+            headers={
+                **_endpoint_auth_headers,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    AuthoredLearningReceipt,
+                    parse_obj_as(
+                        type_=AuthoredLearningReceipt,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        except ValidationError as e:
+            raise ParsingError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+            )
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def revoke_learning_source(
+        self,
+        project_id: str,
+        agent_slug: str,
+        tenant_id: str,
+        user_id: str,
+        source_id: str,
+        *,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[None]:
+        """
+        Parameters
+        ----------
+        project_id : str
+
+        agent_slug : str
+
+        tenant_id : str
+
+        user_id : str
+
+        source_id : str
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -1198,11 +1764,8 @@ class AsyncRawEndUsersClient:
             security=[{"BearerAuth": []}]
         )
         _response = await self._client_wrapper.httpx_client.request(
-            f"v1/projects/{encode_path_param(project_id)}/managed-agents/{encode_path_param(agent_slug)}/end-users/{encode_path_param(tenant_id)}/{encode_path_param(user_id)}/facts",
-            method="DELETE",
-            params={
-                "path": path,
-            },
+            f"v1/projects/{encode_path_param(project_id)}/managed-agents/{encode_path_param(agent_slug)}/end-users/{encode_path_param(tenant_id)}/{encode_path_param(user_id)}/learning-sources/{encode_path_param(source_id)}/revoke",
+            method="POST",
             headers={
                 **_endpoint_auth_headers,
             },

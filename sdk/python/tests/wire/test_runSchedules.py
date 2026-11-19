@@ -24,6 +24,36 @@ def test_runSchedules_create_schedule() -> None:
     verify_auth_headers(test_id, "POST", "/v1/projects/project_id/run-schedules", {"Authorization": r"Bearer .+"}, [])
 
 
+def test_runSchedules_inspect_schedule() -> None:
+    """Test inspect_schedule endpoint with WireMock"""
+    test_id = "run_schedules.inspect_schedule.0"
+    client = get_client(test_id)
+    client.run_schedules.inspect_schedule(
+        project_id="project_id",
+        schedule_id="schedule_id",
+    )
+    verify_request_count(test_id, "GET", "/v1/projects/project_id/run-schedules/schedule_id", None, 1)
+    verify_auth_headers(
+        test_id, "GET", "/v1/projects/project_id/run-schedules/schedule_id", {"Authorization": r"Bearer .+"}, []
+    )
+
+
+def test_runSchedules_update_schedule() -> None:
+    """Test update_schedule endpoint with WireMock"""
+    test_id = "run_schedules.update_schedule.0"
+    client = get_client(test_id)
+    client.run_schedules.update_schedule(
+        project_id="project_id",
+        schedule_id="schedule_id",
+        expected_revision=1,
+        idempotency_key="idempotency_key",
+    )
+    verify_request_count(test_id, "PUT", "/v1/projects/project_id/run-schedules/schedule_id", None, 1)
+    verify_auth_headers(
+        test_id, "PUT", "/v1/projects/project_id/run-schedules/schedule_id", {"Authorization": r"Bearer .+"}, []
+    )
+
+
 def test_runSchedules_delete_schedule() -> None:
     """Test delete_schedule endpoint with WireMock"""
     test_id = "run_schedules.delete_schedule.0"

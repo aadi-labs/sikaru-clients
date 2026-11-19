@@ -1,5 +1,7 @@
 use crate::api::*;
-use crate::{ApiError, ClientConfig, HttpClient, QueryBuilder, RequestOptions, SseStream};
+use crate::{
+    ApiError, ByteStream, ClientConfig, HttpClient, QueryBuilder, RequestOptions, SseStream,
+};
 use reqwest::Method;
 use std::collections::HashMap;
 
@@ -379,6 +381,489 @@ impl RunsClient {
     ///     let client = SikaruClient::new(config).expect("Failed to build client");
     ///     client
     ///         .runs
+    ///         .create_handoff(
+    ///             &"project_id".to_string(),
+    ///             &"run_id".to_string(),
+    ///             &"tool_call_id".to_string(),
+    ///             None,
+    ///         )
+    ///         .await;
+    /// }
+    /// ```
+    pub async fn create_handoff(
+        &self,
+        project_id: &str,
+        run_id: &str,
+        tool_call_id: &str,
+        options: Option<RequestOptions>,
+    ) -> Result<LiveLink, ApiError> {
+        let endpoint_auth_headers = self
+            .http_client
+            .resolve_endpoint_auth_headers(&options, &[&["BearerAuth"] as &[&str]])
+            .await?;
+        let options = {
+            let mut o = options.unwrap_or_default();
+            for (header_key, header_value) in endpoint_auth_headers {
+                o.additional_headers.insert(header_key, header_value);
+            }
+            o.max_retries = Some(0);
+            Some(o)
+        };
+        self.http_client
+            .execute_request(
+                Method::POST,
+                &format!(
+                    "v1/projects/{}/runs/{}/browser/handoffs/{}",
+                    project_id, run_id, tool_call_id
+                ),
+                None,
+                None,
+                options,
+            )
+            .await
+    }
+
+    /// Everything a browser approval asks about, typed values included, for its owner only.
+    ///
+    /// # Arguments
+    ///
+    /// * `options` - Additional request options such as headers, timeout, etc.
+    ///
+    /// # Returns
+    ///
+    /// JSON response from the API
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// use sikaru_sdk::prelude::*;
+    ///
+    /// #[tokio::main]
+    /// async fn main() {
+    ///     let config = ClientConfig {
+    ///         token: Some("<token>".to_string()),
+    ///         ..Default::default()
+    ///     };
+    ///     let client = SikaruClient::new(config).expect("Failed to build client");
+    ///     client
+    ///         .runs
+    ///         .get_preview(
+    ///             &"project_id".to_string(),
+    ///             &"run_id".to_string(),
+    ///             &"digest".to_string(),
+    ///             None,
+    ///         )
+    ///         .await;
+    /// }
+    /// ```
+    pub async fn get_preview(
+        &self,
+        project_id: &str,
+        run_id: &str,
+        digest: &str,
+        options: Option<RequestOptions>,
+    ) -> Result<HashMap<String, serde_json::Value>, ApiError> {
+        let endpoint_auth_headers = self
+            .http_client
+            .resolve_endpoint_auth_headers(&options, &[&["BearerAuth"] as &[&str]])
+            .await?;
+        let options = {
+            let mut o = options.unwrap_or_default();
+            for (header_key, header_value) in endpoint_auth_headers {
+                o.additional_headers.insert(header_key, header_value);
+            }
+            Some(o)
+        };
+        self.http_client
+            .execute_request(
+                Method::GET,
+                &format!(
+                    "v1/projects/{}/runs/{}/browser/previews/{}",
+                    project_id, run_id, digest
+                ),
+                None,
+                None,
+                options,
+            )
+            .await
+    }
+
+    /// The page an approver is asked about, password fields masked.
+    ///
+    /// # Arguments
+    ///
+    /// * `options` - Additional request options such as headers, timeout, etc.
+    ///
+    /// # Returns
+    ///
+    /// Streaming file download (use .into_bytes() to collect or stream chunks)
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// use sikaru_sdk::prelude::*;
+    ///
+    /// #[tokio::main]
+    /// async fn main() {
+    ///     let config = ClientConfig {
+    ///         token: Some("<token>".to_string()),
+    ///         ..Default::default()
+    ///     };
+    ///     let client = SikaruClient::new(config).expect("Failed to build client");
+    ///     client
+    ///         .runs
+    ///         .preview_screenshot(
+    ///             &"project_id".to_string(),
+    ///             &"run_id".to_string(),
+    ///             &"digest".to_string(),
+    ///             None,
+    ///         )
+    ///         .await;
+    /// }
+    /// ```
+    pub async fn preview_screenshot(
+        &self,
+        project_id: &str,
+        run_id: &str,
+        digest: &str,
+        options: Option<RequestOptions>,
+    ) -> Result<ByteStream, ApiError> {
+        let endpoint_auth_headers = self
+            .http_client
+            .resolve_endpoint_auth_headers(&options, &[&["BearerAuth"] as &[&str]])
+            .await?;
+        let options = {
+            let mut o = options.unwrap_or_default();
+            for (header_key, header_value) in endpoint_auth_headers {
+                o.additional_headers.insert(header_key, header_value);
+            }
+            Some(o)
+        };
+        self.http_client
+            .execute_stream_request(
+                Method::GET,
+                &format!(
+                    "v1/projects/{}/runs/{}/browser/previews/{}/screenshot",
+                    project_id, run_id, digest
+                ),
+                None,
+                None,
+                options,
+            )
+            .await
+    }
+
+    /// What the run's browser did: pages visited, actions committed, and sign-ins by people.
+    ///
+    /// # Arguments
+    ///
+    /// * `options` - Additional request options such as headers, timeout, etc.
+    ///
+    /// # Returns
+    ///
+    /// JSON response from the API
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// use sikaru_sdk::prelude::*;
+    ///
+    /// #[tokio::main]
+    /// async fn main() {
+    ///     let config = ClientConfig {
+    ///         token: Some("<token>".to_string()),
+    ///         ..Default::default()
+    ///     };
+    ///     let client = SikaruClient::new(config).expect("Failed to build client");
+    ///     client
+    ///         .runs
+    ///         .get_receipt(&"project_id".to_string(), &"run_id".to_string(), None)
+    ///         .await;
+    /// }
+    /// ```
+    pub async fn get_receipt(
+        &self,
+        project_id: &str,
+        run_id: &str,
+        options: Option<RequestOptions>,
+    ) -> Result<Receipt, ApiError> {
+        let endpoint_auth_headers = self
+            .http_client
+            .resolve_endpoint_auth_headers(&options, &[&["BearerAuth"] as &[&str]])
+            .await?;
+        let options = {
+            let mut o = options.unwrap_or_default();
+            for (header_key, header_value) in endpoint_auth_headers {
+                o.additional_headers.insert(header_key, header_value);
+            }
+            Some(o)
+        };
+        self.http_client
+            .execute_request(
+                Method::GET,
+                &format!("v1/projects/{}/runs/{}/browser/receipt", project_id, run_id),
+                None,
+                None,
+                options,
+            )
+            .await
+    }
+
+    /// # Examples
+    ///
+    /// ```no_run
+    /// use sikaru_sdk::prelude::*;
+    ///
+    /// #[tokio::main]
+    /// async fn main() {
+    ///     let config = ClientConfig {
+    ///         token: Some("<token>".to_string()),
+    ///         ..Default::default()
+    ///     };
+    ///     let client = SikaruClient::new(config).expect("Failed to build client");
+    ///     client
+    ///         .runs
+    ///         .get_receipt_screenshot(
+    ///             &"project_id".to_string(),
+    ///             &"run_id".to_string(),
+    ///             &"digest".to_string(),
+    ///             None,
+    ///         )
+    ///         .await;
+    /// }
+    /// ```
+    pub async fn get_receipt_screenshot(
+        &self,
+        project_id: &str,
+        run_id: &str,
+        digest: &str,
+        options: Option<RequestOptions>,
+    ) -> Result<ByteStream, ApiError> {
+        let endpoint_auth_headers = self
+            .http_client
+            .resolve_endpoint_auth_headers(&options, &[&["BearerAuth"] as &[&str]])
+            .await?;
+        let options = {
+            let mut o = options.unwrap_or_default();
+            for (header_key, header_value) in endpoint_auth_headers {
+                o.additional_headers.insert(header_key, header_value);
+            }
+            Some(o)
+        };
+        self.http_client
+            .execute_stream_request(
+                Method::GET,
+                &format!(
+                    "v1/projects/{}/runs/{}/browser/receipt/screenshots/{}",
+                    project_id, run_id, digest
+                ),
+                None,
+                None,
+                options,
+            )
+            .await
+    }
+
+    /// Take over a run's browser after the agent's current action; the link drives it until handed back.
+    ///
+    /// # Arguments
+    ///
+    /// * `options` - Additional request options such as headers, timeout, etc.
+    ///
+    /// # Returns
+    ///
+    /// JSON response from the API
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// use sikaru_sdk::prelude::*;
+    ///
+    /// #[tokio::main]
+    /// async fn main() {
+    ///     let config = ClientConfig {
+    ///         token: Some("<token>".to_string()),
+    ///         ..Default::default()
+    ///     };
+    ///     let client = SikaruClient::new(config).expect("Failed to build client");
+    ///     client
+    ///         .runs
+    ///         .take_over(
+    ///             &"project_id".to_string(),
+    ///             &"run_id".to_string(),
+    ///             &Some(TakeOverRequest {
+    ///                 ..Default::default()
+    ///             }),
+    ///             None,
+    ///         )
+    ///         .await;
+    /// }
+    /// ```
+    pub async fn take_over(
+        &self,
+        project_id: &str,
+        run_id: &str,
+        request: &Option<TakeOverRequest>,
+        options: Option<RequestOptions>,
+    ) -> Result<LiveLink, ApiError> {
+        let endpoint_auth_headers = self
+            .http_client
+            .resolve_endpoint_auth_headers(&options, &[&["BearerAuth"] as &[&str]])
+            .await?;
+        let options = {
+            let mut o = options.unwrap_or_default();
+            for (header_key, header_value) in endpoint_auth_headers {
+                o.additional_headers.insert(header_key, header_value);
+            }
+            o.max_retries = Some(0);
+            Some(o)
+        };
+        self.http_client
+            .execute_request(
+                Method::POST,
+                &format!(
+                    "v1/projects/{}/runs/{}/browser/takeover",
+                    project_id, run_id
+                ),
+                Some(serde_json::to_value(request).map_err(ApiError::Serialization)?),
+                None,
+                options,
+            )
+            .await
+    }
+
+    /// Withdraw a take over, or hand back the browser the run is waiting on.
+    ///
+    /// # Arguments
+    ///
+    /// * `options` - Additional request options such as headers, timeout, etc.
+    ///
+    /// # Returns
+    ///
+    /// Empty response
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// use sikaru_sdk::prelude::*;
+    ///
+    /// #[tokio::main]
+    /// async fn main() {
+    ///     let config = ClientConfig {
+    ///         token: Some("<token>".to_string()),
+    ///         ..Default::default()
+    ///     };
+    ///     let client = SikaruClient::new(config).expect("Failed to build client");
+    ///     client
+    ///         .runs
+    ///         .end_take_over(&"project_id".to_string(), &"run_id".to_string(), None)
+    ///         .await;
+    /// }
+    /// ```
+    pub async fn end_take_over(
+        &self,
+        project_id: &str,
+        run_id: &str,
+        options: Option<RequestOptions>,
+    ) -> Result<(), ApiError> {
+        let endpoint_auth_headers = self
+            .http_client
+            .resolve_endpoint_auth_headers(&options, &[&["BearerAuth"] as &[&str]])
+            .await?;
+        let options = {
+            let mut o = options.unwrap_or_default();
+            for (header_key, header_value) in endpoint_auth_headers {
+                o.additional_headers.insert(header_key, header_value);
+            }
+            o.max_retries = Some(0);
+            Some(o)
+        };
+        self.http_client
+            .execute_request(
+                Method::DELETE,
+                &format!(
+                    "v1/projects/{}/runs/{}/browser/takeover",
+                    project_id, run_id
+                ),
+                None,
+                None,
+                options,
+            )
+            .await
+    }
+
+    /// Watch a run's browser read-only. Pages signed in with an end user's own login stay hidden
+    /// from everyone but that user.
+    ///
+    /// # Arguments
+    ///
+    /// * `options` - Additional request options such as headers, timeout, etc.
+    ///
+    /// # Returns
+    ///
+    /// JSON response from the API
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// use sikaru_sdk::prelude::*;
+    ///
+    /// #[tokio::main]
+    /// async fn main() {
+    ///     let config = ClientConfig {
+    ///         token: Some("<token>".to_string()),
+    ///         ..Default::default()
+    ///     };
+    ///     let client = SikaruClient::new(config).expect("Failed to build client");
+    ///     client
+    ///         .runs
+    ///         .watch_run(&"project_id".to_string(), &"run_id".to_string(), None)
+    ///         .await;
+    /// }
+    /// ```
+    pub async fn watch_run(
+        &self,
+        project_id: &str,
+        run_id: &str,
+        options: Option<RequestOptions>,
+    ) -> Result<LiveLink, ApiError> {
+        let endpoint_auth_headers = self
+            .http_client
+            .resolve_endpoint_auth_headers(&options, &[&["BearerAuth"] as &[&str]])
+            .await?;
+        let options = {
+            let mut o = options.unwrap_or_default();
+            for (header_key, header_value) in endpoint_auth_headers {
+                o.additional_headers.insert(header_key, header_value);
+            }
+            o.max_retries = Some(0);
+            Some(o)
+        };
+        self.http_client
+            .execute_request(
+                Method::POST,
+                &format!("v1/projects/{}/runs/{}/browser/watch", project_id, run_id),
+                None,
+                None,
+                options,
+            )
+            .await
+    }
+
+    /// # Examples
+    ///
+    /// ```no_run
+    /// use sikaru_sdk::prelude::*;
+    ///
+    /// #[tokio::main]
+    /// async fn main() {
+    ///     let config = ClientConfig {
+    ///         token: Some("<token>".to_string()),
+    ///         ..Default::default()
+    ///     };
+    ///     let client = SikaruClient::new(config).expect("Failed to build client");
+    ///     client
+    ///         .runs
     ///         .cancel(&"project_id".to_string(), &"run_id".to_string(), None)
     ///         .await;
     /// }
@@ -731,6 +1216,8 @@ impl RunsClient {
     ///             &"run_id".to_string(),
     ///             &"tool_call_id".to_string(),
     ///             &ApprovalInput {
+    ///                 always: None,
+    ///                 cap: None,
     ///                 decision: ApprovalInputDecision::Approved,
     ///                 idempotency_key: "idempotency_key".to_string(),
     ///             },
@@ -746,7 +1233,7 @@ impl RunsClient {
         tool_call_id: &str,
         request: &ApprovalInput,
         options: Option<RequestOptions>,
-    ) -> Result<HashMap<String, serde_json::Value>, ApiError> {
+    ) -> Result<PersonalChannelApproval, ApiError> {
         let endpoint_auth_headers = self
             .http_client
             .resolve_endpoint_auth_headers(&options, &[&["BearerAuth"] as &[&str]])

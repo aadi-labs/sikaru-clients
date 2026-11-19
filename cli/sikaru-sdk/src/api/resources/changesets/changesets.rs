@@ -390,6 +390,79 @@ impl ChangesetsClient {
             .await
     }
 
+    /// Promote a Try a Fix changeset its agent's release check blocked or couldn't verify, recording who, when and
+    /// why (grader release check R10, R33, R36). The contract of an agent document's Publish Anyway: owner credentials
+    /// and a reason, refused while the check still runs or when the live version or check settings changed since.
+    ///
+    /// # Arguments
+    ///
+    /// * `options` - Additional request options such as headers, timeout, etc.
+    ///
+    /// # Returns
+    ///
+    /// JSON response from the API
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// use sikaru_sdk::prelude::*;
+    ///
+    /// #[tokio::main]
+    /// async fn main() {
+    ///     let config = ClientConfig {
+    ///         token: Some("<token>".to_string()),
+    ///         ..Default::default()
+    ///     };
+    ///     let client = SikaruClient::new(config).expect("Failed to build client");
+    ///     client
+    ///         .changesets
+    ///         .publish_changeset_anyway(
+    ///             &"project_id".to_string(),
+    ///             &"changeset_id".to_string(),
+    ///             &"publication_id".to_string(),
+    ///             &PublishAnyway {
+    ///                 reason: "reason".to_string(),
+    ///                 ..Default::default()
+    ///             },
+    ///             None,
+    ///         )
+    ///         .await;
+    /// }
+    /// ```
+    pub async fn publish_changeset_anyway(
+        &self,
+        project_id: &str,
+        changeset_id: &str,
+        publication_id: &str,
+        request: &PublishAnyway,
+        options: Option<RequestOptions>,
+    ) -> Result<HashMap<String, serde_json::Value>, ApiError> {
+        let endpoint_auth_headers = self
+            .http_client
+            .resolve_endpoint_auth_headers(&options, &[&["BearerAuth"] as &[&str]])
+            .await?;
+        let options = {
+            let mut o = options.unwrap_or_default();
+            for (header_key, header_value) in endpoint_auth_headers {
+                o.additional_headers.insert(header_key, header_value);
+            }
+            o.max_retries = Some(0);
+            Some(o)
+        };
+        self.http_client
+            .execute_request(
+                Method::POST,
+                &format!(
+                    "v1/projects/{}/changesets/{}/publications/{}/publish-anyway",
+                    project_id, changeset_id, publication_id
+                ),
+                Some(serde_json::to_value(request).map_err(ApiError::Serialization)?),
+                None,
+                options,
+            )
+            .await
+    }
+
     /// # Examples
     ///
     /// ```no_run

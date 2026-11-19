@@ -1,5 +1,7 @@
 from .conftest import get_client, verify_auth_headers, verify_request_count
 
+from sikaru_sdk import TakeOverRequest
+
 
 def test_runs_start() -> None:
     """Test start endpoint with WireMock"""
@@ -80,6 +82,145 @@ def test_runs_pending_actions() -> None:
     verify_request_count(test_id, "GET", "/v1/projects/project_id/runs/run_id/actions", None, 1)
     verify_auth_headers(
         test_id, "GET", "/v1/projects/project_id/runs/run_id/actions", {"Authorization": r"Bearer .+"}, []
+    )
+
+
+def test_runs_create_handoff() -> None:
+    """Test create_handoff endpoint with WireMock"""
+    test_id = "runs.create_handoff.0"
+    client = get_client(test_id)
+    client.runs.create_handoff(
+        project_id="project_id",
+        run_id="run_id",
+        tool_call_id="tool_call_id",
+    )
+    verify_request_count(test_id, "POST", "/v1/projects/project_id/runs/run_id/browser/handoffs/tool_call_id", None, 1)
+    verify_auth_headers(
+        test_id,
+        "POST",
+        "/v1/projects/project_id/runs/run_id/browser/handoffs/tool_call_id",
+        {"Authorization": r"Bearer .+"},
+        [],
+    )
+
+
+def test_runs_get_preview() -> None:
+    """Test get_preview endpoint with WireMock"""
+    test_id = "runs.get_preview.0"
+    client = get_client(test_id)
+    client.runs.get_preview(
+        project_id="project_id",
+        run_id="run_id",
+        digest="digest",
+    )
+    verify_request_count(test_id, "GET", "/v1/projects/project_id/runs/run_id/browser/previews/digest", None, 1)
+    verify_auth_headers(
+        test_id,
+        "GET",
+        "/v1/projects/project_id/runs/run_id/browser/previews/digest",
+        {"Authorization": r"Bearer .+"},
+        [],
+    )
+
+
+def test_runs_preview_screenshot() -> None:
+    """Test preview_screenshot endpoint with WireMock"""
+    test_id = "runs.preview_screenshot.0"
+    client = get_client(test_id)
+    for _ in client.runs.preview_screenshot(
+        project_id="project_id",
+        run_id="run_id",
+        digest="digest",
+    ):
+        pass
+    verify_request_count(
+        test_id, "GET", "/v1/projects/project_id/runs/run_id/browser/previews/digest/screenshot", None, 1
+    )
+    verify_auth_headers(
+        test_id,
+        "GET",
+        "/v1/projects/project_id/runs/run_id/browser/previews/digest/screenshot",
+        {"Authorization": r"Bearer .+"},
+        [],
+    )
+
+
+def test_runs_get_receipt() -> None:
+    """Test get_receipt endpoint with WireMock"""
+    test_id = "runs.get_receipt.0"
+    client = get_client(test_id)
+    client.runs.get_receipt(
+        project_id="project_id",
+        run_id="run_id",
+    )
+    verify_request_count(test_id, "GET", "/v1/projects/project_id/runs/run_id/browser/receipt", None, 1)
+    verify_auth_headers(
+        test_id, "GET", "/v1/projects/project_id/runs/run_id/browser/receipt", {"Authorization": r"Bearer .+"}, []
+    )
+
+
+def test_runs_get_receipt_screenshot() -> None:
+    """Test get_receipt_screenshot endpoint with WireMock"""
+    test_id = "runs.get_receipt_screenshot.0"
+    client = get_client(test_id)
+    for _ in client.runs.get_receipt_screenshot(
+        project_id="project_id",
+        run_id="run_id",
+        digest="digest",
+    ):
+        pass
+    verify_request_count(
+        test_id, "GET", "/v1/projects/project_id/runs/run_id/browser/receipt/screenshots/digest", None, 1
+    )
+    verify_auth_headers(
+        test_id,
+        "GET",
+        "/v1/projects/project_id/runs/run_id/browser/receipt/screenshots/digest",
+        {"Authorization": r"Bearer .+"},
+        [],
+    )
+
+
+def test_runs_take_over() -> None:
+    """Test take_over endpoint with WireMock"""
+    test_id = "runs.take_over.0"
+    client = get_client(test_id)
+    client.runs.take_over(
+        project_id="project_id",
+        run_id="run_id",
+        request=TakeOverRequest(),
+    )
+    verify_request_count(test_id, "POST", "/v1/projects/project_id/runs/run_id/browser/takeover", None, 1)
+    verify_auth_headers(
+        test_id, "POST", "/v1/projects/project_id/runs/run_id/browser/takeover", {"Authorization": r"Bearer .+"}, []
+    )
+
+
+def test_runs_end_take_over() -> None:
+    """Test end_take_over endpoint with WireMock"""
+    test_id = "runs.end_take_over.0"
+    client = get_client(test_id)
+    client.runs.end_take_over(
+        project_id="project_id",
+        run_id="run_id",
+    )
+    verify_request_count(test_id, "DELETE", "/v1/projects/project_id/runs/run_id/browser/takeover", None, 1)
+    verify_auth_headers(
+        test_id, "DELETE", "/v1/projects/project_id/runs/run_id/browser/takeover", {"Authorization": r"Bearer .+"}, []
+    )
+
+
+def test_runs_watch_run() -> None:
+    """Test watch_run endpoint with WireMock"""
+    test_id = "runs.watch_run.0"
+    client = get_client(test_id)
+    client.runs.watch_run(
+        project_id="project_id",
+        run_id="run_id",
+    )
+    verify_request_count(test_id, "POST", "/v1/projects/project_id/runs/run_id/browser/watch", None, 1)
+    verify_auth_headers(
+        test_id, "POST", "/v1/projects/project_id/runs/run_id/browser/watch", {"Authorization": r"Bearer .+"}, []
     )
 
 

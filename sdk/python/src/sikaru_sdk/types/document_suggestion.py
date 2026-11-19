@@ -49,19 +49,19 @@ class DocumentSuggestion(UniversalBaseModel):
     created_at: typing_extensions.Annotated[str, FieldMetadata(alias="createdAt"), pydantic.Field(alias="createdAt")]
     diff: typing.Optional[str] = None
     document: str
+    grader_id: typing_extensions.Annotated[
+        typing.Optional[str],
+        FieldMetadata(alias="graderId"),
+        pydantic.Field(alias="graderId", description="The linked issue, when the change came from one."),
+    ] = None
+    """
+    The linked issue, when the change came from one.
+    """
+
     id: str
     rationale: typing.Optional[str] = pydantic.Field(default=None)
     """
     Why it was suggested, in at most 280 characters.
-    """
-
-    signal_id: typing_extensions.Annotated[
-        typing.Optional[str],
-        FieldMetadata(alias="signalId"),
-        pydantic.Field(alias="signalId", description="The linked issue, when the change came from one."),
-    ] = None
-    """
-    The linked issue, when the change came from one.
     """
 
     status: str

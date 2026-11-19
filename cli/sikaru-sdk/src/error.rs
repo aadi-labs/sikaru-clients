@@ -7,7 +7,7 @@ pub enum ApiError {
     UnauthorizedError {
         message: String,
         code: Option<String>,
-        detail: Option<String>,
+        detail: Option<ErrorResponseDetail>,
         reason: Option<String>,
         top_up: Option<TopUpHint>,
     },
@@ -15,7 +15,7 @@ pub enum ApiError {
     ForbiddenError {
         message: String,
         code: Option<String>,
-        detail: Option<String>,
+        detail: Option<ErrorResponseDetail>,
         reason: Option<String>,
         top_up: Option<TopUpHint>,
     },
@@ -23,7 +23,7 @@ pub enum ApiError {
     NotFoundError {
         message: String,
         code: Option<String>,
-        detail: Option<String>,
+        detail: Option<ErrorResponseDetail>,
         reason: Option<String>,
         top_up: Option<TopUpHint>,
     },
@@ -33,11 +33,19 @@ pub enum ApiError {
         field: Option<String>,
         validation_error: Option<String>,
     },
+    #[error("PaymentRequiredError: {message}")]
+    PaymentRequiredError {
+        message: String,
+        code: Option<String>,
+        detail: Option<ErrorResponseDetail>,
+        reason: Option<String>,
+        top_up: Option<TopUpHint>,
+    },
     #[error("ConflictError: Conflict - {message}")]
     ConflictError {
         message: String,
         code: Option<String>,
-        detail: Option<String>,
+        detail: Option<ErrorResponseDetail>,
         reason: Option<String>,
         top_up: Option<TopUpHint>,
     },
@@ -45,15 +53,7 @@ pub enum ApiError {
     ServiceUnavailableError {
         message: String,
         code: Option<String>,
-        detail: Option<String>,
-        reason: Option<String>,
-        top_up: Option<TopUpHint>,
-    },
-    #[error("PaymentRequiredError: {message}")]
-    PaymentRequiredError {
-        message: String,
-        code: Option<String>,
-        detail: Option<String>,
+        detail: Option<ErrorResponseDetail>,
         reason: Option<String>,
         top_up: Option<TopUpHint>,
     },
@@ -61,7 +61,7 @@ pub enum ApiError {
     TooManyRequestsError {
         message: String,
         code: Option<String>,
-        detail: Option<String>,
+        detail: Option<ErrorResponseDetail>,
         reason: Option<String>,
         top_up: Option<TopUpHint>,
     },
@@ -103,9 +103,9 @@ impl ApiError {
                             code: parsed
                                 .get("code")
                                 .and_then(|v| v.as_str().map(|s| s.to_string())),
-                            detail: parsed
-                                .get("detail")
-                                .and_then(|v| v.as_str().map(|s| s.to_string())),
+                            detail: parsed.get("detail").and_then(|v| {
+                                serde_json::from_value::<ErrorResponseDetail>(v.clone()).ok()
+                            }),
                             reason: parsed
                                 .get("reason")
                                 .and_then(|v| v.as_str().map(|s| s.to_string())),
@@ -136,9 +136,9 @@ impl ApiError {
                             code: parsed
                                 .get("code")
                                 .and_then(|v| v.as_str().map(|s| s.to_string())),
-                            detail: parsed
-                                .get("detail")
-                                .and_then(|v| v.as_str().map(|s| s.to_string())),
+                            detail: parsed.get("detail").and_then(|v| {
+                                serde_json::from_value::<ErrorResponseDetail>(v.clone()).ok()
+                            }),
                             reason: parsed
                                 .get("reason")
                                 .and_then(|v| v.as_str().map(|s| s.to_string())),
@@ -169,9 +169,9 @@ impl ApiError {
                             code: parsed
                                 .get("code")
                                 .and_then(|v| v.as_str().map(|s| s.to_string())),
-                            detail: parsed
-                                .get("detail")
-                                .and_then(|v| v.as_str().map(|s| s.to_string())),
+                            detail: parsed.get("detail").and_then(|v| {
+                                serde_json::from_value::<ErrorResponseDetail>(v.clone()).ok()
+                            }),
                             reason: parsed
                                 .get("reason")
                                 .and_then(|v| v.as_str().map(|s| s.to_string())),
@@ -214,6 +214,39 @@ impl ApiError {
                     validation_error: None,
                 };
             }
+            402 => {
+                // Parse error body for PaymentRequiredError;
+                if let Some(body_str) = body {
+                    if let Ok(parsed) = serde_json::from_str::<serde_json::Value>(body_str) {
+                        return Self::PaymentRequiredError {
+                            message: parsed
+                                .get("message")
+                                .and_then(|v| v.as_str())
+                                .unwrap_or("Unknown error")
+                                .to_string(),
+                            code: parsed
+                                .get("code")
+                                .and_then(|v| v.as_str().map(|s| s.to_string())),
+                            detail: parsed.get("detail").and_then(|v| {
+                                serde_json::from_value::<ErrorResponseDetail>(v.clone()).ok()
+                            }),
+                            reason: parsed
+                                .get("reason")
+                                .and_then(|v| v.as_str().map(|s| s.to_string())),
+                            top_up: parsed
+                                .get("topUp")
+                                .and_then(|v| serde_json::from_value::<TopUpHint>(v.clone()).ok()),
+                        };
+                    }
+                }
+                return Self::PaymentRequiredError {
+                    message: body.unwrap_or("Unknown error").to_string(),
+                    code: None,
+                    detail: None,
+                    reason: None,
+                    top_up: None,
+                };
+            }
             409 => {
                 // Parse error body for ConflictError;
                 if let Some(body_str) = body {
@@ -227,9 +260,9 @@ impl ApiError {
                             code: parsed
                                 .get("code")
                                 .and_then(|v| v.as_str().map(|s| s.to_string())),
-                            detail: parsed
-                                .get("detail")
-                                .and_then(|v| v.as_str().map(|s| s.to_string())),
+                            detail: parsed.get("detail").and_then(|v| {
+                                serde_json::from_value::<ErrorResponseDetail>(v.clone()).ok()
+                            }),
                             reason: parsed
                                 .get("reason")
                                 .and_then(|v| v.as_str().map(|s| s.to_string())),
@@ -260,9 +293,9 @@ impl ApiError {
                             code: parsed
                                 .get("code")
                                 .and_then(|v| v.as_str().map(|s| s.to_string())),
-                            detail: parsed
-                                .get("detail")
-                                .and_then(|v| v.as_str().map(|s| s.to_string())),
+                            detail: parsed.get("detail").and_then(|v| {
+                                serde_json::from_value::<ErrorResponseDetail>(v.clone()).ok()
+                            }),
                             reason: parsed
                                 .get("reason")
                                 .and_then(|v| v.as_str().map(|s| s.to_string())),
@@ -273,39 +306,6 @@ impl ApiError {
                     }
                 }
                 return Self::ServiceUnavailableError {
-                    message: body.unwrap_or("Unknown error").to_string(),
-                    code: None,
-                    detail: None,
-                    reason: None,
-                    top_up: None,
-                };
-            }
-            402 => {
-                // Parse error body for PaymentRequiredError;
-                if let Some(body_str) = body {
-                    if let Ok(parsed) = serde_json::from_str::<serde_json::Value>(body_str) {
-                        return Self::PaymentRequiredError {
-                            message: parsed
-                                .get("message")
-                                .and_then(|v| v.as_str())
-                                .unwrap_or("Unknown error")
-                                .to_string(),
-                            code: parsed
-                                .get("code")
-                                .and_then(|v| v.as_str().map(|s| s.to_string())),
-                            detail: parsed
-                                .get("detail")
-                                .and_then(|v| v.as_str().map(|s| s.to_string())),
-                            reason: parsed
-                                .get("reason")
-                                .and_then(|v| v.as_str().map(|s| s.to_string())),
-                            top_up: parsed
-                                .get("topUp")
-                                .and_then(|v| serde_json::from_value::<TopUpHint>(v.clone()).ok()),
-                        };
-                    }
-                }
-                return Self::PaymentRequiredError {
                     message: body.unwrap_or("Unknown error").to_string(),
                     code: None,
                     detail: None,
@@ -326,9 +326,9 @@ impl ApiError {
                             code: parsed
                                 .get("code")
                                 .and_then(|v| v.as_str().map(|s| s.to_string())),
-                            detail: parsed
-                                .get("detail")
-                                .and_then(|v| v.as_str().map(|s| s.to_string())),
+                            detail: parsed.get("detail").and_then(|v| {
+                                serde_json::from_value::<ErrorResponseDetail>(v.clone()).ok()
+                            }),
                             reason: parsed
                                 .get("reason")
                                 .and_then(|v| v.as_str().map(|s| s.to_string())),

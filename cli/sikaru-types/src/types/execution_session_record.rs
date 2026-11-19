@@ -38,6 +38,9 @@ pub struct ExecutionSessionRecord {
     pub harness_version_id: String,
     #[serde(default)]
     pub id: String,
+    #[serde(rename = "invocationPolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub invocation_policy: Option<InvocationPolicy>,
     #[serde(rename = "modelId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub model_id: Option<String>,
@@ -83,6 +86,7 @@ pub struct ExecutionSessionRecordBuilder {
     harness_id: Option<String>,
     harness_version_id: Option<String>,
     id: Option<String>,
+    invocation_policy: Option<InvocationPolicy>,
     model_id: Option<String>,
     next_turn: Option<i64>,
     personal: Option<bool>,
@@ -153,6 +157,11 @@ impl ExecutionSessionRecordBuilder {
         self
     }
 
+    pub fn invocation_policy(mut self, value: InvocationPolicy) -> Self {
+        self.invocation_policy = Some(value);
+        self
+    }
+
     pub fn model_id(mut self, value: impl Into<String>) -> Self {
         self.model_id = Some(value.into());
         self
@@ -210,6 +219,7 @@ impl ExecutionSessionRecordBuilder {
             harness_id: self.harness_id.ok_or_else(|| BuildError::missing_field("harness_id"))?,
             harness_version_id: self.harness_version_id.ok_or_else(|| BuildError::missing_field("harness_version_id"))?,
             id: self.id.ok_or_else(|| BuildError::missing_field("id"))?,
+            invocation_policy: self.invocation_policy,
             model_id: self.model_id,
             next_turn: self.next_turn.ok_or_else(|| BuildError::missing_field("next_turn"))?,
             personal: self.personal,

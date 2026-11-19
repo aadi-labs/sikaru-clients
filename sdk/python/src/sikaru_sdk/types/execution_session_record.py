@@ -8,6 +8,7 @@ from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
 from ..core.serialization import FieldMetadata
 from .execution_session_record_channel_origin import ExecutionSessionRecordChannelOrigin
 from .execution_session_record_environment import ExecutionSessionRecordEnvironment
+from .invocation_policy import InvocationPolicy
 
 
 class ExecutionSessionRecord(UniversalBaseModel):
@@ -43,6 +44,11 @@ class ExecutionSessionRecord(UniversalBaseModel):
         str, FieldMetadata(alias="harnessVersionId"), pydantic.Field(alias="harnessVersionId")
     ]
     id: str
+    invocation_policy: typing_extensions.Annotated[
+        typing.Optional[InvocationPolicy],
+        FieldMetadata(alias="invocationPolicy"),
+        pydantic.Field(alias="invocationPolicy"),
+    ] = None
     model_id: typing_extensions.Annotated[
         typing.Optional[str], FieldMetadata(alias="modelId"), pydantic.Field(alias="modelId")
     ] = None

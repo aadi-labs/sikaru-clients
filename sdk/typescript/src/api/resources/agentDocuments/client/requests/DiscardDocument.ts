@@ -3,10 +3,10 @@
 /**
  * @example
  *     {
- *         expectedRevision: 1
+ *         baseRevision: 1
  *     }
  */
 export interface DiscardDocument {
+    baseRevision: number;
     expectedLiveVersionId?: string | null;
-    expectedRevision: number;
 }

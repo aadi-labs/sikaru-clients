@@ -33,13 +33,13 @@ class RawRetentionPoliciesClient:
         agent_id: typing.Optional[str] = OMIT,
         backfill_window: typing.Optional[str] = OMIT,
         filter_expression: typing.Optional[str] = OMIT,
+        grader_tags: typing.Optional[typing.Sequence[str]] = OMIT,
         issue_id: typing.Optional[str] = OMIT,
         issue_title: typing.Optional[str] = OMIT,
         retention_days: typing.Optional[int] = OMIT,
         rule_id: typing.Optional[str] = OMIT,
         rule_name: typing.Optional[str] = OMIT,
         sample_rate: typing.Optional[str] = OMIT,
-        signal_tags: typing.Optional[typing.Sequence[str]] = OMIT,
         target: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[typing.Dict[str, typing.Any]]:
@@ -56,6 +56,8 @@ class RawRetentionPoliciesClient:
 
         filter_expression : typing.Optional[str]
 
+        grader_tags : typing.Optional[typing.Sequence[str]]
+
         issue_id : typing.Optional[str]
 
         issue_title : typing.Optional[str]
@@ -67,8 +69,6 @@ class RawRetentionPoliciesClient:
         rule_name : typing.Optional[str]
 
         sample_rate : typing.Optional[str]
-
-        signal_tags : typing.Optional[typing.Sequence[str]]
 
         target : typing.Optional[str]
 
@@ -91,13 +91,13 @@ class RawRetentionPoliciesClient:
                 "agentId": agent_id,
                 "backfillWindow": backfill_window,
                 "filterExpression": filter_expression,
+                "graderTags": grader_tags,
                 "issueId": issue_id,
                 "issueTitle": issue_title,
                 "retentionDays": retention_days,
                 "ruleId": rule_id,
                 "ruleName": rule_name,
                 "sampleRate": sample_rate,
-                "signalTags": signal_tags,
                 "target": target,
                 "traceIds": trace_ids,
             },
@@ -184,13 +184,13 @@ class AsyncRawRetentionPoliciesClient:
         agent_id: typing.Optional[str] = OMIT,
         backfill_window: typing.Optional[str] = OMIT,
         filter_expression: typing.Optional[str] = OMIT,
+        grader_tags: typing.Optional[typing.Sequence[str]] = OMIT,
         issue_id: typing.Optional[str] = OMIT,
         issue_title: typing.Optional[str] = OMIT,
         retention_days: typing.Optional[int] = OMIT,
         rule_id: typing.Optional[str] = OMIT,
         rule_name: typing.Optional[str] = OMIT,
         sample_rate: typing.Optional[str] = OMIT,
-        signal_tags: typing.Optional[typing.Sequence[str]] = OMIT,
         target: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[typing.Dict[str, typing.Any]]:
@@ -207,6 +207,8 @@ class AsyncRawRetentionPoliciesClient:
 
         filter_expression : typing.Optional[str]
 
+        grader_tags : typing.Optional[typing.Sequence[str]]
+
         issue_id : typing.Optional[str]
 
         issue_title : typing.Optional[str]
@@ -218,8 +220,6 @@ class AsyncRawRetentionPoliciesClient:
         rule_name : typing.Optional[str]
 
         sample_rate : typing.Optional[str]
-
-        signal_tags : typing.Optional[typing.Sequence[str]]
 
         target : typing.Optional[str]
 
@@ -244,13 +244,13 @@ class AsyncRawRetentionPoliciesClient:
                 "agentId": agent_id,
                 "backfillWindow": backfill_window,
                 "filterExpression": filter_expression,
+                "graderTags": grader_tags,
                 "issueId": issue_id,
                 "issueTitle": issue_title,
                 "retentionDays": retention_days,
                 "ruleId": rule_id,
                 "ruleName": rule_name,
                 "sampleRate": sample_rate,
-                "signalTags": signal_tags,
                 "target": target,
                 "traceIds": trace_ids,
             },

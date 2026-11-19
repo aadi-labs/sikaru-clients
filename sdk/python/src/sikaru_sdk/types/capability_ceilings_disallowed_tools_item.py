@@ -3,5 +3,6 @@
 import typing
 
 CapabilityCeilingsDisallowedToolsItem = typing.Union[
-    typing.Literal["bash", "workspace", "agents", "memory", "web_search", "web_fetch"], typing.Any
+    typing.Literal["bash", "workspace", "subagents", "memory", "web_search", "web_fetch", "browser", "schedules"],
+    typing.Any,
 ]

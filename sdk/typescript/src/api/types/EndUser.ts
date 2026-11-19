@@ -3,12 +3,12 @@
 import * as Sikaru from "../index.js";
 
 export interface EndUser {
-    /** The profile (USER.md) and long-term memories (memories/*.md). */
-    facts: Sikaru.EndUserFile[];
     /** Whether this user contributes traces and eval cases to population learning. */
     optIn: boolean;
     /** A plain-language summary of how the agent sees this user. */
     personaSummary: Sikaru.EndUserFile | null;
+    /** Whether this cell may run automatic nightly sleep, independent of population opt-in. */
+    sleepEnabled: boolean;
     tenantId: string;
     timezone: string | null;
     userId: string;

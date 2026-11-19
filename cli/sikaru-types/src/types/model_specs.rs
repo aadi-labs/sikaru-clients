@@ -15,6 +15,8 @@ pub struct ModelSpecs {
     pub modalities: Modalities,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reasoning: Option<PublishedReasoning>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sampling_defaults: Option<SamplingDefaults>,
     #[serde(default)]
     pub supported_parameters: Vec<String>,
     #[serde(default)]
@@ -35,6 +37,7 @@ pub struct ModelSpecsBuilder {
     max_output_tokens: Option<i64>,
     modalities: Option<Modalities>,
     reasoning: Option<PublishedReasoning>,
+    sampling_defaults: Option<SamplingDefaults>,
     supported_parameters: Option<Vec<String>>,
     supports_reasoning: Option<bool>,
 }
@@ -65,6 +68,11 @@ impl ModelSpecsBuilder {
         self
     }
 
+    pub fn sampling_defaults(mut self, value: SamplingDefaults) -> Self {
+        self.sampling_defaults = Some(value);
+        self
+    }
+
     pub fn supported_parameters(mut self, value: Vec<String>) -> Self {
         self.supported_parameters = Some(value);
         self
@@ -90,6 +98,7 @@ impl ModelSpecsBuilder {
             max_output_tokens: self.max_output_tokens.ok_or_else(|| BuildError::missing_field("max_output_tokens"))?,
             modalities: self.modalities.ok_or_else(|| BuildError::missing_field("modalities"))?,
             reasoning: self.reasoning,
+            sampling_defaults: self.sampling_defaults,
             supported_parameters: self.supported_parameters.ok_or_else(|| BuildError::missing_field("supported_parameters"))?,
             supports_reasoning: self.supports_reasoning.ok_or_else(|| BuildError::missing_field("supports_reasoning"))?,
         })

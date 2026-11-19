@@ -6,6 +6,8 @@ use super::*;
 pub struct ScheduleDeleted {
     #[serde(default)]
     pub deleted: bool,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub revision: Option<i64>,
 }
 
 impl ScheduleDeleted {
@@ -18,11 +20,17 @@ impl ScheduleDeleted {
 #[non_exhaustive]
 pub struct ScheduleDeletedBuilder {
     deleted: Option<bool>,
+    revision: Option<i64>,
 }
 
 impl ScheduleDeletedBuilder {
     pub fn deleted(mut self, value: bool) -> Self {
         self.deleted = Some(value);
+        self
+    }
+
+    pub fn revision(mut self, value: i64) -> Self {
+        self.revision = Some(value);
         self
     }
 
@@ -32,6 +40,7 @@ impl ScheduleDeletedBuilder {
     pub fn build(self) -> Result<ScheduleDeleted, BuildError> {
         Ok(ScheduleDeleted {
             deleted: self.deleted.ok_or_else(|| BuildError::missing_field("deleted"))?,
+            revision: self.revision,
         })
     }
 }

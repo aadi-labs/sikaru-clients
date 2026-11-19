@@ -220,7 +220,6 @@ export class AgentDocumentsClient {
      *
      * @example
      *     await client.agentDocuments.editSetting("project_id", {
-     *         document: "document",
      *         path: ["path"]
      *     })
      */
@@ -336,9 +335,7 @@ export class AgentDocumentsClient {
      * @throws {@link errors.SikaruTimeoutError}
      *
      * @example
-     *     await client.agentDocuments.validateText("project_id", {
-     *         document: "document"
-     *     })
+     *     await client.agentDocuments.validateText("project_id", {})
      */
     public validateText(project_id: string, request: Sikaru.DocumentInput, requestOptions?: AgentDocumentsClient.RequestOptions): core.HttpResponsePromise<Sikaru.DocumentValidationView> {
         return core.HttpResponsePromise.fromPromise(this.__validateText(project_id, request, requestOptions));
@@ -449,14 +446,15 @@ export class AgentDocumentsClient {
      * @throws {@link Sikaru.UnauthorizedError}
      * @throws {@link Sikaru.ForbiddenError}
      * @throws {@link Sikaru.NotFoundError}
+     * @throws {@link Sikaru.ConflictError}
      * @throws {@link Sikaru.UnprocessableEntityError}
+     * @throws {@link Sikaru.ServiceUnavailableError}
      * @throws {@link errors.SikaruError}
      * @throws {@link errors.SikaruTimeoutError}
      *
      * @example
      *     await client.agentDocuments.save("project_id", "agent_slug", {
-     *         document: "document",
-     *         expectedRevision: 1
+     *         baseRevision: 1
      *     })
      */
     public save(project_id: string, agent_slug: string, request: Sikaru.SaveDocument, requestOptions?: AgentDocumentsClient.RequestOptions): core.HttpResponsePromise<Sikaru.AgentDocument> {
@@ -491,7 +489,9 @@ export class AgentDocumentsClient {
                 case 401: throw new Sikaru.UnauthorizedError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
                 case 403: throw new Sikaru.ForbiddenError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
                 case 404: throw new Sikaru.NotFoundError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 409: throw new Sikaru.ConflictError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
                 case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as unknown, _response.rawResponse);
+                case 503: throw new Sikaru.ServiceUnavailableError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
                 default: throw new errors.SikaruError({
                     statusCode: _response.error.statusCode,
                     body: _response.error.body,
@@ -574,7 +574,7 @@ export class AgentDocumentsClient {
      *
      * @example
      *     await client.agentDocuments.discard("project_id", "agent_slug", {
-     *         expectedRevision: 1
+     *         baseRevision: 1
      *     })
      */
     public discard(project_id: string, agent_slug: string, request: Sikaru.DiscardDocument, requestOptions?: AgentDocumentsClient.RequestOptions): core.HttpResponsePromise<Sikaru.AgentDocument> {
@@ -622,6 +622,136 @@ export class AgentDocumentsClient {
     }
 
     /**
+     * A publication's state, read without publishing again: follow a pending publish here until its release check
+     * settles.
+     *
+     * @param {string} project_id
+     * @param {string} agent_slug
+     * @param {string} publication_id
+     * @param {AgentDocumentsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Sikaru.UnauthorizedError}
+     * @throws {@link Sikaru.ForbiddenError}
+     * @throws {@link Sikaru.NotFoundError}
+     * @throws {@link Sikaru.UnprocessableEntityError}
+     * @throws {@link errors.SikaruError}
+     * @throws {@link errors.SikaruTimeoutError}
+     *
+     * @example
+     *     await client.agentDocuments.getPublication("project_id", "agent_slug", "publication_id")
+     */
+    public getPublication(project_id: string, agent_slug: string, publication_id: string, requestOptions?: AgentDocumentsClient.RequestOptions): core.HttpResponsePromise<Sikaru.PublicationState> {
+        return core.HttpResponsePromise.fromPromise(this.__getPublication(project_id, agent_slug, publication_id, requestOptions));
+    }
+
+    private async __getPublication(project_id: string, agent_slug: string, publication_id: string, requestOptions?: AgentDocumentsClient.RequestOptions): Promise<core.WithRawResponse<Sikaru.PublicationState>> {
+        const _metadata: core.EndpointMetadata = { security: [{ BearerAuth: [] }] };
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest({ endpointMetadata: _metadata });
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(_authRequest.headers, this._options?.headers, requestOptions?.headers);
+        const _response = await core.fetcher({
+            url: core.url.join(await core.Supplier.get(this._options.baseUrl) ?? (await core.Supplier.get(this._options.environment) ?? environments.SikaruEnvironment.Default), `v1/projects/${core.url.encodePathParam(project_id)}/managed-agents/${core.url.encodePathParam(agent_slug)}/document/publications/${core.url.encodePathParam(publication_id)}`),
+            method: "GET",
+            headers: _headers,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            endpointMetadata: _metadata,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging
+        });
+        if (_response.ok) {
+            return { data: _response.body as Sikaru.PublicationState, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401: throw new Sikaru.UnauthorizedError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 403: throw new Sikaru.ForbiddenError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 404: throw new Sikaru.NotFoundError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as unknown, _response.rawResponse);
+                default: throw new errors.SikaruError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.body,
+                    rawResponse: _response.rawResponse
+                });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/v1/projects/{project_id}/managed-agents/{agent_slug}/document/publications/{publication_id}");
+    }
+
+    /**
+     * Release a publication its release check blocked or couldn't verify, recording who, when and why (R10, R33).
+     * Only a release check is overridden: an agent's measured evaluation still runs (R34).
+     *
+     * @param {string} project_id
+     * @param {string} agent_slug
+     * @param {string} publication_id
+     * @param {Sikaru.PublishAnyway} request
+     * @param {AgentDocumentsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Sikaru.UnauthorizedError}
+     * @throws {@link Sikaru.ForbiddenError}
+     * @throws {@link Sikaru.NotFoundError}
+     * @throws {@link Sikaru.ConflictError}
+     * @throws {@link Sikaru.UnprocessableEntityError}
+     * @throws {@link Sikaru.ServiceUnavailableError}
+     * @throws {@link errors.SikaruError}
+     * @throws {@link errors.SikaruTimeoutError}
+     *
+     * @example
+     *     await client.agentDocuments.publishAnyway("project_id", "agent_slug", "publication_id", {
+     *         reason: "reason"
+     *     })
+     */
+    public publishAnyway(project_id: string, agent_slug: string, publication_id: string, request: Sikaru.PublishAnyway, requestOptions?: AgentDocumentsClient.RequestOptions): core.HttpResponsePromise<Sikaru.DocumentPublication> {
+        return core.HttpResponsePromise.fromPromise(this.__publishAnyway(project_id, agent_slug, publication_id, request, requestOptions));
+    }
+
+    private async __publishAnyway(project_id: string, agent_slug: string, publication_id: string, request: Sikaru.PublishAnyway, requestOptions?: AgentDocumentsClient.RequestOptions): Promise<core.WithRawResponse<Sikaru.DocumentPublication>> {
+        const _metadata: core.EndpointMetadata = { security: [{ BearerAuth: [] }] };
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest({ endpointMetadata: _metadata });
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(_authRequest.headers, this._options?.headers, requestOptions?.headers);
+        const _response = await core.fetcher({
+            url: core.url.join(await core.Supplier.get(this._options.baseUrl) ?? (await core.Supplier.get(this._options.environment) ?? environments.SikaruEnvironment.Default), `v1/projects/${core.url.encodePathParam(project_id)}/managed-agents/${core.url.encodePathParam(agent_slug)}/document/publications/${core.url.encodePathParam(publication_id)}/publish-anyway`),
+            method: "POST",
+            headers: _headers,
+            contentType: "application/json",
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            requestType: "json",
+            body: mergeAdditionalBodyParameters(request, requestOptions?.additionalBodyParameters),
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: 0,
+            abortSignal: requestOptions?.abortSignal,
+            endpointMetadata: _metadata,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging
+        });
+        if (_response.ok) {
+            return { data: _response.body as Sikaru.DocumentPublication, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401: throw new Sikaru.UnauthorizedError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 403: throw new Sikaru.ForbiddenError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 404: throw new Sikaru.NotFoundError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 409: throw new Sikaru.ConflictError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as unknown, _response.rawResponse);
+                case 503: throw new Sikaru.ServiceUnavailableError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                default: throw new errors.SikaruError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.body,
+                    rawResponse: _response.rawResponse
+                });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "POST", "/v1/projects/{project_id}/managed-agents/{agent_slug}/document/publications/{publication_id}/publish-anyway");
+    }
+
+    /**
      * @param {string} project_id
      * @param {string} agent_slug
      * @param {Sikaru.PublishDocument} request
@@ -630,7 +760,9 @@ export class AgentDocumentsClient {
      * @throws {@link Sikaru.UnauthorizedError}
      * @throws {@link Sikaru.ForbiddenError}
      * @throws {@link Sikaru.NotFoundError}
+     * @throws {@link Sikaru.ConflictError}
      * @throws {@link Sikaru.UnprocessableEntityError}
+     * @throws {@link Sikaru.ServiceUnavailableError}
      * @throws {@link errors.SikaruError}
      * @throws {@link errors.SikaruTimeoutError}
      *
@@ -671,7 +803,9 @@ export class AgentDocumentsClient {
                 case 401: throw new Sikaru.UnauthorizedError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
                 case 403: throw new Sikaru.ForbiddenError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
                 case 404: throw new Sikaru.NotFoundError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 409: throw new Sikaru.ConflictError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
                 case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as unknown, _response.rawResponse);
+                case 503: throw new Sikaru.ServiceUnavailableError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
                 default: throw new errors.SikaruError({
                     statusCode: _response.error.statusCode,
                     body: _response.error.body,
@@ -936,7 +1070,7 @@ export class AgentDocumentsClient {
      *
      * @example
      *     await client.agentDocuments.adoptSuggestion("project_id", "agent_slug", "suggestion_id", {
-     *         expectedRevision: 1
+     *         baseRevision: 1
      *     })
      */
     public adoptSuggestion(project_id: string, agent_slug: string, suggestion_id: string, request: Sikaru.AdoptSuggestion, requestOptions?: AgentDocumentsClient.RequestOptions): core.HttpResponsePromise<Sikaru.AgentDocument> {
@@ -1054,9 +1188,7 @@ export class AgentDocumentsClient {
      * @throws {@link errors.SikaruTimeoutError}
      *
      * @example
-     *     await client.agentDocuments.validate("project_id", "agent_slug", {
-     *         document: "document"
-     *     })
+     *     await client.agentDocuments.validate("project_id", "agent_slug", {})
      */
     public validate(project_id: string, agent_slug: string, request: Sikaru.DocumentInput, requestOptions?: AgentDocumentsClient.RequestOptions): core.HttpResponsePromise<Sikaru.DocumentValidationView> {
         return core.HttpResponsePromise.fromPromise(this.__validate(project_id, agent_slug, request, requestOptions));

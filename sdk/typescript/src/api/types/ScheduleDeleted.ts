@@ -2,4 +2,5 @@
 
 export interface ScheduleDeleted {
     deleted: boolean;
+    revision?: (number | null) | undefined;
 }

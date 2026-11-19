@@ -35,10 +35,10 @@ class EvaluatorRunsClient:
         dataset_name: typing.Optional[str] = OMIT,
         evaluator_name: typing.Optional[str] = OMIT,
         filter_expression: typing.Optional[str] = OMIT,
+        grader_tags: typing.Optional[typing.Sequence[str]] = OMIT,
         issue_id: typing.Optional[str] = OMIT,
         issue_title: typing.Optional[str] = OMIT,
         sample_rate: typing.Optional[str] = OMIT,
-        signal_tags: typing.Optional[typing.Sequence[str]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> typing.Dict[str, typing.Any]:
         """
@@ -58,13 +58,13 @@ class EvaluatorRunsClient:
 
         filter_expression : typing.Optional[str]
 
+        grader_tags : typing.Optional[typing.Sequence[str]]
+
         issue_id : typing.Optional[str]
 
         issue_title : typing.Optional[str]
 
         sample_rate : typing.Optional[str]
-
-        signal_tags : typing.Optional[typing.Sequence[str]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -95,10 +95,10 @@ class EvaluatorRunsClient:
             dataset_name=dataset_name,
             evaluator_name=evaluator_name,
             filter_expression=filter_expression,
+            grader_tags=grader_tags,
             issue_id=issue_id,
             issue_title=issue_title,
             sample_rate=sample_rate,
-            signal_tags=signal_tags,
             request_options=request_options,
         )
         return _response.data
@@ -129,10 +129,10 @@ class AsyncEvaluatorRunsClient:
         dataset_name: typing.Optional[str] = OMIT,
         evaluator_name: typing.Optional[str] = OMIT,
         filter_expression: typing.Optional[str] = OMIT,
+        grader_tags: typing.Optional[typing.Sequence[str]] = OMIT,
         issue_id: typing.Optional[str] = OMIT,
         issue_title: typing.Optional[str] = OMIT,
         sample_rate: typing.Optional[str] = OMIT,
-        signal_tags: typing.Optional[typing.Sequence[str]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> typing.Dict[str, typing.Any]:
         """
@@ -152,13 +152,13 @@ class AsyncEvaluatorRunsClient:
 
         filter_expression : typing.Optional[str]
 
+        grader_tags : typing.Optional[typing.Sequence[str]]
+
         issue_id : typing.Optional[str]
 
         issue_title : typing.Optional[str]
 
         sample_rate : typing.Optional[str]
-
-        signal_tags : typing.Optional[typing.Sequence[str]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -197,10 +197,10 @@ class AsyncEvaluatorRunsClient:
             dataset_name=dataset_name,
             evaluator_name=evaluator_name,
             filter_expression=filter_expression,
+            grader_tags=grader_tags,
             issue_id=issue_id,
             issue_title=issue_title,
             sample_rate=sample_rate,
-            signal_tags=signal_tags,
             request_options=request_options,
         )
         return _response.data

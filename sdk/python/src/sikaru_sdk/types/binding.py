@@ -5,12 +5,16 @@ import typing
 import pydantic
 from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
 from .binding_transport import BindingTransport
+from .feedback_configuration import FeedbackConfiguration
 
 
 class Binding(UniversalBaseModel):
     agent_id: str
+    declared_path: typing.Optional[str] = None
     destination_id: typing.Optional[str] = None
     destination_kind: typing.Optional[str] = None
+    feedback: typing.Optional[FeedbackConfiguration] = None
+    feedback_notice: typing.Optional[str] = None
     generation: int
     id: str
     identity_app_ids: typing.Optional[typing.List[str]] = None

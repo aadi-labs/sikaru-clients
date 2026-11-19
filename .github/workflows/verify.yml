@@ -26,10 +26,6 @@ jobs:
           python -m build sdk/python
           python -m pip install sdk/python/dist/*.whl
           python -c 'from sikaru_sdk import SikaruApi, AsyncSikaruApi'
-      - name: Install Python authoring companion
-        run: |
-          python -m pip install ./shared/authoring/python
-          python -c 'from sikaru_authoring import compile_directory'
       - name: Python compute lifecycle wire contract
         run: python shared/compute-contracts/wire.py python shared/compute-contracts/python_contract.py
 
@@ -93,27 +89,6 @@ jobs:
         env:
           COMPUTE_CONTRACT_BINARY: cli/target/debug/sikaru
         run: python shared/compute-contracts/wire.py python shared/compute-contracts/cli_contract.py
-
-  authoring-rust:
-    runs-on: ubuntu-24.04
-    timeout-minutes: 45
-    env:
-      CARGO_BUILD_JOBS: 2
-      CARGO_PROFILE_DEV_DEBUG: 0
-      CARGO_INCREMENTAL: 0
-      RUST_MIN_STACK: 16777216
-      CARGO_TARGET_DIR: ${{ github.workspace }}/target
-    steps:
-      - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@stable
-      # dev_tests_saved_revision_without_creating_an_agent is parked pending the
-      # authoring `dev` migration; every other authoring test runs.
-      - name: Test authoring companion
-        run: cargo test --locked --manifest-path shared/authoring/rust/Cargo.toml -- --skip dev_tests_saved_revision_without_creating_an_agent
-      - name: Install authoring companion
-        run: |
-          cargo install --locked --debug --path shared/authoring/rust
-          sikaru-authoring --help
 
   version:
     runs-on: ubuntu-24.04

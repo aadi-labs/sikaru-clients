@@ -33,7 +33,6 @@ class CompletionsClient:
     def create_stream(
         self,
         *,
-        model: str,
         prompt: CreateCompletionsStreamRequestPrompt,
         best_of: typing.Optional[int] = OMIT,
         echo: typing.Optional[bool] = OMIT,
@@ -42,6 +41,7 @@ class CompletionsClient:
         logprobs: typing.Optional[int] = OMIT,
         max_tokens: typing.Optional[int] = OMIT,
         min_p: typing.Optional[float] = OMIT,
+        model: typing.Optional[str] = OMIT,
         models: typing.Optional[typing.Sequence[str]] = OMIT,
         n: typing.Optional[int] = OMIT,
         presence_penalty: typing.Optional[float] = OMIT,
@@ -64,8 +64,6 @@ class CompletionsClient:
         """
         Parameters
         ----------
-        model : str
-
         prompt : CreateCompletionsStreamRequestPrompt
 
         best_of : typing.Optional[int]
@@ -81,6 +79,8 @@ class CompletionsClient:
         max_tokens : typing.Optional[int]
 
         min_p : typing.Optional[float]
+
+        model : typing.Optional[str]
 
         models : typing.Optional[typing.Sequence[str]]
 
@@ -133,14 +133,12 @@ class CompletionsClient:
             api_key="YOUR_API_KEY",
         )
         response = client.completions.create_stream(
-            model="model",
             prompt="prompt",
         )
         for chunk in response:
             yield chunk
         """
         with self._raw_client.create_stream(
-            model=model,
             prompt=prompt,
             best_of=best_of,
             echo=echo,
@@ -149,6 +147,7 @@ class CompletionsClient:
             logprobs=logprobs,
             max_tokens=max_tokens,
             min_p=min_p,
+            model=model,
             models=models,
             n=n,
             presence_penalty=presence_penalty,
@@ -173,7 +172,6 @@ class CompletionsClient:
     def create(
         self,
         *,
-        model: str,
         prompt: CreateCompletionsRequestPrompt,
         best_of: typing.Optional[int] = OMIT,
         echo: typing.Optional[bool] = OMIT,
@@ -182,6 +180,7 @@ class CompletionsClient:
         logprobs: typing.Optional[int] = OMIT,
         max_tokens: typing.Optional[int] = OMIT,
         min_p: typing.Optional[float] = OMIT,
+        model: typing.Optional[str] = OMIT,
         models: typing.Optional[typing.Sequence[str]] = OMIT,
         n: typing.Optional[int] = OMIT,
         presence_penalty: typing.Optional[float] = OMIT,
@@ -204,8 +203,6 @@ class CompletionsClient:
         """
         Parameters
         ----------
-        model : str
-
         prompt : CreateCompletionsRequestPrompt
 
         best_of : typing.Optional[int]
@@ -221,6 +218,8 @@ class CompletionsClient:
         max_tokens : typing.Optional[int]
 
         min_p : typing.Optional[float]
+
+        model : typing.Optional[str]
 
         models : typing.Optional[typing.Sequence[str]]
 
@@ -273,12 +272,10 @@ class CompletionsClient:
             api_key="YOUR_API_KEY",
         )
         client.completions.create(
-            model="model",
             prompt="prompt",
         )
         """
         _response = self._raw_client.create(
-            model=model,
             prompt=prompt,
             best_of=best_of,
             echo=echo,
@@ -287,6 +284,7 @@ class CompletionsClient:
             logprobs=logprobs,
             max_tokens=max_tokens,
             min_p=min_p,
+            model=model,
             models=models,
             n=n,
             presence_penalty=presence_penalty,
@@ -327,7 +325,6 @@ class AsyncCompletionsClient:
     async def create_stream(
         self,
         *,
-        model: str,
         prompt: CreateCompletionsStreamRequestPrompt,
         best_of: typing.Optional[int] = OMIT,
         echo: typing.Optional[bool] = OMIT,
@@ -336,6 +333,7 @@ class AsyncCompletionsClient:
         logprobs: typing.Optional[int] = OMIT,
         max_tokens: typing.Optional[int] = OMIT,
         min_p: typing.Optional[float] = OMIT,
+        model: typing.Optional[str] = OMIT,
         models: typing.Optional[typing.Sequence[str]] = OMIT,
         n: typing.Optional[int] = OMIT,
         presence_penalty: typing.Optional[float] = OMIT,
@@ -358,8 +356,6 @@ class AsyncCompletionsClient:
         """
         Parameters
         ----------
-        model : str
-
         prompt : CreateCompletionsStreamRequestPrompt
 
         best_of : typing.Optional[int]
@@ -375,6 +371,8 @@ class AsyncCompletionsClient:
         max_tokens : typing.Optional[int]
 
         min_p : typing.Optional[float]
+
+        model : typing.Optional[str]
 
         models : typing.Optional[typing.Sequence[str]]
 
@@ -432,7 +430,6 @@ class AsyncCompletionsClient:
 
         async def main() -> None:
             response = client.completions.create_stream(
-                model="model",
                 prompt="prompt",
             )
             async for chunk in response:
@@ -442,7 +439,6 @@ class AsyncCompletionsClient:
         asyncio.run(main())
         """
         async with self._raw_client.create_stream(
-            model=model,
             prompt=prompt,
             best_of=best_of,
             echo=echo,
@@ -451,6 +447,7 @@ class AsyncCompletionsClient:
             logprobs=logprobs,
             max_tokens=max_tokens,
             min_p=min_p,
+            model=model,
             models=models,
             n=n,
             presence_penalty=presence_penalty,
@@ -476,7 +473,6 @@ class AsyncCompletionsClient:
     async def create(
         self,
         *,
-        model: str,
         prompt: CreateCompletionsRequestPrompt,
         best_of: typing.Optional[int] = OMIT,
         echo: typing.Optional[bool] = OMIT,
@@ -485,6 +481,7 @@ class AsyncCompletionsClient:
         logprobs: typing.Optional[int] = OMIT,
         max_tokens: typing.Optional[int] = OMIT,
         min_p: typing.Optional[float] = OMIT,
+        model: typing.Optional[str] = OMIT,
         models: typing.Optional[typing.Sequence[str]] = OMIT,
         n: typing.Optional[int] = OMIT,
         presence_penalty: typing.Optional[float] = OMIT,
@@ -507,8 +504,6 @@ class AsyncCompletionsClient:
         """
         Parameters
         ----------
-        model : str
-
         prompt : CreateCompletionsRequestPrompt
 
         best_of : typing.Optional[int]
@@ -524,6 +519,8 @@ class AsyncCompletionsClient:
         max_tokens : typing.Optional[int]
 
         min_p : typing.Optional[float]
+
+        model : typing.Optional[str]
 
         models : typing.Optional[typing.Sequence[str]]
 
@@ -581,7 +578,6 @@ class AsyncCompletionsClient:
 
         async def main() -> None:
             await client.completions.create(
-                model="model",
                 prompt="prompt",
             )
 
@@ -589,7 +585,6 @@ class AsyncCompletionsClient:
         asyncio.run(main())
         """
         _response = await self._raw_client.create(
-            model=model,
             prompt=prompt,
             best_of=best_of,
             echo=echo,
@@ -598,6 +593,7 @@ class AsyncCompletionsClient:
             logprobs=logprobs,
             max_tokens=max_tokens,
             min_p=min_p,
+            model=model,
             models=models,
             n=n,
             presence_penalty=presence_penalty,

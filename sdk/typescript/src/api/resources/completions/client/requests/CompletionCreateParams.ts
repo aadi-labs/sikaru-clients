@@ -3,7 +3,6 @@
 /**
  * @example
  *     {
- *         model: "model",
  *         prompt: "prompt"
  *     }
  */
@@ -15,7 +14,7 @@ export interface CompletionCreateParams {
     logprobs?: number | null;
     max_tokens?: number | null;
     min_p?: number | null;
-    model: string;
+    model?: string | null;
     models?: string[] | null;
     n?: number | null;
     presence_penalty?: number | null;

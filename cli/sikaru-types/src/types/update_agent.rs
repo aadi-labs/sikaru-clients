@@ -15,6 +15,14 @@ pub struct UpdateAgent {
     #[serde(rename = "maxConcurrentTurns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_concurrent_turns: Option<i64>,
+    /// Whether memory dreams run automatically once conversations go idle. "Dream now" works either way.
+    #[serde(rename = "memoryDreamAuto")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub memory_dream_auto: Option<bool>,
+    /// Seconds a user's conversations stay idle before an automatic dream; null restores the default of 900.
+    #[serde(rename = "memoryDreamIdleSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub memory_dream_idle_seconds: Option<i64>,
 }
 
 impl UpdateAgent {
@@ -29,6 +37,8 @@ pub struct UpdateAgentBuilder {
     background_turn_share: Option<f64>,
     display_name: Option<String>,
     max_concurrent_turns: Option<i64>,
+    memory_dream_auto: Option<bool>,
+    memory_dream_idle_seconds: Option<i64>,
 }
 
 impl UpdateAgentBuilder {
@@ -47,12 +57,24 @@ impl UpdateAgentBuilder {
         self
     }
 
+    pub fn memory_dream_auto(mut self, value: bool) -> Self {
+        self.memory_dream_auto = Some(value);
+        self
+    }
+
+    pub fn memory_dream_idle_seconds(mut self, value: i64) -> Self {
+        self.memory_dream_idle_seconds = Some(value);
+        self
+    }
+
     /// Consumes the builder and constructs a [`UpdateAgent`].
     pub fn build(self) -> Result<UpdateAgent, BuildError> {
         Ok(UpdateAgent {
             background_turn_share: self.background_turn_share,
             display_name: self.display_name,
             max_concurrent_turns: self.max_concurrent_turns,
+            memory_dream_auto: self.memory_dream_auto,
+            memory_dream_idle_seconds: self.memory_dream_idle_seconds,
         })
     }
 }

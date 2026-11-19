@@ -39,6 +39,14 @@ pub struct ManagedAgentView {
     #[serde(rename = "maxConcurrentTurns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_concurrent_turns: Option<i64>,
+    /// Whether memory dreams run automatically after conversations go idle.
+    #[serde(rename = "memoryDreamAuto")]
+    #[serde(default)]
+    pub memory_dream_auto: bool,
+    /// Idle seconds before an automatic dream; null follows the default (900).
+    #[serde(rename = "memoryDreamIdleSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub memory_dream_idle_seconds: Option<i64>,
     #[serde(rename = "organizationId")]
     #[serde(default)]
     pub organization_id: String,
@@ -70,6 +78,8 @@ pub struct ManagedAgentViewBuilder {
     id: Option<String>,
     learning_locked: Option<bool>,
     max_concurrent_turns: Option<i64>,
+    memory_dream_auto: Option<bool>,
+    memory_dream_idle_seconds: Option<i64>,
     organization_id: Option<String>,
     personal: Option<bool>,
     project_id: Option<String>,
@@ -127,6 +137,16 @@ impl ManagedAgentViewBuilder {
         self
     }
 
+    pub fn memory_dream_auto(mut self, value: bool) -> Self {
+        self.memory_dream_auto = Some(value);
+        self
+    }
+
+    pub fn memory_dream_idle_seconds(mut self, value: i64) -> Self {
+        self.memory_dream_idle_seconds = Some(value);
+        self
+    }
+
     pub fn organization_id(mut self, value: impl Into<String>) -> Self {
         self.organization_id = Some(value.into());
         self
@@ -156,6 +176,7 @@ impl ManagedAgentViewBuilder {
     /// - [`harness_id`](ManagedAgentViewBuilder::harness_id)
     /// - [`id`](ManagedAgentViewBuilder::id)
     /// - [`learning_locked`](ManagedAgentViewBuilder::learning_locked)
+    /// - [`memory_dream_auto`](ManagedAgentViewBuilder::memory_dream_auto)
     /// - [`organization_id`](ManagedAgentViewBuilder::organization_id)
     /// - [`personal`](ManagedAgentViewBuilder::personal)
     /// - [`project_id`](ManagedAgentViewBuilder::project_id)
@@ -172,6 +193,8 @@ impl ManagedAgentViewBuilder {
             id: self.id.ok_or_else(|| BuildError::missing_field("id"))?,
             learning_locked: self.learning_locked.ok_or_else(|| BuildError::missing_field("learning_locked"))?,
             max_concurrent_turns: self.max_concurrent_turns,
+            memory_dream_auto: self.memory_dream_auto.ok_or_else(|| BuildError::missing_field("memory_dream_auto"))?,
+            memory_dream_idle_seconds: self.memory_dream_idle_seconds,
             organization_id: self.organization_id.ok_or_else(|| BuildError::missing_field("organization_id"))?,
             personal: self.personal.ok_or_else(|| BuildError::missing_field("personal"))?,
             project_id: self.project_id.ok_or_else(|| BuildError::missing_field("project_id"))?,

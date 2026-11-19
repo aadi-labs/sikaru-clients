@@ -4,9 +4,9 @@ use super::*;
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default, PartialEq, Eq, Hash)]
 pub struct AdoptSuggestion {
-    #[serde(rename = "expectedRevision")]
+    #[serde(rename = "baseRevision")]
     #[serde(default)]
-    pub expected_revision: i64,
+    pub base_revision: i64,
 }
 
 impl AdoptSuggestion {
@@ -18,21 +18,21 @@ impl AdoptSuggestion {
 #[derive(Clone, PartialEq, Default, Debug)]
 #[non_exhaustive]
 pub struct AdoptSuggestionBuilder {
-    expected_revision: Option<i64>,
+    base_revision: Option<i64>,
 }
 
 impl AdoptSuggestionBuilder {
-    pub fn expected_revision(mut self, value: i64) -> Self {
-        self.expected_revision = Some(value);
+    pub fn base_revision(mut self, value: i64) -> Self {
+        self.base_revision = Some(value);
         self
     }
 
     /// Consumes the builder and constructs a [`AdoptSuggestion`].
     /// This method will fail if any of the following fields are not set:
-    /// - [`expected_revision`](AdoptSuggestionBuilder::expected_revision)
+    /// - [`base_revision`](AdoptSuggestionBuilder::base_revision)
     pub fn build(self) -> Result<AdoptSuggestion, BuildError> {
         Ok(AdoptSuggestion {
-            expected_revision: self.expected_revision.ok_or_else(|| BuildError::missing_field("expected_revision"))?,
+            base_revision: self.base_revision.ok_or_else(|| BuildError::missing_field("base_revision"))?,
         })
     }
 }

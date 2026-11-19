@@ -137,10 +137,10 @@ class RawIssueClustersClient:
         label: str,
         trace_ids: typing.Sequence[str],
         agent_id: typing.Optional[str] = OMIT,
+        grader_tags: typing.Optional[typing.Sequence[str]] = OMIT,
         impact: typing.Optional[int] = OMIT,
         issue_id: typing.Optional[str] = OMIT,
         issue_title: typing.Optional[str] = OMIT,
-        signal_tags: typing.Optional[typing.Sequence[str]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[typing.Dict[str, typing.Any]]:
         """
@@ -154,13 +154,13 @@ class RawIssueClustersClient:
 
         agent_id : typing.Optional[str]
 
+        grader_tags : typing.Optional[typing.Sequence[str]]
+
         impact : typing.Optional[int]
 
         issue_id : typing.Optional[str]
 
         issue_title : typing.Optional[str]
-
-        signal_tags : typing.Optional[typing.Sequence[str]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -179,11 +179,11 @@ class RawIssueClustersClient:
             method="POST",
             json={
                 "agentId": agent_id,
+                "graderTags": grader_tags,
                 "impact": impact,
                 "issueId": issue_id,
                 "issueTitle": issue_title,
                 "label": label,
-                "signalTags": signal_tags,
                 "traceIds": trace_ids,
             },
             headers={
@@ -667,10 +667,10 @@ class AsyncRawIssueClustersClient:
         label: str,
         trace_ids: typing.Sequence[str],
         agent_id: typing.Optional[str] = OMIT,
+        grader_tags: typing.Optional[typing.Sequence[str]] = OMIT,
         impact: typing.Optional[int] = OMIT,
         issue_id: typing.Optional[str] = OMIT,
         issue_title: typing.Optional[str] = OMIT,
-        signal_tags: typing.Optional[typing.Sequence[str]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[typing.Dict[str, typing.Any]]:
         """
@@ -684,13 +684,13 @@ class AsyncRawIssueClustersClient:
 
         agent_id : typing.Optional[str]
 
+        grader_tags : typing.Optional[typing.Sequence[str]]
+
         impact : typing.Optional[int]
 
         issue_id : typing.Optional[str]
 
         issue_title : typing.Optional[str]
-
-        signal_tags : typing.Optional[typing.Sequence[str]]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -711,11 +711,11 @@ class AsyncRawIssueClustersClient:
             method="POST",
             json={
                 "agentId": agent_id,
+                "graderTags": grader_tags,
                 "impact": impact,
                 "issueId": issue_id,
                 "issueTitle": issue_title,
                 "label": label,
-                "signalTags": signal_tags,
                 "traceIds": trace_ids,
             },
             headers={

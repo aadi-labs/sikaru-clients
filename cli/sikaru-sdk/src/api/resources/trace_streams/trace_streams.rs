@@ -38,6 +38,7 @@ impl TraceStreamsClient {
     ///                     ..Default::default()
     ///                 },
     ///                 dataset: None,
+    ///                 records: None,
     ///                 resource_spans: None,
     ///                 spans: None,
     ///                 trajectories: None,

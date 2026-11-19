@@ -7,5 +7,7 @@
  *     }
  */
 export interface PauseInput {
+    expected_revision?: number | null;
+    idempotency_key?: string | null;
     paused: boolean;
 }

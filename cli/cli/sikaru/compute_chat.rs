@@ -14,6 +14,9 @@ pub fn is_interactive(m: &ArgMatches) -> bool {
 
 /// Only an explicit `--format json`; the framework's piped-stdout default stays human here.
 fn json_format(m: &ArgMatches) -> bool {
+    if super::super::agent_folder::optional(m, "folder-output") == Some("json") {
+        return true;
+    }
     m.try_get_one::<String>("format")
         .ok()
         .flatten()
@@ -27,7 +30,7 @@ fn dry_run(m: &ArgMatches) -> bool {
 
 /// A conversation opens only for a person who gave no task.
 pub fn is_conversation(m: &ArgMatches) -> bool {
-    let task = ["task", "prompt", "prompt-file"]
+    let task = ["task", "prompt", "prompt-file", "schedule"]
         .iter()
         .any(|name| m.contains_id(name));
     is_interactive(m) && !task
@@ -107,7 +110,15 @@ async fn wait_for_input() -> bool {
 fn turn_matches(m: &ArgMatches, resume: Option<&str>, text: &str) -> Result<ArgMatches> {
     let mut args = vec!["run".to_owned(), "--compute".into(), "local".into()];
     args.extend(m.get_one::<String>("agent").cloned());
-    for name in ["project", "workspace", "tenant", "user", "model"] {
+    for name in [
+        "project",
+        "workspace",
+        "tenant",
+        "user",
+        "model",
+        "folder",
+        "access-digest",
+    ] {
         if let Some(value) = m.get_one::<String>(name) {
             args.extend([format!("--{name}"), value.clone()]);
         }
@@ -120,6 +131,9 @@ fn turn_matches(m: &ArgMatches, resume: Option<&str>, text: &str) -> Result<ArgM
     }
     if m.get_flag("no-workspace-checkpoints") {
         args.push("--no-workspace-checkpoints".into());
+    }
+    if m.get_flag("acknowledge-widening") {
+        args.push("--acknowledge-widening".into());
     }
     add_state(&mut args, m, resume);
     args.push(format!("--prompt={text}"));

@@ -35,17 +35,16 @@ import { ExecutionsClient } from "./api/resources/executions/client/Client.js";
 import { ExecutionSessionsClient } from "./api/resources/executionSessions/client/Client.js";
 import { FeedbackClient } from "./api/resources/feedback/client/Client.js";
 import { GitCredentialsClient } from "./api/resources/gitCredentials/client/Client.js";
+import { GradersClient } from "./api/resources/graders/client/Client.js";
 import { HarnessesClient } from "./api/resources/harnesses/client/Client.js";
 import { HttpChannelsClient } from "./api/resources/httpChannels/client/Client.js";
 import { ImportSessionsClient } from "./api/resources/importSessions/client/Client.js";
 import { IssueClustersClient } from "./api/resources/issueClusters/client/Client.js";
-import { JudgeAlignmentClient } from "./api/resources/judgeAlignment/client/Client.js";
 import { ManagedAgentsClient } from "./api/resources/managedAgents/client/Client.js";
-import { MemoryRegistryClient } from "./api/resources/memoryRegistry/client/Client.js";
+import { MemoryClient } from "./api/resources/memory/client/Client.js";
 import { ModelGatewayClient } from "./api/resources/modelGateway/client/Client.js";
 import { ModelsClient } from "./api/resources/models/client/Client.js";
 import { ModelSettingsClient } from "./api/resources/modelSettings/client/Client.js";
-import { OnlineEvaluationsClient } from "./api/resources/onlineEvaluations/client/Client.js";
 import { PersonalChannelsClient } from "./api/resources/personalChannels/client/Client.js";
 import { ProjectsClient } from "./api/resources/projects/client/Client.js";
 import { ReleaseWatchesClient } from "./api/resources/releaseWatches/client/Client.js";
@@ -57,7 +56,7 @@ import { RunsClient } from "./api/resources/runs/client/Client.js";
 import { RunSchedulesClient } from "./api/resources/runSchedules/client/Client.js";
 import { RunWebhooksClient } from "./api/resources/runWebhooks/client/Client.js";
 import { SessionsClient } from "./api/resources/sessions/client/Client.js";
-import { SpecialistsClient } from "./api/resources/specialists/client/Client.js";
+import { TasksClient } from "./api/resources/tasks/client/Client.js";
 import { ToolProvidersClient } from "./api/resources/toolProviders/client/Client.js";
 import { TraceImportConnectionsClient } from "./api/resources/traceImportConnections/client/Client.js";
 import { TraceImportsClient } from "./api/resources/traceImports/client/Client.js";
@@ -88,6 +87,7 @@ export class SikaruApi {
     protected _activation: ActivationClient | undefined;
     protected _agentDocuments: AgentDocumentsClient | undefined;
     protected _agentImports: AgentImportsClient | undefined;
+    protected _graders: GradersClient | undefined;
     protected _agents: AgentsClient | undefined;
     protected _capabilityCeilings: CapabilityCeilingsClient | undefined;
     protected _changesets: ChangesetsClient | undefined;
@@ -111,7 +111,7 @@ export class SikaruApi {
     protected _evaluatorRuns: EvaluatorRunsClient | undefined;
     protected _executionObjectives: ExecutionObjectivesClient | undefined;
     protected _executionSessions: ExecutionSessionsClient | undefined;
-    protected _specialists: SpecialistsClient | undefined;
+    protected _tasks: TasksClient | undefined;
     protected _executions: ExecutionsClient | undefined;
     protected _feedback: FeedbackClient | undefined;
     protected _gitCredentials: GitCredentialsClient | undefined;
@@ -119,14 +119,12 @@ export class SikaruApi {
     protected _runs: RunsClient | undefined;
     protected _importSessions: ImportSessionsClient | undefined;
     protected _issueClusters: IssueClustersClient | undefined;
-    protected _judgeAlignment: JudgeAlignmentClient | undefined;
     protected _managedAgents: ManagedAgentsClient | undefined;
     protected _checks: ChecksClient | undefined;
     protected _endUsers: EndUsersClient | undefined;
-    protected _memoryRegistry: MemoryRegistryClient | undefined;
+    protected _memory: MemoryClient | undefined;
     protected _modelGateway: ModelGatewayClient | undefined;
     protected _modelSettings: ModelSettingsClient | undefined;
-    protected _onlineEvaluations: OnlineEvaluationsClient | undefined;
     protected _releaseWatches: ReleaseWatchesClient | undefined;
     protected _retentionPolicies: RetentionPoliciesClient | undefined;
     protected _reviewQueue: ReviewQueueClient | undefined;
@@ -184,6 +182,10 @@ export class SikaruApi {
 
     public get agentImports(): AgentImportsClient {
         return (this._agentImports ??= new AgentImportsClient(this._options));
+    }
+
+    public get graders(): GradersClient {
+        return (this._graders ??= new GradersClient(this._options));
     }
 
     public get agents(): AgentsClient {
@@ -278,8 +280,8 @@ export class SikaruApi {
         return (this._executionSessions ??= new ExecutionSessionsClient(this._options));
     }
 
-    public get specialists(): SpecialistsClient {
-        return (this._specialists ??= new SpecialistsClient(this._options));
+    public get tasks(): TasksClient {
+        return (this._tasks ??= new TasksClient(this._options));
     }
 
     public get executions(): ExecutionsClient {
@@ -310,10 +312,6 @@ export class SikaruApi {
         return (this._issueClusters ??= new IssueClustersClient(this._options));
     }
 
-    public get judgeAlignment(): JudgeAlignmentClient {
-        return (this._judgeAlignment ??= new JudgeAlignmentClient(this._options));
-    }
-
     public get managedAgents(): ManagedAgentsClient {
         return (this._managedAgents ??= new ManagedAgentsClient(this._options));
     }
@@ -326,8 +324,8 @@ export class SikaruApi {
         return (this._endUsers ??= new EndUsersClient(this._options));
     }
 
-    public get memoryRegistry(): MemoryRegistryClient {
-        return (this._memoryRegistry ??= new MemoryRegistryClient(this._options));
+    public get memory(): MemoryClient {
+        return (this._memory ??= new MemoryClient(this._options));
     }
 
     public get modelGateway(): ModelGatewayClient {
@@ -336,10 +334,6 @@ export class SikaruApi {
 
     public get modelSettings(): ModelSettingsClient {
         return (this._modelSettings ??= new ModelSettingsClient(this._options));
-    }
-
-    public get onlineEvaluations(): OnlineEvaluationsClient {
-        return (this._onlineEvaluations ??= new OnlineEvaluationsClient(this._options));
     }
 
     public get releaseWatches(): ReleaseWatchesClient {

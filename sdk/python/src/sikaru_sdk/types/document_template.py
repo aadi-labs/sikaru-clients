@@ -16,6 +16,7 @@ class DocumentTemplate(UniversalBaseModel):
 
     description: str
     document: str
+    files: typing.Optional[typing.Dict[str, typing.Optional[str]]] = None
     id: str
     name: str
 

@@ -10,6 +10,9 @@
  */
 export interface ScheduleInput {
     agent_slug?: string | null;
+    at?: string | null;
+    /** HTTPS callback on the registered provider's origin. */
+    callback_url?: string | null;
     cron?: string | null;
     environment?: ScheduleInput.Environment;
     idempotency_key?: string | null;
@@ -18,6 +21,8 @@ export interface ScheduleInput {
     session_id?: string | null;
     session_mode?: ScheduleInput.SessionMode | null;
     timezone?: string;
+    /** Registered provider target for signed occurrence delivery. */
+    tool_provider_id?: string | null;
 }
 
 export namespace ScheduleInput {

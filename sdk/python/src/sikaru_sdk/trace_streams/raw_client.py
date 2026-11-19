@@ -39,6 +39,7 @@ class RawTraceStreamsClient:
         idempotency_key: typing.Optional[str] = None,
         sikaru_client_id: typing.Optional[str] = None,
         dataset: typing.Optional[str] = OMIT,
+        records: typing.Optional[typing.Sequence[typing.Dict[str, typing.Any]]] = OMIT,
         resource_spans: typing.Optional[typing.Sequence[typing.Dict[str, typing.Any]]] = OMIT,
         spans: typing.Optional[typing.Sequence[OpenInferenceSpan]] = OMIT,
         trajectories: typing.Optional[typing.Sequence[typing.Dict[str, typing.Any]]] = OMIT,
@@ -57,6 +58,9 @@ class RawTraceStreamsClient:
         sikaru_client_id : typing.Optional[str]
 
         dataset : typing.Optional[str]
+
+        records : typing.Optional[typing.Sequence[typing.Dict[str, typing.Any]]]
+            Rows of a trace export, unchanged, for `langfuse.observations.v1` (observations), `langsmith.runs.v1` (runs) or `braintrust.spans.v1` (spans). The service rebuilds each trace or agent run only from the rows in one request, so keep all of its rows together.
 
         resource_spans : typing.Optional[typing.Sequence[typing.Dict[str, typing.Any]]]
 
@@ -87,6 +91,7 @@ class RawTraceStreamsClient:
                 "metadata": convert_and_respect_annotation_metadata(
                     object_=metadata, annotation=TraceMetadata, direction="write"
                 ),
+                "records": records,
                 "resourceSpans": resource_spans,
                 "spans": convert_and_respect_annotation_metadata(
                     object_=spans, annotation=typing.Sequence[OpenInferenceSpan], direction="write"
@@ -212,6 +217,7 @@ class AsyncRawTraceStreamsClient:
         idempotency_key: typing.Optional[str] = None,
         sikaru_client_id: typing.Optional[str] = None,
         dataset: typing.Optional[str] = OMIT,
+        records: typing.Optional[typing.Sequence[typing.Dict[str, typing.Any]]] = OMIT,
         resource_spans: typing.Optional[typing.Sequence[typing.Dict[str, typing.Any]]] = OMIT,
         spans: typing.Optional[typing.Sequence[OpenInferenceSpan]] = OMIT,
         trajectories: typing.Optional[typing.Sequence[typing.Dict[str, typing.Any]]] = OMIT,
@@ -230,6 +236,9 @@ class AsyncRawTraceStreamsClient:
         sikaru_client_id : typing.Optional[str]
 
         dataset : typing.Optional[str]
+
+        records : typing.Optional[typing.Sequence[typing.Dict[str, typing.Any]]]
+            Rows of a trace export, unchanged, for `langfuse.observations.v1` (observations), `langsmith.runs.v1` (runs) or `braintrust.spans.v1` (spans). The service rebuilds each trace or agent run only from the rows in one request, so keep all of its rows together.
 
         resource_spans : typing.Optional[typing.Sequence[typing.Dict[str, typing.Any]]]
 
@@ -262,6 +271,7 @@ class AsyncRawTraceStreamsClient:
                 "metadata": convert_and_respect_annotation_metadata(
                     object_=metadata, annotation=TraceMetadata, direction="write"
                 ),
+                "records": records,
                 "resourceSpans": resource_spans,
                 "spans": convert_and_respect_annotation_metadata(
                     object_=spans, annotation=typing.Sequence[OpenInferenceSpan], direction="write"

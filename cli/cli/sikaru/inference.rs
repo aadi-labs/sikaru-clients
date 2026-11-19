@@ -69,7 +69,13 @@ fn chat_command() -> Command {
                 .long("temperature")
                 .short('t')
                 .value_parser(clap::value_parser!(f64))
-                .help("Sampling temperature"),
+                .help("Sampling temperature (omit for the model's recommended default)"),
+        )
+        .arg(
+            Arg::new("top-p")
+                .long("top-p")
+                .value_parser(clap::value_parser!(f64))
+                .help("Nucleus sampling cutoff (omit for the model's recommended default)"),
         )
         .arg(
             Arg::new("max-tokens")
@@ -200,6 +206,9 @@ fn chat_body(m: &ArgMatches, message: &str, stream: bool) -> Value {
     }
     if let Some(temperature) = m.get_one::<f64>("temperature") {
         body["temperature"] = json!(temperature);
+    }
+    if let Some(top_p) = m.get_one::<f64>("top-p") {
+        body["top_p"] = json!(top_p);
     }
     if let Some(effort) = m.get_one::<String>("reasoning-effort") {
         body["reasoning_effort"] = effort_value(effort);
@@ -585,8 +594,28 @@ fn describe(card: &Value) -> String {
     ] {
         text.push_str(&format!("{label}: {}\n", joined(&specs[key])));
     }
+    text.push_str(&format!(
+        "sampling defaults: {}\n",
+        sampling_text(&specs["sampling_defaults"])
+    ));
     text.push_str(&reasoning_text(&specs["reasoning"]));
     text
+}
+
+/// The recommended values a request inherits when it omits them, e.g. `temperature=1, top_p=0.95`.
+fn sampling_text(defaults: &Value) -> String {
+    let set: Vec<String> = defaults
+        .as_object()
+        .into_iter()
+        .flatten()
+        .filter(|(_, value)| !value.is_null())
+        .map(|(name, value)| format!("{name}={value}"))
+        .collect();
+    if set.is_empty() {
+        "provider default".to_string()
+    } else {
+        set.join(", ")
+    }
 }
 
 fn reasoning_text(reasoning: &Value) -> String {

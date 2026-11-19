@@ -4,7 +4,9 @@ import typing
 
 from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ..core.request_options import RequestOptions
+from ..types.always_cap import AlwaysCap
 from ..types.approval_input_decision import ApprovalInputDecision
+from ..types.browser_rule_list import BrowserRuleList
 from ..types.connection_authorization import ConnectionAuthorization
 from ..types.connection_credentials import ConnectionCredentials
 from ..types.personal_channel_approval import PersonalChannelApproval
@@ -81,6 +83,471 @@ class PersonalChannelsClient:
         _response = self._raw_client.get_message(
             binding_id,
             receipt_id,
+            authorization=authorization,
+            sikaru_user_assertion=sikaru_user_assertion,
+            sikaru_member_authorization=sikaru_member_authorization,
+            request_options=request_options,
+        )
+        return _response.data
+
+    def list_browser_logins(
+        self,
+        binding_id: str,
+        receipt_id: str,
+        *,
+        authorization: typing.Optional[str] = None,
+        sikaru_user_assertion: typing.Optional[str] = None,
+        sikaru_member_authorization: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> typing.Dict[str, typing.Any]:
+        """
+        The sites this user's agents may open signed in as them.
+
+        Parameters
+        ----------
+        binding_id : str
+
+        receipt_id : str
+
+        authorization : typing.Optional[str]
+
+        sikaru_user_assertion : typing.Optional[str]
+
+        sikaru_member_authorization : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        typing.Dict[str, typing.Any]
+            Successful Response
+
+        Examples
+        --------
+        from sikaru_sdk import SikaruApi
+
+        client = SikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+        client.personal_channels.list_browser_logins(
+            binding_id="binding_id",
+            receipt_id="receipt_id",
+        )
+        """
+        _response = self._raw_client.list_browser_logins(
+            binding_id,
+            receipt_id,
+            authorization=authorization,
+            sikaru_user_assertion=sikaru_user_assertion,
+            sikaru_member_authorization=sikaru_member_authorization,
+            request_options=request_options,
+        )
+        return _response.data
+
+    def delete_browser_login(
+        self,
+        binding_id: str,
+        receipt_id: str,
+        login_id: str,
+        *,
+        authorization: typing.Optional[str] = None,
+        sikaru_user_assertion: typing.Optional[str] = None,
+        sikaru_member_authorization: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> None:
+        """
+        Parameters
+        ----------
+        binding_id : str
+
+        receipt_id : str
+
+        login_id : str
+
+        authorization : typing.Optional[str]
+
+        sikaru_user_assertion : typing.Optional[str]
+
+        sikaru_member_authorization : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        None
+
+        Examples
+        --------
+        from sikaru_sdk import SikaruApi
+
+        client = SikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+        client.personal_channels.delete_browser_login(
+            binding_id="binding_id",
+            receipt_id="receipt_id",
+            login_id="login_id",
+        )
+        """
+        _response = self._raw_client.delete_browser_login(
+            binding_id,
+            receipt_id,
+            login_id,
+            authorization=authorization,
+            sikaru_user_assertion=sikaru_user_assertion,
+            sikaru_member_authorization=sikaru_member_authorization,
+            request_options=request_options,
+        )
+        return _response.data
+
+    def get_browser_preview(
+        self,
+        binding_id: str,
+        receipt_id: str,
+        digest: str,
+        *,
+        authorization: typing.Optional[str] = None,
+        sikaru_user_assertion: typing.Optional[str] = None,
+        sikaru_member_authorization: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> typing.Dict[str, typing.Any]:
+        """
+        Everything this user is asked to approve, typed values included.
+
+        Parameters
+        ----------
+        binding_id : str
+
+        receipt_id : str
+
+        digest : str
+
+        authorization : typing.Optional[str]
+
+        sikaru_user_assertion : typing.Optional[str]
+
+        sikaru_member_authorization : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        typing.Dict[str, typing.Any]
+            Successful Response
+
+        Examples
+        --------
+        from sikaru_sdk import SikaruApi
+
+        client = SikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+        client.personal_channels.get_browser_preview(
+            binding_id="binding_id",
+            receipt_id="receipt_id",
+            digest="digest",
+        )
+        """
+        _response = self._raw_client.get_browser_preview(
+            binding_id,
+            receipt_id,
+            digest,
+            authorization=authorization,
+            sikaru_user_assertion=sikaru_user_assertion,
+            sikaru_member_authorization=sikaru_member_authorization,
+            request_options=request_options,
+        )
+        return _response.data
+
+    def get_browser_preview_screenshot(
+        self,
+        binding_id: str,
+        receipt_id: str,
+        digest: str,
+        *,
+        authorization: typing.Optional[str] = None,
+        sikaru_user_assertion: typing.Optional[str] = None,
+        sikaru_member_authorization: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> typing.Iterator[bytes]:
+        """
+        The page this user is asked to approve, password fields masked.
+
+        Parameters
+        ----------
+        binding_id : str
+
+        receipt_id : str
+
+        digest : str
+
+        authorization : typing.Optional[str]
+
+        sikaru_user_assertion : typing.Optional[str]
+
+        sikaru_member_authorization : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration. You can pass in configuration such as `chunk_size`, and more to customize the request and response.
+
+        Returns
+        -------
+        typing.Iterator[bytes]
+            Successful Response
+
+        Examples
+        --------
+        from sikaru_sdk import SikaruApi
+
+        client = SikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+        client.personal_channels.get_browser_preview_screenshot(
+            binding_id="binding_id",
+            receipt_id="receipt_id",
+            digest="digest",
+        )
+        """
+        with self._raw_client.get_browser_preview_screenshot(
+            binding_id,
+            receipt_id,
+            digest,
+            authorization=authorization,
+            sikaru_user_assertion=sikaru_user_assertion,
+            sikaru_member_authorization=sikaru_member_authorization,
+            request_options=request_options,
+        ) as r:
+            yield from r.data
+
+    def get_browser_receipt(
+        self,
+        binding_id: str,
+        receipt_id: str,
+        *,
+        authorization: typing.Optional[str] = None,
+        sikaru_user_assertion: typing.Optional[str] = None,
+        sikaru_member_authorization: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> typing.Dict[str, typing.Any]:
+        """
+        What this run's browser did for this user, with their own pages' screenshots.
+
+        Parameters
+        ----------
+        binding_id : str
+
+        receipt_id : str
+
+        authorization : typing.Optional[str]
+
+        sikaru_user_assertion : typing.Optional[str]
+
+        sikaru_member_authorization : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        typing.Dict[str, typing.Any]
+            Successful Response
+
+        Examples
+        --------
+        from sikaru_sdk import SikaruApi
+
+        client = SikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+        client.personal_channels.get_browser_receipt(
+            binding_id="binding_id",
+            receipt_id="receipt_id",
+        )
+        """
+        _response = self._raw_client.get_browser_receipt(
+            binding_id,
+            receipt_id,
+            authorization=authorization,
+            sikaru_user_assertion=sikaru_user_assertion,
+            sikaru_member_authorization=sikaru_member_authorization,
+            request_options=request_options,
+        )
+        return _response.data
+
+    def get_browser_receipt_screenshot(
+        self,
+        binding_id: str,
+        receipt_id: str,
+        digest: str,
+        *,
+        authorization: typing.Optional[str] = None,
+        sikaru_user_assertion: typing.Optional[str] = None,
+        sikaru_member_authorization: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> typing.Iterator[bytes]:
+        """
+        Parameters
+        ----------
+        binding_id : str
+
+        receipt_id : str
+
+        digest : str
+
+        authorization : typing.Optional[str]
+
+        sikaru_user_assertion : typing.Optional[str]
+
+        sikaru_member_authorization : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration. You can pass in configuration such as `chunk_size`, and more to customize the request and response.
+
+        Returns
+        -------
+        typing.Iterator[bytes]
+            Successful Response
+
+        Examples
+        --------
+        from sikaru_sdk import SikaruApi
+
+        client = SikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+        client.personal_channels.get_browser_receipt_screenshot(
+            binding_id="binding_id",
+            receipt_id="receipt_id",
+            digest="digest",
+        )
+        """
+        with self._raw_client.get_browser_receipt_screenshot(
+            binding_id,
+            receipt_id,
+            digest,
+            authorization=authorization,
+            sikaru_user_assertion=sikaru_user_assertion,
+            sikaru_member_authorization=sikaru_member_authorization,
+            request_options=request_options,
+        ) as r:
+            yield from r.data
+
+    def list_browser_rules(
+        self,
+        binding_id: str,
+        receipt_id: str,
+        *,
+        authorization: typing.Optional[str] = None,
+        sikaru_user_assertion: typing.Optional[str] = None,
+        sikaru_member_authorization: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> BrowserRuleList:
+        """
+        The browser actions this user always allows this agent to take for them.
+
+        Parameters
+        ----------
+        binding_id : str
+
+        receipt_id : str
+
+        authorization : typing.Optional[str]
+
+        sikaru_user_assertion : typing.Optional[str]
+
+        sikaru_member_authorization : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        BrowserRuleList
+            Successful Response
+
+        Examples
+        --------
+        from sikaru_sdk import SikaruApi
+
+        client = SikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+        client.personal_channels.list_browser_rules(
+            binding_id="binding_id",
+            receipt_id="receipt_id",
+        )
+        """
+        _response = self._raw_client.list_browser_rules(
+            binding_id,
+            receipt_id,
+            authorization=authorization,
+            sikaru_user_assertion=sikaru_user_assertion,
+            sikaru_member_authorization=sikaru_member_authorization,
+            request_options=request_options,
+        )
+        return _response.data
+
+    def delete_browser_rule(
+        self,
+        binding_id: str,
+        receipt_id: str,
+        rule_id: str,
+        *,
+        authorization: typing.Optional[str] = None,
+        sikaru_user_assertion: typing.Optional[str] = None,
+        sikaru_member_authorization: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> None:
+        """
+        Parameters
+        ----------
+        binding_id : str
+
+        receipt_id : str
+
+        rule_id : str
+
+        authorization : typing.Optional[str]
+
+        sikaru_user_assertion : typing.Optional[str]
+
+        sikaru_member_authorization : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        None
+
+        Examples
+        --------
+        from sikaru_sdk import SikaruApi
+
+        client = SikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+        client.personal_channels.delete_browser_rule(
+            binding_id="binding_id",
+            receipt_id="receipt_id",
+            rule_id="rule_id",
+        )
+        """
+        _response = self._raw_client.delete_browser_rule(
+            binding_id,
+            receipt_id,
+            rule_id,
             authorization=authorization,
             sikaru_user_assertion=sikaru_user_assertion,
             sikaru_member_authorization=sikaru_member_authorization,
@@ -403,6 +870,8 @@ class PersonalChannelsClient:
         authorization: typing.Optional[str] = None,
         sikaru_user_assertion: typing.Optional[str] = None,
         sikaru_member_authorization: typing.Optional[str] = None,
+        always: typing.Optional[bool] = OMIT,
+        cap: typing.Optional[AlwaysCap] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> PersonalChannelApproval:
         """
@@ -423,6 +892,11 @@ class PersonalChannelsClient:
         sikaru_user_assertion : typing.Optional[str]
 
         sikaru_member_authorization : typing.Optional[str]
+
+        always : typing.Optional[bool]
+            Also always allow this browser commit at its playbook step.
+
+        cap : typing.Optional[AlwaysCap]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -454,6 +928,69 @@ class PersonalChannelsClient:
             tool_call_id,
             decision=decision,
             idempotency_key=idempotency_key,
+            authorization=authorization,
+            sikaru_user_assertion=sikaru_user_assertion,
+            sikaru_member_authorization=sikaru_member_authorization,
+            always=always,
+            cap=cap,
+            request_options=request_options,
+        )
+        return _response.data
+
+    def create_browser_handoff(
+        self,
+        binding_id: str,
+        receipt_id: str,
+        tool_call_id: str,
+        *,
+        authorization: typing.Optional[str] = None,
+        sikaru_user_assertion: typing.Optional[str] = None,
+        sikaru_member_authorization: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> typing.Dict[str, typing.Any]:
+        """
+        A one-time link to sign in, in a live browser, to the sites a parked browser call needs.
+
+        Parameters
+        ----------
+        binding_id : str
+
+        receipt_id : str
+
+        tool_call_id : str
+
+        authorization : typing.Optional[str]
+
+        sikaru_user_assertion : typing.Optional[str]
+
+        sikaru_member_authorization : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        typing.Dict[str, typing.Any]
+            Successful Response
+
+        Examples
+        --------
+        from sikaru_sdk import SikaruApi
+
+        client = SikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+        client.personal_channels.create_browser_handoff(
+            binding_id="binding_id",
+            receipt_id="receipt_id",
+            tool_call_id="tool_call_id",
+        )
+        """
+        _response = self._raw_client.create_browser_handoff(
+            binding_id,
+            receipt_id,
+            tool_call_id,
             authorization=authorization,
             sikaru_user_assertion=sikaru_user_assertion,
             sikaru_member_authorization=sikaru_member_authorization,
@@ -693,6 +1230,537 @@ class AsyncPersonalChannelsClient:
         _response = await self._raw_client.get_message(
             binding_id,
             receipt_id,
+            authorization=authorization,
+            sikaru_user_assertion=sikaru_user_assertion,
+            sikaru_member_authorization=sikaru_member_authorization,
+            request_options=request_options,
+        )
+        return _response.data
+
+    async def list_browser_logins(
+        self,
+        binding_id: str,
+        receipt_id: str,
+        *,
+        authorization: typing.Optional[str] = None,
+        sikaru_user_assertion: typing.Optional[str] = None,
+        sikaru_member_authorization: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> typing.Dict[str, typing.Any]:
+        """
+        The sites this user's agents may open signed in as them.
+
+        Parameters
+        ----------
+        binding_id : str
+
+        receipt_id : str
+
+        authorization : typing.Optional[str]
+
+        sikaru_user_assertion : typing.Optional[str]
+
+        sikaru_member_authorization : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        typing.Dict[str, typing.Any]
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sikaru_sdk import AsyncSikaruApi
+
+        client = AsyncSikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+
+
+        async def main() -> None:
+            await client.personal_channels.list_browser_logins(
+                binding_id="binding_id",
+                receipt_id="receipt_id",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.list_browser_logins(
+            binding_id,
+            receipt_id,
+            authorization=authorization,
+            sikaru_user_assertion=sikaru_user_assertion,
+            sikaru_member_authorization=sikaru_member_authorization,
+            request_options=request_options,
+        )
+        return _response.data
+
+    async def delete_browser_login(
+        self,
+        binding_id: str,
+        receipt_id: str,
+        login_id: str,
+        *,
+        authorization: typing.Optional[str] = None,
+        sikaru_user_assertion: typing.Optional[str] = None,
+        sikaru_member_authorization: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> None:
+        """
+        Parameters
+        ----------
+        binding_id : str
+
+        receipt_id : str
+
+        login_id : str
+
+        authorization : typing.Optional[str]
+
+        sikaru_user_assertion : typing.Optional[str]
+
+        sikaru_member_authorization : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        None
+
+        Examples
+        --------
+        import asyncio
+
+        from sikaru_sdk import AsyncSikaruApi
+
+        client = AsyncSikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+
+
+        async def main() -> None:
+            await client.personal_channels.delete_browser_login(
+                binding_id="binding_id",
+                receipt_id="receipt_id",
+                login_id="login_id",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.delete_browser_login(
+            binding_id,
+            receipt_id,
+            login_id,
+            authorization=authorization,
+            sikaru_user_assertion=sikaru_user_assertion,
+            sikaru_member_authorization=sikaru_member_authorization,
+            request_options=request_options,
+        )
+        return _response.data
+
+    async def get_browser_preview(
+        self,
+        binding_id: str,
+        receipt_id: str,
+        digest: str,
+        *,
+        authorization: typing.Optional[str] = None,
+        sikaru_user_assertion: typing.Optional[str] = None,
+        sikaru_member_authorization: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> typing.Dict[str, typing.Any]:
+        """
+        Everything this user is asked to approve, typed values included.
+
+        Parameters
+        ----------
+        binding_id : str
+
+        receipt_id : str
+
+        digest : str
+
+        authorization : typing.Optional[str]
+
+        sikaru_user_assertion : typing.Optional[str]
+
+        sikaru_member_authorization : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        typing.Dict[str, typing.Any]
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sikaru_sdk import AsyncSikaruApi
+
+        client = AsyncSikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+
+
+        async def main() -> None:
+            await client.personal_channels.get_browser_preview(
+                binding_id="binding_id",
+                receipt_id="receipt_id",
+                digest="digest",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.get_browser_preview(
+            binding_id,
+            receipt_id,
+            digest,
+            authorization=authorization,
+            sikaru_user_assertion=sikaru_user_assertion,
+            sikaru_member_authorization=sikaru_member_authorization,
+            request_options=request_options,
+        )
+        return _response.data
+
+    async def get_browser_preview_screenshot(
+        self,
+        binding_id: str,
+        receipt_id: str,
+        digest: str,
+        *,
+        authorization: typing.Optional[str] = None,
+        sikaru_user_assertion: typing.Optional[str] = None,
+        sikaru_member_authorization: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> typing.AsyncIterator[bytes]:
+        """
+        The page this user is asked to approve, password fields masked.
+
+        Parameters
+        ----------
+        binding_id : str
+
+        receipt_id : str
+
+        digest : str
+
+        authorization : typing.Optional[str]
+
+        sikaru_user_assertion : typing.Optional[str]
+
+        sikaru_member_authorization : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration. You can pass in configuration such as `chunk_size`, and more to customize the request and response.
+
+        Returns
+        -------
+        typing.AsyncIterator[bytes]
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sikaru_sdk import AsyncSikaruApi
+
+        client = AsyncSikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+
+
+        async def main() -> None:
+            await client.personal_channels.get_browser_preview_screenshot(
+                binding_id="binding_id",
+                receipt_id="receipt_id",
+                digest="digest",
+            )
+
+
+        asyncio.run(main())
+        """
+        async with self._raw_client.get_browser_preview_screenshot(
+            binding_id,
+            receipt_id,
+            digest,
+            authorization=authorization,
+            sikaru_user_assertion=sikaru_user_assertion,
+            sikaru_member_authorization=sikaru_member_authorization,
+            request_options=request_options,
+        ) as r:
+            async for _chunk in r.data:
+                yield _chunk
+
+    async def get_browser_receipt(
+        self,
+        binding_id: str,
+        receipt_id: str,
+        *,
+        authorization: typing.Optional[str] = None,
+        sikaru_user_assertion: typing.Optional[str] = None,
+        sikaru_member_authorization: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> typing.Dict[str, typing.Any]:
+        """
+        What this run's browser did for this user, with their own pages' screenshots.
+
+        Parameters
+        ----------
+        binding_id : str
+
+        receipt_id : str
+
+        authorization : typing.Optional[str]
+
+        sikaru_user_assertion : typing.Optional[str]
+
+        sikaru_member_authorization : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        typing.Dict[str, typing.Any]
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sikaru_sdk import AsyncSikaruApi
+
+        client = AsyncSikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+
+
+        async def main() -> None:
+            await client.personal_channels.get_browser_receipt(
+                binding_id="binding_id",
+                receipt_id="receipt_id",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.get_browser_receipt(
+            binding_id,
+            receipt_id,
+            authorization=authorization,
+            sikaru_user_assertion=sikaru_user_assertion,
+            sikaru_member_authorization=sikaru_member_authorization,
+            request_options=request_options,
+        )
+        return _response.data
+
+    async def get_browser_receipt_screenshot(
+        self,
+        binding_id: str,
+        receipt_id: str,
+        digest: str,
+        *,
+        authorization: typing.Optional[str] = None,
+        sikaru_user_assertion: typing.Optional[str] = None,
+        sikaru_member_authorization: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> typing.AsyncIterator[bytes]:
+        """
+        Parameters
+        ----------
+        binding_id : str
+
+        receipt_id : str
+
+        digest : str
+
+        authorization : typing.Optional[str]
+
+        sikaru_user_assertion : typing.Optional[str]
+
+        sikaru_member_authorization : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration. You can pass in configuration such as `chunk_size`, and more to customize the request and response.
+
+        Returns
+        -------
+        typing.AsyncIterator[bytes]
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sikaru_sdk import AsyncSikaruApi
+
+        client = AsyncSikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+
+
+        async def main() -> None:
+            await client.personal_channels.get_browser_receipt_screenshot(
+                binding_id="binding_id",
+                receipt_id="receipt_id",
+                digest="digest",
+            )
+
+
+        asyncio.run(main())
+        """
+        async with self._raw_client.get_browser_receipt_screenshot(
+            binding_id,
+            receipt_id,
+            digest,
+            authorization=authorization,
+            sikaru_user_assertion=sikaru_user_assertion,
+            sikaru_member_authorization=sikaru_member_authorization,
+            request_options=request_options,
+        ) as r:
+            async for _chunk in r.data:
+                yield _chunk
+
+    async def list_browser_rules(
+        self,
+        binding_id: str,
+        receipt_id: str,
+        *,
+        authorization: typing.Optional[str] = None,
+        sikaru_user_assertion: typing.Optional[str] = None,
+        sikaru_member_authorization: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> BrowserRuleList:
+        """
+        The browser actions this user always allows this agent to take for them.
+
+        Parameters
+        ----------
+        binding_id : str
+
+        receipt_id : str
+
+        authorization : typing.Optional[str]
+
+        sikaru_user_assertion : typing.Optional[str]
+
+        sikaru_member_authorization : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        BrowserRuleList
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sikaru_sdk import AsyncSikaruApi
+
+        client = AsyncSikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+
+
+        async def main() -> None:
+            await client.personal_channels.list_browser_rules(
+                binding_id="binding_id",
+                receipt_id="receipt_id",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.list_browser_rules(
+            binding_id,
+            receipt_id,
+            authorization=authorization,
+            sikaru_user_assertion=sikaru_user_assertion,
+            sikaru_member_authorization=sikaru_member_authorization,
+            request_options=request_options,
+        )
+        return _response.data
+
+    async def delete_browser_rule(
+        self,
+        binding_id: str,
+        receipt_id: str,
+        rule_id: str,
+        *,
+        authorization: typing.Optional[str] = None,
+        sikaru_user_assertion: typing.Optional[str] = None,
+        sikaru_member_authorization: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> None:
+        """
+        Parameters
+        ----------
+        binding_id : str
+
+        receipt_id : str
+
+        rule_id : str
+
+        authorization : typing.Optional[str]
+
+        sikaru_user_assertion : typing.Optional[str]
+
+        sikaru_member_authorization : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        None
+
+        Examples
+        --------
+        import asyncio
+
+        from sikaru_sdk import AsyncSikaruApi
+
+        client = AsyncSikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+
+
+        async def main() -> None:
+            await client.personal_channels.delete_browser_rule(
+                binding_id="binding_id",
+                receipt_id="receipt_id",
+                rule_id="rule_id",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.delete_browser_rule(
+            binding_id,
+            receipt_id,
+            rule_id,
             authorization=authorization,
             sikaru_user_assertion=sikaru_user_assertion,
             sikaru_member_authorization=sikaru_member_authorization,
@@ -1056,6 +2124,8 @@ class AsyncPersonalChannelsClient:
         authorization: typing.Optional[str] = None,
         sikaru_user_assertion: typing.Optional[str] = None,
         sikaru_member_authorization: typing.Optional[str] = None,
+        always: typing.Optional[bool] = OMIT,
+        cap: typing.Optional[AlwaysCap] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> PersonalChannelApproval:
         """
@@ -1076,6 +2146,11 @@ class AsyncPersonalChannelsClient:
         sikaru_user_assertion : typing.Optional[str]
 
         sikaru_member_authorization : typing.Optional[str]
+
+        always : typing.Optional[bool]
+            Also always allow this browser commit at its playbook step.
+
+        cap : typing.Optional[AlwaysCap]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -1115,6 +2190,77 @@ class AsyncPersonalChannelsClient:
             tool_call_id,
             decision=decision,
             idempotency_key=idempotency_key,
+            authorization=authorization,
+            sikaru_user_assertion=sikaru_user_assertion,
+            sikaru_member_authorization=sikaru_member_authorization,
+            always=always,
+            cap=cap,
+            request_options=request_options,
+        )
+        return _response.data
+
+    async def create_browser_handoff(
+        self,
+        binding_id: str,
+        receipt_id: str,
+        tool_call_id: str,
+        *,
+        authorization: typing.Optional[str] = None,
+        sikaru_user_assertion: typing.Optional[str] = None,
+        sikaru_member_authorization: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> typing.Dict[str, typing.Any]:
+        """
+        A one-time link to sign in, in a live browser, to the sites a parked browser call needs.
+
+        Parameters
+        ----------
+        binding_id : str
+
+        receipt_id : str
+
+        tool_call_id : str
+
+        authorization : typing.Optional[str]
+
+        sikaru_user_assertion : typing.Optional[str]
+
+        sikaru_member_authorization : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        typing.Dict[str, typing.Any]
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sikaru_sdk import AsyncSikaruApi
+
+        client = AsyncSikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+
+
+        async def main() -> None:
+            await client.personal_channels.create_browser_handoff(
+                binding_id="binding_id",
+                receipt_id="receipt_id",
+                tool_call_id="tool_call_id",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.create_browser_handoff(
+            binding_id,
+            receipt_id,
+            tool_call_id,
             authorization=authorization,
             sikaru_user_assertion=sikaru_user_assertion,
             sikaru_member_authorization=sikaru_member_authorization,

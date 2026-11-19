@@ -40,7 +40,6 @@ class RawCompletionsClient:
         self,
         *,
         messages: typing.Sequence[typing.Dict[str, typing.Any]],
-        model: str,
         audio: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
         frequency_penalty: typing.Optional[float] = OMIT,
         function_call: typing.Optional[CreateCompletionsStreamRequestFunctionCall] = OMIT,
@@ -53,6 +52,7 @@ class RawCompletionsClient:
         metadata: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
         min_p: typing.Optional[float] = OMIT,
         modalities: typing.Optional[typing.Sequence[str]] = OMIT,
+        model: typing.Optional[str] = OMIT,
         models: typing.Optional[typing.Sequence[str]] = OMIT,
         moderation: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
         n: typing.Optional[int] = OMIT,
@@ -95,8 +95,6 @@ class RawCompletionsClient:
         ----------
         messages : typing.Sequence[typing.Dict[str, typing.Any]]
 
-        model : str
-
         audio : typing.Optional[typing.Dict[str, typing.Any]]
 
         frequency_penalty : typing.Optional[float]
@@ -120,6 +118,8 @@ class RawCompletionsClient:
         min_p : typing.Optional[float]
 
         modalities : typing.Optional[typing.Sequence[str]]
+
+        model : typing.Optional[str]
 
         models : typing.Optional[typing.Sequence[str]]
 
@@ -333,7 +333,6 @@ class RawCompletionsClient:
         self,
         *,
         messages: typing.Sequence[typing.Dict[str, typing.Any]],
-        model: str,
         audio: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
         frequency_penalty: typing.Optional[float] = OMIT,
         function_call: typing.Optional[CreateCompletionsRequestFunctionCall] = OMIT,
@@ -346,6 +345,7 @@ class RawCompletionsClient:
         metadata: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
         min_p: typing.Optional[float] = OMIT,
         modalities: typing.Optional[typing.Sequence[str]] = OMIT,
+        model: typing.Optional[str] = OMIT,
         models: typing.Optional[typing.Sequence[str]] = OMIT,
         moderation: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
         n: typing.Optional[int] = OMIT,
@@ -388,8 +388,6 @@ class RawCompletionsClient:
         ----------
         messages : typing.Sequence[typing.Dict[str, typing.Any]]
 
-        model : str
-
         audio : typing.Optional[typing.Dict[str, typing.Any]]
 
         frequency_penalty : typing.Optional[float]
@@ -413,6 +411,8 @@ class RawCompletionsClient:
         min_p : typing.Optional[float]
 
         modalities : typing.Optional[typing.Sequence[str]]
+
+        model : typing.Optional[str]
 
         models : typing.Optional[typing.Sequence[str]]
 
@@ -601,7 +601,6 @@ class AsyncRawCompletionsClient:
         self,
         *,
         messages: typing.Sequence[typing.Dict[str, typing.Any]],
-        model: str,
         audio: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
         frequency_penalty: typing.Optional[float] = OMIT,
         function_call: typing.Optional[CreateCompletionsStreamRequestFunctionCall] = OMIT,
@@ -614,6 +613,7 @@ class AsyncRawCompletionsClient:
         metadata: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
         min_p: typing.Optional[float] = OMIT,
         modalities: typing.Optional[typing.Sequence[str]] = OMIT,
+        model: typing.Optional[str] = OMIT,
         models: typing.Optional[typing.Sequence[str]] = OMIT,
         moderation: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
         n: typing.Optional[int] = OMIT,
@@ -656,8 +656,6 @@ class AsyncRawCompletionsClient:
         ----------
         messages : typing.Sequence[typing.Dict[str, typing.Any]]
 
-        model : str
-
         audio : typing.Optional[typing.Dict[str, typing.Any]]
 
         frequency_penalty : typing.Optional[float]
@@ -681,6 +679,8 @@ class AsyncRawCompletionsClient:
         min_p : typing.Optional[float]
 
         modalities : typing.Optional[typing.Sequence[str]]
+
+        model : typing.Optional[str]
 
         models : typing.Optional[typing.Sequence[str]]
 
@@ -896,7 +896,6 @@ class AsyncRawCompletionsClient:
         self,
         *,
         messages: typing.Sequence[typing.Dict[str, typing.Any]],
-        model: str,
         audio: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
         frequency_penalty: typing.Optional[float] = OMIT,
         function_call: typing.Optional[CreateCompletionsRequestFunctionCall] = OMIT,
@@ -909,6 +908,7 @@ class AsyncRawCompletionsClient:
         metadata: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
         min_p: typing.Optional[float] = OMIT,
         modalities: typing.Optional[typing.Sequence[str]] = OMIT,
+        model: typing.Optional[str] = OMIT,
         models: typing.Optional[typing.Sequence[str]] = OMIT,
         moderation: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
         n: typing.Optional[int] = OMIT,
@@ -951,8 +951,6 @@ class AsyncRawCompletionsClient:
         ----------
         messages : typing.Sequence[typing.Dict[str, typing.Any]]
 
-        model : str
-
         audio : typing.Optional[typing.Dict[str, typing.Any]]
 
         frequency_penalty : typing.Optional[float]
@@ -976,6 +974,8 @@ class AsyncRawCompletionsClient:
         min_p : typing.Optional[float]
 
         modalities : typing.Optional[typing.Sequence[str]]
+
+        model : typing.Optional[str]
 
         models : typing.Optional[typing.Sequence[str]]
 

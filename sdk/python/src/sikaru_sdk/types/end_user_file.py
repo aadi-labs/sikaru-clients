@@ -15,7 +15,7 @@ class EndUserFile(UniversalBaseModel):
 
     path: str = pydantic.Field()
     """
-    USER.md, memories/<name>.md or cell/PERSONA_SUMMARY.md.
+    cell/PERSONA_SUMMARY.md.
     """
 
     if IS_PYDANTIC_V2:

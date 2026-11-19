@@ -11,12 +11,12 @@ export interface CreateReviewQueueItemRequest {
     agentId?: string | null;
     backfillWindow?: string | null;
     filterExpression?: string | null;
+    graderTags?: string[];
     issueId?: string | null;
     issueTitle?: string | null;
     ruleId?: string | null;
     ruleName?: string | null;
     sampleRate?: string | null;
-    signalTags?: string[];
     target?: string | null;
     traceIds: string[];
 }

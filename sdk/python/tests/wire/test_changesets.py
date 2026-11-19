@@ -102,6 +102,32 @@ def test_changesets_promote_changeset() -> None:
     )
 
 
+def test_changesets_publish_changeset_anyway() -> None:
+    """Test publish_changeset_anyway endpoint with WireMock"""
+    test_id = "changesets.publish_changeset_anyway.0"
+    client = get_client(test_id)
+    client.changesets.publish_changeset_anyway(
+        project_id="project_id",
+        changeset_id="changeset_id",
+        publication_id="publication_id",
+        reason="reason",
+    )
+    verify_request_count(
+        test_id,
+        "POST",
+        "/v1/projects/project_id/changesets/changeset_id/publications/publication_id/publish-anyway",
+        None,
+        1,
+    )
+    verify_auth_headers(
+        test_id,
+        "POST",
+        "/v1/projects/project_id/changesets/changeset_id/publications/publication_id/publish-anyway",
+        {"Authorization": r"Bearer .+"},
+        [],
+    )
+
+
 def test_changesets_reject_changeset() -> None:
     """Test reject_changeset endpoint with WireMock"""
     test_id = "changesets.reject_changeset.0"

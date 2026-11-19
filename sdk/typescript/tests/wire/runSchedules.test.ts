@@ -10,7 +10,7 @@ describe("RunSchedulesClient", () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         
-        const rawResponseBody = { "schedules" : [ { "agentId" : "agentId" , "creator" : "creator" , "cron" : "cron" , "environment" : "environment" , "id" : "id" , "intervalSeconds" : 1 , "nextAt" : 1.1 , "paused" : true , "sessionId" : "sessionId" , "sessionMode" : "fresh" , "timezone" : "timezone" } ] };
+        const rawResponseBody = { "schedules" : [ { "agentId" : "agentId" , "at" : 1.1 , "callbackUrl" : "callbackUrl" , "creator" : "creator" , "cron" : "cron" , "declaredPath" : "declaredPath" , "deleted" : true , "destination" : "destination" , "environment" : "environment" , "exhausted" : true , "id" : "id" , "input" : { "key" : "value" } , "intervalSeconds" : 1 , "nextAt" : 1.1 , "paused" : true , "revision" : 1 , "sessionId" : "sessionId" , "sessionMode" : "fresh" , "timezone" : "timezone" , "toolProviderId" : "toolProviderId" } ] };
         
         server
             .mockEndpoint()
@@ -102,7 +102,7 @@ describe("RunSchedulesClient", () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         const rawRequestBody = { "input" : { "key" : "value" } };
-        const rawResponseBody = { "schedule" : { "agentId" : "agentId" , "creator" : "creator" , "cron" : "cron" , "environment" : "environment" , "id" : "id" , "intervalSeconds" : 1 , "nextAt" : 1.1 , "paused" : true , "sessionId" : "sessionId" , "sessionMode" : "fresh" , "timezone" : "timezone" } };
+        const rawResponseBody = { "schedule" : { "agentId" : "agentId" , "at" : 1.1 , "callbackUrl" : "callbackUrl" , "creator" : "creator" , "cron" : "cron" , "declaredPath" : "declaredPath" , "deleted" : true , "destination" : "destination" , "environment" : "environment" , "exhausted" : true , "id" : "id" , "input" : { "key" : "value" } , "intervalSeconds" : 1 , "nextAt" : 1.1 , "paused" : true , "revision" : 1 , "sessionId" : "sessionId" , "sessionMode" : "fresh" , "timezone" : "timezone" , "toolProviderId" : "toolProviderId" } };
         
         server
             .mockEndpoint()
@@ -223,11 +223,215 @@ describe("RunSchedulesClient", () => {
             }).rejects.toThrow(Sikaru.UnprocessableEntityError);
     });
           
+    test("inspect_schedule (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        
+        const rawResponseBody = { "schedule" : { "agentId" : "agentId" , "at" : 1.1 , "callbackUrl" : "callbackUrl" , "creator" : "creator" , "cron" : "cron" , "declaredPath" : "declaredPath" , "deleted" : true , "destination" : "destination" , "environment" : "environment" , "exhausted" : true , "id" : "id" , "input" : { "key" : "value" } , "intervalSeconds" : 1 , "nextAt" : 1.1 , "paused" : true , "revision" : 1 , "sessionId" : "sessionId" , "sessionMode" : "fresh" , "timezone" : "timezone" , "toolProviderId" : "toolProviderId" } };
+        
+        server
+            .mockEndpoint()
+            .get("/v1/projects/project_id/run-schedules/schedule_id").respondWith()
+            .statusCode(200).jsonBody(rawResponseBody)
+                .build();
+
+        
+                        
+                                const response = await client.runSchedules.inspectSchedule("project_id", "schedule_id");
+                                expect(response).toEqual(rawResponseBody);
+                              
+                    
+    });
+          
+    test("inspect_schedule (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        
+        const rawResponseBody = { "code" : "code" , "detail" : "detail" };
+        
+        server
+            .mockEndpoint()
+            .get("/v1/projects/project_id/run-schedules/schedule_id").respondWith()
+            .statusCode(401).jsonBody(rawResponseBody)
+                .build();
+
+        
+            await expect(async () => {
+                return await client.runSchedules.inspectSchedule("project_id", "schedule_id")
+            }).rejects.toThrow(Sikaru.UnauthorizedError);
+    });
+          
+    test("inspect_schedule (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        
+        const rawResponseBody = { "code" : "code" , "detail" : "detail" };
+        
+        server
+            .mockEndpoint()
+            .get("/v1/projects/project_id/run-schedules/schedule_id").respondWith()
+            .statusCode(403).jsonBody(rawResponseBody)
+                .build();
+
+        
+            await expect(async () => {
+                return await client.runSchedules.inspectSchedule("project_id", "schedule_id")
+            }).rejects.toThrow(Sikaru.ForbiddenError);
+    });
+          
+    test("inspect_schedule (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        
+        const rawResponseBody = { "code" : "code" , "detail" : "detail" };
+        
+        server
+            .mockEndpoint()
+            .get("/v1/projects/project_id/run-schedules/schedule_id").respondWith()
+            .statusCode(404).jsonBody(rawResponseBody)
+                .build();
+
+        
+            await expect(async () => {
+                return await client.runSchedules.inspectSchedule("project_id", "schedule_id")
+            }).rejects.toThrow(Sikaru.NotFoundError);
+    });
+          
+    test("inspect_schedule (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        
+        const rawResponseBody = { "key" : "value" };
+        
+        server
+            .mockEndpoint()
+            .get("/v1/projects/project_id/run-schedules/schedule_id").respondWith()
+            .statusCode(422).jsonBody(rawResponseBody)
+                .build();
+
+        
+            await expect(async () => {
+                return await client.runSchedules.inspectSchedule("project_id", "schedule_id")
+            }).rejects.toThrow(Sikaru.UnprocessableEntityError);
+    });
+          
+    test("update_schedule (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        const rawRequestBody = { "expected_revision" : 1 , "idempotency_key" : "idempotency_key" };
+        const rawResponseBody = { "schedule" : { "agentId" : "agentId" , "at" : 1.1 , "callbackUrl" : "callbackUrl" , "creator" : "creator" , "cron" : "cron" , "declaredPath" : "declaredPath" , "deleted" : true , "destination" : "destination" , "environment" : "environment" , "exhausted" : true , "id" : "id" , "input" : { "key" : "value" } , "intervalSeconds" : 1 , "nextAt" : 1.1 , "paused" : true , "revision" : 1 , "sessionId" : "sessionId" , "sessionMode" : "fresh" , "timezone" : "timezone" , "toolProviderId" : "toolProviderId" } };
+        
+        server
+            .mockEndpoint()
+            .put("/v1/projects/project_id/run-schedules/schedule_id").jsonBody(rawRequestBody)
+                .respondWith()
+            .statusCode(200).jsonBody(rawResponseBody)
+                .build();
+
+        
+                        
+                                const response = await client.runSchedules.updateSchedule("project_id", "schedule_id", {
+    expected_revision: 1,
+    idempotency_key: "idempotency_key"
+});
+                                expect(response).toEqual(rawResponseBody);
+                              
+                    
+    });
+          
+    test("update_schedule (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        const rawRequestBody = { "expected_revision" : 1 , "idempotency_key" : "x" };
+        const rawResponseBody = { "code" : "code" , "detail" : "detail" };
+        
+        server
+            .mockEndpoint()
+            .put("/v1/projects/project_id/run-schedules/schedule_id").jsonBody(rawRequestBody)
+                .respondWith()
+            .statusCode(401).jsonBody(rawResponseBody)
+                .build();
+
+        
+            await expect(async () => {
+                return await client.runSchedules.updateSchedule("project_id", "schedule_id", {
+    expected_revision: 1,
+    idempotency_key: "x"
+})
+            }).rejects.toThrow(Sikaru.UnauthorizedError);
+    });
+          
+    test("update_schedule (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        const rawRequestBody = { "expected_revision" : 1 , "idempotency_key" : "x" };
+        const rawResponseBody = { "code" : "code" , "detail" : "detail" };
+        
+        server
+            .mockEndpoint()
+            .put("/v1/projects/project_id/run-schedules/schedule_id").jsonBody(rawRequestBody)
+                .respondWith()
+            .statusCode(403).jsonBody(rawResponseBody)
+                .build();
+
+        
+            await expect(async () => {
+                return await client.runSchedules.updateSchedule("project_id", "schedule_id", {
+    expected_revision: 1,
+    idempotency_key: "x"
+})
+            }).rejects.toThrow(Sikaru.ForbiddenError);
+    });
+          
+    test("update_schedule (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        const rawRequestBody = { "expected_revision" : 1 , "idempotency_key" : "x" };
+        const rawResponseBody = { "code" : "code" , "detail" : "detail" };
+        
+        server
+            .mockEndpoint()
+            .put("/v1/projects/project_id/run-schedules/schedule_id").jsonBody(rawRequestBody)
+                .respondWith()
+            .statusCode(404).jsonBody(rawResponseBody)
+                .build();
+
+        
+            await expect(async () => {
+                return await client.runSchedules.updateSchedule("project_id", "schedule_id", {
+    expected_revision: 1,
+    idempotency_key: "x"
+})
+            }).rejects.toThrow(Sikaru.NotFoundError);
+    });
+          
+    test("update_schedule (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        const rawRequestBody = { "expected_revision" : 1 , "idempotency_key" : "x" };
+        const rawResponseBody = { "key" : "value" };
+        
+        server
+            .mockEndpoint()
+            .put("/v1/projects/project_id/run-schedules/schedule_id").jsonBody(rawRequestBody)
+                .respondWith()
+            .statusCode(422).jsonBody(rawResponseBody)
+                .build();
+
+        
+            await expect(async () => {
+                return await client.runSchedules.updateSchedule("project_id", "schedule_id", {
+    expected_revision: 1,
+    idempotency_key: "x"
+})
+            }).rejects.toThrow(Sikaru.UnprocessableEntityError);
+    });
+          
     test("delete_schedule (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         
-        const rawResponseBody = { "deleted" : true };
+        const rawResponseBody = { "deleted" : true , "revision" : 1 };
         
         server
             .mockEndpoint()
@@ -319,7 +523,7 @@ describe("RunSchedulesClient", () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         const rawRequestBody = { "paused" : true };
-        const rawResponseBody = { "paused" : true };
+        const rawResponseBody = { "paused" : true , "revision" : 1 };
         
         server
             .mockEndpoint()
@@ -518,7 +722,7 @@ describe("RunSchedulesClient", () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         
-        const rawResponseBody = { "items" : [ { "access" : { "key" : "value" } , "admittedAt" : 1.1 , "harnessVersionId" : "harnessVersionId" , "runId" : "runId" , "scheduledAt" : 1.1 , "sessionId" : "sessionId" , "status" : "admitted" } ] , "nextBefore" : 1.1 };
+        const rawResponseBody = { "items" : [ { "access" : { "key" : "value" } , "admittedAt" : 1.1 , "harnessVersionId" : "harnessVersionId" , "revision" : 1 , "runId" : "runId" , "scheduledAt" : 1.1 , "sessionId" : "sessionId" , "status" : "admitted" } ] , "nextBefore" : 1.1 };
         
         server
             .mockEndpoint()

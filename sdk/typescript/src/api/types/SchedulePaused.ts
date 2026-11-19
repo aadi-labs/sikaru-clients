@@ -2,4 +2,5 @@
 
 export interface SchedulePaused {
     paused: boolean;
+    revision?: (number | null) | undefined;
 }

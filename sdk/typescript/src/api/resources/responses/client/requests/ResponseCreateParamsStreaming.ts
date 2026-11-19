@@ -2,9 +2,7 @@
 
 /**
  * @example
- *     {
- *         model: "model"
- *     }
+ *     {}
  */
 export interface ResponseCreateParamsStreaming {
     access_programs?: Record<string, unknown> | null;
@@ -17,7 +15,7 @@ export interface ResponseCreateParamsStreaming {
     max_output_tokens?: number | null;
     max_tool_calls?: number | null;
     metadata?: Record<string, unknown> | null;
-    model: string;
+    model?: string | null;
     models?: string[] | null;
     moderation?: Record<string, unknown> | null;
     parallel_tool_calls?: boolean | null;

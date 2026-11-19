@@ -12,7 +12,7 @@ The official Sikaru clients, released together under one version and one `vX.Y.Z
 | `sdk/python/` | `sikaru-sdk` on PyPI, imported as `sikaru_sdk` | `pip install sikaru-sdk` |
 | `sdk/typescript/` | `@aadi-labs/sikaru-sdk` on npm | `npm install @aadi-labs/sikaru-sdk` |
 
-`examples/` has runnable CLI and SDK examples. `shared/` holds the authoring companions and shared contracts.
+`examples/` has runnable CLI and SDK examples. `shared/` holds cross-language contracts.
 
 ## Using Sikaru from your project
 

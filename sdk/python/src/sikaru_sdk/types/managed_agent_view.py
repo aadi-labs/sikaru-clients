@@ -68,6 +68,29 @@ class ManagedAgentView(UniversalBaseModel):
     Most turns the agent runs at once; null follows the default.
     """
 
+    memory_dream_auto: typing_extensions.Annotated[
+        bool,
+        FieldMetadata(alias="memoryDreamAuto"),
+        pydantic.Field(
+            alias="memoryDreamAuto", description="Whether memory dreams run automatically after conversations go idle."
+        ),
+    ]
+    """
+    Whether memory dreams run automatically after conversations go idle.
+    """
+
+    memory_dream_idle_seconds: typing_extensions.Annotated[
+        typing.Optional[int],
+        FieldMetadata(alias="memoryDreamIdleSeconds"),
+        pydantic.Field(
+            alias="memoryDreamIdleSeconds",
+            description="Idle seconds before an automatic dream; null follows the default (900).",
+        ),
+    ] = None
+    """
+    Idle seconds before an automatic dream; null follows the default (900).
+    """
+
     organization_id: typing_extensions.Annotated[
         str, FieldMetadata(alias="organizationId"), pydantic.Field(alias="organizationId")
     ]

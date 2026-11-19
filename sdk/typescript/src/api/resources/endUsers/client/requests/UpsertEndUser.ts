@@ -5,8 +5,12 @@
  *     {}
  */
 export interface UpsertEndUser {
+    /** Apply settings only when creating a cell. Return existing cells unchanged. */
+    createOnly?: boolean;
     /** Opting out removes this user's contributed traces and eval cases from population material. Omit it to keep the current choice. */
     optIn?: boolean | null;
+    /** Allow automatic nightly sleep; omit to preserve the setting. */
+    sleepEnabled?: boolean | null;
     /** IANA timezone, such as Europe/Berlin. Explicit null clears it; omit it to keep the current value. */
     timezone?: string | null;
 }

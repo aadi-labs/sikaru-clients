@@ -102,7 +102,7 @@ describe("ChannelsClient", () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         
-        const rawResponseBody = [ { "agent_id" : "agent_id" , "destination_id" : "destination_id" , "destination_kind" : "destination_kind" , "generation" : 1 , "id" : "id" , "identity_app_ids" : [ "identity_app_ids" ] , "installation_generation" : 1 , "installation_id" : "installation_id" , "name" : "name" , "pending_cap" : 1 , "per_minute" : 1 , "personal_access" : true , "recipient_id" : "recipient_id" , "status" : "status" , "transport" : "http" } ];
+        const rawResponseBody = [ { "agent_id" : "agent_id" , "declared_path" : "declared_path" , "destination_id" : "destination_id" , "destination_kind" : "destination_kind" , "feedback" : { "emojis" : { "key" : "value" } , "enabled" : true } , "feedback_notice" : "feedback_notice" , "generation" : 1 , "id" : "id" , "identity_app_ids" : [ "identity_app_ids" ] , "installation_generation" : 1 , "installation_id" : "installation_id" , "name" : "name" , "pending_cap" : 1 , "per_minute" : 1 , "personal_access" : true , "recipient_id" : "recipient_id" , "status" : "status" , "transport" : "http" } ];
         
         server
             .mockEndpoint()
@@ -204,7 +204,7 @@ describe("ChannelsClient", () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         const rawRequestBody = { "agent_id" : "agent_id" , "transport" : "http" };
-        const rawResponseBody = { "agent_id" : "agent_id" , "destination_id" : "destination_id" , "destination_kind" : "destination_kind" , "generation" : 1 , "id" : "id" , "identity_app_ids" : [ "identity_app_ids" ] , "installation_generation" : 1 , "installation_id" : "installation_id" , "name" : "name" , "pending_cap" : 1 , "per_minute" : 1 , "personal_access" : true , "recipient_id" : "recipient_id" , "status" : "status" , "transport" : "http" };
+        const rawResponseBody = { "agent_id" : "agent_id" , "declared_path" : "declared_path" , "destination_id" : "destination_id" , "destination_kind" : "destination_kind" , "feedback" : { "emojis" : { "key" : "value" } , "enabled" : true } , "feedback_notice" : "feedback_notice" , "generation" : 1 , "id" : "id" , "identity_app_ids" : [ "identity_app_ids" ] , "installation_generation" : 1 , "installation_id" : "installation_id" , "name" : "name" , "pending_cap" : 1 , "per_minute" : 1 , "personal_access" : true , "recipient_id" : "recipient_id" , "status" : "status" , "transport" : "http" };
         
         server
             .mockEndpoint()
@@ -407,7 +407,7 @@ describe("ChannelsClient", () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         const rawRequestBody = { "status" : "active" };
-        const rawResponseBody = { "agent_id" : "agent_id" , "destination_id" : "destination_id" , "destination_kind" : "destination_kind" , "generation" : 1 , "id" : "id" , "identity_app_ids" : [ "identity_app_ids" ] , "installation_generation" : 1 , "installation_id" : "installation_id" , "name" : "name" , "pending_cap" : 1 , "per_minute" : 1 , "personal_access" : true , "recipient_id" : "recipient_id" , "status" : "status" , "transport" : "http" };
+        const rawResponseBody = { "agent_id" : "agent_id" , "declared_path" : "declared_path" , "destination_id" : "destination_id" , "destination_kind" : "destination_kind" , "feedback" : { "emojis" : { "key" : "value" } , "enabled" : true } , "feedback_notice" : "feedback_notice" , "generation" : 1 , "id" : "id" , "identity_app_ids" : [ "identity_app_ids" ] , "installation_generation" : 1 , "installation_id" : "installation_id" , "name" : "name" , "pending_cap" : 1 , "per_minute" : 1 , "personal_access" : true , "recipient_id" : "recipient_id" , "status" : "status" , "transport" : "http" };
         
         server
             .mockEndpoint()
@@ -514,7 +514,7 @@ describe("ChannelsClient", () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         const rawRequestBody = { };
-        const rawResponseBody = { "agent_id" : "agent_id" , "destination_id" : "destination_id" , "destination_kind" : "destination_kind" , "generation" : 1 , "id" : "id" , "identity_app_ids" : [ "identity_app_ids" ] , "installation_generation" : 1 , "installation_id" : "installation_id" , "name" : "name" , "pending_cap" : 1 , "per_minute" : 1 , "personal_access" : true , "recipient_id" : "recipient_id" , "status" : "status" , "transport" : "http" };
+        const rawResponseBody = { "agent_id" : "agent_id" , "declared_path" : "declared_path" , "destination_id" : "destination_id" , "destination_kind" : "destination_kind" , "feedback" : { "emojis" : { "key" : "value" } , "enabled" : true } , "feedback_notice" : "feedback_notice" , "generation" : 1 , "id" : "id" , "identity_app_ids" : [ "identity_app_ids" ] , "installation_generation" : 1 , "installation_id" : "installation_id" , "name" : "name" , "pending_cap" : 1 , "per_minute" : 1 , "personal_access" : true , "recipient_id" : "recipient_id" , "status" : "status" , "transport" : "http" };
         
         server
             .mockEndpoint()
@@ -696,6 +696,103 @@ describe("ChannelsClient", () => {
         
             await expect(async () => {
                 return await client.channels.issueHttpCredential("project_id", "binding_id")
+            }).rejects.toThrow(Sikaru.UnprocessableEntityError);
+    });
+          
+    test("configure_feedback (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        const rawRequestBody = { };
+        const rawResponseBody = { "agent_id" : "agent_id" , "declared_path" : "declared_path" , "destination_id" : "destination_id" , "destination_kind" : "destination_kind" , "feedback" : { "emojis" : { "key" : "value" } , "enabled" : true } , "feedback_notice" : "feedback_notice" , "generation" : 1 , "id" : "id" , "identity_app_ids" : [ "identity_app_ids" ] , "installation_generation" : 1 , "installation_id" : "installation_id" , "name" : "name" , "pending_cap" : 1 , "per_minute" : 1 , "personal_access" : true , "recipient_id" : "recipient_id" , "status" : "status" , "transport" : "http" };
+        
+        server
+            .mockEndpoint()
+            .patch("/v1/projects/project_id/channels/bindings/binding_id/feedback").jsonBody(rawRequestBody)
+                .respondWith()
+            .statusCode(200).jsonBody(rawResponseBody)
+                .build();
+
+        
+                        
+                                const response = await client.channels.configureFeedback("project_id", "binding_id", {});
+                                expect(response).toEqual(rawResponseBody);
+                              
+                    
+    });
+          
+    test("configure_feedback (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        const rawRequestBody = { };
+        const rawResponseBody = { "code" : "code" , "detail" : "detail" };
+        
+        server
+            .mockEndpoint()
+            .patch("/v1/projects/project_id/channels/bindings/binding_id/feedback").jsonBody(rawRequestBody)
+                .respondWith()
+            .statusCode(401).jsonBody(rawResponseBody)
+                .build();
+
+        
+            await expect(async () => {
+                return await client.channels.configureFeedback("project_id", "binding_id", {})
+            }).rejects.toThrow(Sikaru.UnauthorizedError);
+    });
+          
+    test("configure_feedback (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        const rawRequestBody = { };
+        const rawResponseBody = { "code" : "code" , "detail" : "detail" };
+        
+        server
+            .mockEndpoint()
+            .patch("/v1/projects/project_id/channels/bindings/binding_id/feedback").jsonBody(rawRequestBody)
+                .respondWith()
+            .statusCode(403).jsonBody(rawResponseBody)
+                .build();
+
+        
+            await expect(async () => {
+                return await client.channels.configureFeedback("project_id", "binding_id", {})
+            }).rejects.toThrow(Sikaru.ForbiddenError);
+    });
+          
+    test("configure_feedback (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        const rawRequestBody = { };
+        const rawResponseBody = { "code" : "code" , "detail" : "detail" };
+        
+        server
+            .mockEndpoint()
+            .patch("/v1/projects/project_id/channels/bindings/binding_id/feedback").jsonBody(rawRequestBody)
+                .respondWith()
+            .statusCode(404).jsonBody(rawResponseBody)
+                .build();
+
+        
+            await expect(async () => {
+                return await client.channels.configureFeedback("project_id", "binding_id", {})
+            }).rejects.toThrow(Sikaru.NotFoundError);
+    });
+          
+    test("configure_feedback (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        const rawRequestBody = { };
+        const rawResponseBody = { "key" : "value" };
+        
+        server
+            .mockEndpoint()
+            .patch("/v1/projects/project_id/channels/bindings/binding_id/feedback").jsonBody(rawRequestBody)
+                .respondWith()
+            .statusCode(422).jsonBody(rawResponseBody)
+                .build();
+
+        
+            await expect(async () => {
+                return await client.channels.configureFeedback("project_id", "binding_id", {})
             }).rejects.toThrow(Sikaru.UnprocessableEntityError);
     });
           
@@ -1935,7 +2032,7 @@ describe("ChannelsClient", () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
         const rawRequestBody = { "agent_id" : "agent_id" , "identity_app_id" : "identity_app_id" , "installation_id" : "installation_id" , "verification_id" : "verification_id" };
-        const rawResponseBody = { "agent_id" : "agent_id" , "destination_id" : "destination_id" , "destination_kind" : "destination_kind" , "generation" : 1 , "id" : "id" , "identity_app_ids" : [ "identity_app_ids" ] , "installation_generation" : 1 , "installation_id" : "installation_id" , "name" : "name" , "pending_cap" : 1 , "per_minute" : 1 , "personal_access" : true , "recipient_id" : "recipient_id" , "status" : "status" , "transport" : "http" };
+        const rawResponseBody = { "agent_id" : "agent_id" , "declared_path" : "declared_path" , "destination_id" : "destination_id" , "destination_kind" : "destination_kind" , "feedback" : { "emojis" : { "key" : "value" } , "enabled" : true } , "feedback_notice" : "feedback_notice" , "generation" : 1 , "id" : "id" , "identity_app_ids" : [ "identity_app_ids" ] , "installation_generation" : 1 , "installation_id" : "installation_id" , "name" : "name" , "pending_cap" : 1 , "per_minute" : 1 , "personal_access" : true , "recipient_id" : "recipient_id" , "status" : "status" , "transport" : "http" };
         
         server
             .mockEndpoint()

@@ -8,6 +8,7 @@ export interface DocumentTemplate {
     connectors?: string[] | undefined;
     description: string;
     document: string;
+    files?: (Record<string, string | null> | null) | undefined;
     id: string;
     name: string;
 }

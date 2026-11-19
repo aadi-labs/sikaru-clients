@@ -443,7 +443,6 @@ client = SikaruApi(
 )
 
 client.completions.create_stream(
-    model="model",
     prompt="prompt",
 )
 
@@ -457,14 +456,6 @@ client.completions.create_stream(
 
 <dl>
 <dd>
-
-<dl>
-<dd>
-
-**model:** `str` 
-    
-</dd>
-</dl>
 
 <dl>
 <dd>
@@ -534,6 +525,14 @@ client.completions.create_stream(
 <dd>
 
 **min_p:** `typing.Optional[float]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**model:** `typing.Optional[str]` 
     
 </dd>
 </dl>
@@ -711,7 +710,6 @@ client = SikaruApi(
 )
 
 client.completions.create_stream(
-    model="model",
     prompt="prompt",
 )
 
@@ -725,14 +723,6 @@ client.completions.create_stream(
 
 <dl>
 <dd>
-
-<dl>
-<dd>
-
-**model:** `str` 
-    
-</dd>
-</dl>
 
 <dl>
 <dd>
@@ -802,6 +792,14 @@ client.completions.create_stream(
 <dd>
 
 **min_p:** `typing.Optional[float]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**model:** `typing.Optional[str]` 
     
 </dd>
 </dl>
@@ -1116,6 +1114,857 @@ client.personal_channels.get_message(
 <dd>
 
 **receipt_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**authorization:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**sikaru_user_assertion:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**sikaru_member_authorization:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.personal_channels.<a href="src/sikaru_sdk/personal_channels/client.py">list_browser_logins</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+The sites this user's agents may open signed in as them.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.personal_channels.list_browser_logins(
+    binding_id="binding_id",
+    receipt_id="receipt_id",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**binding_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**receipt_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**authorization:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**sikaru_user_assertion:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**sikaru_member_authorization:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.personal_channels.<a href="src/sikaru_sdk/personal_channels/client.py">delete_browser_login</a>(...)</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.personal_channels.delete_browser_login(
+    binding_id="binding_id",
+    receipt_id="receipt_id",
+    login_id="login_id",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**binding_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**receipt_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**login_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**authorization:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**sikaru_user_assertion:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**sikaru_member_authorization:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.personal_channels.<a href="src/sikaru_sdk/personal_channels/client.py">get_browser_preview</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Everything this user is asked to approve, typed values included.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.personal_channels.get_browser_preview(
+    binding_id="binding_id",
+    receipt_id="receipt_id",
+    digest="digest",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**binding_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**receipt_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**digest:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**authorization:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**sikaru_user_assertion:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**sikaru_member_authorization:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.personal_channels.<a href="src/sikaru_sdk/personal_channels/client.py">get_browser_preview_screenshot</a>(...) -> typing.Iterator[bytes]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+The page this user is asked to approve, password fields masked.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.personal_channels.get_browser_preview_screenshot(
+    binding_id="binding_id",
+    receipt_id="receipt_id",
+    digest="digest",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**binding_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**receipt_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**digest:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**authorization:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**sikaru_user_assertion:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**sikaru_member_authorization:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.personal_channels.<a href="src/sikaru_sdk/personal_channels/client.py">get_browser_receipt</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+What this run's browser did for this user, with their own pages' screenshots.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.personal_channels.get_browser_receipt(
+    binding_id="binding_id",
+    receipt_id="receipt_id",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**binding_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**receipt_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**authorization:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**sikaru_user_assertion:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**sikaru_member_authorization:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.personal_channels.<a href="src/sikaru_sdk/personal_channels/client.py">get_browser_receipt_screenshot</a>(...) -> typing.Iterator[bytes]</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.personal_channels.get_browser_receipt_screenshot(
+    binding_id="binding_id",
+    receipt_id="receipt_id",
+    digest="digest",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**binding_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**receipt_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**digest:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**authorization:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**sikaru_user_assertion:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**sikaru_member_authorization:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.personal_channels.<a href="src/sikaru_sdk/personal_channels/client.py">list_browser_rules</a>(...) -> BrowserRuleList</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+The browser actions this user always allows this agent to take for them.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.personal_channels.list_browser_rules(
+    binding_id="binding_id",
+    receipt_id="receipt_id",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**binding_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**receipt_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**authorization:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**sikaru_user_assertion:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**sikaru_member_authorization:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.personal_channels.<a href="src/sikaru_sdk/personal_channels/client.py">delete_browser_rule</a>(...)</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.personal_channels.delete_browser_rule(
+    binding_id="binding_id",
+    receipt_id="receipt_id",
+    rule_id="rule_id",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**binding_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**receipt_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**rule_id:** `str` 
     
 </dd>
 </dl>
@@ -1741,6 +2590,121 @@ client.personal_channels.decide_approval(
 <dd>
 
 **request:** `ApprovalInput` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**authorization:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**sikaru_user_assertion:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**sikaru_member_authorization:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.personal_channels.<a href="src/sikaru_sdk/personal_channels/client.py">create_browser_handoff</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+A one-time link to sign in, in a live browser, to the sites a parked browser call needs.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.personal_channels.create_browser_handoff(
+    binding_id="binding_id",
+    receipt_id="receipt_id",
+    tool_call_id="tool_call_id",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**binding_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**receipt_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**tool_call_id:** `str` 
     
 </dd>
 </dl>
@@ -2464,7 +3428,6 @@ client = SikaruApi(
 
 client.agent_documents.edit_setting(
     project_id="project_id",
-    document="document",
     path=[
         "path"
     ],
@@ -2492,7 +3455,7 @@ client.agent_documents.edit_setting(
 <dl>
 <dd>
 
-**document:** `str` 
+**path:** `typing.List[str]` 
     
 </dd>
 </dl>
@@ -2500,7 +3463,15 @@ client.agent_documents.edit_setting(
 <dl>
 <dd>
 
-**path:** `typing.List[str]` 
+**document:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**files:** `typing.Optional[typing.Dict[str, typing.Optional[str]]]` 
     
 </dd>
 </dl>
@@ -2618,7 +3589,6 @@ client = SikaruApi(
 
 client.agent_documents.validate_text(
     project_id="project_id",
-    document="document",
 )
 
 ```
@@ -2755,8 +3725,7 @@ client = SikaruApi(
 client.agent_documents.save(
     project_id="project_id",
     agent_slug="agent_slug",
-    document="document",
-    expected_revision=1,
+    base_revision=1,
 )
 
 ```
@@ -2789,7 +3758,7 @@ client.agent_documents.save(
 <dl>
 <dd>
 
-**document:** `str` 
+**base_revision:** `int` 
     
 </dd>
 </dl>
@@ -2797,7 +3766,15 @@ client.agent_documents.save(
 <dl>
 <dd>
 
-**expected_revision:** `int` 
+**document:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**files:** `typing.Optional[typing.Dict[str, typing.Optional[str]]]` 
     
 </dd>
 </dl>
@@ -2909,7 +3886,7 @@ client = SikaruApi(
 client.agent_documents.discard(
     project_id="project_id",
     agent_slug="agent_slug",
-    expected_revision=1,
+    base_revision=1,
 )
 
 ```
@@ -2942,7 +3919,7 @@ client.agent_documents.discard(
 <dl>
 <dd>
 
-**expected_revision:** `int` 
+**base_revision:** `int` 
     
 </dd>
 </dl>
@@ -2951,6 +3928,199 @@ client.agent_documents.discard(
 <dd>
 
 **expected_live_version_id:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.agent_documents.<a href="src/sikaru_sdk/agent_documents/client.py">get_publication</a>(...) -> PublicationState</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+A publication's state, read without publishing again: follow a pending publish here until its release check
+settles.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.agent_documents.get_publication(
+    project_id="project_id",
+    agent_slug="agent_slug",
+    publication_id="publication_id",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_slug:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**publication_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.agent_documents.<a href="src/sikaru_sdk/agent_documents/client.py">publish_anyway</a>(...) -> DocumentPublication</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Release a publication its release check blocked or couldn't verify, recording who, when and why (R10, R33).
+Only a release check is overridden: an agent's measured evaluation still runs (R34).
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.agent_documents.publish_anyway(
+    project_id="project_id",
+    agent_slug="agent_slug",
+    publication_id="publication_id",
+    reason="reason",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_slug:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**publication_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `PublishAnyway` 
     
 </dd>
 </dl>
@@ -3475,7 +4645,7 @@ client.agent_documents.adopt_suggestion(
     project_id="project_id",
     agent_slug="agent_slug",
     suggestion_id="suggestion_id",
-    expected_revision=1,
+    base_revision=1,
 )
 
 ```
@@ -3516,7 +4686,7 @@ client.agent_documents.adopt_suggestion(
 <dl>
 <dd>
 
-**expected_revision:** `int` 
+**base_revision:** `int` 
     
 </dd>
 </dl>
@@ -3637,7 +4807,6 @@ client = SikaruApi(
 client.agent_documents.validate(
     project_id="project_id",
     agent_slug="agent_slug",
-    document="document",
 )
 
 ```
@@ -3912,6 +5081,1150 @@ client.agent_imports.create_agent_import(
 <dd>
 
 **source_refs:** `typing.Optional[typing.List[AgentImportSourceRefRequest]]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## Graders
+<details><summary><code>client.graders.<a href="src/sikaru_sdk/graders/client.py">list</a>(...) -> GraderList</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+The agent's Graders, presets included, and whether the agent is graded at all.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.graders.list(
+    project_id="project_id",
+    agent_id="agent_id",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.graders.<a href="src/sikaru_sdk/graders/client.py">test</a>(...) -> TestReport</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Score an unsaved file with its own judge. Poll a pending test; no Grader or verdict is saved.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.graders.test(
+    project_id="project_id",
+    agent_id="agent_id",
+    file="file",
+    name="name",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**file:** `str` — The Grader file's text, as a push would read it. It is tested by its chosen judge without saving a Grader or verdict; its ceiling applies while its release check is on.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**name:** `str` — The Grader file's name: graders/<name>.toml in the agent folder.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**idempotency_key:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**limit:** `typing.Optional[int]` — Recent conversations to score.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.graders.<a href="src/sikaru_sdk/graders/client.py">get_test</a>(...) -> TestReport</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Read a pending, completed or failed unsaved test. Reports expire after one day.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.graders.get_test(
+    project_id="project_id",
+    agent_id="agent_id",
+    test_id="test_id",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**test_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.graders.<a href="src/sikaru_sdk/graders/client.py">get</a>(...) -> GraderDetail</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+One Grader: its status, criteria, judge, release check, versions and label counts.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.graders.get(
+    project_id="project_id",
+    agent_id="agent_id",
+    grader_id="grader_id",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**grader_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.graders.<a href="src/sikaru_sdk/graders/client.py">update</a>(...) -> GraderDetail</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Change the description, judge, escalation or release check. A judge or escalation change saves a provisional
+version that goes live only once it clears the promotion rule; the other settings change no verdict.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.graders.update(
+    project_id="project_id",
+    agent_id="agent_id",
+    grader_id="grader_id",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**grader_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**description:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**escalate:** `typing.Optional[bool]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**judge:** `typing.Optional[JudgeChoice]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**reason:** `typing.Optional[str]` — Why a check that blocks a release is turned off or loosened; required then, and recorded.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**release_check:** `typing.Optional[CheckChoice]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.graders.<a href="src/sikaru_sdk/graders/client.py">estimate_cost</a>(...) -> CostEstimate</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+What judging every conversation with the LLM judge or a project agent is expected to cost (R4).
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.graders.estimate_cost(
+    project_id="project_id",
+    agent_id="agent_id",
+    grader_id="grader_id",
+    judge="llm",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**grader_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**judge:** `EstimateCostGradersRequestJudge` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**judge_agent_id:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.graders.<a href="src/sikaru_sdk/graders/client.py">label_queue</a>(...) -> LabelQueue</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Conversations the Grader is least sure about, unlabeled, each with an excerpt and without its verdict.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.graders.label_queue(
+    project_id="project_id",
+    agent_id="agent_id",
+    grader_id="grader_id",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**grader_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**limit:** `typing.Optional[int]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.graders.<a href="src/sikaru_sdk/graders/client.py">label</a>(...) -> Labeled</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Mark one conversation Flagged or Looks Fine with an optional reason; labeling it again replaces the label.
+The response then shows what the Grader itself said.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.graders.label(
+    project_id="project_id",
+    agent_id="agent_id",
+    grader_id="grader_id",
+    conversation_key="conversationKey",
+    verdict="flagged",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**grader_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**conversation_key:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**verdict:** `LabelBodyVerdict` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**reason:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.graders.<a href="src/sikaru_sdk/graders/client.py">run</a>(...) -> RunStarted</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Re-score recent production conversations using this Grader version's own judge.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.graders.run(
+    project_id="project_id",
+    agent_id="agent_id",
+    grader_id="grader_id",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**grader_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**idempotency_key:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**days:** `typing.Optional[int]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.graders.<a href="src/sikaru_sdk/graders/client.py">get_run</a>(...) -> RunReport</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Follow a recent-production re-score to completion or a useful failure message.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.graders.get_run(
+    project_id="project_id",
+    agent_id="agent_id",
+    grader_id="grader_id",
+    run_id="run_id",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**grader_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**run_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.graders.<a href="src/sikaru_sdk/graders/client.py">samples</a>(...) -> Samples</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+The Grader's recent verdicts, flagged conversations first.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.graders.samples(
+    project_id="project_id",
+    agent_id="agent_id",
+    grader_id="grader_id",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**grader_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**limit:** `typing.Optional[int]` 
     
 </dd>
 </dl>
@@ -4730,6 +7043,108 @@ client.changesets.promote_changeset(
 </dl>
 </details>
 
+<details><summary><code>client.changesets.<a href="src/sikaru_sdk/changesets/client.py">publish_changeset_anyway</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Promote a Try a Fix changeset its agent's release check blocked or couldn't verify, recording who, when and
+why (grader release check R10, R33, R36). The contract of an agent document's Publish Anyway: owner credentials
+and a reason, refused while the check still runs or when the live version or check settings changed since.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.changesets.publish_changeset_anyway(
+    project_id="project_id",
+    changeset_id="changeset_id",
+    publication_id="publication_id",
+    reason="reason",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**changeset_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**publication_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `PublishAnyway` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.changesets.<a href="src/sikaru_sdk/changesets/client.py">reject_changeset</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
@@ -5492,6 +7907,82 @@ client.channels.issue_http_credential(
 <dd>
 
 **binding_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.channels.<a href="src/sikaru_sdk/channels/client.py">configure_feedback</a>(...) -> Binding</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.channels.configure_feedback(
+    project_id="project_id",
+    binding_id="binding_id",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**binding_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `FeedbackConfiguration` 
     
 </dd>
 </dl>
@@ -10715,7 +13206,7 @@ client.context_registry.create_context_registry_change(
 <dl>
 <dd>
 
-**linked_signal:** `typing.Optional[str]` 
+**linked_grader:** `typing.Optional[str]` 
     
 </dd>
 </dl>
@@ -13998,6 +16489,14 @@ client.evaluator_runs.create_evaluator_run(
 <dl>
 <dd>
 
+**grader_tags:** `typing.Optional[typing.List[str]]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **issue_id:** `typing.Optional[str]` 
     
 </dd>
@@ -14015,14 +16514,6 @@ client.evaluator_runs.create_evaluator_run(
 <dd>
 
 **sample_rate:** `typing.Optional[str]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**signal_tags:** `typing.Optional[typing.List[str]]` 
     
 </dd>
 </dl>
@@ -15443,7 +17934,23 @@ client.execution_sessions.create(
 <dl>
 <dd>
 
+**draft_files:** `typing.Optional[typing.Dict[str, typing.Optional[str]]]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **draft_revision:** `typing.Optional[int]` — Saved document revision to test. Required for document Draft sessions.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**draft_schedule:** `typing.Optional[str]` 
     
 </dd>
 </dl>
@@ -15476,6 +17983,14 @@ client.execution_sessions.create(
 <dd>
 
 **idempotency_key:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**invocation_policy:** `typing.Optional[InvocationPolicy]` 
     
 </dd>
 </dl>
@@ -15625,8 +18140,8 @@ client.execution_sessions.list_eligible_releases(
 </dl>
 </details>
 
-## Specialists
-<details><summary><code>client.specialists.<a href="src/sikaru_sdk/specialists/client.py">list</a>(...) -> SpecialistThreads</code></summary>
+## Tasks
+<details><summary><code>client.tasks.<a href="src/sikaru_sdk/tasks/client.py">list</a>(...) -> Tasks</code></summary>
 <dl>
 <dd>
 
@@ -15647,7 +18162,7 @@ client = SikaruApi(
     environment=SikaruApiEnvironment.DEFAULT,
 )
 
-client.specialists.list(
+client.tasks.list(
     project_id="project_id",
     session_id="session_id",
 )
@@ -15694,7 +18209,7 @@ client.specialists.list(
 </dl>
 </details>
 
-<details><summary><code>client.specialists.<a href="src/sikaru_sdk/specialists/client.py">get</a>(...) -> SpecialistThread</code></summary>
+<details><summary><code>client.tasks.<a href="src/sikaru_sdk/tasks/client.py">stop_all</a>(...) -> TaskReceipt</code></summary>
 <dl>
 <dd>
 
@@ -15715,87 +18230,9 @@ client = SikaruApi(
     environment=SikaruApiEnvironment.DEFAULT,
 )
 
-client.specialists.get(
+client.tasks.stop_all(
     project_id="project_id",
     session_id="session_id",
-    thread_id="thread_id",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**project_id:** `str` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**session_id:** `str` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**thread_id:** `str` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.specialists.<a href="src/sikaru_sdk/specialists/client.py">cancel</a>(...) -> SpecialistReceipt</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from sikaru_sdk import SikaruApi
-from sikaru_sdk.environment import SikaruApiEnvironment
-
-client = SikaruApi(
-    api_key="<token>",
-    environment=SikaruApiEnvironment.DEFAULT,
-)
-
-client.specialists.cancel(
-    project_id="project_id",
-    session_id="session_id",
-    thread_id="thread_id",
     idempotency_key="idempotency_key",
 )
 
@@ -15829,15 +18266,7 @@ client.specialists.cancel(
 <dl>
 <dd>
 
-**thread_id:** `str` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**idempotency_key:** `str` 
+**request:** `TaskCancel` 
     
 </dd>
 </dl>
@@ -15857,7 +18286,7 @@ client.specialists.cancel(
 </dl>
 </details>
 
-<details><summary><code>client.specialists.<a href="src/sikaru_sdk/specialists/client.py">message</a>(...) -> SpecialistReceipt</code></summary>
+<details><summary><code>client.tasks.<a href="src/sikaru_sdk/tasks/client.py">get</a>(...) -> Task</code></summary>
 <dl>
 <dd>
 
@@ -15878,10 +18307,603 @@ client = SikaruApi(
     environment=SikaruApiEnvironment.DEFAULT,
 )
 
-client.specialists.message(
+client.tasks.get(
     project_id="project_id",
     session_id="session_id",
-    thread_id="thread_id",
+    task_id="task_id",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**session_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**task_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.tasks.<a href="src/sikaru_sdk/tasks/client.py">actions</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.tasks.actions(
+    project_id="project_id",
+    session_id="session_id",
+    task_id="task_id",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**session_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**task_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.tasks.<a href="src/sikaru_sdk/tasks/client.py">approve_action</a>(...) -> TaskApprovalReceipt</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.tasks.approve_action(
+    project_id="project_id",
+    session_id="session_id",
+    task_id="task_id",
+    action_id="action_id",
+    decision="approved",
+    idempotency_key="idempotency_key",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**session_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**task_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**action_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `ApprovalInput` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.tasks.<a href="src/sikaru_sdk/tasks/client.py">cancel</a>(...) -> TaskReceipt</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.tasks.cancel(
+    project_id="project_id",
+    session_id="session_id",
+    task_id="task_id",
+    idempotency_key="idempotency_key",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**session_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**task_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `TaskCancel` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.tasks.<a href="src/sikaru_sdk/tasks/client.py">changes</a>(...) -> TaskChanges</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.tasks.changes(
+    project_id="project_id",
+    session_id="session_id",
+    task_id="task_id",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**session_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**task_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.tasks.<a href="src/sikaru_sdk/tasks/client.py">integrations</a>(...) -> TaskIntegrationReceipts</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.tasks.integrations(
+    project_id="project_id",
+    session_id="session_id",
+    task_id="task_id",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**session_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**task_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.tasks.<a href="src/sikaru_sdk/tasks/client.py">integrate</a>(...) -> TaskIntegrationReceipt</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.tasks.integrate(
+    project_id="project_id",
+    session_id="session_id",
+    task_id="task_id",
+    idempotency_key="idempotency_key",
+    revision=1,
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**session_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**task_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**idempotency_key:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**revision:** `int` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**paths:** `typing.Optional[typing.List[str]]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.tasks.<a href="src/sikaru_sdk/tasks/client.py">message</a>(...) -> TaskReceipt</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.tasks.message(
+    project_id="project_id",
+    session_id="session_id",
+    task_id="task_id",
     idempotency_key="idempotency_key",
     input={
         "key": "value"
@@ -15918,7 +18940,7 @@ client.specialists.message(
 <dl>
 <dd>
 
-**thread_id:** `str` 
+**task_id:** `str` 
     
 </dd>
 </dl>
@@ -15942,7 +18964,7 @@ client.specialists.message(
 <dl>
 <dd>
 
-**delivery_mode:** `typing.Optional[SpecialistMessageDeliveryMode]` 
+**delivery_mode:** `typing.Optional[TaskMessageDeliveryMode]` 
     
 </dd>
 </dl>
@@ -17638,6 +20660,680 @@ client.runs.pending_actions(
 </dl>
 </details>
 
+<details><summary><code>client.runs.<a href="src/sikaru_sdk/runs/client.py">create_handoff</a>(...) -> LiveLink</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.runs.create_handoff(
+    project_id="project_id",
+    run_id="run_id",
+    tool_call_id="tool_call_id",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**run_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**tool_call_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.runs.<a href="src/sikaru_sdk/runs/client.py">get_preview</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Everything a browser approval asks about, typed values included, for its owner only.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.runs.get_preview(
+    project_id="project_id",
+    run_id="run_id",
+    digest="digest",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**run_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**digest:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.runs.<a href="src/sikaru_sdk/runs/client.py">preview_screenshot</a>(...) -> typing.Iterator[bytes]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+The page an approver is asked about, password fields masked.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.runs.preview_screenshot(
+    project_id="project_id",
+    run_id="run_id",
+    digest="digest",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**run_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**digest:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.runs.<a href="src/sikaru_sdk/runs/client.py">get_receipt</a>(...) -> Receipt</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+What the run's browser did: pages visited, actions committed, and sign-ins by people.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.runs.get_receipt(
+    project_id="project_id",
+    run_id="run_id",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**run_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.runs.<a href="src/sikaru_sdk/runs/client.py">get_receipt_screenshot</a>(...) -> typing.Iterator[bytes]</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.runs.get_receipt_screenshot(
+    project_id="project_id",
+    run_id="run_id",
+    digest="digest",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**run_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**digest:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.runs.<a href="src/sikaru_sdk/runs/client.py">take_over</a>(...) -> LiveLink</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Take over a run's browser after the agent's current action; the link drives it until handed back.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi, TakeOverRequest
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.runs.take_over(
+    project_id="project_id",
+    run_id="run_id",
+    request=TakeOverRequest(),
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**run_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `typing.Optional[TakeOverRequest]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.runs.<a href="src/sikaru_sdk/runs/client.py">end_take_over</a>(...)</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Withdraw a take over, or hand back the browser the run is waiting on.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.runs.end_take_over(
+    project_id="project_id",
+    run_id="run_id",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**run_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.runs.<a href="src/sikaru_sdk/runs/client.py">watch_run</a>(...) -> LiveLink</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Watch a run's browser read-only. Pages signed in with an end user's own login stay hidden
+from everyone but that user.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.runs.watch_run(
+    project_id="project_id",
+    run_id="run_id",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**run_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.runs.<a href="src/sikaru_sdk/runs/client.py">cancel</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
 <dd>
@@ -18135,7 +21831,7 @@ client.runs.retry(
 </dl>
 </details>
 
-<details><summary><code>client.runs.<a href="src/sikaru_sdk/runs/client.py">decide_approval</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.runs.<a href="src/sikaru_sdk/runs/client.py">decide_approval</a>(...) -> PersonalChannelApproval</code></summary>
 <dl>
 <dd>
 
@@ -19681,6 +23377,14 @@ client.issue_clusters.upsert_issue_cluster(
 <dl>
 <dd>
 
+**grader_tags:** `typing.Optional[typing.List[str]]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **impact:** `typing.Optional[int]` 
     
 </dd>
@@ -19698,14 +23402,6 @@ client.issue_clusters.upsert_issue_cluster(
 <dd>
 
 **issue_title:** `typing.Optional[str]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**signal_tags:** `typing.Optional[typing.List[str]]` 
     
 </dd>
 </dl>
@@ -19946,92 +23642,6 @@ client.issue_clusters.propose_issue_cluster_fix(
 </dl>
 </details>
 
-## JudgeAlignment
-<details><summary><code>client.judge_alignment.<a href="src/sikaru_sdk/judge_alignment/client.py">get_judge_alignment</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from sikaru_sdk import SikaruApi
-from sikaru_sdk.environment import SikaruApiEnvironment
-
-client = SikaruApi(
-    api_key="<token>",
-    environment=SikaruApiEnvironment.DEFAULT,
-)
-
-client.judge_alignment.get_judge_alignment(
-    project_id="project_id",
-    evaluator="evaluator",
-    revision="revision",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**project_id:** `str` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**evaluator:** `str` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**revision:** `str` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**environment:** `typing.Optional[GetJudgeAlignmentJudgeAlignmentRequestEnvironment]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
 ## ManagedAgents
 <details><summary><code>client.managed_agents.<a href="src/sikaru_sdk/managed_agents/client.py">list_managed_agents</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
@@ -20205,6 +23815,22 @@ client.managed_agents.create_managed_agent(
 <dd>
 
 **max_concurrent_turns:** `typing.Optional[int]` — Most turns the agent runs at once; omit to keep the current limit.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**memory_dream_auto:** `typing.Optional[bool]` — Whether memory dreams run automatically once conversations go idle; omit to keep the current choice.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**memory_dream_idle_seconds:** `typing.Optional[int]` — Seconds a user's conversations stay idle before an automatic dream; null means 900. Omit to keep the current delay.
     
 </dd>
 </dl>
@@ -20424,7 +24050,7 @@ client.managed_agents.delete_managed_agent(
 <dl>
 <dd>
 
-Change the agent's display name or turn capacity. The slug and every reference to the agent stay the same.
+Change the agent's display name, turn capacity or memory dreaming. The slug and every reference to the agent stay the same.
 
 Personal and end-user-cell choices are fixed at creation.
 </dd>
@@ -20508,6 +24134,22 @@ client.managed_agents.update(
 <dl>
 <dd>
 
+**memory_dream_auto:** `typing.Optional[bool]` — Whether memory dreams run automatically once conversations go idle. "Dream now" works either way.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**memory_dream_idle_seconds:** `typing.Optional[int]` — Seconds a user's conversations stay idle before an automatic dream; null restores the default of 900.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
     
 </dd>
@@ -20520,23 +24162,9 @@ client.managed_agents.update(
 </dl>
 </details>
 
-<details><summary><code>client.managed_agents.<a href="src/sikaru_sdk/managed_agents/client.py">create_definition_revision</a>(...) -> DefinitionRevisionResult</code></summary>
+<details><summary><code>client.managed_agents.<a href="src/sikaru_sdk/managed_agents/client.py">list_agent_logins</a>(...) -> SavedLogins</code></summary>
 <dl>
 <dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Stage a changed definition as a draft revision; the live definition is a no-op.
-</dd>
-</dl>
-</dd>
-</dl>
 
 #### 🔌 Usage
 
@@ -20547,7 +24175,7 @@ Stage a changed definition as a draft revision; the live definition is a no-op.
 <dd>
 
 ```python
-from sikaru_sdk import SikaruApi, AgentDefinition
+from sikaru_sdk import SikaruApi
 from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
@@ -20555,13 +24183,9 @@ client = SikaruApi(
     environment=SikaruApiEnvironment.DEFAULT,
 )
 
-client.managed_agents.create_definition_revision(
+client.managed_agents.list_agent_logins(
     project_id="project_id",
     agent_slug="agent_slug",
-    content_digest="contentDigest",
-    definition=AgentDefinition(
-        schema="sikaru.agent.contract.v1",
-    ),
 )
 
 ```
@@ -20594,7 +24218,74 @@ client.managed_agents.create_definition_revision(
 <dl>
 <dd>
 
-**content_digest:** `str` 
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.managed_agents.<a href="src/sikaru_sdk/managed_agents/client.py">add_agent_login</a>(...) -> LiveLink</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+An operator signs the agent in to a company account once; every run then uses it.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.managed_agents.add_agent_login(
+    project_id="project_id",
+    agent_slug="agent_slug",
+    url="url",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `str` 
     
 </dd>
 </dl>
@@ -20602,7 +24293,396 @@ client.managed_agents.create_definition_revision(
 <dl>
 <dd>
 
-**definition:** `AgentDefinition` 
+**agent_slug:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**url:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.managed_agents.<a href="src/sikaru_sdk/managed_agents/client.py">delete_agent_login</a>(...)</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.managed_agents.delete_agent_login(
+    project_id="project_id",
+    agent_slug="agent_slug",
+    login_id="login_id",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_slug:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**login_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.managed_agents.<a href="src/sikaru_sdk/managed_agents/client.py">list_playbooks</a>(...) -> PlaybookList</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.managed_agents.list_playbooks(
+    project_id="project_id",
+    agent_slug="agent_slug",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_slug:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.managed_agents.<a href="src/sikaru_sdk/managed_agents/client.py">delete_playbook</a>(...)</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.managed_agents.delete_playbook(
+    project_id="project_id",
+    agent_slug="agent_slug",
+    playbook_id="playbook_id",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_slug:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**playbook_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.managed_agents.<a href="src/sikaru_sdk/managed_agents/client.py">list_rules</a>(...) -> BrowserRuleList</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Every always-allow rule on the agent; a rule personal to one end user does not say whose.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.managed_agents.list_rules(
+    project_id="project_id",
+    agent_slug="agent_slug",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_slug:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.managed_agents.<a href="src/sikaru_sdk/managed_agents/client.py">delete_rule</a>(...)</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.managed_agents.delete_rule(
+    project_id="project_id",
+    agent_slug="agent_slug",
+    rule_id="rule_id",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_slug:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**rule_id:** `str` 
     
 </dd>
 </dl>
@@ -20680,6 +24760,169 @@ client.managed_agents.get_definition_revision(
 <dd>
 
 **changeset_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.managed_agents.<a href="src/sikaru_sdk/managed_agents/client.py">update_end_user_skill_source</a>(...) -> SkillSourceReceipt</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Replace or enable a customer-authored source using its own revision CAS.
+
+Private optimized methodology and optimizer digests are never returned.
+Replaying an operation returns its original receipt without reverting later work.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.managed_agents.update_end_user_skill_source(
+    project_id="project_id",
+    agent_slug="agent_slug",
+    tenant_id="tenant_id",
+    user_id="user_id",
+    skill_id="skill_id",
+    enabled=True,
+    operation_id="operationId",
+    source_revision="sourceRevision",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_slug:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**tenant_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**user_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**skill_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**enabled:** `bool` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**operation_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**source_revision:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**content:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**expected_revision:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**resources:** `typing.Optional[typing.Dict[str, str]]` 
     
 </dd>
 </dl>
@@ -21082,7 +25325,7 @@ client.checks.run(
 <dl>
 <dd>
 
-What the agent knows about this end user: facts and the persona summary, never the persona prompt.
+What the agent knows about this end user: the persona summary, never the persona prompt.
 </dd>
 </dl>
 </dd>
@@ -21258,7 +25501,23 @@ client.end_users.upsert(
 <dl>
 <dd>
 
+**create_only:** `typing.Optional[bool]` — Apply settings only when creating a cell. Return existing cells unchanged.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **opt_in:** `typing.Optional[bool]` — Opting out removes this user's contributed traces and eval cases from population material. Omit it to keep the current choice.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**sleep_enabled:** `typing.Optional[bool]` — Allow automatic nightly sleep; omit to preserve the setting.
     
 </dd>
 </dl>
@@ -21374,6 +25633,14 @@ client.end_users.delete(
 <dl>
 <dd>
 
+**terminal:** `typing.Optional[bool]` — Permanently reject cell creation and new work for this end user.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
     
 </dd>
@@ -21386,7 +25653,7 @@ client.end_users.delete(
 </dl>
 </details>
 
-<details><summary><code>client.end_users.<a href="src/sikaru_sdk/end_users/client.py">update_fact</a>(...) -> EndUserFile</code></summary>
+<details><summary><code>client.end_users.<a href="src/sikaru_sdk/end_users/client.py">import_state</a>(...) -> ImportReceipt</code></summary>
 <dl>
 <dd>
 
@@ -21398,7 +25665,13 @@ client.end_users.delete(
 <dl>
 <dd>
 
-Correct or add one fact. It serves from the next turn and becomes a held-out case for this user.
+Import a versioned product snapshot atomically, preserving correction provenance.
+
+The cell must already exist. Every file requires expectedEtag (null for an
+absent destination). Reusing an importId requires the identical manifest.
+The digest is SHA-256 of canonical JSON {sourceRevision, files}, with sorted
+keys, compact separators and the supplied file order. Private layers are
+accepted as input but are never returned in the receipt or end-user view.
 </dd>
 </dl>
 </dd>
@@ -21413,7 +25686,7 @@ Correct or add one fact. It serves from the next turn and becomes a held-out cas
 <dd>
 
 ```python
-from sikaru_sdk import SikaruApi
+from sikaru_sdk import SikaruApi, ImportFile
 from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
@@ -21421,13 +25694,22 @@ client = SikaruApi(
     environment=SikaruApiEnvironment.DEFAULT,
 )
 
-client.end_users.update_fact(
+client.end_users.import_state(
     project_id="project_id",
     agent_slug="agent_slug",
     tenant_id="tenant_id",
     user_id="user_id",
-    content="content",
-    path="path",
+    digest="digest",
+    files=[
+        ImportFile(
+            content="content",
+            expected_etag=None,
+            path="path",
+            provenance="provenance",
+        )
+    ],
+    import_id="importId",
+    source_revision="sourceRevision",
 )
 
 ```
@@ -21476,7 +25758,7 @@ client.end_users.update_fact(
 <dl>
 <dd>
 
-**content:** `str` 
+**digest:** `str` 
     
 </dd>
 </dl>
@@ -21484,7 +25766,7 @@ client.end_users.update_fact(
 <dl>
 <dd>
 
-**path:** `str` — USER.md or memories/<name>.md.
+**files:** `typing.List[ImportFile]` 
     
 </dd>
 </dl>
@@ -21492,7 +25774,15 @@ client.end_users.update_fact(
 <dl>
 <dd>
 
-**expected_etag:** `typing.Optional[str]` — Refuse with 409 unless the fact still has this etag.
+**import_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**source_revision:** `str` 
     
 </dd>
 </dl>
@@ -21512,23 +25802,9 @@ client.end_users.update_fact(
 </dl>
 </details>
 
-<details><summary><code>client.end_users.<a href="src/sikaru_sdk/end_users/client.py">delete_fact</a>(...)</code></summary>
+<details><summary><code>client.end_users.<a href="src/sikaru_sdk/end_users/client.py">start_learning_run</a>(...) -> AuthoredLearningReceipt</code></summary>
 <dl>
 <dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Forget one memory, or clear the profile.
-</dd>
-</dl>
-</dd>
-</dl>
 
 #### 🔌 Usage
 
@@ -21539,7 +25815,7 @@ Forget one memory, or clear the profile.
 <dd>
 
 ```python
-from sikaru_sdk import SikaruApi
+from sikaru_sdk import SikaruApi, ProductLearningEvidence, AuthoredLearningWorkflow
 from sikaru_sdk.environment import SikaruApiEnvironment
 
 client = SikaruApi(
@@ -21547,12 +25823,25 @@ client = SikaruApi(
     environment=SikaruApiEnvironment.DEFAULT,
 )
 
-client.end_users.delete_fact(
+client.end_users.start_learning_run(
     project_id="project_id",
     agent_slug="agent_slug",
     tenant_id="tenant_id",
     user_id="user_id",
-    path="path",
+    evidence=[
+        ProductLearningEvidence(
+            content="content",
+            digest="digest",
+            learning_eligible=True,
+            provenance="user_message",
+            source_id="sourceId",
+        )
+    ],
+    invocation_id="invocationId",
+    source_revision="sourceRevision",
+    workflow=AuthoredLearningWorkflow(
+        name="name",
+    ),
 )
 
 ```
@@ -21601,7 +25890,245 @@ client.end_users.delete_fact(
 <dl>
 <dd>
 
-**path:** `str` — USER.md or memories/<name>.md.
+**evidence:** `typing.List[ProductLearningEvidence]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**invocation_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**source_revision:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**workflow:** `AuthoredLearningWorkflow` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**capability_grants:** `typing.Optional[typing.List[str]]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**context:** `typing.Optional[typing.Dict[str, typing.Any]]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**tool_provider_refs:** `typing.Optional[typing.List[AuthoredToolProviderRef]]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.end_users.<a href="src/sikaru_sdk/end_users/client.py">get_learning_run</a>(...) -> AuthoredLearningReceipt</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.end_users.get_learning_run(
+    project_id="project_id",
+    agent_slug="agent_slug",
+    tenant_id="tenant_id",
+    user_id="user_id",
+    invocation_id="invocation_id",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_slug:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**tenant_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**user_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**invocation_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.end_users.<a href="src/sikaru_sdk/end_users/client.py">revoke_learning_source</a>(...)</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.end_users.revoke_learning_source(
+    project_id="project_id",
+    agent_slug="agent_slug",
+    tenant_id="tenant_id",
+    user_id="user_id",
+    source_id="source_id",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_slug:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**tenant_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**user_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**source_id:** `str` 
     
 </dd>
 </dl>
@@ -21730,10 +26257,24 @@ client.end_users.correct_persona_summary(
 </dl>
 </details>
 
-## MemoryRegistry
-<details><summary><code>client.memory_registry.<a href="src/sikaru_sdk/memory_registry/client.py">create_memory_registry_change</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+## Memory
+<details><summary><code>client.memory.<a href="src/sikaru_sdk/memory/client.py">get_dream</a>(...) -> MemoryDream</code></summary>
 <dl>
 <dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+The directory's latest dream job.
+</dd>
+</dl>
+</dd>
+</dl>
 
 #### 🔌 Usage
 
@@ -21752,12 +26293,9 @@ client = SikaruApi(
     environment=SikaruApiEnvironment.DEFAULT,
 )
 
-client.memory_registry.create_memory_registry_change(
+client.memory.get_dream(
     project_id="project_id",
-    memory_id="memoryId",
-    memory_type="memoryType",
-    name="name",
-    scope="scope",
+    agent_slug="agent_slug",
 )
 
 ```
@@ -21782,7 +26320,7 @@ client.memory_registry.create_memory_registry_change(
 <dl>
 <dd>
 
-**memory_id:** `str` 
+**agent_slug:** `str` 
     
 </dd>
 </dl>
@@ -21790,7 +26328,7 @@ client.memory_registry.create_memory_registry_change(
 <dl>
 <dd>
 
-**memory_type:** `str` 
+**directory:** `typing.Optional[GetDreamMemoryRequestDirectory]` — The shared agent directory, or one end user's directory.
     
 </dd>
 </dl>
@@ -21798,7 +26336,7 @@ client.memory_registry.create_memory_registry_change(
 <dl>
 <dd>
 
-**name:** `str` 
+**environment:** `typing.Optional[GetDreamMemoryRequestEnvironment]` 
     
 </dd>
 </dl>
@@ -21806,7 +26344,7 @@ client.memory_registry.create_memory_registry_change(
 <dl>
 <dd>
 
-**scope:** `str` 
+**tenant_id:** `typing.Optional[str]` 
     
 </dd>
 </dl>
@@ -21814,7 +26352,7 @@ client.memory_registry.create_memory_registry_change(
 <dl>
 <dd>
 
-**action:** `typing.Optional[CreateMemoryRegistryChangeRequestAction]` 
+**user_id:** `typing.Optional[str]` 
     
 </dd>
 </dl>
@@ -21822,7 +26360,73 @@ client.memory_registry.create_memory_registry_change(
 <dl>
 <dd>
 
-**candidate_release_id:** `typing.Optional[str]` 
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.memory.<a href="src/sikaru_sdk/memory/client.py">dream</a>(...) -> MemoryDream</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Dream now: consolidate this directory without waiting for idle time, even with automatic dreaming off.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.memory.dream(
+    project_id="project_id",
+    agent_slug="agent_slug",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `str` 
     
 </dd>
 </dl>
@@ -21830,7 +26434,7 @@ client.memory_registry.create_memory_registry_change(
 <dl>
 <dd>
 
-**confidence:** `typing.Optional[str]` 
+**agent_slug:** `str` 
     
 </dd>
 </dl>
@@ -21838,7 +26442,7 @@ client.memory_registry.create_memory_registry_change(
 <dl>
 <dd>
 
-**policy:** `typing.Optional[str]` 
+**directory:** `typing.Optional[DreamMemoryRequestDirectory]` — The shared agent directory, or one end user's directory.
     
 </dd>
 </dl>
@@ -21846,7 +26450,7 @@ client.memory_registry.create_memory_registry_change(
 <dl>
 <dd>
 
-**provenance:** `typing.Optional[str]` 
+**environment:** `typing.Optional[DreamMemoryRequestEnvironment]` 
     
 </dd>
 </dl>
@@ -21854,7 +26458,7 @@ client.memory_registry.create_memory_registry_change(
 <dl>
 <dd>
 
-**source:** `typing.Optional[str]` 
+**tenant_id:** `typing.Optional[str]` 
     
 </dd>
 </dl>
@@ -21862,7 +26466,7 @@ client.memory_registry.create_memory_registry_change(
 <dl>
 <dd>
 
-**source_trace_ids:** `typing.Optional[typing.List[str]]` 
+**user_id:** `typing.Optional[str]` 
     
 </dd>
 </dl>
@@ -21870,7 +26474,1298 @@ client.memory_registry.create_memory_registry_change(
 <dl>
 <dd>
 
-**ttl:** `typing.Optional[str]` 
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.memory.<a href="src/sikaru_sdk/memory/client.py">list_files</a>(...) -> MemoryFiles</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+The directory's files and its current head.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.memory.list_files(
+    project_id="project_id",
+    agent_slug="agent_slug",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_slug:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**directory:** `typing.Optional[ListFilesMemoryRequestDirectory]` — The shared agent directory, or one end user's directory.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**environment:** `typing.Optional[ListFilesMemoryRequestEnvironment]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**tenant_id:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**user_id:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.memory.<a href="src/sikaru_sdk/memory/client.py">read_file</a>(...) -> MemoryFile</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.memory.read_file(
+    project_id="project_id",
+    agent_slug="agent_slug",
+    path="path",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_slug:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**path:** `str` — Path inside the directory, such as MEMORY.md or notes/trip.md.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**directory:** `typing.Optional[ReadFileMemoryRequestDirectory]` — The shared agent directory, or one end user's directory.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**environment:** `typing.Optional[ReadFileMemoryRequestEnvironment]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**tenant_id:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**user_id:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.memory.<a href="src/sikaru_sdk/memory/client.py">write_file</a>(...) -> MemoryHead</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Create or replace one file.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.memory.write_file(
+    project_id="project_id",
+    agent_slug="agent_slug",
+    content="content",
+    path="path",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_slug:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**content:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**path:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**directory:** `typing.Optional[WriteFileMemoryRequestDirectory]` — The shared agent directory, or one end user's directory.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**environment:** `typing.Optional[WriteFileMemoryRequestEnvironment]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**tenant_id:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**user_id:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**base:** `typing.Optional[str]` — The head this change was made from; 409 if another writer changed the same file since.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.memory.<a href="src/sikaru_sdk/memory/client.py">delete_file</a>(...) -> MemoryHead</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.memory.delete_file(
+    project_id="project_id",
+    agent_slug="agent_slug",
+    path="path",
+    base="base",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_slug:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**path:** `str` — Path inside the directory, such as MEMORY.md or notes/trip.md.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**base:** `str` — The head the deletion was made from.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**directory:** `typing.Optional[DeleteFileMemoryRequestDirectory]` — The shared agent directory, or one end user's directory.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**environment:** `typing.Optional[DeleteFileMemoryRequestEnvironment]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**tenant_id:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**user_id:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.memory.<a href="src/sikaru_sdk/memory/client.py">move_file</a>(...) -> MemoryHead</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Move or rename one file; the destination must not exist.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.memory.move_file(
+    project_id="project_id",
+    agent_slug="agent_slug",
+    path="path",
+    to="to",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_slug:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**path:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**to:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**directory:** `typing.Optional[MoveFileMemoryRequestDirectory]` — The shared agent directory, or one end user's directory.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**environment:** `typing.Optional[MoveFileMemoryRequestEnvironment]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**tenant_id:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**user_id:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**base:** `typing.Optional[str]` — The head this change was made from; 409 if another writer changed the same file since.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.memory.<a href="src/sikaru_sdk/memory/client.py">list_forgets</a>(...) -> MemoryForgets</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.memory.list_forgets(
+    project_id="project_id",
+    agent_slug="agent_slug",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_slug:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**directory:** `typing.Optional[ListForgetsMemoryRequestDirectory]` — The shared agent directory, or one end user's directory.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**environment:** `typing.Optional[ListForgetsMemoryRequestEnvironment]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**tenant_id:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**user_id:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.memory.<a href="src/sikaru_sdk/memory/client.py">forget</a>(...) -> MemoryForget</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Remove something from this user's memory, its retained history and past-session search, in the background.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.memory.forget(
+    project_id="project_id",
+    agent_slug="agent_slug",
+    target="target",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_slug:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `ForgetMemory` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**directory:** `typing.Optional[ForgetMemoryRequestDirectory]` — The shared agent directory, or one end user's directory.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**environment:** `typing.Optional[ForgetMemoryRequestEnvironment]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**tenant_id:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**user_id:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.memory.<a href="src/sikaru_sdk/memory/client.py">get_forget</a>(...) -> MemoryForget</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.memory.get_forget(
+    project_id="project_id",
+    agent_slug="agent_slug",
+    job_id="job_id",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_slug:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**job_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**directory:** `typing.Optional[GetForgetMemoryRequestDirectory]` — The shared agent directory, or one end user's directory.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**environment:** `typing.Optional[GetForgetMemoryRequestEnvironment]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**tenant_id:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**user_id:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.memory.<a href="src/sikaru_sdk/memory/client.py">remember</a>(...) -> Remembered</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Remember again: finished forgets of this target stop hiding it from future search and dreams.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.memory.remember(
+    project_id="project_id",
+    agent_slug="agent_slug",
+    target="target",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_slug:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `ForgetMemory` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**directory:** `typing.Optional[RememberMemoryRequestDirectory]` — The shared agent directory, or one end user's directory.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**environment:** `typing.Optional[RememberMemoryRequestEnvironment]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**tenant_id:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**user_id:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.memory.<a href="src/sikaru_sdk/memory/client.py">list_versions</a>(...) -> MemoryVersions</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.memory.list_versions(
+    project_id="project_id",
+    agent_slug="agent_slug",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_slug:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**directory:** `typing.Optional[ListVersionsMemoryRequestDirectory]` — The shared agent directory, or one end user's directory.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**environment:** `typing.Optional[ListVersionsMemoryRequestEnvironment]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**tenant_id:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**user_id:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.memory.<a href="src/sikaru_sdk/memory/client.py">rollback</a>(...) -> MemoryHead</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Make a retained version the head again; the rollback is kept as the newest version.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.memory.rollback(
+    project_id="project_id",
+    agent_slug="agent_slug",
+    version=1,
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**agent_slug:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**version:** `int` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**directory:** `typing.Optional[RollbackMemoryRequestDirectory]` — The shared agent directory, or one end user's directory.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**environment:** `typing.Optional[RollbackMemoryRequestEnvironment]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**tenant_id:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**user_id:** `typing.Optional[str]` 
     
 </dd>
 </dl>
@@ -22122,330 +28017,6 @@ client.model_settings.update_model_settings(
 </dl>
 </details>
 
-## OnlineEvaluations
-<details><summary><code>client.online_evaluations.<a href="src/sikaru_sdk/online_evaluations/client.py">list_policies</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from sikaru_sdk import SikaruApi
-from sikaru_sdk.environment import SikaruApiEnvironment
-
-client = SikaruApi(
-    api_key="<token>",
-    environment=SikaruApiEnvironment.DEFAULT,
-)
-
-client.online_evaluations.list_policies(
-    project_id="project_id",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**project_id:** `str` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**after:** `typing.Optional[str]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.online_evaluations.<a href="src/sikaru_sdk/online_evaluations/client.py">create_policy</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from sikaru_sdk import SikaruApi
-from sikaru_sdk.environment import SikaruApiEnvironment
-
-client = SikaruApi(
-    api_key="<token>",
-    environment=SikaruApiEnvironment.DEFAULT,
-)
-
-client.online_evaluations.create_policy(
-    project_id="project_id",
-    evaluator="evaluator",
-    id="id",
-    revision="revision",
-    rubric="rubric",
-    sample_percent=1,
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**project_id:** `str` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**evaluator:** `str` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**id:** `str` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**revision:** `str` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**rubric:** `str` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**sample_percent:** `int` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**environment:** `typing.Optional[PolicyInputEnvironment]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.online_evaluations.<a href="src/sikaru_sdk/online_evaluations/client.py">preview_policy_eligibility</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from sikaru_sdk import SikaruApi
-from sikaru_sdk.environment import SikaruApiEnvironment
-
-client = SikaruApi(
-    api_key="<token>",
-    environment=SikaruApiEnvironment.DEFAULT,
-)
-
-client.online_evaluations.preview_policy_eligibility(
-    project_id="project_id",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**project_id:** `str` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**environment:** `typing.Optional[PreviewPolicyEligibilityOnlineEvaluationsRequestEnvironment]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.online_evaluations.<a href="src/sikaru_sdk/online_evaluations/client.py">update_policy</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from sikaru_sdk import SikaruApi
-from sikaru_sdk.environment import SikaruApiEnvironment
-
-client = SikaruApi(
-    api_key="<token>",
-    environment=SikaruApiEnvironment.DEFAULT,
-)
-
-client.online_evaluations.update_policy(
-    project_id="project_id",
-    policy_id="policy_id",
-    enabled=True,
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**project_id:** `str` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**policy_id:** `str` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**enabled:** `bool` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
 ## ReleaseWatches
 <details><summary><code>client.release_watches.<a href="src/sikaru_sdk/release_watches/client.py">create_release_watch</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
 <dl>
@@ -22529,6 +28100,14 @@ client.release_watches.create_release_watch(
 <dl>
 <dd>
 
+**grader_tags:** `typing.Optional[typing.List[str]]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **issue_id:** `typing.Optional[str]` 
     
 </dd>
@@ -22570,14 +28149,6 @@ client.release_watches.create_release_watch(
 <dd>
 
 **sample_rate:** `typing.Optional[str]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**signal_tags:** `typing.Optional[typing.List[str]]` 
     
 </dd>
 </dl>
@@ -22688,6 +28259,14 @@ client.retention_policies.create_retention_policy_update(
 <dl>
 <dd>
 
+**grader_tags:** `typing.Optional[typing.List[str]]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **issue_id:** `typing.Optional[str]` 
     
 </dd>
@@ -22729,14 +28308,6 @@ client.retention_policies.create_retention_policy_update(
 <dd>
 
 **sample_rate:** `typing.Optional[str]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**signal_tags:** `typing.Optional[typing.List[str]]` 
     
 </dd>
 </dl>
@@ -22855,6 +28426,14 @@ client.review_queue.create_review_queue_item(
 <dl>
 <dd>
 
+**grader_tags:** `typing.Optional[typing.List[str]]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **issue_id:** `typing.Optional[str]` 
     
 </dd>
@@ -22888,14 +28467,6 @@ client.review_queue.create_review_queue_item(
 <dd>
 
 **sample_rate:** `typing.Optional[str]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**signal_tags:** `typing.Optional[typing.List[str]]` 
     
 </dd>
 </dl>
@@ -23142,6 +28713,22 @@ client.run_schedules.create_schedule(
 <dl>
 <dd>
 
+**at:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**callback_url:** `typing.Optional[str]` — HTTPS callback on the registered provider's origin.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **cron:** `typing.Optional[str]` 
     
 </dd>
@@ -23183,6 +28770,208 @@ client.run_schedules.create_schedule(
 <dd>
 
 **session_mode:** `typing.Optional[ScheduleInputSessionMode]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**timezone:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**tool_provider_id:** `typing.Optional[str]` — Registered provider target for signed occurrence delivery.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.run_schedules.<a href="src/sikaru_sdk/run_schedules/client.py">inspect_schedule</a>(...) -> ScheduleResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.run_schedules.inspect_schedule(
+    project_id="project_id",
+    schedule_id="schedule_id",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**schedule_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.run_schedules.<a href="src/sikaru_sdk/run_schedules/client.py">update_schedule</a>(...) -> ScheduleResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.run_schedules.update_schedule(
+    project_id="project_id",
+    schedule_id="schedule_id",
+    expected_revision=1,
+    idempotency_key="idempotency_key",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**schedule_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**expected_revision:** `int` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**idempotency_key:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**at:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**cron:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**input:** `typing.Optional[typing.Dict[str, typing.Any]]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**interval_seconds:** `typing.Optional[int]` 
     
 </dd>
 </dl>
@@ -23266,6 +29055,22 @@ client.run_schedules.delete_schedule(
 <dl>
 <dd>
 
+**expected_revision:** `typing.Optional[int]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**idempotency_key:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
     
 </dd>
@@ -23336,6 +29141,22 @@ client.run_schedules.pause_schedule(
 <dd>
 
 **paused:** `bool` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**expected_revision:** `typing.Optional[int]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**idempotency_key:** `typing.Optional[str]` 
     
 </dd>
 </dl>
@@ -25592,9 +31413,7 @@ client = SikaruApi(
     environment=SikaruApiEnvironment.DEFAULT,
 )
 
-client.responses.create_stream(
-    model="model",
-)
+client.responses.create_stream()
 
 ```
 </dd>
@@ -25606,14 +31425,6 @@ client.responses.create_stream(
 
 <dl>
 <dd>
-
-<dl>
-<dd>
-
-**model:** `str` 
-    
-</dd>
-</dl>
 
 <dl>
 <dd>
@@ -25699,6 +31510,14 @@ client.responses.create_stream(
 <dd>
 
 **metadata:** `typing.Optional[typing.Dict[str, typing.Any]]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**model:** `typing.Optional[str]` 
     
 </dd>
 </dl>
@@ -25939,9 +31758,7 @@ client = SikaruApi(
     environment=SikaruApiEnvironment.DEFAULT,
 )
 
-client.responses.create_stream(
-    model="model",
-)
+client.responses.create_stream()
 
 ```
 </dd>
@@ -25953,14 +31770,6 @@ client.responses.create_stream(
 
 <dl>
 <dd>
-
-<dl>
-<dd>
-
-**model:** `str` 
-    
-</dd>
-</dl>
 
 <dl>
 <dd>
@@ -26046,6 +31855,14 @@ client.responses.create_stream(
 <dd>
 
 **metadata:** `typing.Optional[typing.Dict[str, typing.Any]]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**model:** `typing.Optional[str]` 
     
 </dd>
 </dl>
@@ -26439,6 +32256,14 @@ client.trace_streams.stream_openinference_spans(
 <dl>
 <dd>
 
+**records:** `typing.Optional[typing.List[typing.Dict[str, typing.Any]]]` — Rows of a trace export, unchanged, for `langfuse.observations.v1` (observations), `langsmith.runs.v1` (runs) or `braintrust.spans.v1` (spans). The service rebuilds each trace or agent run only from the rows in one request, so keep all of its rows together.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **resource_spans:** `typing.Optional[typing.List[typing.Dict[str, typing.Any]]]` 
     
 </dd>
@@ -26511,7 +32336,6 @@ client.chat.completions.create_stream(
             "key": "value"
         }
     ],
-    model="model",
 )
 
 ```
@@ -26529,14 +32353,6 @@ client.chat.completions.create_stream(
 <dd>
 
 **messages:** `typing.List[typing.Dict[str, typing.Any]]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**model:** `str` 
     
 </dd>
 </dl>
@@ -26641,6 +32457,14 @@ client.chat.completions.create_stream(
 <dd>
 
 **modalities:** `typing.Optional[typing.List[str]]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**model:** `typing.Optional[str]` 
     
 </dd>
 </dl>
@@ -26967,7 +32791,6 @@ client.chat.completions.create_stream(
             "key": "value"
         }
     ],
-    model="model",
 )
 
 ```
@@ -26985,14 +32808,6 @@ client.chat.completions.create_stream(
 <dd>
 
 **messages:** `typing.List[typing.Dict[str, typing.Any]]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**model:** `str` 
     
 </dd>
 </dl>
@@ -27097,6 +32912,14 @@ client.chat.completions.create_stream(
 <dd>
 
 **modalities:** `typing.Optional[typing.List[str]]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**model:** `typing.Optional[str]` 
     
 </dd>
 </dl>

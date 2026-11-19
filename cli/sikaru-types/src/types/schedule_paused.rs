@@ -6,6 +6,8 @@ use super::*;
 pub struct SchedulePaused {
     #[serde(default)]
     pub paused: bool,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub revision: Option<i64>,
 }
 
 impl SchedulePaused {
@@ -18,11 +20,17 @@ impl SchedulePaused {
 #[non_exhaustive]
 pub struct SchedulePausedBuilder {
     paused: Option<bool>,
+    revision: Option<i64>,
 }
 
 impl SchedulePausedBuilder {
     pub fn paused(mut self, value: bool) -> Self {
         self.paused = Some(value);
+        self
+    }
+
+    pub fn revision(mut self, value: i64) -> Self {
+        self.revision = Some(value);
         self
     }
 
@@ -32,6 +40,7 @@ impl SchedulePausedBuilder {
     pub fn build(self) -> Result<SchedulePaused, BuildError> {
         Ok(SchedulePaused {
             paused: self.paused.ok_or_else(|| BuildError::missing_field("paused"))?,
+            revision: self.revision,
         })
     }
 }

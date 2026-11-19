@@ -90,10 +90,10 @@ impl IssueClustersClient {
     ///                 label: "label".to_string(),
     ///                 trace_ids: vec!["traceIds".to_string()],
     ///                 agent_id: None,
+    ///                 grader_tags: None,
     ///                 impact: None,
     ///                 issue_id: None,
     ///                 issue_title: None,
-    ///                 signal_tags: None,
     ///             },
     ///             None,
     ///         )

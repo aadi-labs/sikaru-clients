@@ -88,7 +88,9 @@ export class ManagedAgentsClient {
      * @throws {@link Sikaru.UnauthorizedError}
      * @throws {@link Sikaru.ForbiddenError}
      * @throws {@link Sikaru.NotFoundError}
+     * @throws {@link Sikaru.ConflictError}
      * @throws {@link Sikaru.UnprocessableEntityError}
+     * @throws {@link Sikaru.ServiceUnavailableError}
      * @throws {@link errors.SikaruError}
      * @throws {@link errors.SikaruTimeoutError}
      *
@@ -129,7 +131,9 @@ export class ManagedAgentsClient {
                 case 401: throw new Sikaru.UnauthorizedError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
                 case 403: throw new Sikaru.ForbiddenError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
                 case 404: throw new Sikaru.NotFoundError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 409: throw new Sikaru.ConflictError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
                 case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as unknown, _response.rawResponse);
+                case 503: throw new Sikaru.ServiceUnavailableError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
                 default: throw new errors.SikaruError({
                     statusCode: _response.error.statusCode,
                     body: _response.error.body,
@@ -258,7 +262,7 @@ export class ManagedAgentsClient {
     }
 
     /**
-     * Change the agent's display name or turn capacity. The slug and every reference to the agent stay the same.
+     * Change the agent's display name, turn capacity or memory dreaming. The slug and every reference to the agent stay the same.
      *
      * Personal and end-user-cell choices are fixed at creation.
      *
@@ -322,11 +326,8 @@ export class ManagedAgentsClient {
     }
 
     /**
-     * Stage a changed definition as a draft revision; the live definition is a no-op.
-     *
      * @param {string} project_id
      * @param {string} agent_slug
-     * @param {Sikaru.DefinitionRevisionRequest} request
      * @param {ManagedAgentsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Sikaru.UnauthorizedError}
@@ -337,38 +338,30 @@ export class ManagedAgentsClient {
      * @throws {@link errors.SikaruTimeoutError}
      *
      * @example
-     *     await client.managedAgents.createDefinitionRevision("project_id", "agent_slug", {
-     *         contentDigest: "contentDigest",
-     *         definition: {
-     *             schema: "sikaru.agent.contract.v1"
-     *         }
-     *     })
+     *     await client.managedAgents.listAgentLogins("project_id", "agent_slug")
      */
-    public createDefinitionRevision(project_id: string, agent_slug: string, request: Sikaru.DefinitionRevisionRequest, requestOptions?: ManagedAgentsClient.RequestOptions): core.HttpResponsePromise<Sikaru.DefinitionRevisionResult> {
-        return core.HttpResponsePromise.fromPromise(this.__createDefinitionRevision(project_id, agent_slug, request, requestOptions));
+    public listAgentLogins(project_id: string, agent_slug: string, requestOptions?: ManagedAgentsClient.RequestOptions): core.HttpResponsePromise<Sikaru.SavedLogins> {
+        return core.HttpResponsePromise.fromPromise(this.__listAgentLogins(project_id, agent_slug, requestOptions));
     }
 
-    private async __createDefinitionRevision(project_id: string, agent_slug: string, request: Sikaru.DefinitionRevisionRequest, requestOptions?: ManagedAgentsClient.RequestOptions): Promise<core.WithRawResponse<Sikaru.DefinitionRevisionResult>> {
+    private async __listAgentLogins(project_id: string, agent_slug: string, requestOptions?: ManagedAgentsClient.RequestOptions): Promise<core.WithRawResponse<Sikaru.SavedLogins>> {
         const _metadata: core.EndpointMetadata = { security: [{ BearerAuth: [] }] };
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest({ endpointMetadata: _metadata });
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(_authRequest.headers, this._options?.headers, requestOptions?.headers);
         const _response = await core.fetcher({
-            url: core.url.join(await core.Supplier.get(this._options.baseUrl) ?? (await core.Supplier.get(this._options.environment) ?? environments.SikaruEnvironment.Default), `v1/projects/${core.url.encodePathParam(project_id)}/managed-agents/${core.url.encodePathParam(agent_slug)}/definition-revisions`),
-            method: "POST",
+            url: core.url.join(await core.Supplier.get(this._options.baseUrl) ?? (await core.Supplier.get(this._options.environment) ?? environments.SikaruEnvironment.Default), `v1/projects/${core.url.encodePathParam(project_id)}/managed-agents/${core.url.encodePathParam(agent_slug)}/browser-logins`),
+            method: "GET",
             headers: _headers,
-            contentType: "application/json",
             queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
-            requestType: "json",
-            body: mergeAdditionalBodyParameters(request, requestOptions?.additionalBodyParameters),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
-            maxRetries: 0,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
             endpointMetadata: _metadata,
             fetchFn: this._options?.fetch,
             logging: this._options.logging
         });
         if (_response.ok) {
-            return { data: _response.body as Sikaru.DefinitionRevisionResult, rawResponse: _response.rawResponse };
+            return { data: _response.body as Sikaru.SavedLogins, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
@@ -385,7 +378,356 @@ export class ManagedAgentsClient {
             }
         }
 
-        return handleNonStatusCodeError(_response.error, _response.rawResponse, "POST", "/v1/projects/{project_id}/managed-agents/{agent_slug}/definition-revisions");
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/v1/projects/{project_id}/managed-agents/{agent_slug}/browser-logins");
+    }
+
+    /**
+     * An operator signs the agent in to a company account once; every run then uses it.
+     *
+     * @param {string} project_id
+     * @param {string} agent_slug
+     * @param {Sikaru.LoginRequest} request
+     * @param {ManagedAgentsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Sikaru.UnauthorizedError}
+     * @throws {@link Sikaru.ForbiddenError}
+     * @throws {@link Sikaru.NotFoundError}
+     * @throws {@link Sikaru.UnprocessableEntityError}
+     * @throws {@link errors.SikaruError}
+     * @throws {@link errors.SikaruTimeoutError}
+     *
+     * @example
+     *     await client.managedAgents.addAgentLogin("project_id", "agent_slug", {
+     *         url: "url"
+     *     })
+     */
+    public addAgentLogin(project_id: string, agent_slug: string, request: Sikaru.LoginRequest, requestOptions?: ManagedAgentsClient.RequestOptions): core.HttpResponsePromise<Sikaru.LiveLink> {
+        return core.HttpResponsePromise.fromPromise(this.__addAgentLogin(project_id, agent_slug, request, requestOptions));
+    }
+
+    private async __addAgentLogin(project_id: string, agent_slug: string, request: Sikaru.LoginRequest, requestOptions?: ManagedAgentsClient.RequestOptions): Promise<core.WithRawResponse<Sikaru.LiveLink>> {
+        const _metadata: core.EndpointMetadata = { security: [{ BearerAuth: [] }] };
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest({ endpointMetadata: _metadata });
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(_authRequest.headers, this._options?.headers, requestOptions?.headers);
+        const _response = await core.fetcher({
+            url: core.url.join(await core.Supplier.get(this._options.baseUrl) ?? (await core.Supplier.get(this._options.environment) ?? environments.SikaruEnvironment.Default), `v1/projects/${core.url.encodePathParam(project_id)}/managed-agents/${core.url.encodePathParam(agent_slug)}/browser-logins`),
+            method: "POST",
+            headers: _headers,
+            contentType: "application/json",
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            requestType: "json",
+            body: mergeAdditionalBodyParameters(request, requestOptions?.additionalBodyParameters),
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: 0,
+            abortSignal: requestOptions?.abortSignal,
+            endpointMetadata: _metadata,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging
+        });
+        if (_response.ok) {
+            return { data: _response.body as Sikaru.LiveLink, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401: throw new Sikaru.UnauthorizedError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 403: throw new Sikaru.ForbiddenError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 404: throw new Sikaru.NotFoundError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as unknown, _response.rawResponse);
+                default: throw new errors.SikaruError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.body,
+                    rawResponse: _response.rawResponse
+                });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "POST", "/v1/projects/{project_id}/managed-agents/{agent_slug}/browser-logins");
+    }
+
+    /**
+     * @param {string} project_id
+     * @param {string} agent_slug
+     * @param {string} login_id
+     * @param {ManagedAgentsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Sikaru.UnauthorizedError}
+     * @throws {@link Sikaru.ForbiddenError}
+     * @throws {@link Sikaru.NotFoundError}
+     * @throws {@link Sikaru.UnprocessableEntityError}
+     * @throws {@link errors.SikaruError}
+     * @throws {@link errors.SikaruTimeoutError}
+     *
+     * @example
+     *     await client.managedAgents.deleteAgentLogin("project_id", "agent_slug", "login_id")
+     */
+    public deleteAgentLogin(project_id: string, agent_slug: string, login_id: string, requestOptions?: ManagedAgentsClient.RequestOptions): core.HttpResponsePromise<void> {
+        return core.HttpResponsePromise.fromPromise(this.__deleteAgentLogin(project_id, agent_slug, login_id, requestOptions));
+    }
+
+    private async __deleteAgentLogin(project_id: string, agent_slug: string, login_id: string, requestOptions?: ManagedAgentsClient.RequestOptions): Promise<core.WithRawResponse<void>> {
+        const _metadata: core.EndpointMetadata = { security: [{ BearerAuth: [] }] };
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest({ endpointMetadata: _metadata });
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(_authRequest.headers, this._options?.headers, requestOptions?.headers);
+        const _response = await core.fetcher({
+            url: core.url.join(await core.Supplier.get(this._options.baseUrl) ?? (await core.Supplier.get(this._options.environment) ?? environments.SikaruEnvironment.Default), `v1/projects/${core.url.encodePathParam(project_id)}/managed-agents/${core.url.encodePathParam(agent_slug)}/browser-logins/${core.url.encodePathParam(login_id)}`),
+            method: "DELETE",
+            headers: _headers,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: 0,
+            abortSignal: requestOptions?.abortSignal,
+            endpointMetadata: _metadata,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging
+        });
+        if (_response.ok) {
+            return { data: undefined, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401: throw new Sikaru.UnauthorizedError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 403: throw new Sikaru.ForbiddenError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 404: throw new Sikaru.NotFoundError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as unknown, _response.rawResponse);
+                default: throw new errors.SikaruError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.body,
+                    rawResponse: _response.rawResponse
+                });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "DELETE", "/v1/projects/{project_id}/managed-agents/{agent_slug}/browser-logins/{login_id}");
+    }
+
+    /**
+     * @param {string} project_id
+     * @param {string} agent_slug
+     * @param {ManagedAgentsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Sikaru.UnauthorizedError}
+     * @throws {@link Sikaru.ForbiddenError}
+     * @throws {@link Sikaru.NotFoundError}
+     * @throws {@link Sikaru.UnprocessableEntityError}
+     * @throws {@link errors.SikaruError}
+     * @throws {@link errors.SikaruTimeoutError}
+     *
+     * @example
+     *     await client.managedAgents.listPlaybooks("project_id", "agent_slug")
+     */
+    public listPlaybooks(project_id: string, agent_slug: string, requestOptions?: ManagedAgentsClient.RequestOptions): core.HttpResponsePromise<Sikaru.PlaybookList> {
+        return core.HttpResponsePromise.fromPromise(this.__listPlaybooks(project_id, agent_slug, requestOptions));
+    }
+
+    private async __listPlaybooks(project_id: string, agent_slug: string, requestOptions?: ManagedAgentsClient.RequestOptions): Promise<core.WithRawResponse<Sikaru.PlaybookList>> {
+        const _metadata: core.EndpointMetadata = { security: [{ BearerAuth: [] }] };
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest({ endpointMetadata: _metadata });
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(_authRequest.headers, this._options?.headers, requestOptions?.headers);
+        const _response = await core.fetcher({
+            url: core.url.join(await core.Supplier.get(this._options.baseUrl) ?? (await core.Supplier.get(this._options.environment) ?? environments.SikaruEnvironment.Default), `v1/projects/${core.url.encodePathParam(project_id)}/managed-agents/${core.url.encodePathParam(agent_slug)}/browser-playbooks`),
+            method: "GET",
+            headers: _headers,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            endpointMetadata: _metadata,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging
+        });
+        if (_response.ok) {
+            return { data: _response.body as Sikaru.PlaybookList, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401: throw new Sikaru.UnauthorizedError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 403: throw new Sikaru.ForbiddenError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 404: throw new Sikaru.NotFoundError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as unknown, _response.rawResponse);
+                default: throw new errors.SikaruError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.body,
+                    rawResponse: _response.rawResponse
+                });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/v1/projects/{project_id}/managed-agents/{agent_slug}/browser-playbooks");
+    }
+
+    /**
+     * @param {string} project_id
+     * @param {string} agent_slug
+     * @param {string} playbook_id
+     * @param {ManagedAgentsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Sikaru.UnauthorizedError}
+     * @throws {@link Sikaru.ForbiddenError}
+     * @throws {@link Sikaru.NotFoundError}
+     * @throws {@link Sikaru.UnprocessableEntityError}
+     * @throws {@link errors.SikaruError}
+     * @throws {@link errors.SikaruTimeoutError}
+     *
+     * @example
+     *     await client.managedAgents.deletePlaybook("project_id", "agent_slug", "playbook_id")
+     */
+    public deletePlaybook(project_id: string, agent_slug: string, playbook_id: string, requestOptions?: ManagedAgentsClient.RequestOptions): core.HttpResponsePromise<void> {
+        return core.HttpResponsePromise.fromPromise(this.__deletePlaybook(project_id, agent_slug, playbook_id, requestOptions));
+    }
+
+    private async __deletePlaybook(project_id: string, agent_slug: string, playbook_id: string, requestOptions?: ManagedAgentsClient.RequestOptions): Promise<core.WithRawResponse<void>> {
+        const _metadata: core.EndpointMetadata = { security: [{ BearerAuth: [] }] };
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest({ endpointMetadata: _metadata });
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(_authRequest.headers, this._options?.headers, requestOptions?.headers);
+        const _response = await core.fetcher({
+            url: core.url.join(await core.Supplier.get(this._options.baseUrl) ?? (await core.Supplier.get(this._options.environment) ?? environments.SikaruEnvironment.Default), `v1/projects/${core.url.encodePathParam(project_id)}/managed-agents/${core.url.encodePathParam(agent_slug)}/browser-playbooks/${core.url.encodePathParam(playbook_id)}`),
+            method: "DELETE",
+            headers: _headers,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: 0,
+            abortSignal: requestOptions?.abortSignal,
+            endpointMetadata: _metadata,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging
+        });
+        if (_response.ok) {
+            return { data: undefined, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401: throw new Sikaru.UnauthorizedError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 403: throw new Sikaru.ForbiddenError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 404: throw new Sikaru.NotFoundError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as unknown, _response.rawResponse);
+                default: throw new errors.SikaruError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.body,
+                    rawResponse: _response.rawResponse
+                });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "DELETE", "/v1/projects/{project_id}/managed-agents/{agent_slug}/browser-playbooks/{playbook_id}");
+    }
+
+    /**
+     * Every always-allow rule on the agent; a rule personal to one end user does not say whose.
+     *
+     * @param {string} project_id
+     * @param {string} agent_slug
+     * @param {ManagedAgentsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Sikaru.UnauthorizedError}
+     * @throws {@link Sikaru.ForbiddenError}
+     * @throws {@link Sikaru.NotFoundError}
+     * @throws {@link Sikaru.UnprocessableEntityError}
+     * @throws {@link errors.SikaruError}
+     * @throws {@link errors.SikaruTimeoutError}
+     *
+     * @example
+     *     await client.managedAgents.listRules("project_id", "agent_slug")
+     */
+    public listRules(project_id: string, agent_slug: string, requestOptions?: ManagedAgentsClient.RequestOptions): core.HttpResponsePromise<Sikaru.BrowserRuleList> {
+        return core.HttpResponsePromise.fromPromise(this.__listRules(project_id, agent_slug, requestOptions));
+    }
+
+    private async __listRules(project_id: string, agent_slug: string, requestOptions?: ManagedAgentsClient.RequestOptions): Promise<core.WithRawResponse<Sikaru.BrowserRuleList>> {
+        const _metadata: core.EndpointMetadata = { security: [{ BearerAuth: [] }] };
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest({ endpointMetadata: _metadata });
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(_authRequest.headers, this._options?.headers, requestOptions?.headers);
+        const _response = await core.fetcher({
+            url: core.url.join(await core.Supplier.get(this._options.baseUrl) ?? (await core.Supplier.get(this._options.environment) ?? environments.SikaruEnvironment.Default), `v1/projects/${core.url.encodePathParam(project_id)}/managed-agents/${core.url.encodePathParam(agent_slug)}/browser-rules`),
+            method: "GET",
+            headers: _headers,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            endpointMetadata: _metadata,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging
+        });
+        if (_response.ok) {
+            return { data: _response.body as Sikaru.BrowserRuleList, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401: throw new Sikaru.UnauthorizedError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 403: throw new Sikaru.ForbiddenError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 404: throw new Sikaru.NotFoundError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as unknown, _response.rawResponse);
+                default: throw new errors.SikaruError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.body,
+                    rawResponse: _response.rawResponse
+                });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/v1/projects/{project_id}/managed-agents/{agent_slug}/browser-rules");
+    }
+
+    /**
+     * @param {string} project_id
+     * @param {string} agent_slug
+     * @param {string} rule_id
+     * @param {ManagedAgentsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Sikaru.UnauthorizedError}
+     * @throws {@link Sikaru.ForbiddenError}
+     * @throws {@link Sikaru.NotFoundError}
+     * @throws {@link Sikaru.UnprocessableEntityError}
+     * @throws {@link errors.SikaruError}
+     * @throws {@link errors.SikaruTimeoutError}
+     *
+     * @example
+     *     await client.managedAgents.deleteRule("project_id", "agent_slug", "rule_id")
+     */
+    public deleteRule(project_id: string, agent_slug: string, rule_id: string, requestOptions?: ManagedAgentsClient.RequestOptions): core.HttpResponsePromise<void> {
+        return core.HttpResponsePromise.fromPromise(this.__deleteRule(project_id, agent_slug, rule_id, requestOptions));
+    }
+
+    private async __deleteRule(project_id: string, agent_slug: string, rule_id: string, requestOptions?: ManagedAgentsClient.RequestOptions): Promise<core.WithRawResponse<void>> {
+        const _metadata: core.EndpointMetadata = { security: [{ BearerAuth: [] }] };
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest({ endpointMetadata: _metadata });
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(_authRequest.headers, this._options?.headers, requestOptions?.headers);
+        const _response = await core.fetcher({
+            url: core.url.join(await core.Supplier.get(this._options.baseUrl) ?? (await core.Supplier.get(this._options.environment) ?? environments.SikaruEnvironment.Default), `v1/projects/${core.url.encodePathParam(project_id)}/managed-agents/${core.url.encodePathParam(agent_slug)}/browser-rules/${core.url.encodePathParam(rule_id)}`),
+            method: "DELETE",
+            headers: _headers,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: 0,
+            abortSignal: requestOptions?.abortSignal,
+            endpointMetadata: _metadata,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging
+        });
+        if (_response.ok) {
+            return { data: undefined, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401: throw new Sikaru.UnauthorizedError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 403: throw new Sikaru.ForbiddenError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 404: throw new Sikaru.NotFoundError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as unknown, _response.rawResponse);
+                default: throw new errors.SikaruError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.body,
+                    rawResponse: _response.rawResponse
+                });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "DELETE", "/v1/projects/{project_id}/managed-agents/{agent_slug}/browser-rules/{rule_id}");
     }
 
     /**
@@ -443,5 +785,77 @@ export class ManagedAgentsClient {
         }
 
         return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/v1/projects/{project_id}/managed-agents/{agent_slug}/definition-revisions/{changeset_id}");
+    }
+
+    /**
+     * Replace or enable a customer-authored source using its own revision CAS.
+     *
+     * Private optimized methodology and optimizer digests are never returned.
+     * Replaying an operation returns its original receipt without reverting later work.
+     *
+     * @param {string} project_id
+     * @param {string} agent_slug
+     * @param {string} tenant_id
+     * @param {string} user_id
+     * @param {string} skill_id
+     * @param {Sikaru.UpdateSkillSource} request
+     * @param {ManagedAgentsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Sikaru.UnauthorizedError}
+     * @throws {@link Sikaru.ForbiddenError}
+     * @throws {@link Sikaru.NotFoundError}
+     * @throws {@link Sikaru.UnprocessableEntityError}
+     * @throws {@link errors.SikaruError}
+     * @throws {@link errors.SikaruTimeoutError}
+     *
+     * @example
+     *     await client.managedAgents.updateEndUserSkillSource("project_id", "agent_slug", "tenant_id", "user_id", "skill_id", {
+     *         enabled: true,
+     *         operationId: "operationId",
+     *         sourceRevision: "sourceRevision"
+     *     })
+     */
+    public updateEndUserSkillSource(project_id: string, agent_slug: string, tenant_id: string, user_id: string, skill_id: string, request: Sikaru.UpdateSkillSource, requestOptions?: ManagedAgentsClient.RequestOptions): core.HttpResponsePromise<Sikaru.SkillSourceReceipt> {
+        return core.HttpResponsePromise.fromPromise(this.__updateEndUserSkillSource(project_id, agent_slug, tenant_id, user_id, skill_id, request, requestOptions));
+    }
+
+    private async __updateEndUserSkillSource(project_id: string, agent_slug: string, tenant_id: string, user_id: string, skill_id: string, request: Sikaru.UpdateSkillSource, requestOptions?: ManagedAgentsClient.RequestOptions): Promise<core.WithRawResponse<Sikaru.SkillSourceReceipt>> {
+        const _metadata: core.EndpointMetadata = { security: [{ BearerAuth: [] }] };
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest({ endpointMetadata: _metadata });
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(_authRequest.headers, this._options?.headers, requestOptions?.headers);
+        const _response = await core.fetcher({
+            url: core.url.join(await core.Supplier.get(this._options.baseUrl) ?? (await core.Supplier.get(this._options.environment) ?? environments.SikaruEnvironment.Default), `v1/projects/${core.url.encodePathParam(project_id)}/managed-agents/${core.url.encodePathParam(agent_slug)}/end-users/${core.url.encodePathParam(tenant_id)}/${core.url.encodePathParam(user_id)}/skill-sources/${core.url.encodePathParam(skill_id)}`),
+            method: "PUT",
+            headers: _headers,
+            contentType: "application/json",
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            requestType: "json",
+            body: mergeAdditionalBodyParameters(request, requestOptions?.additionalBodyParameters),
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: 0,
+            abortSignal: requestOptions?.abortSignal,
+            endpointMetadata: _metadata,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging
+        });
+        if (_response.ok) {
+            return { data: _response.body as Sikaru.SkillSourceReceipt, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401: throw new Sikaru.UnauthorizedError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 403: throw new Sikaru.ForbiddenError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 404: throw new Sikaru.NotFoundError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as unknown, _response.rawResponse);
+                default: throw new errors.SikaruError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.body,
+                    rawResponse: _response.rawResponse
+                });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "PUT", "/v1/projects/{project_id}/managed-agents/{agent_slug}/end-users/{tenant_id}/{user_id}/skill-sources/{skill_id}");
     }
 }

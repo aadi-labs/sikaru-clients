@@ -35,12 +35,12 @@ class ReviewQueueClient:
         agent_id: typing.Optional[str] = OMIT,
         backfill_window: typing.Optional[str] = OMIT,
         filter_expression: typing.Optional[str] = OMIT,
+        grader_tags: typing.Optional[typing.Sequence[str]] = OMIT,
         issue_id: typing.Optional[str] = OMIT,
         issue_title: typing.Optional[str] = OMIT,
         rule_id: typing.Optional[str] = OMIT,
         rule_name: typing.Optional[str] = OMIT,
         sample_rate: typing.Optional[str] = OMIT,
-        signal_tags: typing.Optional[typing.Sequence[str]] = OMIT,
         target: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> typing.Dict[str, typing.Any]:
@@ -59,6 +59,8 @@ class ReviewQueueClient:
 
         filter_expression : typing.Optional[str]
 
+        grader_tags : typing.Optional[typing.Sequence[str]]
+
         issue_id : typing.Optional[str]
 
         issue_title : typing.Optional[str]
@@ -68,8 +70,6 @@ class ReviewQueueClient:
         rule_name : typing.Optional[str]
 
         sample_rate : typing.Optional[str]
-
-        signal_tags : typing.Optional[typing.Sequence[str]]
 
         target : typing.Optional[str]
 
@@ -101,12 +101,12 @@ class ReviewQueueClient:
             agent_id=agent_id,
             backfill_window=backfill_window,
             filter_expression=filter_expression,
+            grader_tags=grader_tags,
             issue_id=issue_id,
             issue_title=issue_title,
             rule_id=rule_id,
             rule_name=rule_name,
             sample_rate=sample_rate,
-            signal_tags=signal_tags,
             target=target,
             request_options=request_options,
         )
@@ -137,12 +137,12 @@ class AsyncReviewQueueClient:
         agent_id: typing.Optional[str] = OMIT,
         backfill_window: typing.Optional[str] = OMIT,
         filter_expression: typing.Optional[str] = OMIT,
+        grader_tags: typing.Optional[typing.Sequence[str]] = OMIT,
         issue_id: typing.Optional[str] = OMIT,
         issue_title: typing.Optional[str] = OMIT,
         rule_id: typing.Optional[str] = OMIT,
         rule_name: typing.Optional[str] = OMIT,
         sample_rate: typing.Optional[str] = OMIT,
-        signal_tags: typing.Optional[typing.Sequence[str]] = OMIT,
         target: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> typing.Dict[str, typing.Any]:
@@ -161,6 +161,8 @@ class AsyncReviewQueueClient:
 
         filter_expression : typing.Optional[str]
 
+        grader_tags : typing.Optional[typing.Sequence[str]]
+
         issue_id : typing.Optional[str]
 
         issue_title : typing.Optional[str]
@@ -170,8 +172,6 @@ class AsyncReviewQueueClient:
         rule_name : typing.Optional[str]
 
         sample_rate : typing.Optional[str]
-
-        signal_tags : typing.Optional[typing.Sequence[str]]
 
         target : typing.Optional[str]
 
@@ -211,12 +211,12 @@ class AsyncReviewQueueClient:
             agent_id=agent_id,
             backfill_window=backfill_window,
             filter_expression=filter_expression,
+            grader_tags=grader_tags,
             issue_id=issue_id,
             issue_title=issue_title,
             rule_id=rule_id,
             rule_name=rule_name,
             sample_rate=sample_rate,
-            signal_tags=signal_tags,
             target=target,
             request_options=request_options,
         )

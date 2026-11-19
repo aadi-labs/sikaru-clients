@@ -1,6 +1,7 @@
 use crate::api::*;
 use crate::{ApiError, ByteStream, ClientConfig, HttpClient, RequestOptions};
 use reqwest::Method;
+use std::collections::HashMap;
 
 pub struct PersonalChannelsClient {
     pub http_client: HttpClient,
@@ -43,6 +44,400 @@ impl PersonalChannelsClient {
                 &format!(
                     "v1/personal-channel-bindings/{}/messages/{}",
                     binding_id, receipt_id
+                ),
+                None,
+                None,
+                options,
+            )
+            .await
+    }
+
+    /// The sites this user's agents may open signed in as them.
+    ///
+    /// # Arguments
+    ///
+    /// * `options` - Additional request options such as headers, timeout, etc.
+    ///
+    /// # Returns
+    ///
+    /// JSON response from the API
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// use sikaru_sdk::prelude::*;
+    ///
+    /// #[tokio::main]
+    /// async fn main() {
+    ///     let config = ClientConfig {
+    ///         token: Some("<token>".to_string()),
+    ///         ..Default::default()
+    ///     };
+    ///     let client = SikaruClient::new(config).expect("Failed to build client");
+    ///     client
+    ///         .personal_channels
+    ///         .list_browser_logins(&"binding_id".to_string(), &"receipt_id".to_string(), None)
+    ///         .await;
+    /// }
+    /// ```
+    pub async fn list_browser_logins(
+        &self,
+        binding_id: &str,
+        receipt_id: &str,
+        options: Option<RequestOptions>,
+    ) -> Result<HashMap<String, serde_json::Value>, ApiError> {
+        self.http_client
+            .execute_request(
+                Method::GET,
+                &format!(
+                    "v1/personal-channel-bindings/{}/messages/{}/browser-logins",
+                    binding_id, receipt_id
+                ),
+                None,
+                None,
+                options,
+            )
+            .await
+    }
+
+    /// # Examples
+    ///
+    /// ```no_run
+    /// use sikaru_sdk::prelude::*;
+    ///
+    /// #[tokio::main]
+    /// async fn main() {
+    ///     let config = ClientConfig {
+    ///         token: Some("<token>".to_string()),
+    ///         ..Default::default()
+    ///     };
+    ///     let client = SikaruClient::new(config).expect("Failed to build client");
+    ///     client
+    ///         .personal_channels
+    ///         .delete_browser_login(
+    ///             &"binding_id".to_string(),
+    ///             &"receipt_id".to_string(),
+    ///             &"login_id".to_string(),
+    ///             None,
+    ///         )
+    ///         .await;
+    /// }
+    /// ```
+    pub async fn delete_browser_login(
+        &self,
+        binding_id: &str,
+        receipt_id: &str,
+        login_id: &str,
+        options: Option<RequestOptions>,
+    ) -> Result<(), ApiError> {
+        let options = {
+            let mut o = options.unwrap_or_default();
+            o.max_retries = Some(0);
+            Some(o)
+        };
+        self.http_client
+            .execute_request(
+                Method::DELETE,
+                &format!(
+                    "v1/personal-channel-bindings/{}/messages/{}/browser-logins/{}",
+                    binding_id, receipt_id, login_id
+                ),
+                None,
+                None,
+                options,
+            )
+            .await
+    }
+
+    /// Everything this user is asked to approve, typed values included.
+    ///
+    /// # Arguments
+    ///
+    /// * `options` - Additional request options such as headers, timeout, etc.
+    ///
+    /// # Returns
+    ///
+    /// JSON response from the API
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// use sikaru_sdk::prelude::*;
+    ///
+    /// #[tokio::main]
+    /// async fn main() {
+    ///     let config = ClientConfig {
+    ///         token: Some("<token>".to_string()),
+    ///         ..Default::default()
+    ///     };
+    ///     let client = SikaruClient::new(config).expect("Failed to build client");
+    ///     client
+    ///         .personal_channels
+    ///         .get_browser_preview(
+    ///             &"binding_id".to_string(),
+    ///             &"receipt_id".to_string(),
+    ///             &"digest".to_string(),
+    ///             None,
+    ///         )
+    ///         .await;
+    /// }
+    /// ```
+    pub async fn get_browser_preview(
+        &self,
+        binding_id: &str,
+        receipt_id: &str,
+        digest: &str,
+        options: Option<RequestOptions>,
+    ) -> Result<HashMap<String, serde_json::Value>, ApiError> {
+        self.http_client
+            .execute_request(
+                Method::GET,
+                &format!(
+                    "v1/personal-channel-bindings/{}/messages/{}/browser-previews/{}",
+                    binding_id, receipt_id, digest
+                ),
+                None,
+                None,
+                options,
+            )
+            .await
+    }
+
+    /// The page this user is asked to approve, password fields masked.
+    ///
+    /// # Arguments
+    ///
+    /// * `options` - Additional request options such as headers, timeout, etc.
+    ///
+    /// # Returns
+    ///
+    /// Streaming file download (use .into_bytes() to collect or stream chunks)
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// use sikaru_sdk::prelude::*;
+    ///
+    /// #[tokio::main]
+    /// async fn main() {
+    ///     let config = ClientConfig {
+    ///         token: Some("<token>".to_string()),
+    ///         ..Default::default()
+    ///     };
+    ///     let client = SikaruClient::new(config).expect("Failed to build client");
+    ///     client
+    ///         .personal_channels
+    ///         .get_browser_preview_screenshot(
+    ///             &"binding_id".to_string(),
+    ///             &"receipt_id".to_string(),
+    ///             &"digest".to_string(),
+    ///             None,
+    ///         )
+    ///         .await;
+    /// }
+    /// ```
+    pub async fn get_browser_preview_screenshot(
+        &self,
+        binding_id: &str,
+        receipt_id: &str,
+        digest: &str,
+        options: Option<RequestOptions>,
+    ) -> Result<ByteStream, ApiError> {
+        self.http_client
+            .execute_stream_request(
+                Method::GET,
+                &format!(
+                    "v1/personal-channel-bindings/{}/messages/{}/browser-previews/{}/screenshot",
+                    binding_id, receipt_id, digest
+                ),
+                None,
+                None,
+                options,
+            )
+            .await
+    }
+
+    /// What this run's browser did for this user, with their own pages' screenshots.
+    ///
+    /// # Arguments
+    ///
+    /// * `options` - Additional request options such as headers, timeout, etc.
+    ///
+    /// # Returns
+    ///
+    /// JSON response from the API
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// use sikaru_sdk::prelude::*;
+    ///
+    /// #[tokio::main]
+    /// async fn main() {
+    ///     let config = ClientConfig {
+    ///         token: Some("<token>".to_string()),
+    ///         ..Default::default()
+    ///     };
+    ///     let client = SikaruClient::new(config).expect("Failed to build client");
+    ///     client
+    ///         .personal_channels
+    ///         .get_browser_receipt(&"binding_id".to_string(), &"receipt_id".to_string(), None)
+    ///         .await;
+    /// }
+    /// ```
+    pub async fn get_browser_receipt(
+        &self,
+        binding_id: &str,
+        receipt_id: &str,
+        options: Option<RequestOptions>,
+    ) -> Result<HashMap<String, serde_json::Value>, ApiError> {
+        self.http_client
+            .execute_request(
+                Method::GET,
+                &format!(
+                    "v1/personal-channel-bindings/{}/messages/{}/browser-receipt",
+                    binding_id, receipt_id
+                ),
+                None,
+                None,
+                options,
+            )
+            .await
+    }
+
+    /// # Examples
+    ///
+    /// ```no_run
+    /// use sikaru_sdk::prelude::*;
+    ///
+    /// #[tokio::main]
+    /// async fn main() {
+    ///     let config = ClientConfig {
+    ///         token: Some("<token>".to_string()),
+    ///         ..Default::default()
+    ///     };
+    ///     let client = SikaruClient::new(config).expect("Failed to build client");
+    ///     client
+    ///         .personal_channels
+    ///         .get_browser_receipt_screenshot(
+    ///             &"binding_id".to_string(),
+    ///             &"receipt_id".to_string(),
+    ///             &"digest".to_string(),
+    ///             None,
+    ///         )
+    ///         .await;
+    /// }
+    /// ```
+    pub async fn get_browser_receipt_screenshot(
+        &self,
+        binding_id: &str,
+        receipt_id: &str,
+        digest: &str,
+        options: Option<RequestOptions>,
+    ) -> Result<ByteStream, ApiError> {
+        self.http_client
+            .execute_stream_request(
+                Method::GET,
+                &format!(
+                    "v1/personal-channel-bindings/{}/messages/{}/browser-receipt/screenshots/{}",
+                    binding_id, receipt_id, digest
+                ),
+                None,
+                None,
+                options,
+            )
+            .await
+    }
+
+    /// The browser actions this user always allows this agent to take for them.
+    ///
+    /// # Arguments
+    ///
+    /// * `options` - Additional request options such as headers, timeout, etc.
+    ///
+    /// # Returns
+    ///
+    /// JSON response from the API
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// use sikaru_sdk::prelude::*;
+    ///
+    /// #[tokio::main]
+    /// async fn main() {
+    ///     let config = ClientConfig {
+    ///         token: Some("<token>".to_string()),
+    ///         ..Default::default()
+    ///     };
+    ///     let client = SikaruClient::new(config).expect("Failed to build client");
+    ///     client
+    ///         .personal_channels
+    ///         .list_browser_rules(&"binding_id".to_string(), &"receipt_id".to_string(), None)
+    ///         .await;
+    /// }
+    /// ```
+    pub async fn list_browser_rules(
+        &self,
+        binding_id: &str,
+        receipt_id: &str,
+        options: Option<RequestOptions>,
+    ) -> Result<BrowserRuleList, ApiError> {
+        self.http_client
+            .execute_request(
+                Method::GET,
+                &format!(
+                    "v1/personal-channel-bindings/{}/messages/{}/browser-rules",
+                    binding_id, receipt_id
+                ),
+                None,
+                None,
+                options,
+            )
+            .await
+    }
+
+    /// # Examples
+    ///
+    /// ```no_run
+    /// use sikaru_sdk::prelude::*;
+    ///
+    /// #[tokio::main]
+    /// async fn main() {
+    ///     let config = ClientConfig {
+    ///         token: Some("<token>".to_string()),
+    ///         ..Default::default()
+    ///     };
+    ///     let client = SikaruClient::new(config).expect("Failed to build client");
+    ///     client
+    ///         .personal_channels
+    ///         .delete_browser_rule(
+    ///             &"binding_id".to_string(),
+    ///             &"receipt_id".to_string(),
+    ///             &"rule_id".to_string(),
+    ///             None,
+    ///         )
+    ///         .await;
+    /// }
+    /// ```
+    pub async fn delete_browser_rule(
+        &self,
+        binding_id: &str,
+        receipt_id: &str,
+        rule_id: &str,
+        options: Option<RequestOptions>,
+    ) -> Result<(), ApiError> {
+        let options = {
+            let mut o = options.unwrap_or_default();
+            o.max_retries = Some(0);
+            Some(o)
+        };
+        self.http_client
+            .execute_request(
+                Method::DELETE,
+                &format!(
+                    "v1/personal-channel-bindings/{}/messages/{}/browser-rules/{}",
+                    binding_id, receipt_id, rule_id
                 ),
                 None,
                 None,
@@ -311,6 +706,8 @@ impl PersonalChannelsClient {
     ///             &"receipt_id".to_string(),
     ///             &"tool_call_id".to_string(),
     ///             &ApprovalInput {
+    ///                 always: None,
+    ///                 cap: None,
     ///                 decision: ApprovalInputDecision::Approved,
     ///                 idempotency_key: "idempotency_key".to_string(),
     ///             },
@@ -340,6 +737,65 @@ impl PersonalChannelsClient {
                     binding_id, receipt_id, tool_call_id
                 ),
                 Some(serde_json::to_value(request).map_err(ApiError::Serialization)?),
+                None,
+                options,
+            )
+            .await
+    }
+
+    /// A one-time link to sign in, in a live browser, to the sites a parked browser call needs.
+    ///
+    /// # Arguments
+    ///
+    /// * `options` - Additional request options such as headers, timeout, etc.
+    ///
+    /// # Returns
+    ///
+    /// JSON response from the API
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// use sikaru_sdk::prelude::*;
+    ///
+    /// #[tokio::main]
+    /// async fn main() {
+    ///     let config = ClientConfig {
+    ///         token: Some("<token>".to_string()),
+    ///         ..Default::default()
+    ///     };
+    ///     let client = SikaruClient::new(config).expect("Failed to build client");
+    ///     client
+    ///         .personal_channels
+    ///         .create_browser_handoff(
+    ///             &"binding_id".to_string(),
+    ///             &"receipt_id".to_string(),
+    ///             &"tool_call_id".to_string(),
+    ///             None,
+    ///         )
+    ///         .await;
+    /// }
+    /// ```
+    pub async fn create_browser_handoff(
+        &self,
+        binding_id: &str,
+        receipt_id: &str,
+        tool_call_id: &str,
+        options: Option<RequestOptions>,
+    ) -> Result<HashMap<String, serde_json::Value>, ApiError> {
+        let options = {
+            let mut o = options.unwrap_or_default();
+            o.max_retries = Some(0);
+            Some(o)
+        };
+        self.http_client
+            .execute_request(
+                Method::POST,
+                &format!(
+                    "v1/personal-channel-bindings/{}/messages/{}/tool-calls/{}/browser-handoff",
+                    binding_id, receipt_id, tool_call_id
+                ),
+                None,
                 None,
                 options,
             )

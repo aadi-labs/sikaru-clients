@@ -2,7 +2,7 @@ pub use crate::prelude::*;
 #[allow(unused_imports)]
 use super::*;
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, PartialEq)]
 pub struct DocumentRevision {
     #[serde(default)]
     pub actor: String,
@@ -17,6 +17,8 @@ pub struct DocumentRevision {
     pub created_at: String,
     #[serde(default)]
     pub document: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub files: Option<HashMap<String, String>>,
     #[serde(default)]
     pub revision: i64,
 }
@@ -35,6 +37,7 @@ pub struct DocumentRevisionBuilder {
     content_origin: Option<String>,
     created_at: Option<String>,
     document: Option<String>,
+    files: Option<HashMap<String, String>>,
     revision: Option<i64>,
 }
 
@@ -64,6 +67,11 @@ impl DocumentRevisionBuilder {
         self
     }
 
+    pub fn files(mut self, value: HashMap<String, String>) -> Self {
+        self.files = Some(value);
+        self
+    }
+
     pub fn revision(mut self, value: i64) -> Self {
         self.revision = Some(value);
         self
@@ -83,6 +91,7 @@ impl DocumentRevisionBuilder {
             content_origin: self.content_origin.ok_or_else(|| BuildError::missing_field("content_origin"))?,
             created_at: self.created_at.ok_or_else(|| BuildError::missing_field("created_at"))?,
             document: self.document.ok_or_else(|| BuildError::missing_field("document"))?,
+            files: self.files,
             revision: self.revision.ok_or_else(|| BuildError::missing_field("revision"))?,
         })
     }

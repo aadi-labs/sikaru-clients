@@ -1,4 +1,4 @@
-//! Every remote operation uses the generated SDK under a complete-future deadline.
+//! Public operations use the generated SDK under a complete-future deadline.
 //! The persistent executor channel carries the same work pages and receipts as frames
 //! whose shapes come from the generated channel types.
 use super::{config::Bootstrap, journal::Binding};
@@ -36,6 +36,8 @@ pub struct Transport {
     pub client: ApiClient,
     pub binding: Binding,
     channel_url: Result<String, String>,
+    restore_url: Result<reqwest::Url, String>,
+    http_client: reqwest::Client,
     token: String,
     user_agent: String,
     proxy: Option<fern_cli_sdk::http::ResolvedProxy>,
@@ -48,6 +50,7 @@ impl Transport {
         binding: Binding,
     ) -> Result<Arc<Self>> {
         let channel_url = channel_url(&base_url, &binding).map_err(|e| e.to_string());
+        let restore_url = workspace_restore_url(&base_url, &binding).map_err(|e| e.to_string());
         let client = ApiClientBuilder::new(base_url)
             .token(b.token.clone())
             .max_retries(0)
@@ -58,10 +61,28 @@ impl Transport {
             client,
             binding,
             channel_url,
+            restore_url,
+            http_client: http.client,
             token: b.token.clone(),
             user_agent: http.user_agent,
             proxy: http.proxy,
         }))
+    }
+    pub async fn product_workspace(&self) -> Result<reqwest::Response> {
+        let url = self.restore_url.clone().map_err(anyhow::Error::msg)?;
+        let response = self
+            .http_client
+            .get(url.clone())
+            .bearer_auth(&self.token)
+            .header(reqwest::header::USER_AGENT, &self.user_agent)
+            .send()
+            .await
+            .context("workspace restore request failed")?;
+        anyhow::ensure!(
+            response.status() == reqwest::StatusCode::OK && response.url() == &url,
+            "product workspace restore was refused"
+        );
+        Ok(response)
     }
     pub async fn status(&self, deadline: Instant) -> Result<AttachmentView> {
         bounded(
@@ -825,6 +846,22 @@ pub fn channel_url(base_url: &str, b: &Binding) -> Result<String> {
         segment(&b.project_id),
         segment(&b.attachment_id)
     ))
+}
+
+fn workspace_restore_url(base_url: &str, b: &Binding) -> Result<reqwest::Url> {
+    let mut url = reqwest::Url::parse(base_url)?;
+    url.path_segments_mut()
+        .map_err(|_| anyhow::anyhow!("invalid restore origin"))?
+        .pop_if_empty()
+        .extend([
+            "v1",
+            "projects",
+            &b.project_id,
+            "compute-attachments",
+            &b.attachment_id,
+            "workspace-restore",
+        ]);
+    Ok(url)
 }
 
 impl Channel {

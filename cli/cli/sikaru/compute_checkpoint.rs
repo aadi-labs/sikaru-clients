@@ -185,6 +185,7 @@ pub struct Plan {
     pub run_id: Option<String>,
     pub repo: RepoPaths,
     pub interactive: bool,
+    pub refuse_oversized_files: bool,
 }
 #[derive(Debug, thiserror::Error)]
 enum CheckpointError {
@@ -194,6 +195,8 @@ enum CheckpointError {
     Signal,
     #[error("content_mismatch")]
     ContentMismatch,
+    #[error("oversized_file")]
+    OversizedFile,
 }
 /// A fixed reason for `checkpoint_failed`; error text can carry paths or remote details.
 fn reason(error: &anyhow::Error) -> &'static str {
@@ -202,6 +205,7 @@ fn reason(error: &anyhow::Error) -> &'static str {
             CheckpointError::Timeout => "timeout",
             CheckpointError::Signal => "signal",
             CheckpointError::ContentMismatch => "content_mismatch",
+            CheckpointError::OversizedFile => "oversized_file",
         };
     }
     if let Some(e) = error.downcast_ref::<RecordRefusal>() {
@@ -280,12 +284,12 @@ impl Interrupt {
     }
 }
 
-/// Take one checkpoint, bounded, and report it. Never fails the caller.
+/// Take one checkpoint, bounded, and report whether it was acknowledged.
 pub async fn checkpoint(
     transport: &Transport,
     plan: &Plan,
     mut reconcile: impl AsyncFnMut(Instant) -> Result<()>,
-) {
+) -> bool {
     let events = Events {
         interactive: plan.interactive,
         trigger: plan.trigger,
@@ -308,8 +312,14 @@ pub async fn checkpoint(
             .unwrap_or(Ok(Err(CheckpointError::Signal.into()))),
     };
     match result.unwrap_or_else(|_| Err(checkpoint_timeout(plan.trigger).into())) {
-        Ok(pushed) => events.pushed(&pushed),
-        Err(error) => events.failed(reason(&error)),
+        Ok(pushed) => {
+            events.pushed(&pushed);
+            true
+        }
+        Err(error) => {
+            events.failed(reason(&error));
+            false
+        }
     }
 }
 
@@ -341,6 +351,14 @@ async fn attempt(
         repo.snapshot()
     })
     .await?;
+    if plan.refuse_oversized_files
+        && snapshot
+            .skipped
+            .iter()
+            .any(|file| file.reason == SkipReason::TooLarge)
+    {
+        return Err(CheckpointError::OversizedFile.into());
+    }
     let total =
         snapshot.blobs.iter().map(|b| b.size as u64).sum::<u64>() + snapshot.manifest.len() as u64;
     let mut sent = 0;

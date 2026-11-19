@@ -7,6 +7,9 @@ pub struct UpsertIssueClusterRequest {
     #[serde(rename = "agentId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub agent_id: Option<String>,
+    #[serde(rename = "graderTags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub grader_tags: Option<Vec<String>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub impact: Option<i64>,
     #[serde(rename = "issueId")]
@@ -17,9 +20,6 @@ pub struct UpsertIssueClusterRequest {
     pub issue_title: Option<String>,
     #[serde(default)]
     pub label: String,
-    #[serde(rename = "signalTags")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub signal_tags: Option<Vec<String>>,
     #[serde(rename = "traceIds")]
     #[serde(default)]
     pub trace_ids: Vec<String>,
@@ -35,17 +35,22 @@ impl UpsertIssueClusterRequest {
 #[non_exhaustive]
 pub struct UpsertIssueClusterRequestBuilder {
     agent_id: Option<String>,
+    grader_tags: Option<Vec<String>>,
     impact: Option<i64>,
     issue_id: Option<String>,
     issue_title: Option<String>,
     label: Option<String>,
-    signal_tags: Option<Vec<String>>,
     trace_ids: Option<Vec<String>>,
 }
 
 impl UpsertIssueClusterRequestBuilder {
     pub fn agent_id(mut self, value: impl Into<String>) -> Self {
         self.agent_id = Some(value.into());
+        self
+    }
+
+    pub fn grader_tags(mut self, value: Vec<String>) -> Self {
+        self.grader_tags = Some(value);
         self
     }
 
@@ -69,11 +74,6 @@ impl UpsertIssueClusterRequestBuilder {
         self
     }
 
-    pub fn signal_tags(mut self, value: Vec<String>) -> Self {
-        self.signal_tags = Some(value);
-        self
-    }
-
     pub fn trace_ids(mut self, value: Vec<String>) -> Self {
         self.trace_ids = Some(value);
         self
@@ -86,11 +86,11 @@ impl UpsertIssueClusterRequestBuilder {
     pub fn build(self) -> Result<UpsertIssueClusterRequest, BuildError> {
         Ok(UpsertIssueClusterRequest {
             agent_id: self.agent_id,
+            grader_tags: self.grader_tags,
             impact: self.impact,
             issue_id: self.issue_id,
             issue_title: self.issue_title,
             label: self.label.ok_or_else(|| BuildError::missing_field("label"))?,
-            signal_tags: self.signal_tags,
             trace_ids: self.trace_ids.ok_or_else(|| BuildError::missing_field("trace_ids"))?,
         })
     }

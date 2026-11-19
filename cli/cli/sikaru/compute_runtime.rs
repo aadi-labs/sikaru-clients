@@ -22,6 +22,9 @@ use std::{
 };
 use tokio::{sync::watch, time::Instant};
 
+#[path = "compute_restore.rs"]
+mod restore;
+
 #[derive(Default)]
 pub struct RunOptions {
     pub interactive: bool,
@@ -31,6 +34,8 @@ pub struct RunOptions {
     pub admission: Option<watch::Receiver<bool>>,
     /// Hidden `--no-workspace-checkpoints`: no private staging or content uploads.
     pub skip_checkpoints: bool,
+    /// Require product-owned storage before serving a fresh executor.
+    pub restore_product_workspace: bool,
     /// Controller state inside the workspace that checkpoints leave out.
     pub private_dirs: Vec<PathBuf>,
 }
@@ -48,11 +53,24 @@ pub async fn serve_with_options(
     transport.validate(&current)?;
     let mut journal = Journal::open_verified(&b.state_dir, binding, instance, true)?;
     let mut processes = Processes::new(&journal, Duration::from_secs(b.command_timeout_seconds));
-    // Local and before readiness: no lease exists while the repository opens.
-    let repository = checkpoint_repository(&b, &options).await;
-    let preparation = prepare(&transport, &mut journal, &processes, startup).await;
+    let preparation = async {
+        // Restore before readiness or command reconciliation on the fresh workspace.
+        if options.restore_product_workspace {
+            tokio::time::timeout_at(startup, async {
+                restore::restore(transport.product_workspace().await?, &b.workspace).await
+            })
+            .await??;
+        }
+        let repository = checkpoint_repository(&b, &options).await;
+        if options.restore_product_workspace && repository.is_none() {
+            bail!("product workspace checkpoint staging unavailable");
+        }
+        let deadline = prepare(&transport, &mut journal, &processes, startup).await?;
+        Ok::<_, anyhow::Error>((deadline, repository))
+    }
+    .await;
     let (outcome, cleanup) = match preparation {
-        Ok(deadline) => {
+        Ok((deadline, repository)) => {
             progress(
                 options.interactive,
                 "Workspace ready.",
@@ -204,7 +222,7 @@ async fn run(
     let approval_wait = options.approval_wait;
     let interactive = options.interactive;
     let mut lease_held = true;
-    let outcome = tokio::select! {
+    let mut outcome = tokio::select! {
         biased;
         _=termination_signal()=>Ok(json!({"status":"cancelled","reason":"signal","execution":null})),
         _=stop_requested(&mut options.stop)=>Ok(json!({"status":"cancelled","reason":"controller_stopped","execution":null})),
@@ -225,6 +243,7 @@ async fn run(
         run_id: completed.into_inner().unwrap_or_else(|p| p.into_inner()),
         repo,
         interactive,
+        refuse_oversized_files: options.restore_product_workspace,
     };
     let status = outcome.as_ref().map_or("recovery_required", |v| {
         v["status"].as_str().unwrap_or("failed")
@@ -248,12 +267,19 @@ async fn run(
             }
             reconcile(&transport, journal, processes, deadline).await
         })
-        .await;
+        .await
     };
     tokio::pin!(capture);
     loop {
         tokio::select! {
-            _ = &mut capture => break,
+            saved = &mut capture => {
+                if options.restore_product_workspace {
+                    if let Ok(result) = &mut outcome {
+                        result["workspace_checkpoint"] = json!(if saved { "saved" } else { "failed" });
+                    }
+                }
+                break;
+            }
             _ = &mut heartbeat, if lease_held => lease_held = false,
         }
     }

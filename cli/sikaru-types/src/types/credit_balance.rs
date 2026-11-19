@@ -8,7 +8,7 @@ pub struct CreditBalance {
     #[serde(rename = "availableUsd")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub available_usd: Option<String>,
-    /// `ready`: credits fund work; `no_card`: the organization has not saved a card, so nothing funds work yet; `complimentary`: usage is covered and needs no credits.
+    /// `ready`: credits fund work; `no_card`: the organization has no credit account yet, so nothing funds work until an agent top-up or a saved card opens one; `complimentary`: usage is covered and needs no credits.
     pub state: CreditBalanceState,
     /// Largest top-up offer an agent can create now; null while agent top-ups are off or unavailable.
     #[serde(rename = "topUpMaxUsd")]

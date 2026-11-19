@@ -77,6 +77,413 @@ export class PersonalChannelsClient {
     }
 
     /**
+     * The sites this user's agents may open signed in as them.
+     *
+     * @param {string} binding_id
+     * @param {string} receipt_id
+     * @param {Sikaru.ListBrowserLoginsPersonalChannelsRequest} request
+     * @param {PersonalChannelsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Sikaru.UnprocessableEntityError}
+     * @throws {@link errors.SikaruError}
+     * @throws {@link errors.SikaruTimeoutError}
+     *
+     * @example
+     *     await client.personalChannels.listBrowserLogins("binding_id", "receipt_id")
+     */
+    public listBrowserLogins(binding_id: string, receipt_id: string, request: Sikaru.ListBrowserLoginsPersonalChannelsRequest = {}, requestOptions?: PersonalChannelsClient.RequestOptions): core.HttpResponsePromise<Record<string, unknown>> {
+        return core.HttpResponsePromise.fromPromise(this.__listBrowserLogins(binding_id, receipt_id, request, requestOptions));
+    }
+
+    private async __listBrowserLogins(binding_id: string, receipt_id: string, request: Sikaru.ListBrowserLoginsPersonalChannelsRequest = {}, requestOptions?: PersonalChannelsClient.RequestOptions): Promise<core.WithRawResponse<Record<string, unknown>>> {
+        const _metadata: core.EndpointMetadata = { security: undefined };
+        const { authorization, "X-Sikaru-User-Assertion": sikaruUserAssertion, "X-Sikaru-Member-Authorization": sikaruMemberAuthorization } = request;
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(this._options?.headers, mergeOnlyDefinedHeaders({ "authorization": authorization ?? undefined, "X-Sikaru-User-Assertion": sikaruUserAssertion ?? undefined, "X-Sikaru-Member-Authorization": sikaruMemberAuthorization ?? undefined }), requestOptions?.headers);
+        const _response = await core.fetcher({
+            url: core.url.join(await core.Supplier.get(this._options.baseUrl) ?? (await core.Supplier.get(this._options.environment) ?? environments.SikaruEnvironment.Default), `v1/personal-channel-bindings/${core.url.encodePathParam(binding_id)}/messages/${core.url.encodePathParam(receipt_id)}/browser-logins`),
+            method: "GET",
+            headers: _headers,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            endpointMetadata: _metadata,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging
+        });
+        if (_response.ok) {
+            return { data: _response.body as Record<string, unknown>, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as unknown, _response.rawResponse);
+                default: throw new errors.SikaruError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.body,
+                    rawResponse: _response.rawResponse
+                });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/v1/personal-channel-bindings/{binding_id}/messages/{receipt_id}/browser-logins");
+    }
+
+    /**
+     * @param {string} binding_id
+     * @param {string} receipt_id
+     * @param {string} login_id
+     * @param {Sikaru.DeleteBrowserLoginPersonalChannelsRequest} request
+     * @param {PersonalChannelsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Sikaru.UnprocessableEntityError}
+     * @throws {@link errors.SikaruError}
+     * @throws {@link errors.SikaruTimeoutError}
+     *
+     * @example
+     *     await client.personalChannels.deleteBrowserLogin("binding_id", "receipt_id", "login_id")
+     */
+    public deleteBrowserLogin(binding_id: string, receipt_id: string, login_id: string, request: Sikaru.DeleteBrowserLoginPersonalChannelsRequest = {}, requestOptions?: PersonalChannelsClient.RequestOptions): core.HttpResponsePromise<void> {
+        return core.HttpResponsePromise.fromPromise(this.__deleteBrowserLogin(binding_id, receipt_id, login_id, request, requestOptions));
+    }
+
+    private async __deleteBrowserLogin(binding_id: string, receipt_id: string, login_id: string, request: Sikaru.DeleteBrowserLoginPersonalChannelsRequest = {}, requestOptions?: PersonalChannelsClient.RequestOptions): Promise<core.WithRawResponse<void>> {
+        const _metadata: core.EndpointMetadata = { security: undefined };
+        const { authorization, "X-Sikaru-User-Assertion": sikaruUserAssertion, "X-Sikaru-Member-Authorization": sikaruMemberAuthorization } = request;
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(this._options?.headers, mergeOnlyDefinedHeaders({ "authorization": authorization ?? undefined, "X-Sikaru-User-Assertion": sikaruUserAssertion ?? undefined, "X-Sikaru-Member-Authorization": sikaruMemberAuthorization ?? undefined }), requestOptions?.headers);
+        const _response = await core.fetcher({
+            url: core.url.join(await core.Supplier.get(this._options.baseUrl) ?? (await core.Supplier.get(this._options.environment) ?? environments.SikaruEnvironment.Default), `v1/personal-channel-bindings/${core.url.encodePathParam(binding_id)}/messages/${core.url.encodePathParam(receipt_id)}/browser-logins/${core.url.encodePathParam(login_id)}`),
+            method: "DELETE",
+            headers: _headers,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: 0,
+            abortSignal: requestOptions?.abortSignal,
+            endpointMetadata: _metadata,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging
+        });
+        if (_response.ok) {
+            return { data: undefined, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as unknown, _response.rawResponse);
+                default: throw new errors.SikaruError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.body,
+                    rawResponse: _response.rawResponse
+                });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "DELETE", "/v1/personal-channel-bindings/{binding_id}/messages/{receipt_id}/browser-logins/{login_id}");
+    }
+
+    /**
+     * Everything this user is asked to approve, typed values included.
+     *
+     * @param {string} binding_id
+     * @param {string} receipt_id
+     * @param {string} digest
+     * @param {Sikaru.GetBrowserPreviewPersonalChannelsRequest} request
+     * @param {PersonalChannelsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Sikaru.UnprocessableEntityError}
+     * @throws {@link errors.SikaruError}
+     * @throws {@link errors.SikaruTimeoutError}
+     *
+     * @example
+     *     await client.personalChannels.getBrowserPreview("binding_id", "receipt_id", "digest")
+     */
+    public getBrowserPreview(binding_id: string, receipt_id: string, digest: string, request: Sikaru.GetBrowserPreviewPersonalChannelsRequest = {}, requestOptions?: PersonalChannelsClient.RequestOptions): core.HttpResponsePromise<Record<string, unknown>> {
+        return core.HttpResponsePromise.fromPromise(this.__getBrowserPreview(binding_id, receipt_id, digest, request, requestOptions));
+    }
+
+    private async __getBrowserPreview(binding_id: string, receipt_id: string, digest: string, request: Sikaru.GetBrowserPreviewPersonalChannelsRequest = {}, requestOptions?: PersonalChannelsClient.RequestOptions): Promise<core.WithRawResponse<Record<string, unknown>>> {
+        const _metadata: core.EndpointMetadata = { security: undefined };
+        const { authorization, "X-Sikaru-User-Assertion": sikaruUserAssertion, "X-Sikaru-Member-Authorization": sikaruMemberAuthorization } = request;
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(this._options?.headers, mergeOnlyDefinedHeaders({ "authorization": authorization ?? undefined, "X-Sikaru-User-Assertion": sikaruUserAssertion ?? undefined, "X-Sikaru-Member-Authorization": sikaruMemberAuthorization ?? undefined }), requestOptions?.headers);
+        const _response = await core.fetcher({
+            url: core.url.join(await core.Supplier.get(this._options.baseUrl) ?? (await core.Supplier.get(this._options.environment) ?? environments.SikaruEnvironment.Default), `v1/personal-channel-bindings/${core.url.encodePathParam(binding_id)}/messages/${core.url.encodePathParam(receipt_id)}/browser-previews/${core.url.encodePathParam(digest)}`),
+            method: "GET",
+            headers: _headers,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            endpointMetadata: _metadata,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging
+        });
+        if (_response.ok) {
+            return { data: _response.body as Record<string, unknown>, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as unknown, _response.rawResponse);
+                default: throw new errors.SikaruError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.body,
+                    rawResponse: _response.rawResponse
+                });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/v1/personal-channel-bindings/{binding_id}/messages/{receipt_id}/browser-previews/{digest}");
+    }
+
+    /**
+     * The page this user is asked to approve, password fields masked.
+     *
+     * @throws {@link Sikaru.UnprocessableEntityError}
+     * @throws {@link errors.SikaruError}
+     * @throws {@link errors.SikaruTimeoutError}
+     */
+    public getBrowserPreviewScreenshot(binding_id: string, receipt_id: string, digest: string, request: Sikaru.GetBrowserPreviewScreenshotPersonalChannelsRequest = {}, requestOptions?: PersonalChannelsClient.RequestOptions): core.HttpResponsePromise<core.BinaryResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__getBrowserPreviewScreenshot(binding_id, receipt_id, digest, request, requestOptions));
+    }
+
+    private async __getBrowserPreviewScreenshot(binding_id: string, receipt_id: string, digest: string, request: Sikaru.GetBrowserPreviewScreenshotPersonalChannelsRequest = {}, requestOptions?: PersonalChannelsClient.RequestOptions): Promise<core.WithRawResponse<core.BinaryResponse>> {
+        const _metadata: core.EndpointMetadata = { security: undefined };
+        const { authorization, "X-Sikaru-User-Assertion": sikaruUserAssertion, "X-Sikaru-Member-Authorization": sikaruMemberAuthorization } = request;
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(this._options?.headers, mergeOnlyDefinedHeaders({ "authorization": authorization ?? undefined, "X-Sikaru-User-Assertion": sikaruUserAssertion ?? undefined, "X-Sikaru-Member-Authorization": sikaruMemberAuthorization ?? undefined }), requestOptions?.headers);
+        const _response = await core.fetcher<core.BinaryResponse>({
+            url: core.url.join(await core.Supplier.get(this._options.baseUrl) ?? (await core.Supplier.get(this._options.environment) ?? environments.SikaruEnvironment.Default), `v1/personal-channel-bindings/${core.url.encodePathParam(binding_id)}/messages/${core.url.encodePathParam(receipt_id)}/browser-previews/${core.url.encodePathParam(digest)}/screenshot`),
+            method: "GET",
+            headers: _headers,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            responseType: "binary-response",
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            endpointMetadata: _metadata,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging
+        });
+        if (_response.ok) {
+            return { data: _response.body, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as unknown, _response.rawResponse);
+                default: throw new errors.SikaruError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.body,
+                    rawResponse: _response.rawResponse
+                });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/v1/personal-channel-bindings/{binding_id}/messages/{receipt_id}/browser-previews/{digest}/screenshot");
+    }
+
+    /**
+     * What this run's browser did for this user, with their own pages' screenshots.
+     *
+     * @param {string} binding_id
+     * @param {string} receipt_id
+     * @param {Sikaru.GetBrowserReceiptPersonalChannelsRequest} request
+     * @param {PersonalChannelsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Sikaru.UnprocessableEntityError}
+     * @throws {@link errors.SikaruError}
+     * @throws {@link errors.SikaruTimeoutError}
+     *
+     * @example
+     *     await client.personalChannels.getBrowserReceipt("binding_id", "receipt_id")
+     */
+    public getBrowserReceipt(binding_id: string, receipt_id: string, request: Sikaru.GetBrowserReceiptPersonalChannelsRequest = {}, requestOptions?: PersonalChannelsClient.RequestOptions): core.HttpResponsePromise<Record<string, unknown>> {
+        return core.HttpResponsePromise.fromPromise(this.__getBrowserReceipt(binding_id, receipt_id, request, requestOptions));
+    }
+
+    private async __getBrowserReceipt(binding_id: string, receipt_id: string, request: Sikaru.GetBrowserReceiptPersonalChannelsRequest = {}, requestOptions?: PersonalChannelsClient.RequestOptions): Promise<core.WithRawResponse<Record<string, unknown>>> {
+        const _metadata: core.EndpointMetadata = { security: undefined };
+        const { authorization, "X-Sikaru-User-Assertion": sikaruUserAssertion, "X-Sikaru-Member-Authorization": sikaruMemberAuthorization } = request;
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(this._options?.headers, mergeOnlyDefinedHeaders({ "authorization": authorization ?? undefined, "X-Sikaru-User-Assertion": sikaruUserAssertion ?? undefined, "X-Sikaru-Member-Authorization": sikaruMemberAuthorization ?? undefined }), requestOptions?.headers);
+        const _response = await core.fetcher({
+            url: core.url.join(await core.Supplier.get(this._options.baseUrl) ?? (await core.Supplier.get(this._options.environment) ?? environments.SikaruEnvironment.Default), `v1/personal-channel-bindings/${core.url.encodePathParam(binding_id)}/messages/${core.url.encodePathParam(receipt_id)}/browser-receipt`),
+            method: "GET",
+            headers: _headers,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            endpointMetadata: _metadata,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging
+        });
+        if (_response.ok) {
+            return { data: _response.body as Record<string, unknown>, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as unknown, _response.rawResponse);
+                default: throw new errors.SikaruError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.body,
+                    rawResponse: _response.rawResponse
+                });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/v1/personal-channel-bindings/{binding_id}/messages/{receipt_id}/browser-receipt");
+    }
+
+    /**
+     * @throws {@link Sikaru.UnprocessableEntityError}
+     * @throws {@link errors.SikaruError}
+     * @throws {@link errors.SikaruTimeoutError}
+     */
+    public getBrowserReceiptScreenshot(binding_id: string, receipt_id: string, digest: string, request: Sikaru.GetBrowserReceiptScreenshotPersonalChannelsRequest = {}, requestOptions?: PersonalChannelsClient.RequestOptions): core.HttpResponsePromise<core.BinaryResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__getBrowserReceiptScreenshot(binding_id, receipt_id, digest, request, requestOptions));
+    }
+
+    private async __getBrowserReceiptScreenshot(binding_id: string, receipt_id: string, digest: string, request: Sikaru.GetBrowserReceiptScreenshotPersonalChannelsRequest = {}, requestOptions?: PersonalChannelsClient.RequestOptions): Promise<core.WithRawResponse<core.BinaryResponse>> {
+        const _metadata: core.EndpointMetadata = { security: undefined };
+        const { authorization, "X-Sikaru-User-Assertion": sikaruUserAssertion, "X-Sikaru-Member-Authorization": sikaruMemberAuthorization } = request;
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(this._options?.headers, mergeOnlyDefinedHeaders({ "authorization": authorization ?? undefined, "X-Sikaru-User-Assertion": sikaruUserAssertion ?? undefined, "X-Sikaru-Member-Authorization": sikaruMemberAuthorization ?? undefined }), requestOptions?.headers);
+        const _response = await core.fetcher<core.BinaryResponse>({
+            url: core.url.join(await core.Supplier.get(this._options.baseUrl) ?? (await core.Supplier.get(this._options.environment) ?? environments.SikaruEnvironment.Default), `v1/personal-channel-bindings/${core.url.encodePathParam(binding_id)}/messages/${core.url.encodePathParam(receipt_id)}/browser-receipt/screenshots/${core.url.encodePathParam(digest)}`),
+            method: "GET",
+            headers: _headers,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            responseType: "binary-response",
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            endpointMetadata: _metadata,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging
+        });
+        if (_response.ok) {
+            return { data: _response.body, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as unknown, _response.rawResponse);
+                default: throw new errors.SikaruError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.body,
+                    rawResponse: _response.rawResponse
+                });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/v1/personal-channel-bindings/{binding_id}/messages/{receipt_id}/browser-receipt/screenshots/{digest}");
+    }
+
+    /**
+     * The browser actions this user always allows this agent to take for them.
+     *
+     * @param {string} binding_id
+     * @param {string} receipt_id
+     * @param {Sikaru.ListBrowserRulesPersonalChannelsRequest} request
+     * @param {PersonalChannelsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Sikaru.UnprocessableEntityError}
+     * @throws {@link errors.SikaruError}
+     * @throws {@link errors.SikaruTimeoutError}
+     *
+     * @example
+     *     await client.personalChannels.listBrowserRules("binding_id", "receipt_id")
+     */
+    public listBrowserRules(binding_id: string, receipt_id: string, request: Sikaru.ListBrowserRulesPersonalChannelsRequest = {}, requestOptions?: PersonalChannelsClient.RequestOptions): core.HttpResponsePromise<Sikaru.BrowserRuleList> {
+        return core.HttpResponsePromise.fromPromise(this.__listBrowserRules(binding_id, receipt_id, request, requestOptions));
+    }
+
+    private async __listBrowserRules(binding_id: string, receipt_id: string, request: Sikaru.ListBrowserRulesPersonalChannelsRequest = {}, requestOptions?: PersonalChannelsClient.RequestOptions): Promise<core.WithRawResponse<Sikaru.BrowserRuleList>> {
+        const _metadata: core.EndpointMetadata = { security: undefined };
+        const { authorization, "X-Sikaru-User-Assertion": sikaruUserAssertion, "X-Sikaru-Member-Authorization": sikaruMemberAuthorization } = request;
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(this._options?.headers, mergeOnlyDefinedHeaders({ "authorization": authorization ?? undefined, "X-Sikaru-User-Assertion": sikaruUserAssertion ?? undefined, "X-Sikaru-Member-Authorization": sikaruMemberAuthorization ?? undefined }), requestOptions?.headers);
+        const _response = await core.fetcher({
+            url: core.url.join(await core.Supplier.get(this._options.baseUrl) ?? (await core.Supplier.get(this._options.environment) ?? environments.SikaruEnvironment.Default), `v1/personal-channel-bindings/${core.url.encodePathParam(binding_id)}/messages/${core.url.encodePathParam(receipt_id)}/browser-rules`),
+            method: "GET",
+            headers: _headers,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            endpointMetadata: _metadata,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging
+        });
+        if (_response.ok) {
+            return { data: _response.body as Sikaru.BrowserRuleList, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as unknown, _response.rawResponse);
+                default: throw new errors.SikaruError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.body,
+                    rawResponse: _response.rawResponse
+                });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/v1/personal-channel-bindings/{binding_id}/messages/{receipt_id}/browser-rules");
+    }
+
+    /**
+     * @param {string} binding_id
+     * @param {string} receipt_id
+     * @param {string} rule_id
+     * @param {Sikaru.DeleteBrowserRulePersonalChannelsRequest} request
+     * @param {PersonalChannelsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Sikaru.UnprocessableEntityError}
+     * @throws {@link errors.SikaruError}
+     * @throws {@link errors.SikaruTimeoutError}
+     *
+     * @example
+     *     await client.personalChannels.deleteBrowserRule("binding_id", "receipt_id", "rule_id")
+     */
+    public deleteBrowserRule(binding_id: string, receipt_id: string, rule_id: string, request: Sikaru.DeleteBrowserRulePersonalChannelsRequest = {}, requestOptions?: PersonalChannelsClient.RequestOptions): core.HttpResponsePromise<void> {
+        return core.HttpResponsePromise.fromPromise(this.__deleteBrowserRule(binding_id, receipt_id, rule_id, request, requestOptions));
+    }
+
+    private async __deleteBrowserRule(binding_id: string, receipt_id: string, rule_id: string, request: Sikaru.DeleteBrowserRulePersonalChannelsRequest = {}, requestOptions?: PersonalChannelsClient.RequestOptions): Promise<core.WithRawResponse<void>> {
+        const _metadata: core.EndpointMetadata = { security: undefined };
+        const { authorization, "X-Sikaru-User-Assertion": sikaruUserAssertion, "X-Sikaru-Member-Authorization": sikaruMemberAuthorization } = request;
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(this._options?.headers, mergeOnlyDefinedHeaders({ "authorization": authorization ?? undefined, "X-Sikaru-User-Assertion": sikaruUserAssertion ?? undefined, "X-Sikaru-Member-Authorization": sikaruMemberAuthorization ?? undefined }), requestOptions?.headers);
+        const _response = await core.fetcher({
+            url: core.url.join(await core.Supplier.get(this._options.baseUrl) ?? (await core.Supplier.get(this._options.environment) ?? environments.SikaruEnvironment.Default), `v1/personal-channel-bindings/${core.url.encodePathParam(binding_id)}/messages/${core.url.encodePathParam(receipt_id)}/browser-rules/${core.url.encodePathParam(rule_id)}`),
+            method: "DELETE",
+            headers: _headers,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: 0,
+            abortSignal: requestOptions?.abortSignal,
+            endpointMetadata: _metadata,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging
+        });
+        if (_response.ok) {
+            return { data: undefined, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as unknown, _response.rawResponse);
+                default: throw new errors.SikaruError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.body,
+                    rawResponse: _response.rawResponse
+                });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "DELETE", "/v1/personal-channel-bindings/{binding_id}/messages/{receipt_id}/browser-rules/{rule_id}");
+    }
+
+    /**
      * @param {string} binding_id
      * @param {string} receipt_id
      * @param {string} connection_id
@@ -399,6 +806,60 @@ export class PersonalChannelsClient {
         }
 
         return handleNonStatusCodeError(_response.error, _response.rawResponse, "POST", "/v1/personal-channel-bindings/{binding_id}/messages/{receipt_id}/tool-calls/{tool_call_id}/approval");
+    }
+
+    /**
+     * A one-time link to sign in, in a live browser, to the sites a parked browser call needs.
+     *
+     * @param {string} binding_id
+     * @param {string} receipt_id
+     * @param {string} tool_call_id
+     * @param {Sikaru.CreateBrowserHandoffPersonalChannelsRequest} request
+     * @param {PersonalChannelsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Sikaru.UnprocessableEntityError}
+     * @throws {@link errors.SikaruError}
+     * @throws {@link errors.SikaruTimeoutError}
+     *
+     * @example
+     *     await client.personalChannels.createBrowserHandoff("binding_id", "receipt_id", "tool_call_id")
+     */
+    public createBrowserHandoff(binding_id: string, receipt_id: string, tool_call_id: string, request: Sikaru.CreateBrowserHandoffPersonalChannelsRequest = {}, requestOptions?: PersonalChannelsClient.RequestOptions): core.HttpResponsePromise<Record<string, unknown>> {
+        return core.HttpResponsePromise.fromPromise(this.__createBrowserHandoff(binding_id, receipt_id, tool_call_id, request, requestOptions));
+    }
+
+    private async __createBrowserHandoff(binding_id: string, receipt_id: string, tool_call_id: string, request: Sikaru.CreateBrowserHandoffPersonalChannelsRequest = {}, requestOptions?: PersonalChannelsClient.RequestOptions): Promise<core.WithRawResponse<Record<string, unknown>>> {
+        const _metadata: core.EndpointMetadata = { security: undefined };
+        const { authorization, "X-Sikaru-User-Assertion": sikaruUserAssertion, "X-Sikaru-Member-Authorization": sikaruMemberAuthorization } = request;
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(this._options?.headers, mergeOnlyDefinedHeaders({ "authorization": authorization ?? undefined, "X-Sikaru-User-Assertion": sikaruUserAssertion ?? undefined, "X-Sikaru-Member-Authorization": sikaruMemberAuthorization ?? undefined }), requestOptions?.headers);
+        const _response = await core.fetcher({
+            url: core.url.join(await core.Supplier.get(this._options.baseUrl) ?? (await core.Supplier.get(this._options.environment) ?? environments.SikaruEnvironment.Default), `v1/personal-channel-bindings/${core.url.encodePathParam(binding_id)}/messages/${core.url.encodePathParam(receipt_id)}/tool-calls/${core.url.encodePathParam(tool_call_id)}/browser-handoff`),
+            method: "POST",
+            headers: _headers,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: 0,
+            abortSignal: requestOptions?.abortSignal,
+            endpointMetadata: _metadata,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging
+        });
+        if (_response.ok) {
+            return { data: _response.body as Record<string, unknown>, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as unknown, _response.rawResponse);
+                default: throw new errors.SikaruError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.body,
+                    rawResponse: _response.rawResponse
+                });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "POST", "/v1/personal-channel-bindings/{binding_id}/messages/{receipt_id}/tool-calls/{tool_call_id}/browser-handoff");
     }
 
     /**

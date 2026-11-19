@@ -157,6 +157,17 @@ async fn publish_sends_the_reviewed_revision_to_the_document_publish_route() {
         .mount(&server)
         .await;
 
+    Mock::given(method("POST"))
+        .and(path(
+            "/v1/projects/p/managed-agents/support-bot/document/review",
+        ))
+        .respond_with(ResponseTemplate::new(200).set_body_json(json!({
+            "revision":3,"accessDigest":"digest-1","liveVersionId":"hv_1",
+            "accessDelta":{"added":[],"removed":[],"changed":[]}})))
+        .expect(1)
+        .mount(&server)
+        .await;
+
     let (output, _home) = sikaru(
         &server,
         &[
@@ -172,13 +183,18 @@ async fn publish_sends_the_reviewed_revision_to_the_document_publish_route() {
             "--live-version",
             "hv_1",
             "--acknowledge-widening",
+            "--yes",
         ],
     )
     .await;
 
     assert!(output.status.success(), "{}", text(&output.stderr));
     let requests = server.received_requests().await.unwrap();
-    let body: Value = serde_json::from_slice(&requests[0].body).unwrap();
+    let published = requests
+        .iter()
+        .find(|request| request.url.path().ends_with("/publish"))
+        .unwrap();
+    let body: Value = serde_json::from_slice(&published.body).unwrap();
     assert_eq!(body["revision"], 3);
     assert_eq!(body["expectedAccessDigest"], "digest-1");
     assert_eq!(body["expectedLiveVersionId"], "hv_1");
@@ -309,7 +325,7 @@ fn agent_help_lists_the_curated_verbs_only() {
     let listed = listed_commands(&help(&["agent", "--help"]));
     for verb in [
         "list", "get", "create", "run", "logs", "stop", "pull", "push", "validate", "review",
-        "publish",
+        "publish", "init", "add", "info",
     ] {
         assert!(listed.contains(verb), "{verb} missing from {listed:?}");
     }
@@ -459,7 +475,10 @@ async fn managed_run_paused_for_funding_exits_five_and_says_how_to_resume() {
         "Resolve the billing issue, then run: sikaru agent runs resume --project-id p --run-id r1"
     );
     let cancels = server.received_requests().await.unwrap();
-    assert!(!cancels.iter().any(|r| r.url.path().ends_with("/cancel")), "a paused run is kept");
+    assert!(
+        !cancels.iter().any(|r| r.url.path().ends_with("/cancel")),
+        "a paused run is kept"
+    );
 }
 
 #[cfg(unix)]
@@ -468,12 +487,14 @@ async fn managed_run_out_of_credits_names_the_top_up_before_resume() {
     let server = managed_gateway("run.paused", "paused").await;
     Mock::given(method("GET"))
         .and(path("/v1/projects/p/runs/r1"))
-        .respond_with(ResponseTemplate::new(200).set_body_json(json!({"runId": "r1",
+        .respond_with(
+            ResponseTemplate::new(200).set_body_json(json!({"runId": "r1",
             "status": "paused", "eventsUrl": "events", "harnessId": "support-bot",
             "harnessVersionId": "hv_1", "pause": {"reason": "credits_exhausted",
             "message": "No credits.", "resumable": true, "requires_action": true,
             "topUp": {"operation": "credit_top_ups_create", "cli": "sikaru credits add",
-                "minUsd": "5.00", "maxUsd": "500.00"}}})))
+                "minUsd": "5.00", "maxUsd": "500.00"}}})),
+        )
         .with_priority(1)
         .mount(&server)
         .await;
@@ -487,8 +508,12 @@ async fn managed_run_out_of_credits_names_the_top_up_before_resume() {
     assert_eq!(output.status.code(), Some(5), "{}", text(&output.stderr));
     let result: Value = serde_json::from_slice(&output.stdout).unwrap();
     let next = result["next"].as_str().unwrap();
-    let add = next.find("sikaru credits add --amount 5.00 --project p").expect(next);
-    let resume = next.find("sikaru agent runs resume --project-id p --run-id r1").expect(next);
+    let add = next
+        .find("sikaru credits add --amount 5.00 --project p")
+        .expect(next);
+    let resume = next
+        .find("sikaru agent runs resume --project-id p --run-id r1")
+        .expect(next);
     assert!(add < resume, "{next}");
 }
 
@@ -534,8 +559,7 @@ async fn managed_dry_run_and_local_only_options_send_nothing() {
     assert!(server.received_requests().await.unwrap().is_empty());
 }
 
-/// `agent run` takes its agent only as the first positional: `SIKARU_AGENT` never fills it, so
-/// `agent run "task"` can't silently run the env agent with the task misread as the agent.
+/// An omitted agent uses the local folder; SIKARU_AGENT never silently selects a different agent.
 fn run_with_env_agent(server: &MockServer, args: &[&str]) -> Output {
     Command::new(env!("CARGO_BIN_EXE_sikaru"))
         .args(["--base-url", &server.uri(), "agent", "run"])
@@ -555,9 +579,9 @@ async fn run_agent_is_positional_only() {
     let missing = run_with_env_agent(&server, &["--prompt", "task"]);
     let named = run_with_env_agent(&server, &["support-bot", "task"]);
 
-    assert!(!missing.status.success());
-    let refused: Value = serde_json::from_slice(&missing.stdout).unwrap();
-    assert_eq!(refused["error"]["help"], "<agent>", "{refused}");
+    assert!(missing.status.success(), "{}", text(&missing.stderr));
+    let inferred: Value = serde_json::from_slice(&missing.stdout).unwrap();
+    assert_eq!(inferred["agent"], ".");
     assert!(named.status.success(), "{}", text(&named.stderr));
     let validated: Value = serde_json::from_slice(&named.stdout).unwrap();
     assert_eq!(validated["agent"], "support-bot");
@@ -621,4 +645,270 @@ async fn managed_conversation_continues_one_session() {
         .map(|turn| turn["input"]["goal"].as_str().unwrap().trim().to_owned())
         .collect();
     assert_eq!(goals, ["first task", "second task"]);
+}
+
+#[cfg(unix)]
+#[tokio::test(flavor = "multi_thread", worker_threads = 2)]
+async fn folder_schedule_run_uploads_unsaved_files_and_runs_prompt_once() {
+    let server = managed_gateway("run.completed", "completed").await;
+    let folder = tempfile::tempdir().unwrap();
+    std::fs::create_dir(folder.path().join("schedules")).unwrap();
+    std::fs::write(folder.path().join("agent.md"), "# Unsaved\n").unwrap();
+    std::fs::write(
+        folder.path().join("schedules/brief.md"),
+        "---\nevery: 1d\n---\nBrief once.\n",
+    )
+    .unwrap();
+    Mock::given(method("POST"))
+        .and(path("/v1/projects/p/agent-documents/validate"))
+        .respond_with(ResponseTemplate::new(200).set_body_json(json!({
+            "publishable":true,"mentions":[],"errors":[],
+            "folder":{"schedules":{"brief":{"prompt":"Brief once.\n"}}}})))
+        .mount(&server)
+        .await;
+    let (output, _) = sikaru(
+        &server,
+        &[
+            "agent",
+            "run",
+            "support-bot",
+            "--folder",
+            folder.path().to_str().unwrap(),
+            "--schedule",
+            "brief",
+            "-p",
+            "p",
+            "-o",
+            "json",
+        ],
+    )
+    .await;
+    assert!(output.status.success(), "{}", text(&output.stderr));
+    let requests = server.received_requests().await.unwrap();
+    let session = requests
+        .iter()
+        .find(|r| r.url.path().ends_with("/execution-sessions"))
+        .unwrap();
+    let body: Value = serde_json::from_slice(&session.body).unwrap();
+    assert_eq!(body["environment"], "draft");
+    assert_eq!(body["draft_files"]["agent.md"], "# Unsaved\n");
+    assert_eq!(body["draft_schedule"], "brief");
+    assert_eq!(turn_bodies(&server).await.len(), 1);
+    assert_eq!(
+        turn_bodies(&server).await[0]["input"]["goal"],
+        "Brief once.\n"
+    );
+    assert!(!requests
+        .iter()
+        .any(|r| r.method.as_str() == "PUT" || r.url.path().ends_with("/publish")));
+}
+
+#[tokio::test(flavor = "multi_thread", worker_threads = 2)]
+async fn yes_never_approves_changed_reach() {
+    let server = MockServer::start().await;
+    Mock::given(method("POST"))
+        .and(path("/v1/projects/p/managed-agents/support-bot/document/review"))
+        .respond_with(ResponseTemplate::new(200).set_body_json(json!({"revision":3,
+            "accessDigest":"exact-review-digest","accessDelta":{"added":["browser"],"changed":[],"removed":[]}})))
+        .expect(1).mount(&server).await;
+    let (output, _) = sikaru(
+        &server,
+        &[
+            "agent",
+            "publish",
+            "support-bot",
+            "-p",
+            "p",
+            "--revision",
+            "3",
+            "--yes",
+        ],
+    )
+    .await;
+    assert!(output.status.success(), "{}", text(&output.stderr));
+    let shown: Value = serde_json::from_slice(&output.stdout).unwrap();
+    assert_eq!(shown["status"], "pending");
+    assert!(shown["next"]
+        .as_str()
+        .unwrap()
+        .contains("--access-digest exact-review-digest"));
+    assert!(!server
+        .received_requests()
+        .await
+        .unwrap()
+        .iter()
+        .any(|r| r.url.path().ends_with("/publish")));
+}
+
+#[cfg(unix)]
+#[tokio::test(flavor = "multi_thread", worker_threads = 2)]
+async fn folder_admission_refusal_keeps_safe_reach_and_retry_for_both_compute_modes() {
+    for compute in ["managed", "local"] {
+        let server = MockServer::start().await;
+        let folder = tempfile::tempdir().unwrap();
+        std::fs::write(folder.path().join("agent.md"), "# Agent\n").unwrap();
+        Mock::given(method("POST"))
+            .and(path("/v1/projects/p/agent-documents/validate"))
+            .respond_with(
+                ResponseTemplate::new(200)
+                    .set_body_json(json!({"publishable":true,"mentions":[],"errors":[]})),
+            )
+            .mount(&server)
+            .await;
+        Mock::given(method("POST")).and(path("/v1/projects/p/harnesses/support-bot/execution-sessions"))
+            .respond_with(ResponseTemplate::new(409).set_body_json(json!({"detail":{
+                "message":"Acknowledge the added or changed draft access",
+                "accessDigest":"a".repeat(64),"accessDelta":{"added":["@app/calendar"],"changed":[],"removed":[],
+                    "capabilities":[{"path":"web.browser.enabled","before":false,"after":true},
+                        {"path":"web.allow_domains","before":["old.example"],"after":["new.example"]},
+                        {"path":"web.allow_domains","before":"Bearer secret-token","after":"private-token"}]},
+                "debug":"secret-token"}})))
+            .expect(1).mount(&server).await;
+        let folder_path = folder.path().to_str().unwrap();
+        let mut args = vec![
+            "agent",
+            "run",
+            "support-bot",
+            "private user prompt",
+            "-p",
+            "p",
+            "--folder",
+            folder_path,
+            "--compute",
+            compute,
+        ];
+        if compute == "local" {
+            args.extend(["--workspace", folder_path, "--no-workspace-checkpoints"]);
+        }
+        let (output, _) = sikaru(&server, &args).await;
+        assert_eq!(output.status.code(), Some(2), "{}", text(&output.stderr));
+        let body: Value = serde_json::from_slice(&output.stdout).unwrap();
+        assert_eq!(body["reason"], "draft_access_requires_review");
+        assert_eq!(body["accessDelta"]["added"], json!(["@app/calendar"]));
+        assert_eq!(body["accessDelta"]["capabilities"][0]["after"], true);
+        assert_eq!(
+            body["accessDelta"]["capabilities"][1]["after"],
+            json!(["new.example"])
+        );
+        let next = body["next"].as_str().unwrap();
+        assert!(next.contains("--acknowledge-widening"));
+        assert!(next.contains(&format!("--access-digest {}", "a".repeat(64))));
+        assert!(next.contains("--prompt-file -"));
+        for hidden in [
+            "secret-token",
+            "private-token",
+            "private user prompt",
+            "Inspect the saved run",
+        ] {
+            assert!(!text(&output.stdout).contains(hidden));
+        }
+        assert!(!server.received_requests().await.unwrap().iter().any(|r| r
+            .url
+            .path()
+            .ends_with("/turns")
+            || r.url.path().contains("/compute-")));
+    }
+}
+
+async fn sikaru_in(server: &MockServer, dir: &std::path::Path, args: &[&str]) -> Output {
+    let mut args: Vec<String> = args.iter().map(|arg| arg.to_string()).collect();
+    args.extend(["--base-url".into(), server.uri()]);
+    let dir = dir.to_owned();
+    tokio::task::spawn_blocking(move || {
+        Command::new(env!("CARGO_BIN_EXE_sikaru"))
+            .args(args)
+            .current_dir(&dir)
+            .env("HOME", &dir)
+            .env_remove("SIKARU_PROJECT")
+            .env_remove("SIKARU_AGENT")
+            .env("SIKARU_API_KEY", "test-only")
+            .output()
+            .unwrap()
+    })
+    .await
+    .unwrap()
+}
+
+const GRADER: &str = "description = \"Refunds\"\n\n[[criteria]]\nquestion = \"Was the refund wrong?\"\n";
+
+fn grader_folder() -> (tempfile::TempDir, std::path::PathBuf) {
+    let home = tempfile::tempdir().unwrap();
+    let folder = home.path().join("support-bot");
+    std::fs::create_dir_all(folder.join("graders")).unwrap();
+    std::fs::write(folder.join("agent.md"), "# Support\n").unwrap();
+    std::fs::write(folder.join("graders/refunds.toml"), GRADER).unwrap();
+    (home, folder)
+}
+
+fn draft(revision: i64, grader: &str) -> ResponseTemplate {
+    ResponseTemplate::new(200).set_body_json(json!({"revision": revision, "document": "# Support\n",
+        "files": {"agent.md": "# Support\n", "graders/refunds.toml": grader}}))
+}
+
+#[tokio::test(flavor = "multi_thread", worker_threads = 2)]
+async fn push_sends_grader_files_with_the_folder() {
+    let server = MockServer::start().await;
+    Mock::given(method("PUT"))
+        .and(path("/v1/projects/p/managed-agents/support-bot/document"))
+        .respond_with(draft(2, GRADER))
+        .expect(1)
+        .mount(&server)
+        .await;
+    let (home, folder) = grader_folder();
+    let folder_arg = folder.to_string_lossy().into_owned();
+
+    let output = sikaru_in(&server, home.path(), &["agent", "push", "support-bot", "-p", "p", "--revision", "1",
+        "--folder", &folder_arg]).await;
+
+    assert!(output.status.success(), "{}", text(&output.stderr));
+    let requests = server.received_requests().await.unwrap();
+    let body: Value = serde_json::from_slice(&requests[0].body).unwrap();
+    assert_eq!(body["files"]["graders/refunds.toml"], GRADER);
+    assert_eq!(body["files"]["agent.md"], "# Support\n");
+}
+
+#[tokio::test(flavor = "multi_thread", worker_threads = 2)]
+async fn pull_brings_a_dashboard_grader_edit_down_and_refuses_over_a_local_edit() {
+    let server = MockServer::start().await;
+    let edited = GRADER.replace("Refunds", "Refunds issued wrongly");
+    Mock::given(method("GET"))
+        .and(path("/v1/projects/p/managed-agents/support-bot/document"))
+        .respond_with(draft(3, &edited))
+        .up_to_n_times(1)
+        .mount(&server)
+        .await;
+    Mock::given(method("GET"))
+        .and(path("/v1/projects/p/managed-agents/support-bot/document"))
+        .respond_with(draft(4, &GRADER.replace("Refunds", "Refunds, again")))
+        .mount(&server)
+        .await;
+    let (home, folder) = grader_folder();
+    let folder_arg = folder.to_string_lossy().into_owned();
+    let pull = ["agent", "pull", "support-bot", "-p", "p", "--folder", &folder_arg];
+    std::fs::remove_file(folder.join("graders/refunds.toml")).unwrap(); // a folder never pulled has no Grader file
+
+    let first = sikaru_in(&server, home.path(), &pull).await;
+    assert!(first.status.success(), "{}", text(&first.stderr));
+    assert_eq!(std::fs::read_to_string(folder.join("graders/refunds.toml")).unwrap(), edited);
+
+    let mine = edited.replace("wrongly", "without an order");
+    std::fs::write(folder.join("graders/refunds.toml"), &mine).unwrap();
+    let second = sikaru_in(&server, home.path(), &pull).await;
+
+    assert!(!second.status.success());
+    assert!(text(&second.stdout).contains("graders/refunds.toml") || text(&second.stderr).contains("graders/refunds.toml"));
+    assert_eq!(std::fs::read_to_string(folder.join("graders/refunds.toml")).unwrap(), mine);
+}
+
+#[tokio::test(flavor = "multi_thread", worker_threads = 2)]
+async fn add_scaffolds_a_grader_file() {
+    let server = MockServer::start().await;
+    let home = tempfile::tempdir().unwrap();
+    std::fs::write(home.path().join("agent.md"), "# Support\n").unwrap();
+
+    let output = sikaru_in(&server, home.path(), &["agent", "add", "grader/refunds", "-o", "json"]).await;
+
+    assert!(output.status.success(), "{}", text(&output.stderr));
+    let written = std::fs::read_to_string(home.path().join("graders/refunds.toml")).unwrap();
+    assert!(written.contains("[[criteria]]") && written.contains("question = "));
 }

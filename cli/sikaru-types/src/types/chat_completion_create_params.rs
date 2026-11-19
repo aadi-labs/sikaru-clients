@@ -30,8 +30,8 @@ pub struct ChatCompletionCreateParams {
     pub min_p: Option<f64>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub modalities: Option<Vec<String>>,
-    #[serde(default)]
-    pub model: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub models: Option<Vec<String>>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -420,7 +420,6 @@ impl ChatCompletionCreateParamsBuilder {
     /// Consumes the builder and constructs a [`ChatCompletionCreateParams`].
     /// This method will fail if any of the following fields are not set:
     /// - [`messages`](ChatCompletionCreateParamsBuilder::messages)
-    /// - [`model`](ChatCompletionCreateParamsBuilder::model)
     /// - [`stream`](ChatCompletionCreateParamsBuilder::stream)
     pub fn build(self) -> Result<ChatCompletionCreateParams, BuildError> {
         Ok(ChatCompletionCreateParams {
@@ -437,7 +436,7 @@ impl ChatCompletionCreateParamsBuilder {
             metadata: self.metadata,
             min_p: self.min_p,
             modalities: self.modalities,
-            model: self.model.ok_or_else(|| BuildError::missing_field("model"))?,
+            model: self.model,
             models: self.models,
             moderation: self.moderation,
             n: self.n,

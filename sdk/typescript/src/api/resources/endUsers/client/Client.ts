@@ -26,7 +26,7 @@ export class EndUsersClient {
     }
 
     /**
-     * What the agent knows about this end user: facts and the persona summary, never the persona prompt.
+     * What the agent knows about this end user: the persona summary, never the persona prompt.
      *
      * @param {string} project_id
      * @param {string} agent_slug
@@ -98,6 +98,7 @@ export class EndUsersClient {
      * @throws {@link Sikaru.UnauthorizedError}
      * @throws {@link Sikaru.ForbiddenError}
      * @throws {@link Sikaru.NotFoundError}
+     * @throws {@link Sikaru.ConflictError}
      * @throws {@link Sikaru.UnprocessableEntityError}
      * @throws {@link errors.SikaruError}
      * @throws {@link errors.SikaruTimeoutError}
@@ -137,6 +138,7 @@ export class EndUsersClient {
                 case 401: throw new Sikaru.UnauthorizedError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
                 case 403: throw new Sikaru.ForbiddenError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
                 case 404: throw new Sikaru.NotFoundError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 409: throw new Sikaru.ConflictError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
                 case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as unknown, _response.rawResponse);
                 default: throw new errors.SikaruError({
                     statusCode: _response.error.statusCode,
@@ -156,6 +158,7 @@ export class EndUsersClient {
      * @param {string} agent_slug
      * @param {string} tenant_id
      * @param {string} user_id
+     * @param {Sikaru.DeleteEndUsersRequest} request
      * @param {EndUsersClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Sikaru.UnauthorizedError}
@@ -168,19 +171,23 @@ export class EndUsersClient {
      * @example
      *     await client.endUsers.delete("project_id", "agent_slug", "tenant_id", "user_id")
      */
-    public delete(project_id: string, agent_slug: string, tenant_id: string, user_id: string, requestOptions?: EndUsersClient.RequestOptions): core.HttpResponsePromise<Sikaru.EndUserDeletion> {
-        return core.HttpResponsePromise.fromPromise(this.__delete(project_id, agent_slug, tenant_id, user_id, requestOptions));
+    public delete(project_id: string, agent_slug: string, tenant_id: string, user_id: string, request: Sikaru.DeleteEndUsersRequest = {}, requestOptions?: EndUsersClient.RequestOptions): core.HttpResponsePromise<Sikaru.EndUserDeletion> {
+        return core.HttpResponsePromise.fromPromise(this.__delete(project_id, agent_slug, tenant_id, user_id, request, requestOptions));
     }
 
-    private async __delete(project_id: string, agent_slug: string, tenant_id: string, user_id: string, requestOptions?: EndUsersClient.RequestOptions): Promise<core.WithRawResponse<Sikaru.EndUserDeletion>> {
+    private async __delete(project_id: string, agent_slug: string, tenant_id: string, user_id: string, request: Sikaru.DeleteEndUsersRequest = {}, requestOptions?: EndUsersClient.RequestOptions): Promise<core.WithRawResponse<Sikaru.EndUserDeletion>> {
         const _metadata: core.EndpointMetadata = { security: [{ BearerAuth: [] }] };
+        const { terminal } = request;
+        const _queryParams: Record<string, unknown> = {
+            terminal
+        };
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest({ endpointMetadata: _metadata });
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(_authRequest.headers, this._options?.headers, requestOptions?.headers);
         const _response = await core.fetcher({
             url: core.url.join(await core.Supplier.get(this._options.baseUrl) ?? (await core.Supplier.get(this._options.environment) ?? environments.SikaruEnvironment.Default), `v1/projects/${core.url.encodePathParam(project_id)}/managed-agents/${core.url.encodePathParam(agent_slug)}/end-users/${core.url.encodePathParam(tenant_id)}/${core.url.encodePathParam(user_id)}`),
             method: "DELETE",
             headers: _headers,
-            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            queryString: core.url.queryBuilder().addMany(_queryParams).mergeAdditional(requestOptions?.queryParams).build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: 0,
             abortSignal: requestOptions?.abortSignal,
@@ -210,13 +217,19 @@ export class EndUsersClient {
     }
 
     /**
-     * Correct or add one fact. It serves from the next turn and becomes a held-out case for this user.
+     * Import a versioned product snapshot atomically, preserving correction provenance.
+     *
+     * The cell must already exist. Every file requires expectedEtag (null for an
+     * absent destination). Reusing an importId requires the identical manifest.
+     * The digest is SHA-256 of canonical JSON {sourceRevision, files}, with sorted
+     * keys, compact separators and the supplied file order. Private layers are
+     * accepted as input but are never returned in the receipt or end-user view.
      *
      * @param {string} project_id
      * @param {string} agent_slug
      * @param {string} tenant_id
      * @param {string} user_id
-     * @param {Sikaru.UpdateEndUserFact} request
+     * @param {Sikaru.CellImport} request
      * @param {EndUsersClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Sikaru.UnauthorizedError}
@@ -227,22 +240,28 @@ export class EndUsersClient {
      * @throws {@link errors.SikaruTimeoutError}
      *
      * @example
-     *     await client.endUsers.updateFact("project_id", "agent_slug", "tenant_id", "user_id", {
-     *         content: "content",
-     *         path: "path"
+     *     await client.endUsers.importState("project_id", "agent_slug", "tenant_id", "user_id", {
+     *         digest: "digest",
+     *         files: [{
+     *                 content: "content",
+     *                 path: "path",
+     *                 provenance: "provenance"
+     *             }],
+     *         importId: "importId",
+     *         sourceRevision: "sourceRevision"
      *     })
      */
-    public updateFact(project_id: string, agent_slug: string, tenant_id: string, user_id: string, request: Sikaru.UpdateEndUserFact, requestOptions?: EndUsersClient.RequestOptions): core.HttpResponsePromise<Sikaru.EndUserFile> {
-        return core.HttpResponsePromise.fromPromise(this.__updateFact(project_id, agent_slug, tenant_id, user_id, request, requestOptions));
+    public importState(project_id: string, agent_slug: string, tenant_id: string, user_id: string, request: Sikaru.CellImport, requestOptions?: EndUsersClient.RequestOptions): core.HttpResponsePromise<Sikaru.ImportReceipt> {
+        return core.HttpResponsePromise.fromPromise(this.__importState(project_id, agent_slug, tenant_id, user_id, request, requestOptions));
     }
 
-    private async __updateFact(project_id: string, agent_slug: string, tenant_id: string, user_id: string, request: Sikaru.UpdateEndUserFact, requestOptions?: EndUsersClient.RequestOptions): Promise<core.WithRawResponse<Sikaru.EndUserFile>> {
+    private async __importState(project_id: string, agent_slug: string, tenant_id: string, user_id: string, request: Sikaru.CellImport, requestOptions?: EndUsersClient.RequestOptions): Promise<core.WithRawResponse<Sikaru.ImportReceipt>> {
         const _metadata: core.EndpointMetadata = { security: [{ BearerAuth: [] }] };
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest({ endpointMetadata: _metadata });
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(_authRequest.headers, this._options?.headers, requestOptions?.headers);
         const _response = await core.fetcher({
-            url: core.url.join(await core.Supplier.get(this._options.baseUrl) ?? (await core.Supplier.get(this._options.environment) ?? environments.SikaruEnvironment.Default), `v1/projects/${core.url.encodePathParam(project_id)}/managed-agents/${core.url.encodePathParam(agent_slug)}/end-users/${core.url.encodePathParam(tenant_id)}/${core.url.encodePathParam(user_id)}/facts`),
-            method: "PUT",
+            url: core.url.join(await core.Supplier.get(this._options.baseUrl) ?? (await core.Supplier.get(this._options.environment) ?? environments.SikaruEnvironment.Default), `v1/projects/${core.url.encodePathParam(project_id)}/managed-agents/${core.url.encodePathParam(agent_slug)}/end-users/${core.url.encodePathParam(tenant_id)}/${core.url.encodePathParam(user_id)}/imports`),
+            method: "POST",
             headers: _headers,
             contentType: "application/json",
             queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
@@ -256,7 +275,7 @@ export class EndUsersClient {
             logging: this._options.logging
         });
         if (_response.ok) {
-            return { data: _response.body as Sikaru.EndUserFile, rawResponse: _response.rawResponse };
+            return { data: _response.body as Sikaru.ImportReceipt, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
@@ -273,17 +292,15 @@ export class EndUsersClient {
             }
         }
 
-        return handleNonStatusCodeError(_response.error, _response.rawResponse, "PUT", "/v1/projects/{project_id}/managed-agents/{agent_slug}/end-users/{tenant_id}/{user_id}/facts");
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "POST", "/v1/projects/{project_id}/managed-agents/{agent_slug}/end-users/{tenant_id}/{user_id}/imports");
     }
 
     /**
-     * Forget one memory, or clear the profile.
-     *
      * @param {string} project_id
      * @param {string} agent_slug
      * @param {string} tenant_id
      * @param {string} user_id
-     * @param {Sikaru.DeleteFactEndUsersRequest} request
+     * @param {Sikaru.StartAuthoredLearning} request
      * @param {EndUsersClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Sikaru.UnauthorizedError}
@@ -294,27 +311,155 @@ export class EndUsersClient {
      * @throws {@link errors.SikaruTimeoutError}
      *
      * @example
-     *     await client.endUsers.deleteFact("project_id", "agent_slug", "tenant_id", "user_id", {
-     *         path: "path"
+     *     await client.endUsers.startLearningRun("project_id", "agent_slug", "tenant_id", "user_id", {
+     *         evidence: [{
+     *                 content: "content",
+     *                 digest: "digest",
+     *                 learningEligible: true,
+     *                 provenance: "user_message",
+     *                 sourceId: "sourceId"
+     *             }],
+     *         invocationId: "invocationId",
+     *         sourceRevision: "sourceRevision",
+     *         workflow: {
+     *             name: "name"
+     *         }
      *     })
      */
-    public deleteFact(project_id: string, agent_slug: string, tenant_id: string, user_id: string, request: Sikaru.DeleteFactEndUsersRequest, requestOptions?: EndUsersClient.RequestOptions): core.HttpResponsePromise<void> {
-        return core.HttpResponsePromise.fromPromise(this.__deleteFact(project_id, agent_slug, tenant_id, user_id, request, requestOptions));
+    public startLearningRun(project_id: string, agent_slug: string, tenant_id: string, user_id: string, request: Sikaru.StartAuthoredLearning, requestOptions?: EndUsersClient.RequestOptions): core.HttpResponsePromise<Sikaru.AuthoredLearningReceipt> {
+        return core.HttpResponsePromise.fromPromise(this.__startLearningRun(project_id, agent_slug, tenant_id, user_id, request, requestOptions));
     }
 
-    private async __deleteFact(project_id: string, agent_slug: string, tenant_id: string, user_id: string, request: Sikaru.DeleteFactEndUsersRequest, requestOptions?: EndUsersClient.RequestOptions): Promise<core.WithRawResponse<void>> {
+    private async __startLearningRun(project_id: string, agent_slug: string, tenant_id: string, user_id: string, request: Sikaru.StartAuthoredLearning, requestOptions?: EndUsersClient.RequestOptions): Promise<core.WithRawResponse<Sikaru.AuthoredLearningReceipt>> {
         const _metadata: core.EndpointMetadata = { security: [{ BearerAuth: [] }] };
-        const { path } = request;
-        const _queryParams: Record<string, unknown> = {
-            path
-        };
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest({ endpointMetadata: _metadata });
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(_authRequest.headers, this._options?.headers, requestOptions?.headers);
         const _response = await core.fetcher({
-            url: core.url.join(await core.Supplier.get(this._options.baseUrl) ?? (await core.Supplier.get(this._options.environment) ?? environments.SikaruEnvironment.Default), `v1/projects/${core.url.encodePathParam(project_id)}/managed-agents/${core.url.encodePathParam(agent_slug)}/end-users/${core.url.encodePathParam(tenant_id)}/${core.url.encodePathParam(user_id)}/facts`),
-            method: "DELETE",
+            url: core.url.join(await core.Supplier.get(this._options.baseUrl) ?? (await core.Supplier.get(this._options.environment) ?? environments.SikaruEnvironment.Default), `v1/projects/${core.url.encodePathParam(project_id)}/managed-agents/${core.url.encodePathParam(agent_slug)}/end-users/${core.url.encodePathParam(tenant_id)}/${core.url.encodePathParam(user_id)}/learning-runs`),
+            method: "POST",
             headers: _headers,
-            queryString: core.url.queryBuilder().addMany(_queryParams).mergeAdditional(requestOptions?.queryParams).build(),
+            contentType: "application/json",
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            requestType: "json",
+            body: mergeAdditionalBodyParameters(request, requestOptions?.additionalBodyParameters),
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: 0,
+            abortSignal: requestOptions?.abortSignal,
+            endpointMetadata: _metadata,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging
+        });
+        if (_response.ok) {
+            return { data: _response.body as Sikaru.AuthoredLearningReceipt, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401: throw new Sikaru.UnauthorizedError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 403: throw new Sikaru.ForbiddenError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 404: throw new Sikaru.NotFoundError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as unknown, _response.rawResponse);
+                default: throw new errors.SikaruError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.body,
+                    rawResponse: _response.rawResponse
+                });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "POST", "/v1/projects/{project_id}/managed-agents/{agent_slug}/end-users/{tenant_id}/{user_id}/learning-runs");
+    }
+
+    /**
+     * @param {string} project_id
+     * @param {string} agent_slug
+     * @param {string} tenant_id
+     * @param {string} user_id
+     * @param {string} invocation_id
+     * @param {EndUsersClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Sikaru.UnauthorizedError}
+     * @throws {@link Sikaru.ForbiddenError}
+     * @throws {@link Sikaru.NotFoundError}
+     * @throws {@link Sikaru.UnprocessableEntityError}
+     * @throws {@link errors.SikaruError}
+     * @throws {@link errors.SikaruTimeoutError}
+     *
+     * @example
+     *     await client.endUsers.getLearningRun("project_id", "agent_slug", "tenant_id", "user_id", "invocation_id")
+     */
+    public getLearningRun(project_id: string, agent_slug: string, tenant_id: string, user_id: string, invocation_id: string, requestOptions?: EndUsersClient.RequestOptions): core.HttpResponsePromise<Sikaru.AuthoredLearningReceipt> {
+        return core.HttpResponsePromise.fromPromise(this.__getLearningRun(project_id, agent_slug, tenant_id, user_id, invocation_id, requestOptions));
+    }
+
+    private async __getLearningRun(project_id: string, agent_slug: string, tenant_id: string, user_id: string, invocation_id: string, requestOptions?: EndUsersClient.RequestOptions): Promise<core.WithRawResponse<Sikaru.AuthoredLearningReceipt>> {
+        const _metadata: core.EndpointMetadata = { security: [{ BearerAuth: [] }] };
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest({ endpointMetadata: _metadata });
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(_authRequest.headers, this._options?.headers, requestOptions?.headers);
+        const _response = await core.fetcher({
+            url: core.url.join(await core.Supplier.get(this._options.baseUrl) ?? (await core.Supplier.get(this._options.environment) ?? environments.SikaruEnvironment.Default), `v1/projects/${core.url.encodePathParam(project_id)}/managed-agents/${core.url.encodePathParam(agent_slug)}/end-users/${core.url.encodePathParam(tenant_id)}/${core.url.encodePathParam(user_id)}/learning-runs/${core.url.encodePathParam(invocation_id)}`),
+            method: "GET",
+            headers: _headers,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            endpointMetadata: _metadata,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging
+        });
+        if (_response.ok) {
+            return { data: _response.body as Sikaru.AuthoredLearningReceipt, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401: throw new Sikaru.UnauthorizedError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 403: throw new Sikaru.ForbiddenError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 404: throw new Sikaru.NotFoundError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as unknown, _response.rawResponse);
+                default: throw new errors.SikaruError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.body,
+                    rawResponse: _response.rawResponse
+                });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/v1/projects/{project_id}/managed-agents/{agent_slug}/end-users/{tenant_id}/{user_id}/learning-runs/{invocation_id}");
+    }
+
+    /**
+     * @param {string} project_id
+     * @param {string} agent_slug
+     * @param {string} tenant_id
+     * @param {string} user_id
+     * @param {string} source_id
+     * @param {EndUsersClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Sikaru.UnauthorizedError}
+     * @throws {@link Sikaru.ForbiddenError}
+     * @throws {@link Sikaru.NotFoundError}
+     * @throws {@link Sikaru.UnprocessableEntityError}
+     * @throws {@link errors.SikaruError}
+     * @throws {@link errors.SikaruTimeoutError}
+     *
+     * @example
+     *     await client.endUsers.revokeLearningSource("project_id", "agent_slug", "tenant_id", "user_id", "source_id")
+     */
+    public revokeLearningSource(project_id: string, agent_slug: string, tenant_id: string, user_id: string, source_id: string, requestOptions?: EndUsersClient.RequestOptions): core.HttpResponsePromise<void> {
+        return core.HttpResponsePromise.fromPromise(this.__revokeLearningSource(project_id, agent_slug, tenant_id, user_id, source_id, requestOptions));
+    }
+
+    private async __revokeLearningSource(project_id: string, agent_slug: string, tenant_id: string, user_id: string, source_id: string, requestOptions?: EndUsersClient.RequestOptions): Promise<core.WithRawResponse<void>> {
+        const _metadata: core.EndpointMetadata = { security: [{ BearerAuth: [] }] };
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest({ endpointMetadata: _metadata });
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(_authRequest.headers, this._options?.headers, requestOptions?.headers);
+        const _response = await core.fetcher({
+            url: core.url.join(await core.Supplier.get(this._options.baseUrl) ?? (await core.Supplier.get(this._options.environment) ?? environments.SikaruEnvironment.Default), `v1/projects/${core.url.encodePathParam(project_id)}/managed-agents/${core.url.encodePathParam(agent_slug)}/end-users/${core.url.encodePathParam(tenant_id)}/${core.url.encodePathParam(user_id)}/learning-sources/${core.url.encodePathParam(source_id)}/revoke`),
+            method: "POST",
+            headers: _headers,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: 0,
             abortSignal: requestOptions?.abortSignal,
@@ -340,7 +485,7 @@ export class EndUsersClient {
             }
         }
 
-        return handleNonStatusCodeError(_response.error, _response.rawResponse, "DELETE", "/v1/projects/{project_id}/managed-agents/{agent_slug}/end-users/{tenant_id}/{user_id}/facts");
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "POST", "/v1/projects/{project_id}/managed-agents/{agent_slug}/end-users/{tenant_id}/{user_id}/learning-sources/{source_id}/revoke");
     }
 
     /**

@@ -18,15 +18,14 @@ pub use resources::{
     DecisionsClient, DeploymentsClient, EndUsersClient, EnvironmentsClient,
     EvaluationComparisonsClient, EvaluationCriteriaClient, EvaluationJobsClient,
     EvaluationResultsClient, EvaluatorRunsClient, ExecutionObjectivesClient,
-    ExecutionSessionsClient, ExecutionsClient, FeedbackClient, GitCredentialsClient,
+    ExecutionSessionsClient, ExecutionsClient, FeedbackClient, GitCredentialsClient, GradersClient,
     HarnessesClient, HttpChannelsClient, ImportSessionsClient, IssueClustersClient,
-    JudgeAlignmentClient, ManagedAgentsClient, MemoryRegistryClient, ModelGatewayClient,
-    ModelSettingsClient, ModelsClient, OnlineEvaluationsClient, PersonalChannelsClient,
-    ProjectsClient, ReleaseWatchesClient, ResponsesClient, RetentionPoliciesClient,
-    ReviewQueueClient, RunReferencesClient, RunSchedulesClient, RunWebhooksClient, RunsClient,
-    SessionsClient, SpecialistsClient, ToolProvidersClient, TraceImportConnectionsClient,
-    TraceImportsClient, TraceStreamsClient, WorkflowIntentsClient, WorkflowRunsClient,
-    WorkflowsClient,
+    ManagedAgentsClient, MemoryClient, ModelGatewayClient, ModelSettingsClient, ModelsClient,
+    PersonalChannelsClient, ProjectsClient, ReleaseWatchesClient, ResponsesClient,
+    RetentionPoliciesClient, ReviewQueueClient, RunReferencesClient, RunSchedulesClient,
+    RunWebhooksClient, RunsClient, SessionsClient, TasksClient, ToolProvidersClient,
+    TraceImportConnectionsClient, TraceImportsClient, TraceStreamsClient, WorkflowIntentsClient,
+    WorkflowRunsClient, WorkflowsClient,
 };
 
 pub use sikaru_types::*;

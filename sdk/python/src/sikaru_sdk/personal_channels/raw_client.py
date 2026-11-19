@@ -13,7 +13,9 @@ from ..core.pydantic_utilities import parse_obj_as
 from ..core.request_options import RequestOptions
 from ..core.serialization import convert_and_respect_annotation_metadata
 from ..errors.unprocessable_entity_error import UnprocessableEntityError
+from ..types.always_cap import AlwaysCap
 from ..types.approval_input_decision import ApprovalInputDecision
+from ..types.browser_rule_list import BrowserRuleList
 from ..types.connection_authorization import ConnectionAuthorization
 from ..types.connection_credentials import ConnectionCredentials
 from ..types.personal_channel_approval import PersonalChannelApproval
@@ -87,6 +89,635 @@ class RawPersonalChannelsClient:
                     ),
                 )
                 return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        except ValidationError as e:
+            raise ParsingError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+            )
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def list_browser_logins(
+        self,
+        binding_id: str,
+        receipt_id: str,
+        *,
+        authorization: typing.Optional[str] = None,
+        sikaru_user_assertion: typing.Optional[str] = None,
+        sikaru_member_authorization: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[typing.Dict[str, typing.Any]]:
+        """
+        The sites this user's agents may open signed in as them.
+
+        Parameters
+        ----------
+        binding_id : str
+
+        receipt_id : str
+
+        authorization : typing.Optional[str]
+
+        sikaru_user_assertion : typing.Optional[str]
+
+        sikaru_member_authorization : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[typing.Dict[str, typing.Any]]
+            Successful Response
+        """
+        _endpoint_auth_headers = self._client_wrapper.get_auth_headers_for_endpoint(security=None)
+        _response = self._client_wrapper.httpx_client.request(
+            f"v1/personal-channel-bindings/{encode_path_param(binding_id)}/messages/{encode_path_param(receipt_id)}/browser-logins",
+            method="GET",
+            headers={
+                **_endpoint_auth_headers,
+                "authorization": str(authorization) if authorization is not None else None,
+                "X-Sikaru-User-Assertion": str(sikaru_user_assertion) if sikaru_user_assertion is not None else None,
+                "X-Sikaru-Member-Authorization": str(sikaru_member_authorization)
+                if sikaru_member_authorization is not None
+                else None,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    typing.Dict[str, typing.Any],
+                    parse_obj_as(
+                        type_=typing.Dict[str, typing.Any],  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        except ValidationError as e:
+            raise ParsingError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+            )
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def delete_browser_login(
+        self,
+        binding_id: str,
+        receipt_id: str,
+        login_id: str,
+        *,
+        authorization: typing.Optional[str] = None,
+        sikaru_user_assertion: typing.Optional[str] = None,
+        sikaru_member_authorization: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[None]:
+        """
+        Parameters
+        ----------
+        binding_id : str
+
+        receipt_id : str
+
+        login_id : str
+
+        authorization : typing.Optional[str]
+
+        sikaru_user_assertion : typing.Optional[str]
+
+        sikaru_member_authorization : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[None]
+        """
+        _request_options_with_retries_disabled: typing.Optional[RequestOptions] = (
+            {**request_options, "max_retries": 0} if request_options is not None else {"max_retries": 0}
+        )
+        _endpoint_auth_headers = self._client_wrapper.get_auth_headers_for_endpoint(security=None)
+        _response = self._client_wrapper.httpx_client.request(
+            f"v1/personal-channel-bindings/{encode_path_param(binding_id)}/messages/{encode_path_param(receipt_id)}/browser-logins/{encode_path_param(login_id)}",
+            method="DELETE",
+            headers={
+                **_endpoint_auth_headers,
+                "authorization": str(authorization) if authorization is not None else None,
+                "X-Sikaru-User-Assertion": str(sikaru_user_assertion) if sikaru_user_assertion is not None else None,
+                "X-Sikaru-Member-Authorization": str(sikaru_member_authorization)
+                if sikaru_member_authorization is not None
+                else None,
+            },
+            request_options=_request_options_with_retries_disabled,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                return HttpResponse(response=_response, data=None)
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        except ValidationError as e:
+            raise ParsingError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+            )
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def get_browser_preview(
+        self,
+        binding_id: str,
+        receipt_id: str,
+        digest: str,
+        *,
+        authorization: typing.Optional[str] = None,
+        sikaru_user_assertion: typing.Optional[str] = None,
+        sikaru_member_authorization: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[typing.Dict[str, typing.Any]]:
+        """
+        Everything this user is asked to approve, typed values included.
+
+        Parameters
+        ----------
+        binding_id : str
+
+        receipt_id : str
+
+        digest : str
+
+        authorization : typing.Optional[str]
+
+        sikaru_user_assertion : typing.Optional[str]
+
+        sikaru_member_authorization : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[typing.Dict[str, typing.Any]]
+            Successful Response
+        """
+        _endpoint_auth_headers = self._client_wrapper.get_auth_headers_for_endpoint(security=None)
+        _response = self._client_wrapper.httpx_client.request(
+            f"v1/personal-channel-bindings/{encode_path_param(binding_id)}/messages/{encode_path_param(receipt_id)}/browser-previews/{encode_path_param(digest)}",
+            method="GET",
+            headers={
+                **_endpoint_auth_headers,
+                "authorization": str(authorization) if authorization is not None else None,
+                "X-Sikaru-User-Assertion": str(sikaru_user_assertion) if sikaru_user_assertion is not None else None,
+                "X-Sikaru-Member-Authorization": str(sikaru_member_authorization)
+                if sikaru_member_authorization is not None
+                else None,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    typing.Dict[str, typing.Any],
+                    parse_obj_as(
+                        type_=typing.Dict[str, typing.Any],  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        except ValidationError as e:
+            raise ParsingError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+            )
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    @contextlib.contextmanager
+    def get_browser_preview_screenshot(
+        self,
+        binding_id: str,
+        receipt_id: str,
+        digest: str,
+        *,
+        authorization: typing.Optional[str] = None,
+        sikaru_user_assertion: typing.Optional[str] = None,
+        sikaru_member_authorization: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> typing.Iterator[HttpResponse[typing.Iterator[bytes]]]:
+        """
+        The page this user is asked to approve, password fields masked.
+
+        Parameters
+        ----------
+        binding_id : str
+
+        receipt_id : str
+
+        digest : str
+
+        authorization : typing.Optional[str]
+
+        sikaru_user_assertion : typing.Optional[str]
+
+        sikaru_member_authorization : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration. You can pass in configuration such as `chunk_size`, and more to customize the request and response.
+
+        Returns
+        -------
+        typing.Iterator[HttpResponse[typing.Iterator[bytes]]]
+            Successful Response
+        """
+        _endpoint_auth_headers = self._client_wrapper.get_auth_headers_for_endpoint(security=None)
+        with self._client_wrapper.httpx_client.stream(
+            f"v1/personal-channel-bindings/{encode_path_param(binding_id)}/messages/{encode_path_param(receipt_id)}/browser-previews/{encode_path_param(digest)}/screenshot",
+            method="GET",
+            headers={
+                **_endpoint_auth_headers,
+                "authorization": str(authorization) if authorization is not None else None,
+                "X-Sikaru-User-Assertion": str(sikaru_user_assertion) if sikaru_user_assertion is not None else None,
+                "X-Sikaru-Member-Authorization": str(sikaru_member_authorization)
+                if sikaru_member_authorization is not None
+                else None,
+            },
+            request_options=request_options,
+        ) as _response:
+
+            def _stream() -> HttpResponse[typing.Iterator[bytes]]:
+                try:
+                    if 200 <= _response.status_code < 300:
+                        _chunk_size = request_options.get("chunk_size", None) if request_options is not None else None
+                        return HttpResponse(
+                            response=_response, data=(_chunk for _chunk in _response.iter_bytes(chunk_size=_chunk_size))
+                        )
+                    _response.read()
+                    if _response.status_code == 422:
+                        raise UnprocessableEntityError(
+                            headers=dict(_response.headers),
+                            body=typing.cast(
+                                typing.Any,
+                                parse_obj_as(
+                                    type_=typing.Any,  # type: ignore
+                                    object_=_response.json(),
+                                ),
+                            ),
+                        )
+                    _response_json = _response.json()
+                except JSONDecodeError:
+                    raise ApiError(
+                        status_code=_response.status_code, headers=dict(_response.headers), body=_response.text
+                    )
+                except ValidationError as e:
+                    raise ParsingError(
+                        status_code=_response.status_code,
+                        headers=dict(_response.headers),
+                        body=_response.json(),
+                        cause=e,
+                    )
+                raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+            yield _stream()
+
+    def get_browser_receipt(
+        self,
+        binding_id: str,
+        receipt_id: str,
+        *,
+        authorization: typing.Optional[str] = None,
+        sikaru_user_assertion: typing.Optional[str] = None,
+        sikaru_member_authorization: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[typing.Dict[str, typing.Any]]:
+        """
+        What this run's browser did for this user, with their own pages' screenshots.
+
+        Parameters
+        ----------
+        binding_id : str
+
+        receipt_id : str
+
+        authorization : typing.Optional[str]
+
+        sikaru_user_assertion : typing.Optional[str]
+
+        sikaru_member_authorization : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[typing.Dict[str, typing.Any]]
+            Successful Response
+        """
+        _endpoint_auth_headers = self._client_wrapper.get_auth_headers_for_endpoint(security=None)
+        _response = self._client_wrapper.httpx_client.request(
+            f"v1/personal-channel-bindings/{encode_path_param(binding_id)}/messages/{encode_path_param(receipt_id)}/browser-receipt",
+            method="GET",
+            headers={
+                **_endpoint_auth_headers,
+                "authorization": str(authorization) if authorization is not None else None,
+                "X-Sikaru-User-Assertion": str(sikaru_user_assertion) if sikaru_user_assertion is not None else None,
+                "X-Sikaru-Member-Authorization": str(sikaru_member_authorization)
+                if sikaru_member_authorization is not None
+                else None,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    typing.Dict[str, typing.Any],
+                    parse_obj_as(
+                        type_=typing.Dict[str, typing.Any],  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        except ValidationError as e:
+            raise ParsingError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+            )
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    @contextlib.contextmanager
+    def get_browser_receipt_screenshot(
+        self,
+        binding_id: str,
+        receipt_id: str,
+        digest: str,
+        *,
+        authorization: typing.Optional[str] = None,
+        sikaru_user_assertion: typing.Optional[str] = None,
+        sikaru_member_authorization: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> typing.Iterator[HttpResponse[typing.Iterator[bytes]]]:
+        """
+        Parameters
+        ----------
+        binding_id : str
+
+        receipt_id : str
+
+        digest : str
+
+        authorization : typing.Optional[str]
+
+        sikaru_user_assertion : typing.Optional[str]
+
+        sikaru_member_authorization : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration. You can pass in configuration such as `chunk_size`, and more to customize the request and response.
+
+        Returns
+        -------
+        typing.Iterator[HttpResponse[typing.Iterator[bytes]]]
+            Successful Response
+        """
+        _endpoint_auth_headers = self._client_wrapper.get_auth_headers_for_endpoint(security=None)
+        with self._client_wrapper.httpx_client.stream(
+            f"v1/personal-channel-bindings/{encode_path_param(binding_id)}/messages/{encode_path_param(receipt_id)}/browser-receipt/screenshots/{encode_path_param(digest)}",
+            method="GET",
+            headers={
+                **_endpoint_auth_headers,
+                "authorization": str(authorization) if authorization is not None else None,
+                "X-Sikaru-User-Assertion": str(sikaru_user_assertion) if sikaru_user_assertion is not None else None,
+                "X-Sikaru-Member-Authorization": str(sikaru_member_authorization)
+                if sikaru_member_authorization is not None
+                else None,
+            },
+            request_options=request_options,
+        ) as _response:
+
+            def _stream() -> HttpResponse[typing.Iterator[bytes]]:
+                try:
+                    if 200 <= _response.status_code < 300:
+                        _chunk_size = request_options.get("chunk_size", None) if request_options is not None else None
+                        return HttpResponse(
+                            response=_response, data=(_chunk for _chunk in _response.iter_bytes(chunk_size=_chunk_size))
+                        )
+                    _response.read()
+                    if _response.status_code == 422:
+                        raise UnprocessableEntityError(
+                            headers=dict(_response.headers),
+                            body=typing.cast(
+                                typing.Any,
+                                parse_obj_as(
+                                    type_=typing.Any,  # type: ignore
+                                    object_=_response.json(),
+                                ),
+                            ),
+                        )
+                    _response_json = _response.json()
+                except JSONDecodeError:
+                    raise ApiError(
+                        status_code=_response.status_code, headers=dict(_response.headers), body=_response.text
+                    )
+                except ValidationError as e:
+                    raise ParsingError(
+                        status_code=_response.status_code,
+                        headers=dict(_response.headers),
+                        body=_response.json(),
+                        cause=e,
+                    )
+                raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+            yield _stream()
+
+    def list_browser_rules(
+        self,
+        binding_id: str,
+        receipt_id: str,
+        *,
+        authorization: typing.Optional[str] = None,
+        sikaru_user_assertion: typing.Optional[str] = None,
+        sikaru_member_authorization: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[BrowserRuleList]:
+        """
+        The browser actions this user always allows this agent to take for them.
+
+        Parameters
+        ----------
+        binding_id : str
+
+        receipt_id : str
+
+        authorization : typing.Optional[str]
+
+        sikaru_user_assertion : typing.Optional[str]
+
+        sikaru_member_authorization : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[BrowserRuleList]
+            Successful Response
+        """
+        _endpoint_auth_headers = self._client_wrapper.get_auth_headers_for_endpoint(security=None)
+        _response = self._client_wrapper.httpx_client.request(
+            f"v1/personal-channel-bindings/{encode_path_param(binding_id)}/messages/{encode_path_param(receipt_id)}/browser-rules",
+            method="GET",
+            headers={
+                **_endpoint_auth_headers,
+                "authorization": str(authorization) if authorization is not None else None,
+                "X-Sikaru-User-Assertion": str(sikaru_user_assertion) if sikaru_user_assertion is not None else None,
+                "X-Sikaru-Member-Authorization": str(sikaru_member_authorization)
+                if sikaru_member_authorization is not None
+                else None,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    BrowserRuleList,
+                    parse_obj_as(
+                        type_=BrowserRuleList,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        except ValidationError as e:
+            raise ParsingError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+            )
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def delete_browser_rule(
+        self,
+        binding_id: str,
+        receipt_id: str,
+        rule_id: str,
+        *,
+        authorization: typing.Optional[str] = None,
+        sikaru_user_assertion: typing.Optional[str] = None,
+        sikaru_member_authorization: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[None]:
+        """
+        Parameters
+        ----------
+        binding_id : str
+
+        receipt_id : str
+
+        rule_id : str
+
+        authorization : typing.Optional[str]
+
+        sikaru_user_assertion : typing.Optional[str]
+
+        sikaru_member_authorization : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[None]
+        """
+        _request_options_with_retries_disabled: typing.Optional[RequestOptions] = (
+            {**request_options, "max_retries": 0} if request_options is not None else {"max_retries": 0}
+        )
+        _endpoint_auth_headers = self._client_wrapper.get_auth_headers_for_endpoint(security=None)
+        _response = self._client_wrapper.httpx_client.request(
+            f"v1/personal-channel-bindings/{encode_path_param(binding_id)}/messages/{encode_path_param(receipt_id)}/browser-rules/{encode_path_param(rule_id)}",
+            method="DELETE",
+            headers={
+                **_endpoint_auth_headers,
+                "authorization": str(authorization) if authorization is not None else None,
+                "X-Sikaru-User-Assertion": str(sikaru_user_assertion) if sikaru_user_assertion is not None else None,
+                "X-Sikaru-Member-Authorization": str(sikaru_member_authorization)
+                if sikaru_member_authorization is not None
+                else None,
+            },
+            request_options=_request_options_with_retries_disabled,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                return HttpResponse(response=_response, data=None)
             if _response.status_code == 422:
                 raise UnprocessableEntityError(
                     headers=dict(_response.headers),
@@ -543,6 +1174,8 @@ class RawPersonalChannelsClient:
         authorization: typing.Optional[str] = None,
         sikaru_user_assertion: typing.Optional[str] = None,
         sikaru_member_authorization: typing.Optional[str] = None,
+        always: typing.Optional[bool] = OMIT,
+        cap: typing.Optional[AlwaysCap] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[PersonalChannelApproval]:
         """
@@ -564,6 +1197,11 @@ class RawPersonalChannelsClient:
 
         sikaru_member_authorization : typing.Optional[str]
 
+        always : typing.Optional[bool]
+            Also always allow this browser commit at its playbook step.
+
+        cap : typing.Optional[AlwaysCap]
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -580,6 +1218,10 @@ class RawPersonalChannelsClient:
             f"v1/personal-channel-bindings/{encode_path_param(binding_id)}/messages/{encode_path_param(receipt_id)}/tool-calls/{encode_path_param(tool_call_id)}/approval",
             method="POST",
             json={
+                "always": always,
+                "cap": convert_and_respect_annotation_metadata(
+                    object_=cap, annotation=typing.Optional[AlwaysCap], direction="write"
+                ),
                 "decision": decision,
                 "idempotency_key": idempotency_key,
             },
@@ -601,6 +1243,89 @@ class RawPersonalChannelsClient:
                     PersonalChannelApproval,
                     parse_obj_as(
                         type_=PersonalChannelApproval,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        except ValidationError as e:
+            raise ParsingError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+            )
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def create_browser_handoff(
+        self,
+        binding_id: str,
+        receipt_id: str,
+        tool_call_id: str,
+        *,
+        authorization: typing.Optional[str] = None,
+        sikaru_user_assertion: typing.Optional[str] = None,
+        sikaru_member_authorization: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[typing.Dict[str, typing.Any]]:
+        """
+        A one-time link to sign in, in a live browser, to the sites a parked browser call needs.
+
+        Parameters
+        ----------
+        binding_id : str
+
+        receipt_id : str
+
+        tool_call_id : str
+
+        authorization : typing.Optional[str]
+
+        sikaru_user_assertion : typing.Optional[str]
+
+        sikaru_member_authorization : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[typing.Dict[str, typing.Any]]
+            Successful Response
+        """
+        _request_options_with_retries_disabled: typing.Optional[RequestOptions] = (
+            {**request_options, "max_retries": 0} if request_options is not None else {"max_retries": 0}
+        )
+        _endpoint_auth_headers = self._client_wrapper.get_auth_headers_for_endpoint(security=None)
+        _response = self._client_wrapper.httpx_client.request(
+            f"v1/personal-channel-bindings/{encode_path_param(binding_id)}/messages/{encode_path_param(receipt_id)}/tool-calls/{encode_path_param(tool_call_id)}/browser-handoff",
+            method="POST",
+            headers={
+                **_endpoint_auth_headers,
+                "authorization": str(authorization) if authorization is not None else None,
+                "X-Sikaru-User-Assertion": str(sikaru_user_assertion) if sikaru_user_assertion is not None else None,
+                "X-Sikaru-Member-Authorization": str(sikaru_member_authorization)
+                if sikaru_member_authorization is not None
+                else None,
+            },
+            request_options=_request_options_with_retries_disabled,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    typing.Dict[str, typing.Any],
+                    parse_obj_as(
+                        type_=typing.Dict[str, typing.Any],  # type: ignore
                         object_=_response.json(),
                     ),
                 )
@@ -913,6 +1638,637 @@ class AsyncRawPersonalChannelsClient:
                     ),
                 )
                 return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        except ValidationError as e:
+            raise ParsingError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+            )
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def list_browser_logins(
+        self,
+        binding_id: str,
+        receipt_id: str,
+        *,
+        authorization: typing.Optional[str] = None,
+        sikaru_user_assertion: typing.Optional[str] = None,
+        sikaru_member_authorization: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[typing.Dict[str, typing.Any]]:
+        """
+        The sites this user's agents may open signed in as them.
+
+        Parameters
+        ----------
+        binding_id : str
+
+        receipt_id : str
+
+        authorization : typing.Optional[str]
+
+        sikaru_user_assertion : typing.Optional[str]
+
+        sikaru_member_authorization : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[typing.Dict[str, typing.Any]]
+            Successful Response
+        """
+        _endpoint_auth_headers = await self._client_wrapper.async_get_auth_headers_for_endpoint(security=None)
+        _response = await self._client_wrapper.httpx_client.request(
+            f"v1/personal-channel-bindings/{encode_path_param(binding_id)}/messages/{encode_path_param(receipt_id)}/browser-logins",
+            method="GET",
+            headers={
+                **_endpoint_auth_headers,
+                "authorization": str(authorization) if authorization is not None else None,
+                "X-Sikaru-User-Assertion": str(sikaru_user_assertion) if sikaru_user_assertion is not None else None,
+                "X-Sikaru-Member-Authorization": str(sikaru_member_authorization)
+                if sikaru_member_authorization is not None
+                else None,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    typing.Dict[str, typing.Any],
+                    parse_obj_as(
+                        type_=typing.Dict[str, typing.Any],  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        except ValidationError as e:
+            raise ParsingError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+            )
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def delete_browser_login(
+        self,
+        binding_id: str,
+        receipt_id: str,
+        login_id: str,
+        *,
+        authorization: typing.Optional[str] = None,
+        sikaru_user_assertion: typing.Optional[str] = None,
+        sikaru_member_authorization: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[None]:
+        """
+        Parameters
+        ----------
+        binding_id : str
+
+        receipt_id : str
+
+        login_id : str
+
+        authorization : typing.Optional[str]
+
+        sikaru_user_assertion : typing.Optional[str]
+
+        sikaru_member_authorization : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[None]
+        """
+        _request_options_with_retries_disabled: typing.Optional[RequestOptions] = (
+            {**request_options, "max_retries": 0} if request_options is not None else {"max_retries": 0}
+        )
+        _endpoint_auth_headers = await self._client_wrapper.async_get_auth_headers_for_endpoint(security=None)
+        _response = await self._client_wrapper.httpx_client.request(
+            f"v1/personal-channel-bindings/{encode_path_param(binding_id)}/messages/{encode_path_param(receipt_id)}/browser-logins/{encode_path_param(login_id)}",
+            method="DELETE",
+            headers={
+                **_endpoint_auth_headers,
+                "authorization": str(authorization) if authorization is not None else None,
+                "X-Sikaru-User-Assertion": str(sikaru_user_assertion) if sikaru_user_assertion is not None else None,
+                "X-Sikaru-Member-Authorization": str(sikaru_member_authorization)
+                if sikaru_member_authorization is not None
+                else None,
+            },
+            request_options=_request_options_with_retries_disabled,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                return AsyncHttpResponse(response=_response, data=None)
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        except ValidationError as e:
+            raise ParsingError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+            )
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def get_browser_preview(
+        self,
+        binding_id: str,
+        receipt_id: str,
+        digest: str,
+        *,
+        authorization: typing.Optional[str] = None,
+        sikaru_user_assertion: typing.Optional[str] = None,
+        sikaru_member_authorization: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[typing.Dict[str, typing.Any]]:
+        """
+        Everything this user is asked to approve, typed values included.
+
+        Parameters
+        ----------
+        binding_id : str
+
+        receipt_id : str
+
+        digest : str
+
+        authorization : typing.Optional[str]
+
+        sikaru_user_assertion : typing.Optional[str]
+
+        sikaru_member_authorization : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[typing.Dict[str, typing.Any]]
+            Successful Response
+        """
+        _endpoint_auth_headers = await self._client_wrapper.async_get_auth_headers_for_endpoint(security=None)
+        _response = await self._client_wrapper.httpx_client.request(
+            f"v1/personal-channel-bindings/{encode_path_param(binding_id)}/messages/{encode_path_param(receipt_id)}/browser-previews/{encode_path_param(digest)}",
+            method="GET",
+            headers={
+                **_endpoint_auth_headers,
+                "authorization": str(authorization) if authorization is not None else None,
+                "X-Sikaru-User-Assertion": str(sikaru_user_assertion) if sikaru_user_assertion is not None else None,
+                "X-Sikaru-Member-Authorization": str(sikaru_member_authorization)
+                if sikaru_member_authorization is not None
+                else None,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    typing.Dict[str, typing.Any],
+                    parse_obj_as(
+                        type_=typing.Dict[str, typing.Any],  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        except ValidationError as e:
+            raise ParsingError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+            )
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    @contextlib.asynccontextmanager
+    async def get_browser_preview_screenshot(
+        self,
+        binding_id: str,
+        receipt_id: str,
+        digest: str,
+        *,
+        authorization: typing.Optional[str] = None,
+        sikaru_user_assertion: typing.Optional[str] = None,
+        sikaru_member_authorization: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> typing.AsyncIterator[AsyncHttpResponse[typing.AsyncIterator[bytes]]]:
+        """
+        The page this user is asked to approve, password fields masked.
+
+        Parameters
+        ----------
+        binding_id : str
+
+        receipt_id : str
+
+        digest : str
+
+        authorization : typing.Optional[str]
+
+        sikaru_user_assertion : typing.Optional[str]
+
+        sikaru_member_authorization : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration. You can pass in configuration such as `chunk_size`, and more to customize the request and response.
+
+        Returns
+        -------
+        typing.AsyncIterator[AsyncHttpResponse[typing.AsyncIterator[bytes]]]
+            Successful Response
+        """
+        _endpoint_auth_headers = await self._client_wrapper.async_get_auth_headers_for_endpoint(security=None)
+        async with self._client_wrapper.httpx_client.stream(
+            f"v1/personal-channel-bindings/{encode_path_param(binding_id)}/messages/{encode_path_param(receipt_id)}/browser-previews/{encode_path_param(digest)}/screenshot",
+            method="GET",
+            headers={
+                **_endpoint_auth_headers,
+                "authorization": str(authorization) if authorization is not None else None,
+                "X-Sikaru-User-Assertion": str(sikaru_user_assertion) if sikaru_user_assertion is not None else None,
+                "X-Sikaru-Member-Authorization": str(sikaru_member_authorization)
+                if sikaru_member_authorization is not None
+                else None,
+            },
+            request_options=request_options,
+        ) as _response:
+
+            async def _stream() -> AsyncHttpResponse[typing.AsyncIterator[bytes]]:
+                try:
+                    if 200 <= _response.status_code < 300:
+                        _chunk_size = request_options.get("chunk_size", None) if request_options is not None else None
+                        return AsyncHttpResponse(
+                            response=_response,
+                            data=(_chunk async for _chunk in _response.aiter_bytes(chunk_size=_chunk_size)),
+                        )
+                    await _response.aread()
+                    if _response.status_code == 422:
+                        raise UnprocessableEntityError(
+                            headers=dict(_response.headers),
+                            body=typing.cast(
+                                typing.Any,
+                                parse_obj_as(
+                                    type_=typing.Any,  # type: ignore
+                                    object_=_response.json(),
+                                ),
+                            ),
+                        )
+                    _response_json = _response.json()
+                except JSONDecodeError:
+                    raise ApiError(
+                        status_code=_response.status_code, headers=dict(_response.headers), body=_response.text
+                    )
+                except ValidationError as e:
+                    raise ParsingError(
+                        status_code=_response.status_code,
+                        headers=dict(_response.headers),
+                        body=_response.json(),
+                        cause=e,
+                    )
+                raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+            yield await _stream()
+
+    async def get_browser_receipt(
+        self,
+        binding_id: str,
+        receipt_id: str,
+        *,
+        authorization: typing.Optional[str] = None,
+        sikaru_user_assertion: typing.Optional[str] = None,
+        sikaru_member_authorization: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[typing.Dict[str, typing.Any]]:
+        """
+        What this run's browser did for this user, with their own pages' screenshots.
+
+        Parameters
+        ----------
+        binding_id : str
+
+        receipt_id : str
+
+        authorization : typing.Optional[str]
+
+        sikaru_user_assertion : typing.Optional[str]
+
+        sikaru_member_authorization : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[typing.Dict[str, typing.Any]]
+            Successful Response
+        """
+        _endpoint_auth_headers = await self._client_wrapper.async_get_auth_headers_for_endpoint(security=None)
+        _response = await self._client_wrapper.httpx_client.request(
+            f"v1/personal-channel-bindings/{encode_path_param(binding_id)}/messages/{encode_path_param(receipt_id)}/browser-receipt",
+            method="GET",
+            headers={
+                **_endpoint_auth_headers,
+                "authorization": str(authorization) if authorization is not None else None,
+                "X-Sikaru-User-Assertion": str(sikaru_user_assertion) if sikaru_user_assertion is not None else None,
+                "X-Sikaru-Member-Authorization": str(sikaru_member_authorization)
+                if sikaru_member_authorization is not None
+                else None,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    typing.Dict[str, typing.Any],
+                    parse_obj_as(
+                        type_=typing.Dict[str, typing.Any],  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        except ValidationError as e:
+            raise ParsingError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+            )
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    @contextlib.asynccontextmanager
+    async def get_browser_receipt_screenshot(
+        self,
+        binding_id: str,
+        receipt_id: str,
+        digest: str,
+        *,
+        authorization: typing.Optional[str] = None,
+        sikaru_user_assertion: typing.Optional[str] = None,
+        sikaru_member_authorization: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> typing.AsyncIterator[AsyncHttpResponse[typing.AsyncIterator[bytes]]]:
+        """
+        Parameters
+        ----------
+        binding_id : str
+
+        receipt_id : str
+
+        digest : str
+
+        authorization : typing.Optional[str]
+
+        sikaru_user_assertion : typing.Optional[str]
+
+        sikaru_member_authorization : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration. You can pass in configuration such as `chunk_size`, and more to customize the request and response.
+
+        Returns
+        -------
+        typing.AsyncIterator[AsyncHttpResponse[typing.AsyncIterator[bytes]]]
+            Successful Response
+        """
+        _endpoint_auth_headers = await self._client_wrapper.async_get_auth_headers_for_endpoint(security=None)
+        async with self._client_wrapper.httpx_client.stream(
+            f"v1/personal-channel-bindings/{encode_path_param(binding_id)}/messages/{encode_path_param(receipt_id)}/browser-receipt/screenshots/{encode_path_param(digest)}",
+            method="GET",
+            headers={
+                **_endpoint_auth_headers,
+                "authorization": str(authorization) if authorization is not None else None,
+                "X-Sikaru-User-Assertion": str(sikaru_user_assertion) if sikaru_user_assertion is not None else None,
+                "X-Sikaru-Member-Authorization": str(sikaru_member_authorization)
+                if sikaru_member_authorization is not None
+                else None,
+            },
+            request_options=request_options,
+        ) as _response:
+
+            async def _stream() -> AsyncHttpResponse[typing.AsyncIterator[bytes]]:
+                try:
+                    if 200 <= _response.status_code < 300:
+                        _chunk_size = request_options.get("chunk_size", None) if request_options is not None else None
+                        return AsyncHttpResponse(
+                            response=_response,
+                            data=(_chunk async for _chunk in _response.aiter_bytes(chunk_size=_chunk_size)),
+                        )
+                    await _response.aread()
+                    if _response.status_code == 422:
+                        raise UnprocessableEntityError(
+                            headers=dict(_response.headers),
+                            body=typing.cast(
+                                typing.Any,
+                                parse_obj_as(
+                                    type_=typing.Any,  # type: ignore
+                                    object_=_response.json(),
+                                ),
+                            ),
+                        )
+                    _response_json = _response.json()
+                except JSONDecodeError:
+                    raise ApiError(
+                        status_code=_response.status_code, headers=dict(_response.headers), body=_response.text
+                    )
+                except ValidationError as e:
+                    raise ParsingError(
+                        status_code=_response.status_code,
+                        headers=dict(_response.headers),
+                        body=_response.json(),
+                        cause=e,
+                    )
+                raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+            yield await _stream()
+
+    async def list_browser_rules(
+        self,
+        binding_id: str,
+        receipt_id: str,
+        *,
+        authorization: typing.Optional[str] = None,
+        sikaru_user_assertion: typing.Optional[str] = None,
+        sikaru_member_authorization: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[BrowserRuleList]:
+        """
+        The browser actions this user always allows this agent to take for them.
+
+        Parameters
+        ----------
+        binding_id : str
+
+        receipt_id : str
+
+        authorization : typing.Optional[str]
+
+        sikaru_user_assertion : typing.Optional[str]
+
+        sikaru_member_authorization : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[BrowserRuleList]
+            Successful Response
+        """
+        _endpoint_auth_headers = await self._client_wrapper.async_get_auth_headers_for_endpoint(security=None)
+        _response = await self._client_wrapper.httpx_client.request(
+            f"v1/personal-channel-bindings/{encode_path_param(binding_id)}/messages/{encode_path_param(receipt_id)}/browser-rules",
+            method="GET",
+            headers={
+                **_endpoint_auth_headers,
+                "authorization": str(authorization) if authorization is not None else None,
+                "X-Sikaru-User-Assertion": str(sikaru_user_assertion) if sikaru_user_assertion is not None else None,
+                "X-Sikaru-Member-Authorization": str(sikaru_member_authorization)
+                if sikaru_member_authorization is not None
+                else None,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    BrowserRuleList,
+                    parse_obj_as(
+                        type_=BrowserRuleList,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        except ValidationError as e:
+            raise ParsingError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+            )
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def delete_browser_rule(
+        self,
+        binding_id: str,
+        receipt_id: str,
+        rule_id: str,
+        *,
+        authorization: typing.Optional[str] = None,
+        sikaru_user_assertion: typing.Optional[str] = None,
+        sikaru_member_authorization: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[None]:
+        """
+        Parameters
+        ----------
+        binding_id : str
+
+        receipt_id : str
+
+        rule_id : str
+
+        authorization : typing.Optional[str]
+
+        sikaru_user_assertion : typing.Optional[str]
+
+        sikaru_member_authorization : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[None]
+        """
+        _request_options_with_retries_disabled: typing.Optional[RequestOptions] = (
+            {**request_options, "max_retries": 0} if request_options is not None else {"max_retries": 0}
+        )
+        _endpoint_auth_headers = await self._client_wrapper.async_get_auth_headers_for_endpoint(security=None)
+        _response = await self._client_wrapper.httpx_client.request(
+            f"v1/personal-channel-bindings/{encode_path_param(binding_id)}/messages/{encode_path_param(receipt_id)}/browser-rules/{encode_path_param(rule_id)}",
+            method="DELETE",
+            headers={
+                **_endpoint_auth_headers,
+                "authorization": str(authorization) if authorization is not None else None,
+                "X-Sikaru-User-Assertion": str(sikaru_user_assertion) if sikaru_user_assertion is not None else None,
+                "X-Sikaru-Member-Authorization": str(sikaru_member_authorization)
+                if sikaru_member_authorization is not None
+                else None,
+            },
+            request_options=_request_options_with_retries_disabled,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                return AsyncHttpResponse(response=_response, data=None)
             if _response.status_code == 422:
                 raise UnprocessableEntityError(
                     headers=dict(_response.headers),
@@ -1370,6 +2726,8 @@ class AsyncRawPersonalChannelsClient:
         authorization: typing.Optional[str] = None,
         sikaru_user_assertion: typing.Optional[str] = None,
         sikaru_member_authorization: typing.Optional[str] = None,
+        always: typing.Optional[bool] = OMIT,
+        cap: typing.Optional[AlwaysCap] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[PersonalChannelApproval]:
         """
@@ -1391,6 +2749,11 @@ class AsyncRawPersonalChannelsClient:
 
         sikaru_member_authorization : typing.Optional[str]
 
+        always : typing.Optional[bool]
+            Also always allow this browser commit at its playbook step.
+
+        cap : typing.Optional[AlwaysCap]
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -1407,6 +2770,10 @@ class AsyncRawPersonalChannelsClient:
             f"v1/personal-channel-bindings/{encode_path_param(binding_id)}/messages/{encode_path_param(receipt_id)}/tool-calls/{encode_path_param(tool_call_id)}/approval",
             method="POST",
             json={
+                "always": always,
+                "cap": convert_and_respect_annotation_metadata(
+                    object_=cap, annotation=typing.Optional[AlwaysCap], direction="write"
+                ),
                 "decision": decision,
                 "idempotency_key": idempotency_key,
             },
@@ -1428,6 +2795,89 @@ class AsyncRawPersonalChannelsClient:
                     PersonalChannelApproval,
                     parse_obj_as(
                         type_=PersonalChannelApproval,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        except ValidationError as e:
+            raise ParsingError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+            )
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def create_browser_handoff(
+        self,
+        binding_id: str,
+        receipt_id: str,
+        tool_call_id: str,
+        *,
+        authorization: typing.Optional[str] = None,
+        sikaru_user_assertion: typing.Optional[str] = None,
+        sikaru_member_authorization: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[typing.Dict[str, typing.Any]]:
+        """
+        A one-time link to sign in, in a live browser, to the sites a parked browser call needs.
+
+        Parameters
+        ----------
+        binding_id : str
+
+        receipt_id : str
+
+        tool_call_id : str
+
+        authorization : typing.Optional[str]
+
+        sikaru_user_assertion : typing.Optional[str]
+
+        sikaru_member_authorization : typing.Optional[str]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[typing.Dict[str, typing.Any]]
+            Successful Response
+        """
+        _request_options_with_retries_disabled: typing.Optional[RequestOptions] = (
+            {**request_options, "max_retries": 0} if request_options is not None else {"max_retries": 0}
+        )
+        _endpoint_auth_headers = await self._client_wrapper.async_get_auth_headers_for_endpoint(security=None)
+        _response = await self._client_wrapper.httpx_client.request(
+            f"v1/personal-channel-bindings/{encode_path_param(binding_id)}/messages/{encode_path_param(receipt_id)}/tool-calls/{encode_path_param(tool_call_id)}/browser-handoff",
+            method="POST",
+            headers={
+                **_endpoint_auth_headers,
+                "authorization": str(authorization) if authorization is not None else None,
+                "X-Sikaru-User-Assertion": str(sikaru_user_assertion) if sikaru_user_assertion is not None else None,
+                "X-Sikaru-Member-Authorization": str(sikaru_member_authorization)
+                if sikaru_member_authorization is not None
+                else None,
+            },
+            request_options=_request_options_with_retries_disabled,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    typing.Dict[str, typing.Any],
+                    parse_obj_as(
+                        type_=typing.Dict[str, typing.Any],  # type: ignore
                         object_=_response.json(),
                     ),
                 )

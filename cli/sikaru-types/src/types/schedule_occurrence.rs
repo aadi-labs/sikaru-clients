@@ -13,6 +13,8 @@ pub struct ScheduleOccurrence {
     #[serde(rename = "harnessVersionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub harness_version_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub revision: Option<i64>,
     #[serde(rename = "runId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub run_id: Option<String>,
@@ -38,6 +40,7 @@ pub struct ScheduleOccurrenceBuilder {
     access: Option<HashMap<String, serde_json::Value>>,
     admitted_at: Option<f64>,
     harness_version_id: Option<String>,
+    revision: Option<i64>,
     run_id: Option<String>,
     scheduled_at: Option<f64>,
     session_id: Option<String>,
@@ -57,6 +60,11 @@ impl ScheduleOccurrenceBuilder {
 
     pub fn harness_version_id(mut self, value: impl Into<String>) -> Self {
         self.harness_version_id = Some(value.into());
+        self
+    }
+
+    pub fn revision(mut self, value: i64) -> Self {
+        self.revision = Some(value);
         self
     }
 
@@ -90,6 +98,7 @@ impl ScheduleOccurrenceBuilder {
             access: self.access,
             admitted_at: self.admitted_at.ok_or_else(|| BuildError::missing_field("admitted_at"))?,
             harness_version_id: self.harness_version_id,
+            revision: self.revision,
             run_id: self.run_id,
             scheduled_at: self.scheduled_at.ok_or_else(|| BuildError::missing_field("scheduled_at"))?,
             session_id: self.session_id,

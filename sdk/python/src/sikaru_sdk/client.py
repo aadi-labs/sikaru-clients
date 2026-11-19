@@ -46,17 +46,16 @@ if typing.TYPE_CHECKING:
     from .executions.client import AsyncExecutionsClient, ExecutionsClient
     from .feedback.client import AsyncFeedbackClient, FeedbackClient
     from .git_credentials.client import AsyncGitCredentialsClient, GitCredentialsClient
+    from .graders.client import AsyncGradersClient, GradersClient
     from .harnesses.client import AsyncHarnessesClient, HarnessesClient
     from .http_channels.client import AsyncHttpChannelsClient, HttpChannelsClient
     from .import_sessions.client import AsyncImportSessionsClient, ImportSessionsClient
     from .issue_clusters.client import AsyncIssueClustersClient, IssueClustersClient
-    from .judge_alignment.client import AsyncJudgeAlignmentClient, JudgeAlignmentClient
     from .managed_agents.client import AsyncManagedAgentsClient, ManagedAgentsClient
-    from .memory_registry.client import AsyncMemoryRegistryClient, MemoryRegistryClient
+    from .memory.client import AsyncMemoryClient, MemoryClient
     from .model_gateway.client import AsyncModelGatewayClient, ModelGatewayClient
     from .model_settings.client import AsyncModelSettingsClient, ModelSettingsClient
     from .models.client import AsyncModelsClient, ModelsClient
-    from .online_evaluations.client import AsyncOnlineEvaluationsClient, OnlineEvaluationsClient
     from .personal_channels.client import AsyncPersonalChannelsClient, PersonalChannelsClient
     from .projects.client import AsyncProjectsClient, ProjectsClient
     from .release_watches.client import AsyncReleaseWatchesClient, ReleaseWatchesClient
@@ -68,7 +67,7 @@ if typing.TYPE_CHECKING:
     from .run_webhooks.client import AsyncRunWebhooksClient, RunWebhooksClient
     from .runs.client import AsyncRunsClient, RunsClient
     from .sessions.client import AsyncSessionsClient, SessionsClient
-    from .specialists.client import AsyncSpecialistsClient, SpecialistsClient
+    from .tasks.client import AsyncTasksClient, TasksClient
     from .tool_providers.client import AsyncToolProvidersClient, ToolProvidersClient
     from .trace_import_connections.client import AsyncTraceImportConnectionsClient, TraceImportConnectionsClient
     from .trace_imports.client import AsyncTraceImportsClient, TraceImportsClient
@@ -175,6 +174,7 @@ class SikaruApi:
         self._activation: typing.Optional[ActivationClient] = None
         self._agent_documents: typing.Optional[AgentDocumentsClient] = None
         self._agent_imports: typing.Optional[AgentImportsClient] = None
+        self._graders: typing.Optional[GradersClient] = None
         self._agents: typing.Optional[AgentsClient] = None
         self._capability_ceilings: typing.Optional[CapabilityCeilingsClient] = None
         self._changesets: typing.Optional[ChangesetsClient] = None
@@ -198,7 +198,7 @@ class SikaruApi:
         self._evaluator_runs: typing.Optional[EvaluatorRunsClient] = None
         self._execution_objectives: typing.Optional[ExecutionObjectivesClient] = None
         self._execution_sessions: typing.Optional[ExecutionSessionsClient] = None
-        self._specialists: typing.Optional[SpecialistsClient] = None
+        self._tasks: typing.Optional[TasksClient] = None
         self._executions: typing.Optional[ExecutionsClient] = None
         self._feedback: typing.Optional[FeedbackClient] = None
         self._git_credentials: typing.Optional[GitCredentialsClient] = None
@@ -206,14 +206,12 @@ class SikaruApi:
         self._runs: typing.Optional[RunsClient] = None
         self._import_sessions: typing.Optional[ImportSessionsClient] = None
         self._issue_clusters: typing.Optional[IssueClustersClient] = None
-        self._judge_alignment: typing.Optional[JudgeAlignmentClient] = None
         self._managed_agents: typing.Optional[ManagedAgentsClient] = None
         self._checks: typing.Optional[ChecksClient] = None
         self._end_users: typing.Optional[EndUsersClient] = None
-        self._memory_registry: typing.Optional[MemoryRegistryClient] = None
+        self._memory: typing.Optional[MemoryClient] = None
         self._model_gateway: typing.Optional[ModelGatewayClient] = None
         self._model_settings: typing.Optional[ModelSettingsClient] = None
-        self._online_evaluations: typing.Optional[OnlineEvaluationsClient] = None
         self._release_watches: typing.Optional[ReleaseWatchesClient] = None
         self._retention_policies: typing.Optional[RetentionPoliciesClient] = None
         self._review_queue: typing.Optional[ReviewQueueClient] = None
@@ -303,6 +301,14 @@ class SikaruApi:
 
             self._agent_imports = AgentImportsClient(client_wrapper=self._client_wrapper)
         return self._agent_imports
+
+    @property
+    def graders(self):
+        if self._graders is None:
+            from .graders.client import GradersClient  # noqa: E402
+
+            self._graders = GradersClient(client_wrapper=self._client_wrapper)
+        return self._graders
 
     @property
     def agents(self):
@@ -489,12 +495,12 @@ class SikaruApi:
         return self._execution_sessions
 
     @property
-    def specialists(self):
-        if self._specialists is None:
-            from .specialists.client import SpecialistsClient  # noqa: E402
+    def tasks(self):
+        if self._tasks is None:
+            from .tasks.client import TasksClient  # noqa: E402
 
-            self._specialists = SpecialistsClient(client_wrapper=self._client_wrapper)
-        return self._specialists
+            self._tasks = TasksClient(client_wrapper=self._client_wrapper)
+        return self._tasks
 
     @property
     def executions(self):
@@ -553,14 +559,6 @@ class SikaruApi:
         return self._issue_clusters
 
     @property
-    def judge_alignment(self):
-        if self._judge_alignment is None:
-            from .judge_alignment.client import JudgeAlignmentClient  # noqa: E402
-
-            self._judge_alignment = JudgeAlignmentClient(client_wrapper=self._client_wrapper)
-        return self._judge_alignment
-
-    @property
     def managed_agents(self):
         if self._managed_agents is None:
             from .managed_agents.client import ManagedAgentsClient  # noqa: E402
@@ -585,12 +583,12 @@ class SikaruApi:
         return self._end_users
 
     @property
-    def memory_registry(self):
-        if self._memory_registry is None:
-            from .memory_registry.client import MemoryRegistryClient  # noqa: E402
+    def memory(self):
+        if self._memory is None:
+            from .memory.client import MemoryClient  # noqa: E402
 
-            self._memory_registry = MemoryRegistryClient(client_wrapper=self._client_wrapper)
-        return self._memory_registry
+            self._memory = MemoryClient(client_wrapper=self._client_wrapper)
+        return self._memory
 
     @property
     def model_gateway(self):
@@ -607,14 +605,6 @@ class SikaruApi:
 
             self._model_settings = ModelSettingsClient(client_wrapper=self._client_wrapper)
         return self._model_settings
-
-    @property
-    def online_evaluations(self):
-        if self._online_evaluations is None:
-            from .online_evaluations.client import OnlineEvaluationsClient  # noqa: E402
-
-            self._online_evaluations = OnlineEvaluationsClient(client_wrapper=self._client_wrapper)
-        return self._online_evaluations
 
     @property
     def release_watches(self):
@@ -871,6 +861,7 @@ class AsyncSikaruApi:
         self._activation: typing.Optional[AsyncActivationClient] = None
         self._agent_documents: typing.Optional[AsyncAgentDocumentsClient] = None
         self._agent_imports: typing.Optional[AsyncAgentImportsClient] = None
+        self._graders: typing.Optional[AsyncGradersClient] = None
         self._agents: typing.Optional[AsyncAgentsClient] = None
         self._capability_ceilings: typing.Optional[AsyncCapabilityCeilingsClient] = None
         self._changesets: typing.Optional[AsyncChangesetsClient] = None
@@ -894,7 +885,7 @@ class AsyncSikaruApi:
         self._evaluator_runs: typing.Optional[AsyncEvaluatorRunsClient] = None
         self._execution_objectives: typing.Optional[AsyncExecutionObjectivesClient] = None
         self._execution_sessions: typing.Optional[AsyncExecutionSessionsClient] = None
-        self._specialists: typing.Optional[AsyncSpecialistsClient] = None
+        self._tasks: typing.Optional[AsyncTasksClient] = None
         self._executions: typing.Optional[AsyncExecutionsClient] = None
         self._feedback: typing.Optional[AsyncFeedbackClient] = None
         self._git_credentials: typing.Optional[AsyncGitCredentialsClient] = None
@@ -902,14 +893,12 @@ class AsyncSikaruApi:
         self._runs: typing.Optional[AsyncRunsClient] = None
         self._import_sessions: typing.Optional[AsyncImportSessionsClient] = None
         self._issue_clusters: typing.Optional[AsyncIssueClustersClient] = None
-        self._judge_alignment: typing.Optional[AsyncJudgeAlignmentClient] = None
         self._managed_agents: typing.Optional[AsyncManagedAgentsClient] = None
         self._checks: typing.Optional[AsyncChecksClient] = None
         self._end_users: typing.Optional[AsyncEndUsersClient] = None
-        self._memory_registry: typing.Optional[AsyncMemoryRegistryClient] = None
+        self._memory: typing.Optional[AsyncMemoryClient] = None
         self._model_gateway: typing.Optional[AsyncModelGatewayClient] = None
         self._model_settings: typing.Optional[AsyncModelSettingsClient] = None
-        self._online_evaluations: typing.Optional[AsyncOnlineEvaluationsClient] = None
         self._release_watches: typing.Optional[AsyncReleaseWatchesClient] = None
         self._retention_policies: typing.Optional[AsyncRetentionPoliciesClient] = None
         self._review_queue: typing.Optional[AsyncReviewQueueClient] = None
@@ -999,6 +988,14 @@ class AsyncSikaruApi:
 
             self._agent_imports = AsyncAgentImportsClient(client_wrapper=self._client_wrapper)
         return self._agent_imports
+
+    @property
+    def graders(self):
+        if self._graders is None:
+            from .graders.client import AsyncGradersClient  # noqa: E402
+
+            self._graders = AsyncGradersClient(client_wrapper=self._client_wrapper)
+        return self._graders
 
     @property
     def agents(self):
@@ -1185,12 +1182,12 @@ class AsyncSikaruApi:
         return self._execution_sessions
 
     @property
-    def specialists(self):
-        if self._specialists is None:
-            from .specialists.client import AsyncSpecialistsClient  # noqa: E402
+    def tasks(self):
+        if self._tasks is None:
+            from .tasks.client import AsyncTasksClient  # noqa: E402
 
-            self._specialists = AsyncSpecialistsClient(client_wrapper=self._client_wrapper)
-        return self._specialists
+            self._tasks = AsyncTasksClient(client_wrapper=self._client_wrapper)
+        return self._tasks
 
     @property
     def executions(self):
@@ -1249,14 +1246,6 @@ class AsyncSikaruApi:
         return self._issue_clusters
 
     @property
-    def judge_alignment(self):
-        if self._judge_alignment is None:
-            from .judge_alignment.client import AsyncJudgeAlignmentClient  # noqa: E402
-
-            self._judge_alignment = AsyncJudgeAlignmentClient(client_wrapper=self._client_wrapper)
-        return self._judge_alignment
-
-    @property
     def managed_agents(self):
         if self._managed_agents is None:
             from .managed_agents.client import AsyncManagedAgentsClient  # noqa: E402
@@ -1281,12 +1270,12 @@ class AsyncSikaruApi:
         return self._end_users
 
     @property
-    def memory_registry(self):
-        if self._memory_registry is None:
-            from .memory_registry.client import AsyncMemoryRegistryClient  # noqa: E402
+    def memory(self):
+        if self._memory is None:
+            from .memory.client import AsyncMemoryClient  # noqa: E402
 
-            self._memory_registry = AsyncMemoryRegistryClient(client_wrapper=self._client_wrapper)
-        return self._memory_registry
+            self._memory = AsyncMemoryClient(client_wrapper=self._client_wrapper)
+        return self._memory
 
     @property
     def model_gateway(self):
@@ -1303,14 +1292,6 @@ class AsyncSikaruApi:
 
             self._model_settings = AsyncModelSettingsClient(client_wrapper=self._client_wrapper)
         return self._model_settings
-
-    @property
-    def online_evaluations(self):
-        if self._online_evaluations is None:
-            from .online_evaluations.client import AsyncOnlineEvaluationsClient  # noqa: E402
-
-            self._online_evaluations = AsyncOnlineEvaluationsClient(client_wrapper=self._client_wrapper)
-        return self._online_evaluations
 
     @property
     def release_watches(self):

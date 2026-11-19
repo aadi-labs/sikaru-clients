@@ -17,6 +17,185 @@ def test_personalChannels_get_message() -> None:
     )
 
 
+def test_personalChannels_list_browser_logins() -> None:
+    """Test list_browser_logins endpoint with WireMock"""
+    test_id = "personal_channels.list_browser_logins.0"
+    client = get_client(test_id)
+    client.personal_channels.list_browser_logins(
+        binding_id="binding_id",
+        receipt_id="receipt_id",
+    )
+    verify_request_count(
+        test_id, "GET", "/v1/personal-channel-bindings/binding_id/messages/receipt_id/browser-logins", None, 1
+    )
+    verify_auth_headers(
+        test_id,
+        "GET",
+        "/v1/personal-channel-bindings/binding_id/messages/receipt_id/browser-logins",
+        {},
+        ["Authorization"],
+    )
+
+
+def test_personalChannels_delete_browser_login() -> None:
+    """Test delete_browser_login endpoint with WireMock"""
+    test_id = "personal_channels.delete_browser_login.0"
+    client = get_client(test_id)
+    client.personal_channels.delete_browser_login(
+        binding_id="binding_id",
+        receipt_id="receipt_id",
+        login_id="login_id",
+    )
+    verify_request_count(
+        test_id,
+        "DELETE",
+        "/v1/personal-channel-bindings/binding_id/messages/receipt_id/browser-logins/login_id",
+        None,
+        1,
+    )
+    verify_auth_headers(
+        test_id,
+        "DELETE",
+        "/v1/personal-channel-bindings/binding_id/messages/receipt_id/browser-logins/login_id",
+        {},
+        ["Authorization"],
+    )
+
+
+def test_personalChannels_get_browser_preview() -> None:
+    """Test get_browser_preview endpoint with WireMock"""
+    test_id = "personal_channels.get_browser_preview.0"
+    client = get_client(test_id)
+    client.personal_channels.get_browser_preview(
+        binding_id="binding_id",
+        receipt_id="receipt_id",
+        digest="digest",
+    )
+    verify_request_count(
+        test_id, "GET", "/v1/personal-channel-bindings/binding_id/messages/receipt_id/browser-previews/digest", None, 1
+    )
+    verify_auth_headers(
+        test_id,
+        "GET",
+        "/v1/personal-channel-bindings/binding_id/messages/receipt_id/browser-previews/digest",
+        {},
+        ["Authorization"],
+    )
+
+
+def test_personalChannels_get_browser_preview_screenshot() -> None:
+    """Test get_browser_preview_screenshot endpoint with WireMock"""
+    test_id = "personal_channels.get_browser_preview_screenshot.0"
+    client = get_client(test_id)
+    for _ in client.personal_channels.get_browser_preview_screenshot(
+        binding_id="binding_id",
+        receipt_id="receipt_id",
+        digest="digest",
+    ):
+        pass
+    verify_request_count(
+        test_id,
+        "GET",
+        "/v1/personal-channel-bindings/binding_id/messages/receipt_id/browser-previews/digest/screenshot",
+        None,
+        1,
+    )
+    verify_auth_headers(
+        test_id,
+        "GET",
+        "/v1/personal-channel-bindings/binding_id/messages/receipt_id/browser-previews/digest/screenshot",
+        {},
+        ["Authorization"],
+    )
+
+
+def test_personalChannels_get_browser_receipt() -> None:
+    """Test get_browser_receipt endpoint with WireMock"""
+    test_id = "personal_channels.get_browser_receipt.0"
+    client = get_client(test_id)
+    client.personal_channels.get_browser_receipt(
+        binding_id="binding_id",
+        receipt_id="receipt_id",
+    )
+    verify_request_count(
+        test_id, "GET", "/v1/personal-channel-bindings/binding_id/messages/receipt_id/browser-receipt", None, 1
+    )
+    verify_auth_headers(
+        test_id,
+        "GET",
+        "/v1/personal-channel-bindings/binding_id/messages/receipt_id/browser-receipt",
+        {},
+        ["Authorization"],
+    )
+
+
+def test_personalChannels_get_browser_receipt_screenshot() -> None:
+    """Test get_browser_receipt_screenshot endpoint with WireMock"""
+    test_id = "personal_channels.get_browser_receipt_screenshot.0"
+    client = get_client(test_id)
+    for _ in client.personal_channels.get_browser_receipt_screenshot(
+        binding_id="binding_id",
+        receipt_id="receipt_id",
+        digest="digest",
+    ):
+        pass
+    verify_request_count(
+        test_id,
+        "GET",
+        "/v1/personal-channel-bindings/binding_id/messages/receipt_id/browser-receipt/screenshots/digest",
+        None,
+        1,
+    )
+    verify_auth_headers(
+        test_id,
+        "GET",
+        "/v1/personal-channel-bindings/binding_id/messages/receipt_id/browser-receipt/screenshots/digest",
+        {},
+        ["Authorization"],
+    )
+
+
+def test_personalChannels_list_browser_rules() -> None:
+    """Test list_browser_rules endpoint with WireMock"""
+    test_id = "personal_channels.list_browser_rules.0"
+    client = get_client(test_id)
+    client.personal_channels.list_browser_rules(
+        binding_id="binding_id",
+        receipt_id="receipt_id",
+    )
+    verify_request_count(
+        test_id, "GET", "/v1/personal-channel-bindings/binding_id/messages/receipt_id/browser-rules", None, 1
+    )
+    verify_auth_headers(
+        test_id,
+        "GET",
+        "/v1/personal-channel-bindings/binding_id/messages/receipt_id/browser-rules",
+        {},
+        ["Authorization"],
+    )
+
+
+def test_personalChannels_delete_browser_rule() -> None:
+    """Test delete_browser_rule endpoint with WireMock"""
+    test_id = "personal_channels.delete_browser_rule.0"
+    client = get_client(test_id)
+    client.personal_channels.delete_browser_rule(
+        binding_id="binding_id",
+        receipt_id="receipt_id",
+        rule_id="rule_id",
+    )
+    verify_request_count(
+        test_id, "DELETE", "/v1/personal-channel-bindings/binding_id/messages/receipt_id/browser-rules/rule_id", None, 1
+    )
+    verify_auth_headers(
+        test_id,
+        "DELETE",
+        "/v1/personal-channel-bindings/binding_id/messages/receipt_id/browser-rules/rule_id",
+        {},
+        ["Authorization"],
+    )
+
+
 def test_personalChannels_authorize_connection() -> None:
     """Test authorize_connection endpoint with WireMock"""
     test_id = "personal_channels.authorize_connection.0"
@@ -152,6 +331,31 @@ def test_personalChannels_decide_approval() -> None:
         test_id,
         "POST",
         "/v1/personal-channel-bindings/binding_id/messages/receipt_id/tool-calls/tool_call_id/approval",
+        {},
+        ["Authorization"],
+    )
+
+
+def test_personalChannels_create_browser_handoff() -> None:
+    """Test create_browser_handoff endpoint with WireMock"""
+    test_id = "personal_channels.create_browser_handoff.0"
+    client = get_client(test_id)
+    client.personal_channels.create_browser_handoff(
+        binding_id="binding_id",
+        receipt_id="receipt_id",
+        tool_call_id="tool_call_id",
+    )
+    verify_request_count(
+        test_id,
+        "POST",
+        "/v1/personal-channel-bindings/binding_id/messages/receipt_id/tool-calls/tool_call_id/browser-handoff",
+        None,
+        1,
+    )
+    verify_auth_headers(
+        test_id,
+        "POST",
+        "/v1/personal-channel-bindings/binding_id/messages/receipt_id/tool-calls/tool_call_id/browser-handoff",
         {},
         ["Authorization"],
     )

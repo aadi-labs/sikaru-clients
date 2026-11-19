@@ -4,6 +4,7 @@ export interface ScheduleOccurrence {
     access: Record<string, unknown> | null;
     admittedAt: number;
     harnessVersionId: string | null;
+    revision?: number | undefined;
     runId: string | null;
     scheduledAt: number;
     sessionId: string | null;

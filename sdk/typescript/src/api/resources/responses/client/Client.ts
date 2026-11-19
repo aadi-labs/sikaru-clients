@@ -79,9 +79,7 @@ export class ResponsesClient {
      * @throws {@link errors.SikaruTimeoutError}
      *
      * @example
-     *     await client.responses.create({
-     *         model: "model"
-     *     })
+     *     await client.responses.create({})
      */
     public create(request: Sikaru.ResponseCreateParams, requestOptions?: ResponsesClient.RequestOptions): core.HttpResponsePromise<Sikaru.ModelResponse> {
         return core.HttpResponsePromise.fromPromise(this.__create(request, requestOptions));

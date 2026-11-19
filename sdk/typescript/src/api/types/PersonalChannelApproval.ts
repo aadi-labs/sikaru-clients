@@ -4,4 +4,14 @@ import * as Sikaru from "../index.js";
 
 export interface PersonalChannelApproval {
     approval: Sikaru.PersonalChannelApprovalDecision;
+    /** Set when the decision also chose to always allow a browser commit. */
+    rule?: (PersonalChannelApproval.Rule | null) | undefined;
+}
+
+export namespace PersonalChannelApproval {
+    export const Rule = {
+            Saved: "saved",
+            LimitReached: "limit_reached"
+        } as const;
+    export type Rule = typeof Rule[keyof typeof Rule];
 }

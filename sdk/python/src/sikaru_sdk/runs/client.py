@@ -4,16 +4,21 @@ import typing
 
 from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ..core.request_options import RequestOptions
+from ..types.always_cap import AlwaysCap
 from ..types.approval_input_decision import ApprovalInputDecision
 from ..types.event_delivery_request import EventDeliveryRequest
 from ..types.execution_turn_response import ExecutionTurnResponse
+from ..types.live_link import LiveLink
 from ..types.managed_run import ManagedRun
+from ..types.personal_channel_approval import PersonalChannelApproval
+from ..types.receipt import Receipt
 from ..types.resume_counts import ResumeCounts
 from ..types.resume_result import ResumeResult
 from ..types.resume_results import ResumeResults
 from ..types.run_event import RunEvent
 from ..types.run_events import RunEvents
 from ..types.run_transcript import RunTranscript
+from ..types.take_over_request import TakeOverRequest
 from ..types.tool_provider_ref_request import ToolProviderRefRequest
 from ..types.transcript_stream_event import TranscriptStreamEvent
 from ..types.workspace_provenance import WorkspaceProvenance
@@ -364,6 +369,315 @@ class RunsClient:
         _response = self._raw_client.pending_actions(project_id, run_id, request_options=request_options)
         return _response.data
 
+    def create_handoff(
+        self,
+        project_id: str,
+        run_id: str,
+        tool_call_id: str,
+        *,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> LiveLink:
+        """
+        Parameters
+        ----------
+        project_id : str
+
+        run_id : str
+
+        tool_call_id : str
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        LiveLink
+            Successful Response
+
+        Examples
+        --------
+        from sikaru_sdk import SikaruApi
+
+        client = SikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+        client.runs.create_handoff(
+            project_id="project_id",
+            run_id="run_id",
+            tool_call_id="tool_call_id",
+        )
+        """
+        _response = self._raw_client.create_handoff(project_id, run_id, tool_call_id, request_options=request_options)
+        return _response.data
+
+    def get_preview(
+        self, project_id: str, run_id: str, digest: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> typing.Dict[str, typing.Any]:
+        """
+        Everything a browser approval asks about, typed values included, for its owner only.
+
+        Parameters
+        ----------
+        project_id : str
+
+        run_id : str
+
+        digest : str
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        typing.Dict[str, typing.Any]
+            Successful Response
+
+        Examples
+        --------
+        from sikaru_sdk import SikaruApi
+
+        client = SikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+        client.runs.get_preview(
+            project_id="project_id",
+            run_id="run_id",
+            digest="digest",
+        )
+        """
+        _response = self._raw_client.get_preview(project_id, run_id, digest, request_options=request_options)
+        return _response.data
+
+    def preview_screenshot(
+        self, project_id: str, run_id: str, digest: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> typing.Iterator[bytes]:
+        """
+        The page an approver is asked about, password fields masked.
+
+        Parameters
+        ----------
+        project_id : str
+
+        run_id : str
+
+        digest : str
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration. You can pass in configuration such as `chunk_size`, and more to customize the request and response.
+
+        Returns
+        -------
+        typing.Iterator[bytes]
+            Successful Response
+
+        Examples
+        --------
+        from sikaru_sdk import SikaruApi
+
+        client = SikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+        client.runs.preview_screenshot(
+            project_id="project_id",
+            run_id="run_id",
+            digest="digest",
+        )
+        """
+        with self._raw_client.preview_screenshot(project_id, run_id, digest, request_options=request_options) as r:
+            yield from r.data
+
+    def get_receipt(
+        self, project_id: str, run_id: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> Receipt:
+        """
+        What the run's browser did: pages visited, actions committed, and sign-ins by people.
+
+        Parameters
+        ----------
+        project_id : str
+
+        run_id : str
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        Receipt
+            Successful Response
+
+        Examples
+        --------
+        from sikaru_sdk import SikaruApi
+
+        client = SikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+        client.runs.get_receipt(
+            project_id="project_id",
+            run_id="run_id",
+        )
+        """
+        _response = self._raw_client.get_receipt(project_id, run_id, request_options=request_options)
+        return _response.data
+
+    def get_receipt_screenshot(
+        self, project_id: str, run_id: str, digest: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> typing.Iterator[bytes]:
+        """
+        Parameters
+        ----------
+        project_id : str
+
+        run_id : str
+
+        digest : str
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration. You can pass in configuration such as `chunk_size`, and more to customize the request and response.
+
+        Returns
+        -------
+        typing.Iterator[bytes]
+            Successful Response
+
+        Examples
+        --------
+        from sikaru_sdk import SikaruApi
+
+        client = SikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+        client.runs.get_receipt_screenshot(
+            project_id="project_id",
+            run_id="run_id",
+            digest="digest",
+        )
+        """
+        with self._raw_client.get_receipt_screenshot(project_id, run_id, digest, request_options=request_options) as r:
+            yield from r.data
+
+    def take_over(
+        self,
+        project_id: str,
+        run_id: str,
+        *,
+        request: typing.Optional[TakeOverRequest] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> LiveLink:
+        """
+        Take over a run's browser after the agent's current action; the link drives it until handed back.
+
+        Parameters
+        ----------
+        project_id : str
+
+        run_id : str
+
+        request : typing.Optional[TakeOverRequest]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        LiveLink
+            Successful Response
+
+        Examples
+        --------
+        from sikaru_sdk import SikaruApi, TakeOverRequest
+
+        client = SikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+        client.runs.take_over(
+            project_id="project_id",
+            run_id="run_id",
+            request=TakeOverRequest(),
+        )
+        """
+        _response = self._raw_client.take_over(project_id, run_id, request=request, request_options=request_options)
+        return _response.data
+
+    def end_take_over(
+        self, project_id: str, run_id: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> None:
+        """
+        Withdraw a take over, or hand back the browser the run is waiting on.
+
+        Parameters
+        ----------
+        project_id : str
+
+        run_id : str
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        None
+
+        Examples
+        --------
+        from sikaru_sdk import SikaruApi
+
+        client = SikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+        client.runs.end_take_over(
+            project_id="project_id",
+            run_id="run_id",
+        )
+        """
+        _response = self._raw_client.end_take_over(project_id, run_id, request_options=request_options)
+        return _response.data
+
+    def watch_run(
+        self, project_id: str, run_id: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> LiveLink:
+        """
+        Watch a run's browser read-only. Pages signed in with an end user's own login stay hidden
+        from everyone but that user.
+
+        Parameters
+        ----------
+        project_id : str
+
+        run_id : str
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        LiveLink
+            Successful Response
+
+        Examples
+        --------
+        from sikaru_sdk import SikaruApi
+
+        client = SikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+        client.runs.watch_run(
+            project_id="project_id",
+            run_id="run_id",
+        )
+        """
+        _response = self._raw_client.watch_run(project_id, run_id, request_options=request_options)
+        return _response.data
+
     def cancel(
         self, project_id: str, run_id: str, *, request_options: typing.Optional[RequestOptions] = None
     ) -> typing.Dict[str, typing.Any]:
@@ -622,8 +936,10 @@ class RunsClient:
         *,
         decision: ApprovalInputDecision,
         idempotency_key: str,
+        always: typing.Optional[bool] = OMIT,
+        cap: typing.Optional[AlwaysCap] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> typing.Dict[str, typing.Any]:
+    ) -> PersonalChannelApproval:
         """
         Parameters
         ----------
@@ -637,12 +953,17 @@ class RunsClient:
 
         idempotency_key : str
 
+        always : typing.Optional[bool]
+            Also always allow this browser commit at its playbook step.
+
+        cap : typing.Optional[AlwaysCap]
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        typing.Dict[str, typing.Any]
+        PersonalChannelApproval
             Successful Response
 
         Examples
@@ -667,6 +988,8 @@ class RunsClient:
             tool_call_id,
             decision=decision,
             idempotency_key=idempotency_key,
+            always=always,
+            cap=cap,
             request_options=request_options,
         )
         return _response.data
@@ -1254,6 +1577,389 @@ class AsyncRunsClient:
         _response = await self._raw_client.pending_actions(project_id, run_id, request_options=request_options)
         return _response.data
 
+    async def create_handoff(
+        self,
+        project_id: str,
+        run_id: str,
+        tool_call_id: str,
+        *,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> LiveLink:
+        """
+        Parameters
+        ----------
+        project_id : str
+
+        run_id : str
+
+        tool_call_id : str
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        LiveLink
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sikaru_sdk import AsyncSikaruApi
+
+        client = AsyncSikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+
+
+        async def main() -> None:
+            await client.runs.create_handoff(
+                project_id="project_id",
+                run_id="run_id",
+                tool_call_id="tool_call_id",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.create_handoff(
+            project_id, run_id, tool_call_id, request_options=request_options
+        )
+        return _response.data
+
+    async def get_preview(
+        self, project_id: str, run_id: str, digest: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> typing.Dict[str, typing.Any]:
+        """
+        Everything a browser approval asks about, typed values included, for its owner only.
+
+        Parameters
+        ----------
+        project_id : str
+
+        run_id : str
+
+        digest : str
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        typing.Dict[str, typing.Any]
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sikaru_sdk import AsyncSikaruApi
+
+        client = AsyncSikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+
+
+        async def main() -> None:
+            await client.runs.get_preview(
+                project_id="project_id",
+                run_id="run_id",
+                digest="digest",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.get_preview(project_id, run_id, digest, request_options=request_options)
+        return _response.data
+
+    async def preview_screenshot(
+        self, project_id: str, run_id: str, digest: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> typing.AsyncIterator[bytes]:
+        """
+        The page an approver is asked about, password fields masked.
+
+        Parameters
+        ----------
+        project_id : str
+
+        run_id : str
+
+        digest : str
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration. You can pass in configuration such as `chunk_size`, and more to customize the request and response.
+
+        Returns
+        -------
+        typing.AsyncIterator[bytes]
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sikaru_sdk import AsyncSikaruApi
+
+        client = AsyncSikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+
+
+        async def main() -> None:
+            await client.runs.preview_screenshot(
+                project_id="project_id",
+                run_id="run_id",
+                digest="digest",
+            )
+
+
+        asyncio.run(main())
+        """
+        async with self._raw_client.preview_screenshot(
+            project_id, run_id, digest, request_options=request_options
+        ) as r:
+            async for _chunk in r.data:
+                yield _chunk
+
+    async def get_receipt(
+        self, project_id: str, run_id: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> Receipt:
+        """
+        What the run's browser did: pages visited, actions committed, and sign-ins by people.
+
+        Parameters
+        ----------
+        project_id : str
+
+        run_id : str
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        Receipt
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sikaru_sdk import AsyncSikaruApi
+
+        client = AsyncSikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+
+
+        async def main() -> None:
+            await client.runs.get_receipt(
+                project_id="project_id",
+                run_id="run_id",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.get_receipt(project_id, run_id, request_options=request_options)
+        return _response.data
+
+    async def get_receipt_screenshot(
+        self, project_id: str, run_id: str, digest: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> typing.AsyncIterator[bytes]:
+        """
+        Parameters
+        ----------
+        project_id : str
+
+        run_id : str
+
+        digest : str
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration. You can pass in configuration such as `chunk_size`, and more to customize the request and response.
+
+        Returns
+        -------
+        typing.AsyncIterator[bytes]
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sikaru_sdk import AsyncSikaruApi
+
+        client = AsyncSikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+
+
+        async def main() -> None:
+            await client.runs.get_receipt_screenshot(
+                project_id="project_id",
+                run_id="run_id",
+                digest="digest",
+            )
+
+
+        asyncio.run(main())
+        """
+        async with self._raw_client.get_receipt_screenshot(
+            project_id, run_id, digest, request_options=request_options
+        ) as r:
+            async for _chunk in r.data:
+                yield _chunk
+
+    async def take_over(
+        self,
+        project_id: str,
+        run_id: str,
+        *,
+        request: typing.Optional[TakeOverRequest] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> LiveLink:
+        """
+        Take over a run's browser after the agent's current action; the link drives it until handed back.
+
+        Parameters
+        ----------
+        project_id : str
+
+        run_id : str
+
+        request : typing.Optional[TakeOverRequest]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        LiveLink
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sikaru_sdk import AsyncSikaruApi, TakeOverRequest
+
+        client = AsyncSikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+
+
+        async def main() -> None:
+            await client.runs.take_over(
+                project_id="project_id",
+                run_id="run_id",
+                request=TakeOverRequest(),
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.take_over(
+            project_id, run_id, request=request, request_options=request_options
+        )
+        return _response.data
+
+    async def end_take_over(
+        self, project_id: str, run_id: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> None:
+        """
+        Withdraw a take over, or hand back the browser the run is waiting on.
+
+        Parameters
+        ----------
+        project_id : str
+
+        run_id : str
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        None
+
+        Examples
+        --------
+        import asyncio
+
+        from sikaru_sdk import AsyncSikaruApi
+
+        client = AsyncSikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+
+
+        async def main() -> None:
+            await client.runs.end_take_over(
+                project_id="project_id",
+                run_id="run_id",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.end_take_over(project_id, run_id, request_options=request_options)
+        return _response.data
+
+    async def watch_run(
+        self, project_id: str, run_id: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> LiveLink:
+        """
+        Watch a run's browser read-only. Pages signed in with an end user's own login stay hidden
+        from everyone but that user.
+
+        Parameters
+        ----------
+        project_id : str
+
+        run_id : str
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        LiveLink
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sikaru_sdk import AsyncSikaruApi
+
+        client = AsyncSikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+
+
+        async def main() -> None:
+            await client.runs.watch_run(
+                project_id="project_id",
+                run_id="run_id",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.watch_run(project_id, run_id, request_options=request_options)
+        return _response.data
+
     async def cancel(
         self, project_id: str, run_id: str, *, request_options: typing.Optional[RequestOptions] = None
     ) -> typing.Dict[str, typing.Any]:
@@ -1561,8 +2267,10 @@ class AsyncRunsClient:
         *,
         decision: ApprovalInputDecision,
         idempotency_key: str,
+        always: typing.Optional[bool] = OMIT,
+        cap: typing.Optional[AlwaysCap] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> typing.Dict[str, typing.Any]:
+    ) -> PersonalChannelApproval:
         """
         Parameters
         ----------
@@ -1576,12 +2284,17 @@ class AsyncRunsClient:
 
         idempotency_key : str
 
+        always : typing.Optional[bool]
+            Also always allow this browser commit at its playbook step.
+
+        cap : typing.Optional[AlwaysCap]
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        typing.Dict[str, typing.Any]
+        PersonalChannelApproval
             Successful Response
 
         Examples
@@ -1614,6 +2327,8 @@ class AsyncRunsClient:
             tool_call_id,
             decision=decision,
             idempotency_key=idempotency_key,
+            always=always,
+            cap=cap,
             request_options=request_options,
         )
         return _response.data

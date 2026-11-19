@@ -9,7 +9,7 @@ pub struct EndUserFile {
     /// Pass as expectedEtag to replace exactly this content.
     #[serde(default)]
     pub etag: String,
-    /// USER.md, memories/<name>.md or cell/PERSONA_SUMMARY.md.
+    /// cell/PERSONA_SUMMARY.md.
     #[serde(default)]
     pub path: String,
 }

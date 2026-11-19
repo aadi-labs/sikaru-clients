@@ -3,5 +3,13 @@
 import typing
 
 TraceStreamRequestFormat = typing.Union[
-    typing.Literal["openinference.v1", "opentelemetry.otlp.v1", "harbor.atif.v1"], typing.Any
+    typing.Literal[
+        "openinference.v1",
+        "opentelemetry.otlp.v1",
+        "harbor.atif.v1",
+        "langfuse.observations.v1",
+        "langsmith.runs.v1",
+        "braintrust.spans.v1",
+    ],
+    typing.Any,
 ]

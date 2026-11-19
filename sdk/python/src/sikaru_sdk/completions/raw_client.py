@@ -32,7 +32,6 @@ class RawCompletionsClient:
     def create_stream(
         self,
         *,
-        model: str,
         prompt: CreateCompletionsStreamRequestPrompt,
         best_of: typing.Optional[int] = OMIT,
         echo: typing.Optional[bool] = OMIT,
@@ -41,6 +40,7 @@ class RawCompletionsClient:
         logprobs: typing.Optional[int] = OMIT,
         max_tokens: typing.Optional[int] = OMIT,
         min_p: typing.Optional[float] = OMIT,
+        model: typing.Optional[str] = OMIT,
         models: typing.Optional[typing.Sequence[str]] = OMIT,
         n: typing.Optional[int] = OMIT,
         presence_penalty: typing.Optional[float] = OMIT,
@@ -63,8 +63,6 @@ class RawCompletionsClient:
         """
         Parameters
         ----------
-        model : str
-
         prompt : CreateCompletionsStreamRequestPrompt
 
         best_of : typing.Optional[int]
@@ -80,6 +78,8 @@ class RawCompletionsClient:
         max_tokens : typing.Optional[int]
 
         min_p : typing.Optional[float]
+
+        model : typing.Optional[str]
 
         models : typing.Optional[typing.Sequence[str]]
 
@@ -223,7 +223,6 @@ class RawCompletionsClient:
     def create(
         self,
         *,
-        model: str,
         prompt: CreateCompletionsRequestPrompt,
         best_of: typing.Optional[int] = OMIT,
         echo: typing.Optional[bool] = OMIT,
@@ -232,6 +231,7 @@ class RawCompletionsClient:
         logprobs: typing.Optional[int] = OMIT,
         max_tokens: typing.Optional[int] = OMIT,
         min_p: typing.Optional[float] = OMIT,
+        model: typing.Optional[str] = OMIT,
         models: typing.Optional[typing.Sequence[str]] = OMIT,
         n: typing.Optional[int] = OMIT,
         presence_penalty: typing.Optional[float] = OMIT,
@@ -254,8 +254,6 @@ class RawCompletionsClient:
         """
         Parameters
         ----------
-        model : str
-
         prompt : CreateCompletionsRequestPrompt
 
         best_of : typing.Optional[int]
@@ -271,6 +269,8 @@ class RawCompletionsClient:
         max_tokens : typing.Optional[int]
 
         min_p : typing.Optional[float]
+
+        model : typing.Optional[str]
 
         models : typing.Optional[typing.Sequence[str]]
 
@@ -389,7 +389,6 @@ class AsyncRawCompletionsClient:
     async def create_stream(
         self,
         *,
-        model: str,
         prompt: CreateCompletionsStreamRequestPrompt,
         best_of: typing.Optional[int] = OMIT,
         echo: typing.Optional[bool] = OMIT,
@@ -398,6 +397,7 @@ class AsyncRawCompletionsClient:
         logprobs: typing.Optional[int] = OMIT,
         max_tokens: typing.Optional[int] = OMIT,
         min_p: typing.Optional[float] = OMIT,
+        model: typing.Optional[str] = OMIT,
         models: typing.Optional[typing.Sequence[str]] = OMIT,
         n: typing.Optional[int] = OMIT,
         presence_penalty: typing.Optional[float] = OMIT,
@@ -420,8 +420,6 @@ class AsyncRawCompletionsClient:
         """
         Parameters
         ----------
-        model : str
-
         prompt : CreateCompletionsStreamRequestPrompt
 
         best_of : typing.Optional[int]
@@ -437,6 +435,8 @@ class AsyncRawCompletionsClient:
         max_tokens : typing.Optional[int]
 
         min_p : typing.Optional[float]
+
+        model : typing.Optional[str]
 
         models : typing.Optional[typing.Sequence[str]]
 
@@ -582,7 +582,6 @@ class AsyncRawCompletionsClient:
     async def create(
         self,
         *,
-        model: str,
         prompt: CreateCompletionsRequestPrompt,
         best_of: typing.Optional[int] = OMIT,
         echo: typing.Optional[bool] = OMIT,
@@ -591,6 +590,7 @@ class AsyncRawCompletionsClient:
         logprobs: typing.Optional[int] = OMIT,
         max_tokens: typing.Optional[int] = OMIT,
         min_p: typing.Optional[float] = OMIT,
+        model: typing.Optional[str] = OMIT,
         models: typing.Optional[typing.Sequence[str]] = OMIT,
         n: typing.Optional[int] = OMIT,
         presence_penalty: typing.Optional[float] = OMIT,
@@ -613,8 +613,6 @@ class AsyncRawCompletionsClient:
         """
         Parameters
         ----------
-        model : str
-
         prompt : CreateCompletionsRequestPrompt
 
         best_of : typing.Optional[int]
@@ -630,6 +628,8 @@ class AsyncRawCompletionsClient:
         max_tokens : typing.Optional[int]
 
         min_p : typing.Optional[float]
+
+        model : typing.Optional[str]
 
         models : typing.Optional[typing.Sequence[str]]
 

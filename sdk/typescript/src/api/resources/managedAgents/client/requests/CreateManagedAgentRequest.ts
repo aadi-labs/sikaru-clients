@@ -21,6 +21,10 @@ export interface CreateManagedAgentRequest {
     initialChannel?: CreateManagedAgentRequest.InitialChannel;
     /** Most turns the agent runs at once; omit to keep the current limit. */
     maxConcurrentTurns?: number | null;
+    /** Whether memory dreams run automatically once conversations go idle; omit to keep the current choice. */
+    memoryDreamAuto?: boolean;
+    /** Seconds a user's conversations stay idle before an automatic dream; null means 900. Omit to keep the current delay. */
+    memoryDreamIdleSeconds?: number | null;
     /** Fixed at creation; new agents are shared unless set. A personal agent's conversations stay private to the person who runs them. Omit it to keep an existing agent's choice. */
     personal?: boolean | null;
     source?: Sikaru.CreateManagedAgentSourceRequest | null;

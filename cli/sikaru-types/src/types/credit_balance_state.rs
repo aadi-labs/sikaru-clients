@@ -2,7 +2,7 @@ pub use crate::prelude::*;
 #[allow(unused_imports)]
 use super::*;
 
-/// `ready`: credits fund work; `no_card`: the organization has not saved a card, so nothing funds work yet; `complimentary`: usage is covered and needs no credits.
+/// `ready`: credits fund work; `no_card`: the organization has no credit account yet, so nothing funds work until an agent top-up or a saved card opens one; `complimentary`: usage is covered and needs no credits.
 #[non_exhaustive]
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum CreditBalanceState {

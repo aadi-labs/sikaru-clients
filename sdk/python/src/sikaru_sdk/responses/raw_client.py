@@ -35,7 +35,6 @@ class RawResponsesClient:
     def create_stream(
         self,
         *,
-        model: str,
         access_programs: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
         background: typing.Optional[bool] = OMIT,
         context_management: typing.Optional[typing.Sequence[typing.Dict[str, typing.Any]]] = OMIT,
@@ -46,6 +45,7 @@ class RawResponsesClient:
         max_output_tokens: typing.Optional[int] = OMIT,
         max_tool_calls: typing.Optional[int] = OMIT,
         metadata: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
+        model: typing.Optional[str] = OMIT,
         models: typing.Optional[typing.Sequence[str]] = OMIT,
         moderation: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
         parallel_tool_calls: typing.Optional[bool] = OMIT,
@@ -76,8 +76,6 @@ class RawResponsesClient:
         """
         Parameters
         ----------
-        model : str
-
         access_programs : typing.Optional[typing.Dict[str, typing.Any]]
 
         background : typing.Optional[bool]
@@ -97,6 +95,8 @@ class RawResponsesClient:
         max_tool_calls : typing.Optional[int]
 
         metadata : typing.Optional[typing.Dict[str, typing.Any]]
+
+        model : typing.Optional[str]
 
         models : typing.Optional[typing.Sequence[str]]
 
@@ -272,7 +272,6 @@ class RawResponsesClient:
     def create(
         self,
         *,
-        model: str,
         access_programs: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
         background: typing.Optional[bool] = OMIT,
         context_management: typing.Optional[typing.Sequence[typing.Dict[str, typing.Any]]] = OMIT,
@@ -283,6 +282,7 @@ class RawResponsesClient:
         max_output_tokens: typing.Optional[int] = OMIT,
         max_tool_calls: typing.Optional[int] = OMIT,
         metadata: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
+        model: typing.Optional[str] = OMIT,
         models: typing.Optional[typing.Sequence[str]] = OMIT,
         moderation: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
         parallel_tool_calls: typing.Optional[bool] = OMIT,
@@ -313,8 +313,6 @@ class RawResponsesClient:
         """
         Parameters
         ----------
-        model : str
-
         access_programs : typing.Optional[typing.Dict[str, typing.Any]]
 
         background : typing.Optional[bool]
@@ -334,6 +332,8 @@ class RawResponsesClient:
         max_tool_calls : typing.Optional[int]
 
         metadata : typing.Optional[typing.Dict[str, typing.Any]]
+
+        model : typing.Optional[str]
 
         models : typing.Optional[typing.Sequence[str]]
 
@@ -482,7 +482,6 @@ class AsyncRawResponsesClient:
     async def create_stream(
         self,
         *,
-        model: str,
         access_programs: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
         background: typing.Optional[bool] = OMIT,
         context_management: typing.Optional[typing.Sequence[typing.Dict[str, typing.Any]]] = OMIT,
@@ -493,6 +492,7 @@ class AsyncRawResponsesClient:
         max_output_tokens: typing.Optional[int] = OMIT,
         max_tool_calls: typing.Optional[int] = OMIT,
         metadata: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
+        model: typing.Optional[str] = OMIT,
         models: typing.Optional[typing.Sequence[str]] = OMIT,
         moderation: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
         parallel_tool_calls: typing.Optional[bool] = OMIT,
@@ -523,8 +523,6 @@ class AsyncRawResponsesClient:
         """
         Parameters
         ----------
-        model : str
-
         access_programs : typing.Optional[typing.Dict[str, typing.Any]]
 
         background : typing.Optional[bool]
@@ -544,6 +542,8 @@ class AsyncRawResponsesClient:
         max_tool_calls : typing.Optional[int]
 
         metadata : typing.Optional[typing.Dict[str, typing.Any]]
+
+        model : typing.Optional[str]
 
         models : typing.Optional[typing.Sequence[str]]
 
@@ -721,7 +721,6 @@ class AsyncRawResponsesClient:
     async def create(
         self,
         *,
-        model: str,
         access_programs: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
         background: typing.Optional[bool] = OMIT,
         context_management: typing.Optional[typing.Sequence[typing.Dict[str, typing.Any]]] = OMIT,
@@ -732,6 +731,7 @@ class AsyncRawResponsesClient:
         max_output_tokens: typing.Optional[int] = OMIT,
         max_tool_calls: typing.Optional[int] = OMIT,
         metadata: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
+        model: typing.Optional[str] = OMIT,
         models: typing.Optional[typing.Sequence[str]] = OMIT,
         moderation: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
         parallel_tool_calls: typing.Optional[bool] = OMIT,
@@ -762,8 +762,6 @@ class AsyncRawResponsesClient:
         """
         Parameters
         ----------
-        model : str
-
         access_programs : typing.Optional[typing.Dict[str, typing.Any]]
 
         background : typing.Optional[bool]
@@ -783,6 +781,8 @@ class AsyncRawResponsesClient:
         max_tool_calls : typing.Optional[int]
 
         metadata : typing.Optional[typing.Dict[str, typing.Any]]
+
+        model : typing.Optional[str]
 
         models : typing.Optional[typing.Sequence[str]]
 

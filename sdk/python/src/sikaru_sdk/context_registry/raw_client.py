@@ -35,7 +35,7 @@ class RawContextRegistryClient:
         action: typing.Optional[CreateContextRegistryChangeRequestAction] = OMIT,
         files: typing.Optional[typing.Sequence[str]] = OMIT,
         kind: typing.Optional[str] = OMIT,
-        linked_signal: typing.Optional[str] = OMIT,
+        linked_grader: typing.Optional[str] = OMIT,
         owner: typing.Optional[str] = OMIT,
         production_commit: typing.Optional[str] = OMIT,
         production_tag: typing.Optional[str] = OMIT,
@@ -63,7 +63,7 @@ class RawContextRegistryClient:
 
         kind : typing.Optional[str]
 
-        linked_signal : typing.Optional[str]
+        linked_grader : typing.Optional[str]
 
         owner : typing.Optional[str]
 
@@ -104,7 +104,7 @@ class RawContextRegistryClient:
                 "action": action,
                 "files": files,
                 "kind": kind,
-                "linkedSignal": linked_signal,
+                "linkedGrader": linked_grader,
                 "name": name,
                 "owner": owner,
                 "productionCommit": production_commit,
@@ -202,7 +202,7 @@ class AsyncRawContextRegistryClient:
         action: typing.Optional[CreateContextRegistryChangeRequestAction] = OMIT,
         files: typing.Optional[typing.Sequence[str]] = OMIT,
         kind: typing.Optional[str] = OMIT,
-        linked_signal: typing.Optional[str] = OMIT,
+        linked_grader: typing.Optional[str] = OMIT,
         owner: typing.Optional[str] = OMIT,
         production_commit: typing.Optional[str] = OMIT,
         production_tag: typing.Optional[str] = OMIT,
@@ -230,7 +230,7 @@ class AsyncRawContextRegistryClient:
 
         kind : typing.Optional[str]
 
-        linked_signal : typing.Optional[str]
+        linked_grader : typing.Optional[str]
 
         owner : typing.Optional[str]
 
@@ -273,7 +273,7 @@ class AsyncRawContextRegistryClient:
                 "action": action,
                 "files": files,
                 "kind": kind,
-                "linkedSignal": linked_signal,
+                "linkedGrader": linked_grader,
                 "name": name,
                 "owner": owner,
                 "productionCommit": production_commit,

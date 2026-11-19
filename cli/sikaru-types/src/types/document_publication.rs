@@ -35,12 +35,24 @@ pub struct DocumentPublication {
     #[serde(rename = "harnessVersionId")]
     #[serde(default)]
     pub harness_version_id: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next: Option<String>,
     #[serde(rename = "priorVersionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub prior_version_id: Option<String>,
+    /// The pending publication; a release check that blocks it is overridden with Publish Anyway on this id.
+    #[serde(rename = "publicationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub publication_id: Option<String>,
     #[serde(rename = "publicationStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub publication_status: Option<DocumentPublicationPublicationStatus>,
+    #[serde(rename = "reconcilePlan")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reconcile_plan: Option<HashMap<String, serde_json::Value>>,
+    #[serde(rename = "releaseCheck")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub release_check: Option<ReleaseCheckReceipt>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub revision: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -67,8 +79,12 @@ pub struct DocumentPublicationBuilder {
     created_at: Option<String>,
     earlier_sessions: Option<Vec<EarlierDocumentSession>>,
     harness_version_id: Option<String>,
+    next: Option<String>,
     prior_version_id: Option<String>,
+    publication_id: Option<String>,
     publication_status: Option<DocumentPublicationPublicationStatus>,
+    reconcile_plan: Option<HashMap<String, serde_json::Value>>,
+    release_check: Option<ReleaseCheckReceipt>,
     revision: Option<i64>,
     unchanged: Option<bool>,
 }
@@ -129,13 +145,33 @@ impl DocumentPublicationBuilder {
         self
     }
 
+    pub fn next(mut self, value: impl Into<String>) -> Self {
+        self.next = Some(value.into());
+        self
+    }
+
     pub fn prior_version_id(mut self, value: impl Into<String>) -> Self {
         self.prior_version_id = Some(value.into());
         self
     }
 
+    pub fn publication_id(mut self, value: impl Into<String>) -> Self {
+        self.publication_id = Some(value.into());
+        self
+    }
+
     pub fn publication_status(mut self, value: DocumentPublicationPublicationStatus) -> Self {
         self.publication_status = Some(value);
+        self
+    }
+
+    pub fn reconcile_plan(mut self, value: HashMap<String, serde_json::Value>) -> Self {
+        self.reconcile_plan = Some(value);
+        self
+    }
+
+    pub fn release_check(mut self, value: ReleaseCheckReceipt) -> Self {
+        self.release_check = Some(value);
         self
     }
 
@@ -170,8 +206,12 @@ impl DocumentPublicationBuilder {
             created_at: self.created_at,
             earlier_sessions: self.earlier_sessions.ok_or_else(|| BuildError::missing_field("earlier_sessions"))?,
             harness_version_id: self.harness_version_id.ok_or_else(|| BuildError::missing_field("harness_version_id"))?,
+            next: self.next,
             prior_version_id: self.prior_version_id,
+            publication_id: self.publication_id,
             publication_status: self.publication_status,
+            reconcile_plan: self.reconcile_plan,
+            release_check: self.release_check,
             revision: self.revision,
             unchanged: self.unchanged,
         })

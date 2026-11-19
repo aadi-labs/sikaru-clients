@@ -4,8 +4,10 @@ use super::*;
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default, PartialEq)]
 pub struct EditDocumentSetting {
-    #[serde(default)]
-    pub document: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub document: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub files: Option<HashMap<String, Option<String>>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub op: Option<EditDocumentSettingOp>,
     #[serde(default)]
@@ -24,6 +26,7 @@ impl EditDocumentSetting {
 #[non_exhaustive]
 pub struct EditDocumentSettingBuilder {
     document: Option<String>,
+    files: Option<HashMap<String, Option<String>>>,
     op: Option<EditDocumentSettingOp>,
     path: Option<Vec<String>>,
     value: Option<serde_json::Value>,
@@ -32,6 +35,11 @@ pub struct EditDocumentSettingBuilder {
 impl EditDocumentSettingBuilder {
     pub fn document(mut self, value: impl Into<String>) -> Self {
         self.document = Some(value.into());
+        self
+    }
+
+    pub fn files(mut self, value: HashMap<String, Option<String>>) -> Self {
+        self.files = Some(value);
         self
     }
 
@@ -52,11 +60,11 @@ impl EditDocumentSettingBuilder {
 
     /// Consumes the builder and constructs a [`EditDocumentSetting`].
     /// This method will fail if any of the following fields are not set:
-    /// - [`document`](EditDocumentSettingBuilder::document)
     /// - [`path`](EditDocumentSettingBuilder::path)
     pub fn build(self) -> Result<EditDocumentSetting, BuildError> {
         Ok(EditDocumentSetting {
-            document: self.document.ok_or_else(|| BuildError::missing_field("document"))?,
+            document: self.document,
+            files: self.files,
             op: self.op,
             path: self.path.ok_or_else(|| BuildError::missing_field("path"))?,
             value: self.value,

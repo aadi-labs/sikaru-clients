@@ -24,8 +24,8 @@ pub struct ResponseCreateParams {
     pub max_tool_calls: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metadata: Option<HashMap<String, serde_json::Value>>,
-    #[serde(default)]
-    pub model: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub models: Option<Vec<String>>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -315,7 +315,6 @@ impl ResponseCreateParamsBuilder {
 
     /// Consumes the builder and constructs a [`ResponseCreateParams`].
     /// This method will fail if any of the following fields are not set:
-    /// - [`model`](ResponseCreateParamsBuilder::model)
     /// - [`stream`](ResponseCreateParamsBuilder::stream)
     pub fn build(self) -> Result<ResponseCreateParams, BuildError> {
         Ok(ResponseCreateParams {
@@ -329,7 +328,7 @@ impl ResponseCreateParamsBuilder {
             max_output_tokens: self.max_output_tokens,
             max_tool_calls: self.max_tool_calls,
             metadata: self.metadata,
-            model: self.model.ok_or_else(|| BuildError::missing_field("model"))?,
+            model: self.model,
             models: self.models,
             moderation: self.moderation,
             parallel_tool_calls: self.parallel_tool_calls,

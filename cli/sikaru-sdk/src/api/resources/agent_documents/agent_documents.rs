@@ -201,8 +201,9 @@ impl AgentDocumentsClient {
     ///         .edit_setting(
     ///             &"project_id".to_string(),
     ///             &EditDocumentSetting {
-    ///                 document: "document".to_string(),
     ///                 path: vec!["path".to_string()],
+    ///                 document: None,
+    ///                 files: None,
     ///                 op: None,
     ///                 value: None,
     ///             },
@@ -302,7 +303,6 @@ impl AgentDocumentsClient {
     ///         .validate_text(
     ///             &"project_id".to_string(),
     ///             &DocumentInput {
-    ///                 document: "document".to_string(),
     ///                 ..Default::default()
     ///             },
     ///             None,
@@ -406,8 +406,9 @@ impl AgentDocumentsClient {
     ///             &"project_id".to_string(),
     ///             &"agent_slug".to_string(),
     ///             &SaveDocument {
-    ///                 document: "document".to_string(),
-    ///                 expected_revision: 1,
+    ///                 base_revision: 1,
+    ///                 document: None,
+    ///                 files: None,
     ///             },
     ///             None,
     ///         )
@@ -514,7 +515,7 @@ impl AgentDocumentsClient {
     ///             &"project_id".to_string(),
     ///             &"agent_slug".to_string(),
     ///             &DiscardDocument {
-    ///                 expected_revision: 1,
+    ///                 base_revision: 1,
     ///                 expected_live_version_id: None,
     ///             },
     ///             None,
@@ -547,6 +548,144 @@ impl AgentDocumentsClient {
                 &format!(
                     "v1/projects/{}/managed-agents/{}/document/discard",
                     project_id, agent_slug
+                ),
+                Some(serde_json::to_value(request).map_err(ApiError::Serialization)?),
+                None,
+                options,
+            )
+            .await
+    }
+
+    /// A publication's state, read without publishing again: follow a pending publish here until its release check
+    /// settles.
+    ///
+    /// # Arguments
+    ///
+    /// * `options` - Additional request options such as headers, timeout, etc.
+    ///
+    /// # Returns
+    ///
+    /// JSON response from the API
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// use sikaru_sdk::prelude::*;
+    ///
+    /// #[tokio::main]
+    /// async fn main() {
+    ///     let config = ClientConfig {
+    ///         token: Some("<token>".to_string()),
+    ///         ..Default::default()
+    ///     };
+    ///     let client = SikaruClient::new(config).expect("Failed to build client");
+    ///     client
+    ///         .agent_documents
+    ///         .get_publication(
+    ///             &"project_id".to_string(),
+    ///             &"agent_slug".to_string(),
+    ///             &"publication_id".to_string(),
+    ///             None,
+    ///         )
+    ///         .await;
+    /// }
+    /// ```
+    pub async fn get_publication(
+        &self,
+        project_id: &str,
+        agent_slug: &str,
+        publication_id: &str,
+        options: Option<RequestOptions>,
+    ) -> Result<PublicationState, ApiError> {
+        let endpoint_auth_headers = self
+            .http_client
+            .resolve_endpoint_auth_headers(&options, &[&["BearerAuth"] as &[&str]])
+            .await?;
+        let options = {
+            let mut o = options.unwrap_or_default();
+            for (header_key, header_value) in endpoint_auth_headers {
+                o.additional_headers.insert(header_key, header_value);
+            }
+            Some(o)
+        };
+        self.http_client
+            .execute_request(
+                Method::GET,
+                &format!(
+                    "v1/projects/{}/managed-agents/{}/document/publications/{}",
+                    project_id, agent_slug, publication_id
+                ),
+                None,
+                None,
+                options,
+            )
+            .await
+    }
+
+    /// Release a publication its release check blocked or couldn't verify, recording who, when and why (R10, R33).
+    /// Only a release check is overridden: an agent's measured evaluation still runs (R34).
+    ///
+    /// # Arguments
+    ///
+    /// * `options` - Additional request options such as headers, timeout, etc.
+    ///
+    /// # Returns
+    ///
+    /// JSON response from the API
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// use sikaru_sdk::prelude::*;
+    ///
+    /// #[tokio::main]
+    /// async fn main() {
+    ///     let config = ClientConfig {
+    ///         token: Some("<token>".to_string()),
+    ///         ..Default::default()
+    ///     };
+    ///     let client = SikaruClient::new(config).expect("Failed to build client");
+    ///     client
+    ///         .agent_documents
+    ///         .publish_anyway(
+    ///             &"project_id".to_string(),
+    ///             &"agent_slug".to_string(),
+    ///             &"publication_id".to_string(),
+    ///             &PublishAnyway {
+    ///                 reason: "reason".to_string(),
+    ///                 ..Default::default()
+    ///             },
+    ///             None,
+    ///         )
+    ///         .await;
+    /// }
+    /// ```
+    pub async fn publish_anyway(
+        &self,
+        project_id: &str,
+        agent_slug: &str,
+        publication_id: &str,
+        request: &PublishAnyway,
+        options: Option<RequestOptions>,
+    ) -> Result<DocumentPublication, ApiError> {
+        let endpoint_auth_headers = self
+            .http_client
+            .resolve_endpoint_auth_headers(&options, &[&["BearerAuth"] as &[&str]])
+            .await?;
+        let options = {
+            let mut o = options.unwrap_or_default();
+            for (header_key, header_value) in endpoint_auth_headers {
+                o.additional_headers.insert(header_key, header_value);
+            }
+            o.max_retries = Some(0);
+            Some(o)
+        };
+        self.http_client
+            .execute_request(
+                Method::POST,
+                &format!(
+                    "v1/projects/{}/managed-agents/{}/document/publications/{}/publish-anyway",
+                    project_id, agent_slug, publication_id
                 ),
                 Some(serde_json::to_value(request).map_err(ApiError::Serialization)?),
                 None,
@@ -859,9 +998,7 @@ impl AgentDocumentsClient {
     ///             &"project_id".to_string(),
     ///             &"agent_slug".to_string(),
     ///             &"suggestion_id".to_string(),
-    ///             &AdoptSuggestion {
-    ///                 expected_revision: 1,
-    ///             },
+    ///             &AdoptSuggestion { base_revision: 1 },
     ///             None,
     ///         )
     ///         .await;
@@ -975,7 +1112,6 @@ impl AgentDocumentsClient {
     ///             &"project_id".to_string(),
     ///             &"agent_slug".to_string(),
     ///             &DocumentInput {
-    ///                 document: "document".to_string(),
     ///                 ..Default::default()
     ///             },
     ///             None,
