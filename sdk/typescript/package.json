@@ -744,6 +744,17 @@
                 "default": "./dist/cjs/inference.js"
             },
             "default": "./dist/cjs/inference.js"
+        },
+        "./webhooks": {
+            "import": {
+                "types": "./dist/esm/webhooks.d.mts",
+                "default": "./dist/esm/webhooks.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/webhooks.d.ts",
+                "default": "./dist/cjs/webhooks.js"
+            },
+            "default": "./dist/cjs/webhooks.js"
         }
     },
     "files": [
@@ -788,8 +799,22 @@
         "node": ">=18.0.0"
     },
     "sideEffects": false,
-    "description": "Official TypeScript SDK for the Sikaru API.",
+    "description": "Official TypeScript SDK for Sikaru: OpenAI-compatible inference, managed agents and evaluations.",
     "license": "MIT",
+    "homepage": "https://docs.sikaru.ai",
+    "bugs": {
+        "url": "https://github.com/aadi-labs/sikaru-clients/issues"
+    },
+    "keywords": [
+        "sikaru",
+        "sdk",
+        "ai",
+        "agents",
+        "llm",
+        "inference",
+        "openai-compatible",
+        "evals"
+    ],
     "repository": {
         "type": "git",
         "url": "git+https://github.com/aadi-labs/sikaru-clients.git",

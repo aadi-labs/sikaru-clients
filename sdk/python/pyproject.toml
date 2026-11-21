@@ -5,10 +5,10 @@ dynamic = ["version"]
 [tool.poetry]
 name = "sikaru_sdk"
 version = "0.0.2"
-description = ""
+description = "Official Python SDK for Sikaru: OpenAI-compatible inference, managed agents and evaluations."
 readme = "README.md"
-authors = []
-keywords = []
+authors = ["Aadi Labs <support@sikaru.ai>"]
+keywords = ["sikaru", "sdk", "ai", "agents", "llm", "inference", "openai-compatible", "evals"]
 license = "MIT"
 classifiers = [
     "Intended Audience :: Developers",
@@ -95,3 +95,11 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.extras]
 aiohttp=["aiohttp", "httpx-aiohttp"]
+
+[tool.poetry.urls]
+Homepage = "https://sikaru.ai"
+Documentation = "https://docs.sikaru.ai"
+"API reference" = "https://docs.sikaru.ai/api-reference"
+"Release notes" = "https://docs.sikaru.ai/sdks-and-cli/release-notes"
+Repository = "https://github.com/aadi-labs/sikaru-clients"
+Issues = "https://github.com/aadi-labs/sikaru-clients/issues"

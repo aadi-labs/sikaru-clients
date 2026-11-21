@@ -29831,9 +29831,23 @@ client.sessions.list_managed_session_plan(
 </details>
 
 ## ToolProviders
-<details><summary><code>client.tool_providers.<a href="src/sikaru_sdk/tool_providers/client.py">register_tool_provider</a>(...) -> typing.Dict[str, typing.Any]</code></summary>
+<details><summary><code>client.tool_providers.<a href="src/sikaru_sdk/tool_providers/client.py">list_tool_providers</a>(...) -> typing.List[ToolProvider]</code></summary>
 <dl>
 <dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+The project's tool providers, optionally narrowed to one capability prefix or status.
+</dd>
+</dl>
+</dd>
+</dl>
 
 #### 🔌 Usage
 
@@ -29852,10 +29866,184 @@ client = SikaruApi(
     environment=SikaruApiEnvironment.DEFAULT,
 )
 
-client.tool_providers.register_tool_provider(
+client.tool_providers.list_tool_providers(
     project_id="project_id",
-    broker_endpoint_ref="broker_endpoint_ref",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**capability_prefix:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**status:** `typing.Optional[ListToolProvidersToolProvidersRequestStatus]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.tool_providers.<a href="src/sikaru_sdk/tool_providers/client.py">get_tool_provider</a>(...) -> ToolProvider</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+One tool provider with its delivery mode and secret state.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.tool_providers.get_tool_provider(
+    project_id="project_id",
     capability_prefix="capability_prefix",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**capability_prefix:** `str` — The provider's capability prefix; it never changes.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.tool_providers.<a href="src/sikaru_sdk/tool_providers/client.py">apply_tool_provider</a>(...) -> AppliedToolProvider</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Create the provider for this capability prefix, or converge it to the request.
+
+Re-sending the same declaration changes nothing. Changing the provider type or
+credential owner is refused with `state_conflict`.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.tool_providers.apply_tool_provider(
+    project_id="project_id",
+    capability_prefix="capability_prefix",
+    broker_endpoint_ref="broker_endpoint_ref",
     display_name="display_name",
     provider_type="provider_type",
     tool_catalog_ref="tool_catalog_ref",
@@ -29883,7 +30071,7 @@ client.tool_providers.register_tool_provider(
 <dl>
 <dd>
 
-**broker_endpoint_ref:** `str` 
+**capability_prefix:** `str` — The provider's capability prefix; it never changes.
     
 </dd>
 </dl>
@@ -29891,7 +30079,7 @@ client.tool_providers.register_tool_provider(
 <dl>
 <dd>
 
-**capability_prefix:** `str` 
+**broker_endpoint_ref:** `str` — A public HTTPS URL receives signed pushes; any other ref is poll-only.
     
 </dd>
 </dl>
@@ -29939,6 +30127,194 @@ client.tool_providers.register_tool_provider(
 <dl>
 <dd>
 
+**secret:** `typing.Optional[str]` — A Standard Webhooks secret: 24-64 random bytes, base64-encoded, with or without the whsec_ prefix. Omit to keep the current secret, or to have Sikaru generate one for a new HTTPS provider. A different secret rotates with a 24-hour overlap.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.tool_providers.<a href="src/sikaru_sdk/tool_providers/client.py">expire_previous_tool_provider_secret</a>(...) -> ToolProvider</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Stop accepting the previous delivery secret now. Without one this changes nothing.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.tool_providers.expire_previous_tool_provider_secret(
+    project_id="project_id",
+    capability_prefix="capability_prefix",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**capability_prefix:** `str` — The provider's capability prefix; it never changes.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.tool_providers.<a href="src/sikaru_sdk/tool_providers/client.py">rotate_tool_provider_secret</a>(...) -> AppliedToolProvider</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Make a new delivery secret current; the old one stays valid for the overlap.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from sikaru_sdk import SikaruApi
+from sikaru_sdk.environment import SikaruApiEnvironment
+
+client = SikaruApi(
+    api_key="<token>",
+    environment=SikaruApiEnvironment.DEFAULT,
+)
+
+client.tool_providers.rotate_tool_provider_secret(
+    project_id="project_id",
+    capability_prefix="capability_prefix",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**capability_prefix:** `str` — The provider's capability prefix; it never changes.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**overlap_seconds:** `typing.Optional[int]` — Seconds the previous secret stays valid; 0 retires it at once.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**secret:** `typing.Optional[str]` — A Standard Webhooks secret: 24-64 random bytes, base64-encoded, with or without the whsec_ prefix. Omit to have Sikaru generate one.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
     
 </dd>
@@ -29974,7 +30350,7 @@ client = SikaruApi(
 
 client.tool_providers.attach_source_tool_skill(
     project_id="project_id",
-    tool_provider_id="tool_provider_id",
+    capability_prefix="capability_prefix",
     capability_refs=[
         "capability_refs"
     ],
@@ -30006,7 +30382,7 @@ client.tool_providers.attach_source_tool_skill(
 <dl>
 <dd>
 
-**tool_provider_id:** `str` 
+**capability_prefix:** `str` — The provider's capability prefix; it never changes.
     
 </dd>
 </dl>

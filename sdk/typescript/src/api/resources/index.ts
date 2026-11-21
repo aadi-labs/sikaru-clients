@@ -112,6 +112,7 @@ export * as tasks from "./tasks/index.js";
 export * from "./tasks/client/requests/index.js";
 export * as toolProviders from "./toolProviders/index.js";
 export * from "./toolProviders/client/requests/index.js";
+export * from "./toolProviders/types/index.js";
 export * as traceImportConnections from "./traceImportConnections/index.js";
 export * as traceImports from "./traceImports/index.js";
 export * from "./traceImports/client/requests/index.js";

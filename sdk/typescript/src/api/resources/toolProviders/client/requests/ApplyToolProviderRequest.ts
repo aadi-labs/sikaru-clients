@@ -4,18 +4,19 @@
  * @example
  *     {
  *         broker_endpoint_ref: "broker_endpoint_ref",
- *         capability_prefix: "capability_prefix",
  *         display_name: "display_name",
  *         provider_type: "provider_type",
  *         tool_catalog_ref: "tool_catalog_ref"
  *     }
  */
-export interface RegisterToolProviderRequest {
+export interface ApplyToolProviderRequest {
     approval_policy_ref?: string | null;
+    /** A public HTTPS URL receives signed pushes; any other ref is poll-only. */
     broker_endpoint_ref: string;
-    capability_prefix: string;
     credential_owner?: string;
     display_name: string;
     provider_type: string;
+    /** A Standard Webhooks secret: 24-64 random bytes, base64-encoded, with or without the whsec_ prefix. Omit to keep the current secret, or to have Sikaru generate one for a new HTTPS provider. A different secret rotates with a 24-hour overlap. */
+    secret?: string | null;
     tool_catalog_ref: string;
 }

@@ -17,6 +17,8 @@ if typing.TYPE_CHECKING:
     from .agent_snippets import AgentSnippets
     from .always_cap import AlwaysCap
     from .answer_ref import AnswerRef
+    from .applied_tool_provider import AppliedToolProvider
+    from .applied_tool_provider_delivery_mode import AppliedToolProviderDeliveryMode
     from .approval_input import ApprovalInput
     from .approval_input_decision import ApprovalInputDecision
     from .attachment_view import AttachmentView
@@ -403,7 +405,11 @@ if typing.TYPE_CHECKING:
     from .test_report_status import TestReportStatus
     from .tested import Tested
     from .tested_verdict import TestedVerdict
+    from .tool_provider import ToolProvider
+    from .tool_provider_delivery_mode import ToolProviderDeliveryMode
     from .tool_provider_ref_request import ToolProviderRefRequest
+    from .tool_provider_secret_state import ToolProviderSecretState
+    from .tool_provider_secret_state_source import ToolProviderSecretStateSource
     from .tool_skill_source_request import ToolSkillSourceRequest
     from .toolkit_category import ToolkitCategory
     from .top_up_hint import TopUpHint
@@ -451,6 +457,8 @@ _dynamic_imports: typing.Dict[str, str] = {
     "AgentSnippets": ".agent_snippets",
     "AlwaysCap": ".always_cap",
     "AnswerRef": ".answer_ref",
+    "AppliedToolProvider": ".applied_tool_provider",
+    "AppliedToolProviderDeliveryMode": ".applied_tool_provider_delivery_mode",
     "ApprovalInput": ".approval_input",
     "ApprovalInputDecision": ".approval_input_decision",
     "AttachmentView": ".attachment_view",
@@ -835,7 +843,11 @@ _dynamic_imports: typing.Dict[str, str] = {
     "TestReportStatus": ".test_report_status",
     "Tested": ".tested",
     "TestedVerdict": ".tested_verdict",
+    "ToolProvider": ".tool_provider",
+    "ToolProviderDeliveryMode": ".tool_provider_delivery_mode",
     "ToolProviderRefRequest": ".tool_provider_ref_request",
+    "ToolProviderSecretState": ".tool_provider_secret_state",
+    "ToolProviderSecretStateSource": ".tool_provider_secret_state_source",
     "ToolSkillSourceRequest": ".tool_skill_source_request",
     "ToolkitCategory": ".toolkit_category",
     "TopUpHint": ".top_up_hint",
@@ -907,6 +919,8 @@ __all__ = [
     "AgentSnippets",
     "AlwaysCap",
     "AnswerRef",
+    "AppliedToolProvider",
+    "AppliedToolProviderDeliveryMode",
     "ApprovalInput",
     "ApprovalInputDecision",
     "AttachmentView",
@@ -1291,7 +1305,11 @@ __all__ = [
     "TestReportStatus",
     "Tested",
     "TestedVerdict",
+    "ToolProvider",
+    "ToolProviderDeliveryMode",
     "ToolProviderRefRequest",
+    "ToolProviderSecretState",
+    "ToolProviderSecretStateSource",
     "ToolSkillSourceRequest",
     "ToolkitCategory",
     "TopUpHint",

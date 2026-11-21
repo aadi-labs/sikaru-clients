@@ -6,24 +6,207 @@ import { mockServerPool } from "../mock-server/MockServerPool";
 
 describe("ToolProvidersClient", () => {
     
-    test("register_tool_provider (1)", async () => {
+    test("list_tool_providers (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
-        const rawRequestBody = { "broker_endpoint_ref" : "broker_endpoint_ref" , "capability_prefix" : "capability_prefix" , "display_name" : "display_name" , "provider_type" : "provider_type" , "tool_catalog_ref" : "tool_catalog_ref" };
+        
+        const rawResponseBody = [ { "approvalPolicyRef" : "approvalPolicyRef" , "brokerEndpointRef" : "brokerEndpointRef" , "capabilityPrefix" : "capabilityPrefix" , "credentialOwner" : "credentialOwner" , "deliveryMode" : "push" , "displayName" : "displayName" , "id" : "id" , "providerType" : "providerType" , "secretState" : { "fingerprint" : "fingerprint" , "previousExpiresAt" : "2024-01-15T09:30:00Z" , "previousFingerprint" : "previousFingerprint" , "setAt" : "2024-01-15T09:30:00Z" , "source" : "supplied" , "version" : 1 } , "status" : "status" , "toolCatalogRef" : "toolCatalogRef" } ];
+        
+        server
+            .mockEndpoint()
+            .get("/v1/projects/project_id/tool-providers").respondWith()
+            .statusCode(200).jsonBody(rawResponseBody)
+                .build();
+
+        
+                        
+                                const response = await client.toolProviders.listToolProviders("project_id");
+                                expect(response).toEqual(rawResponseBody);
+                              
+                    
+    });
+          
+    test("list_tool_providers (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        
+        const rawResponseBody = { "code" : "code" , "detail" : "detail" };
+        
+        server
+            .mockEndpoint()
+            .get("/v1/projects/project_id/tool-providers").respondWith()
+            .statusCode(401).jsonBody(rawResponseBody)
+                .build();
+
+        
+            await expect(async () => {
+                return await client.toolProviders.listToolProviders("project_id")
+            }).rejects.toThrow(Sikaru.UnauthorizedError);
+    });
+          
+    test("list_tool_providers (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        
+        const rawResponseBody = { "code" : "code" , "detail" : "detail" };
+        
+        server
+            .mockEndpoint()
+            .get("/v1/projects/project_id/tool-providers").respondWith()
+            .statusCode(403).jsonBody(rawResponseBody)
+                .build();
+
+        
+            await expect(async () => {
+                return await client.toolProviders.listToolProviders("project_id")
+            }).rejects.toThrow(Sikaru.ForbiddenError);
+    });
+          
+    test("list_tool_providers (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        
+        const rawResponseBody = { "code" : "code" , "detail" : "detail" };
+        
+        server
+            .mockEndpoint()
+            .get("/v1/projects/project_id/tool-providers").respondWith()
+            .statusCode(404).jsonBody(rawResponseBody)
+                .build();
+
+        
+            await expect(async () => {
+                return await client.toolProviders.listToolProviders("project_id")
+            }).rejects.toThrow(Sikaru.NotFoundError);
+    });
+          
+    test("list_tool_providers (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        
         const rawResponseBody = { "key" : "value" };
         
         server
             .mockEndpoint()
-            .post("/v1/projects/project_id/tool-providers").jsonBody(rawRequestBody)
+            .get("/v1/projects/project_id/tool-providers").respondWith()
+            .statusCode(422).jsonBody(rawResponseBody)
+                .build();
+
+        
+            await expect(async () => {
+                return await client.toolProviders.listToolProviders("project_id")
+            }).rejects.toThrow(Sikaru.UnprocessableEntityError);
+    });
+          
+    test("get_tool_provider (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        
+        const rawResponseBody = { "approvalPolicyRef" : "approvalPolicyRef" , "brokerEndpointRef" : "brokerEndpointRef" , "capabilityPrefix" : "capabilityPrefix" , "credentialOwner" : "credentialOwner" , "deliveryMode" : "push" , "displayName" : "displayName" , "id" : "id" , "providerType" : "providerType" , "secretState" : { "fingerprint" : "fingerprint" , "previousExpiresAt" : "2024-01-15T09:30:00Z" , "previousFingerprint" : "previousFingerprint" , "setAt" : "2024-01-15T09:30:00Z" , "source" : "supplied" , "version" : 1 } , "status" : "status" , "toolCatalogRef" : "toolCatalogRef" };
+        
+        server
+            .mockEndpoint()
+            .get("/v1/projects/project_id/tool-providers/capability_prefix").respondWith()
+            .statusCode(200).jsonBody(rawResponseBody)
+                .build();
+
+        
+                        
+                                const response = await client.toolProviders.getToolProvider("project_id", "capability_prefix");
+                                expect(response).toEqual(rawResponseBody);
+                              
+                    
+    });
+          
+    test("get_tool_provider (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        
+        const rawResponseBody = { "code" : "code" , "detail" : "detail" };
+        
+        server
+            .mockEndpoint()
+            .get("/v1/projects/project_id/tool-providers/capability_prefix").respondWith()
+            .statusCode(401).jsonBody(rawResponseBody)
+                .build();
+
+        
+            await expect(async () => {
+                return await client.toolProviders.getToolProvider("project_id", "capability_prefix")
+            }).rejects.toThrow(Sikaru.UnauthorizedError);
+    });
+          
+    test("get_tool_provider (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        
+        const rawResponseBody = { "code" : "code" , "detail" : "detail" };
+        
+        server
+            .mockEndpoint()
+            .get("/v1/projects/project_id/tool-providers/capability_prefix").respondWith()
+            .statusCode(403).jsonBody(rawResponseBody)
+                .build();
+
+        
+            await expect(async () => {
+                return await client.toolProviders.getToolProvider("project_id", "capability_prefix")
+            }).rejects.toThrow(Sikaru.ForbiddenError);
+    });
+          
+    test("get_tool_provider (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        
+        const rawResponseBody = { "code" : "code" , "detail" : "detail" };
+        
+        server
+            .mockEndpoint()
+            .get("/v1/projects/project_id/tool-providers/capability_prefix").respondWith()
+            .statusCode(404).jsonBody(rawResponseBody)
+                .build();
+
+        
+            await expect(async () => {
+                return await client.toolProviders.getToolProvider("project_id", "capability_prefix")
+            }).rejects.toThrow(Sikaru.NotFoundError);
+    });
+          
+    test("get_tool_provider (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        
+        const rawResponseBody = { "key" : "value" };
+        
+        server
+            .mockEndpoint()
+            .get("/v1/projects/project_id/tool-providers/capability_prefix").respondWith()
+            .statusCode(422).jsonBody(rawResponseBody)
+                .build();
+
+        
+            await expect(async () => {
+                return await client.toolProviders.getToolProvider("project_id", "capability_prefix")
+            }).rejects.toThrow(Sikaru.UnprocessableEntityError);
+    });
+          
+    test("apply_tool_provider (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        const rawRequestBody = { "broker_endpoint_ref" : "broker_endpoint_ref" , "display_name" : "display_name" , "provider_type" : "provider_type" , "tool_catalog_ref" : "tool_catalog_ref" };
+        const rawResponseBody = { "approvalPolicyRef" : "approvalPolicyRef" , "brokerEndpointRef" : "brokerEndpointRef" , "capabilityPrefix" : "capabilityPrefix" , "credentialOwner" : "credentialOwner" , "deliveryMode" : "push" , "displayName" : "displayName" , "id" : "id" , "providerType" : "providerType" , "secret" : "secret" , "secretState" : { "fingerprint" : "fingerprint" , "previousExpiresAt" : "2024-01-15T09:30:00Z" , "previousFingerprint" : "previousFingerprint" , "setAt" : "2024-01-15T09:30:00Z" , "source" : "supplied" , "version" : 1 } , "status" : "status" , "toolCatalogRef" : "toolCatalogRef" };
+        
+        server
+            .mockEndpoint()
+            .put("/v1/projects/project_id/tool-providers/capability_prefix").jsonBody(rawRequestBody)
                 .respondWith()
             .statusCode(200).jsonBody(rawResponseBody)
                 .build();
 
         
                         
-                                const response = await client.toolProviders.registerToolProvider("project_id", {
+                                const response = await client.toolProviders.applyToolProvider("project_id", "capability_prefix", {
     broker_endpoint_ref: "broker_endpoint_ref",
-    capability_prefix: "capability_prefix",
     display_name: "display_name",
     provider_type: "provider_type",
     tool_catalog_ref: "tool_catalog_ref"
@@ -33,24 +216,23 @@ describe("ToolProvidersClient", () => {
                     
     });
           
-    test("register_tool_provider (2)", async () => {
+    test("apply_tool_provider (2)", async () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
-        const rawRequestBody = { "broker_endpoint_ref" : "broker_endpoint_ref" , "capability_prefix" : "capability_prefix" , "display_name" : "display_name" , "provider_type" : "provider_type" , "tool_catalog_ref" : "tool_catalog_ref" };
+        const rawRequestBody = { "broker_endpoint_ref" : "broker_endpoint_ref" , "display_name" : "display_name" , "provider_type" : "provider_type" , "tool_catalog_ref" : "tool_catalog_ref" };
         const rawResponseBody = { "code" : "code" , "detail" : "detail" };
         
         server
             .mockEndpoint()
-            .post("/v1/projects/project_id/tool-providers").jsonBody(rawRequestBody)
+            .put("/v1/projects/project_id/tool-providers/capability_prefix").jsonBody(rawRequestBody)
                 .respondWith()
             .statusCode(401).jsonBody(rawResponseBody)
                 .build();
 
         
             await expect(async () => {
-                return await client.toolProviders.registerToolProvider("project_id", {
+                return await client.toolProviders.applyToolProvider("project_id", "capability_prefix", {
     broker_endpoint_ref: "broker_endpoint_ref",
-    capability_prefix: "capability_prefix",
     display_name: "display_name",
     provider_type: "provider_type",
     tool_catalog_ref: "tool_catalog_ref"
@@ -58,24 +240,23 @@ describe("ToolProvidersClient", () => {
             }).rejects.toThrow(Sikaru.UnauthorizedError);
     });
           
-    test("register_tool_provider (3)", async () => {
+    test("apply_tool_provider (3)", async () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
-        const rawRequestBody = { "broker_endpoint_ref" : "broker_endpoint_ref" , "capability_prefix" : "capability_prefix" , "display_name" : "display_name" , "provider_type" : "provider_type" , "tool_catalog_ref" : "tool_catalog_ref" };
+        const rawRequestBody = { "broker_endpoint_ref" : "broker_endpoint_ref" , "display_name" : "display_name" , "provider_type" : "provider_type" , "tool_catalog_ref" : "tool_catalog_ref" };
         const rawResponseBody = { "code" : "code" , "detail" : "detail" };
         
         server
             .mockEndpoint()
-            .post("/v1/projects/project_id/tool-providers").jsonBody(rawRequestBody)
+            .put("/v1/projects/project_id/tool-providers/capability_prefix").jsonBody(rawRequestBody)
                 .respondWith()
             .statusCode(403).jsonBody(rawResponseBody)
                 .build();
 
         
             await expect(async () => {
-                return await client.toolProviders.registerToolProvider("project_id", {
+                return await client.toolProviders.applyToolProvider("project_id", "capability_prefix", {
     broker_endpoint_ref: "broker_endpoint_ref",
-    capability_prefix: "capability_prefix",
     display_name: "display_name",
     provider_type: "provider_type",
     tool_catalog_ref: "tool_catalog_ref"
@@ -83,24 +264,23 @@ describe("ToolProvidersClient", () => {
             }).rejects.toThrow(Sikaru.ForbiddenError);
     });
           
-    test("register_tool_provider (4)", async () => {
+    test("apply_tool_provider (4)", async () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
-        const rawRequestBody = { "broker_endpoint_ref" : "broker_endpoint_ref" , "capability_prefix" : "capability_prefix" , "display_name" : "display_name" , "provider_type" : "provider_type" , "tool_catalog_ref" : "tool_catalog_ref" };
+        const rawRequestBody = { "broker_endpoint_ref" : "broker_endpoint_ref" , "display_name" : "display_name" , "provider_type" : "provider_type" , "tool_catalog_ref" : "tool_catalog_ref" };
         const rawResponseBody = { "code" : "code" , "detail" : "detail" };
         
         server
             .mockEndpoint()
-            .post("/v1/projects/project_id/tool-providers").jsonBody(rawRequestBody)
+            .put("/v1/projects/project_id/tool-providers/capability_prefix").jsonBody(rawRequestBody)
                 .respondWith()
             .statusCode(404).jsonBody(rawResponseBody)
                 .build();
 
         
             await expect(async () => {
-                return await client.toolProviders.registerToolProvider("project_id", {
+                return await client.toolProviders.applyToolProvider("project_id", "capability_prefix", {
     broker_endpoint_ref: "broker_endpoint_ref",
-    capability_prefix: "capability_prefix",
     display_name: "display_name",
     provider_type: "provider_type",
     tool_catalog_ref: "tool_catalog_ref"
@@ -108,29 +288,339 @@ describe("ToolProvidersClient", () => {
             }).rejects.toThrow(Sikaru.NotFoundError);
     });
           
-    test("register_tool_provider (5)", async () => {
+    test("apply_tool_provider (5)", async () => {
         const server = mockServerPool.createServer();
         const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
-        const rawRequestBody = { "broker_endpoint_ref" : "broker_endpoint_ref" , "capability_prefix" : "capability_prefix" , "display_name" : "display_name" , "provider_type" : "provider_type" , "tool_catalog_ref" : "tool_catalog_ref" };
+        const rawRequestBody = { "broker_endpoint_ref" : "broker_endpoint_ref" , "display_name" : "display_name" , "provider_type" : "provider_type" , "tool_catalog_ref" : "tool_catalog_ref" };
+        const rawResponseBody = { "code" : "code" , "detail" : "detail" };
+        
+        server
+            .mockEndpoint()
+            .put("/v1/projects/project_id/tool-providers/capability_prefix").jsonBody(rawRequestBody)
+                .respondWith()
+            .statusCode(409).jsonBody(rawResponseBody)
+                .build();
+
+        
+            await expect(async () => {
+                return await client.toolProviders.applyToolProvider("project_id", "capability_prefix", {
+    broker_endpoint_ref: "broker_endpoint_ref",
+    display_name: "display_name",
+    provider_type: "provider_type",
+    tool_catalog_ref: "tool_catalog_ref"
+})
+            }).rejects.toThrow(Sikaru.ConflictError);
+    });
+          
+    test("apply_tool_provider (6)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        const rawRequestBody = { "broker_endpoint_ref" : "broker_endpoint_ref" , "display_name" : "display_name" , "provider_type" : "provider_type" , "tool_catalog_ref" : "tool_catalog_ref" };
         const rawResponseBody = { "key" : "value" };
         
         server
             .mockEndpoint()
-            .post("/v1/projects/project_id/tool-providers").jsonBody(rawRequestBody)
+            .put("/v1/projects/project_id/tool-providers/capability_prefix").jsonBody(rawRequestBody)
                 .respondWith()
             .statusCode(422).jsonBody(rawResponseBody)
                 .build();
 
         
             await expect(async () => {
-                return await client.toolProviders.registerToolProvider("project_id", {
+                return await client.toolProviders.applyToolProvider("project_id", "capability_prefix", {
     broker_endpoint_ref: "broker_endpoint_ref",
-    capability_prefix: "capability_prefix",
     display_name: "display_name",
     provider_type: "provider_type",
     tool_catalog_ref: "tool_catalog_ref"
 })
             }).rejects.toThrow(Sikaru.UnprocessableEntityError);
+    });
+          
+    test("apply_tool_provider (7)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        const rawRequestBody = { "broker_endpoint_ref" : "broker_endpoint_ref" , "display_name" : "display_name" , "provider_type" : "provider_type" , "tool_catalog_ref" : "tool_catalog_ref" };
+        const rawResponseBody = { "code" : "code" , "detail" : "detail" };
+        
+        server
+            .mockEndpoint()
+            .put("/v1/projects/project_id/tool-providers/capability_prefix").jsonBody(rawRequestBody)
+                .respondWith()
+            .statusCode(503).jsonBody(rawResponseBody)
+                .build();
+
+        
+            await expect(async () => {
+                return await client.toolProviders.applyToolProvider("project_id", "capability_prefix", {
+    broker_endpoint_ref: "broker_endpoint_ref",
+    display_name: "display_name",
+    provider_type: "provider_type",
+    tool_catalog_ref: "tool_catalog_ref"
+})
+            }).rejects.toThrow(Sikaru.ServiceUnavailableError);
+    });
+          
+    test("expire_previous_tool_provider_secret (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        
+        const rawResponseBody = { "approvalPolicyRef" : "approvalPolicyRef" , "brokerEndpointRef" : "brokerEndpointRef" , "capabilityPrefix" : "capabilityPrefix" , "credentialOwner" : "credentialOwner" , "deliveryMode" : "push" , "displayName" : "displayName" , "id" : "id" , "providerType" : "providerType" , "secretState" : { "fingerprint" : "fingerprint" , "previousExpiresAt" : "2024-01-15T09:30:00Z" , "previousFingerprint" : "previousFingerprint" , "setAt" : "2024-01-15T09:30:00Z" , "source" : "supplied" , "version" : 1 } , "status" : "status" , "toolCatalogRef" : "toolCatalogRef" };
+        
+        server
+            .mockEndpoint()
+            .delete("/v1/projects/project_id/tool-providers/capability_prefix/secret/previous").respondWith()
+            .statusCode(200).jsonBody(rawResponseBody)
+                .build();
+
+        
+                        
+                                const response = await client.toolProviders.expirePreviousToolProviderSecret("project_id", "capability_prefix");
+                                expect(response).toEqual(rawResponseBody);
+                              
+                    
+    });
+          
+    test("expire_previous_tool_provider_secret (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        
+        const rawResponseBody = { "code" : "code" , "detail" : "detail" };
+        
+        server
+            .mockEndpoint()
+            .delete("/v1/projects/project_id/tool-providers/capability_prefix/secret/previous").respondWith()
+            .statusCode(401).jsonBody(rawResponseBody)
+                .build();
+
+        
+            await expect(async () => {
+                return await client.toolProviders.expirePreviousToolProviderSecret("project_id", "capability_prefix")
+            }).rejects.toThrow(Sikaru.UnauthorizedError);
+    });
+          
+    test("expire_previous_tool_provider_secret (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        
+        const rawResponseBody = { "code" : "code" , "detail" : "detail" };
+        
+        server
+            .mockEndpoint()
+            .delete("/v1/projects/project_id/tool-providers/capability_prefix/secret/previous").respondWith()
+            .statusCode(403).jsonBody(rawResponseBody)
+                .build();
+
+        
+            await expect(async () => {
+                return await client.toolProviders.expirePreviousToolProviderSecret("project_id", "capability_prefix")
+            }).rejects.toThrow(Sikaru.ForbiddenError);
+    });
+          
+    test("expire_previous_tool_provider_secret (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        
+        const rawResponseBody = { "code" : "code" , "detail" : "detail" };
+        
+        server
+            .mockEndpoint()
+            .delete("/v1/projects/project_id/tool-providers/capability_prefix/secret/previous").respondWith()
+            .statusCode(404).jsonBody(rawResponseBody)
+                .build();
+
+        
+            await expect(async () => {
+                return await client.toolProviders.expirePreviousToolProviderSecret("project_id", "capability_prefix")
+            }).rejects.toThrow(Sikaru.NotFoundError);
+    });
+          
+    test("expire_previous_tool_provider_secret (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        
+        const rawResponseBody = { "code" : "code" , "detail" : "detail" };
+        
+        server
+            .mockEndpoint()
+            .delete("/v1/projects/project_id/tool-providers/capability_prefix/secret/previous").respondWith()
+            .statusCode(409).jsonBody(rawResponseBody)
+                .build();
+
+        
+            await expect(async () => {
+                return await client.toolProviders.expirePreviousToolProviderSecret("project_id", "capability_prefix")
+            }).rejects.toThrow(Sikaru.ConflictError);
+    });
+          
+    test("expire_previous_tool_provider_secret (6)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        
+        const rawResponseBody = { "key" : "value" };
+        
+        server
+            .mockEndpoint()
+            .delete("/v1/projects/project_id/tool-providers/capability_prefix/secret/previous").respondWith()
+            .statusCode(422).jsonBody(rawResponseBody)
+                .build();
+
+        
+            await expect(async () => {
+                return await client.toolProviders.expirePreviousToolProviderSecret("project_id", "capability_prefix")
+            }).rejects.toThrow(Sikaru.UnprocessableEntityError);
+    });
+          
+    test("expire_previous_tool_provider_secret (7)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        
+        const rawResponseBody = { "code" : "code" , "detail" : "detail" };
+        
+        server
+            .mockEndpoint()
+            .delete("/v1/projects/project_id/tool-providers/capability_prefix/secret/previous").respondWith()
+            .statusCode(503).jsonBody(rawResponseBody)
+                .build();
+
+        
+            await expect(async () => {
+                return await client.toolProviders.expirePreviousToolProviderSecret("project_id", "capability_prefix")
+            }).rejects.toThrow(Sikaru.ServiceUnavailableError);
+    });
+          
+    test("rotate_tool_provider_secret (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        const rawRequestBody = { };
+        const rawResponseBody = { "approvalPolicyRef" : "approvalPolicyRef" , "brokerEndpointRef" : "brokerEndpointRef" , "capabilityPrefix" : "capabilityPrefix" , "credentialOwner" : "credentialOwner" , "deliveryMode" : "push" , "displayName" : "displayName" , "id" : "id" , "providerType" : "providerType" , "secret" : "secret" , "secretState" : { "fingerprint" : "fingerprint" , "previousExpiresAt" : "2024-01-15T09:30:00Z" , "previousFingerprint" : "previousFingerprint" , "setAt" : "2024-01-15T09:30:00Z" , "source" : "supplied" , "version" : 1 } , "status" : "status" , "toolCatalogRef" : "toolCatalogRef" };
+        
+        server
+            .mockEndpoint()
+            .post("/v1/projects/project_id/tool-providers/capability_prefix/secret/rotate").jsonBody(rawRequestBody)
+                .respondWith()
+            .statusCode(200).jsonBody(rawResponseBody)
+                .build();
+
+        
+                        
+                                const response = await client.toolProviders.rotateToolProviderSecret("project_id", "capability_prefix");
+                                expect(response).toEqual(rawResponseBody);
+                              
+                    
+    });
+          
+    test("rotate_tool_provider_secret (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        const rawRequestBody = { };
+        const rawResponseBody = { "code" : "code" , "detail" : "detail" };
+        
+        server
+            .mockEndpoint()
+            .post("/v1/projects/project_id/tool-providers/capability_prefix/secret/rotate").jsonBody(rawRequestBody)
+                .respondWith()
+            .statusCode(401).jsonBody(rawResponseBody)
+                .build();
+
+        
+            await expect(async () => {
+                return await client.toolProviders.rotateToolProviderSecret("project_id", "capability_prefix")
+            }).rejects.toThrow(Sikaru.UnauthorizedError);
+    });
+          
+    test("rotate_tool_provider_secret (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        const rawRequestBody = { };
+        const rawResponseBody = { "code" : "code" , "detail" : "detail" };
+        
+        server
+            .mockEndpoint()
+            .post("/v1/projects/project_id/tool-providers/capability_prefix/secret/rotate").jsonBody(rawRequestBody)
+                .respondWith()
+            .statusCode(403).jsonBody(rawResponseBody)
+                .build();
+
+        
+            await expect(async () => {
+                return await client.toolProviders.rotateToolProviderSecret("project_id", "capability_prefix")
+            }).rejects.toThrow(Sikaru.ForbiddenError);
+    });
+          
+    test("rotate_tool_provider_secret (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        const rawRequestBody = { };
+        const rawResponseBody = { "code" : "code" , "detail" : "detail" };
+        
+        server
+            .mockEndpoint()
+            .post("/v1/projects/project_id/tool-providers/capability_prefix/secret/rotate").jsonBody(rawRequestBody)
+                .respondWith()
+            .statusCode(404).jsonBody(rawResponseBody)
+                .build();
+
+        
+            await expect(async () => {
+                return await client.toolProviders.rotateToolProviderSecret("project_id", "capability_prefix")
+            }).rejects.toThrow(Sikaru.NotFoundError);
+    });
+          
+    test("rotate_tool_provider_secret (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        const rawRequestBody = { };
+        const rawResponseBody = { "code" : "code" , "detail" : "detail" };
+        
+        server
+            .mockEndpoint()
+            .post("/v1/projects/project_id/tool-providers/capability_prefix/secret/rotate").jsonBody(rawRequestBody)
+                .respondWith()
+            .statusCode(409).jsonBody(rawResponseBody)
+                .build();
+
+        
+            await expect(async () => {
+                return await client.toolProviders.rotateToolProviderSecret("project_id", "capability_prefix")
+            }).rejects.toThrow(Sikaru.ConflictError);
+    });
+          
+    test("rotate_tool_provider_secret (6)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        const rawRequestBody = { };
+        const rawResponseBody = { "key" : "value" };
+        
+        server
+            .mockEndpoint()
+            .post("/v1/projects/project_id/tool-providers/capability_prefix/secret/rotate").jsonBody(rawRequestBody)
+                .respondWith()
+            .statusCode(422).jsonBody(rawResponseBody)
+                .build();
+
+        
+            await expect(async () => {
+                return await client.toolProviders.rotateToolProviderSecret("project_id", "capability_prefix")
+            }).rejects.toThrow(Sikaru.UnprocessableEntityError);
+    });
+          
+    test("rotate_tool_provider_secret (7)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new SikaruApi({ "maxRetries" : 0 , "apiKey" : "test" , "channelCredential" : "test" , "environment" : server.baseUrl });
+        const rawRequestBody = { };
+        const rawResponseBody = { "code" : "code" , "detail" : "detail" };
+        
+        server
+            .mockEndpoint()
+            .post("/v1/projects/project_id/tool-providers/capability_prefix/secret/rotate").jsonBody(rawRequestBody)
+                .respondWith()
+            .statusCode(503).jsonBody(rawResponseBody)
+                .build();
+
+        
+            await expect(async () => {
+                return await client.toolProviders.rotateToolProviderSecret("project_id", "capability_prefix")
+            }).rejects.toThrow(Sikaru.ServiceUnavailableError);
     });
           
     test("attach_source_tool_skill (1)", async () => {
@@ -141,14 +631,14 @@ describe("ToolProvidersClient", () => {
         
         server
             .mockEndpoint()
-            .post("/v1/projects/project_id/tool-providers/tool_provider_id/skills").jsonBody(rawRequestBody)
+            .post("/v1/projects/project_id/tool-providers/capability_prefix/skills").jsonBody(rawRequestBody)
                 .respondWith()
             .statusCode(200).jsonBody(rawResponseBody)
                 .build();
 
         
                         
-                                const response = await client.toolProviders.attachSourceToolSkill("project_id", "tool_provider_id", {
+                                const response = await client.toolProviders.attachSourceToolSkill("project_id", "capability_prefix", {
     capability_refs: ["capability_refs"],
     description: "description",
     source: {
@@ -168,14 +658,14 @@ describe("ToolProvidersClient", () => {
         
         server
             .mockEndpoint()
-            .post("/v1/projects/project_id/tool-providers/tool_provider_id/skills").jsonBody(rawRequestBody)
+            .post("/v1/projects/project_id/tool-providers/capability_prefix/skills").jsonBody(rawRequestBody)
                 .respondWith()
             .statusCode(401).jsonBody(rawResponseBody)
                 .build();
 
         
             await expect(async () => {
-                return await client.toolProviders.attachSourceToolSkill("project_id", "tool_provider_id", {
+                return await client.toolProviders.attachSourceToolSkill("project_id", "capability_prefix", {
     capability_refs: ["capability_refs", "capability_refs"],
     description: "description",
     source: {
@@ -193,14 +683,14 @@ describe("ToolProvidersClient", () => {
         
         server
             .mockEndpoint()
-            .post("/v1/projects/project_id/tool-providers/tool_provider_id/skills").jsonBody(rawRequestBody)
+            .post("/v1/projects/project_id/tool-providers/capability_prefix/skills").jsonBody(rawRequestBody)
                 .respondWith()
             .statusCode(403).jsonBody(rawResponseBody)
                 .build();
 
         
             await expect(async () => {
-                return await client.toolProviders.attachSourceToolSkill("project_id", "tool_provider_id", {
+                return await client.toolProviders.attachSourceToolSkill("project_id", "capability_prefix", {
     capability_refs: ["capability_refs", "capability_refs"],
     description: "description",
     source: {
@@ -218,14 +708,14 @@ describe("ToolProvidersClient", () => {
         
         server
             .mockEndpoint()
-            .post("/v1/projects/project_id/tool-providers/tool_provider_id/skills").jsonBody(rawRequestBody)
+            .post("/v1/projects/project_id/tool-providers/capability_prefix/skills").jsonBody(rawRequestBody)
                 .respondWith()
             .statusCode(404).jsonBody(rawResponseBody)
                 .build();
 
         
             await expect(async () => {
-                return await client.toolProviders.attachSourceToolSkill("project_id", "tool_provider_id", {
+                return await client.toolProviders.attachSourceToolSkill("project_id", "capability_prefix", {
     capability_refs: ["capability_refs", "capability_refs"],
     description: "description",
     source: {
@@ -243,14 +733,14 @@ describe("ToolProvidersClient", () => {
         
         server
             .mockEndpoint()
-            .post("/v1/projects/project_id/tool-providers/tool_provider_id/skills").jsonBody(rawRequestBody)
+            .post("/v1/projects/project_id/tool-providers/capability_prefix/skills").jsonBody(rawRequestBody)
                 .respondWith()
             .statusCode(422).jsonBody(rawResponseBody)
                 .build();
 
         
             await expect(async () => {
-                return await client.toolProviders.attachSourceToolSkill("project_id", "tool_provider_id", {
+                return await client.toolProviders.attachSourceToolSkill("project_id", "capability_prefix", {
     capability_refs: ["capability_refs", "capability_refs"],
     description: "description",
     source: {

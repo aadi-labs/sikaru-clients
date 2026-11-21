@@ -11,12 +11,17 @@ from ..core.parse_error import ParsingError
 from ..core.pydantic_utilities import parse_obj_as
 from ..core.request_options import RequestOptions
 from ..core.serialization import convert_and_respect_annotation_metadata
+from ..errors.conflict_error import ConflictError
 from ..errors.forbidden_error import ForbiddenError
 from ..errors.not_found_error import NotFoundError
+from ..errors.service_unavailable_error import ServiceUnavailableError
 from ..errors.unauthorized_error import UnauthorizedError
 from ..errors.unprocessable_entity_error import UnprocessableEntityError
+from ..types.applied_tool_provider import AppliedToolProvider
 from ..types.error_response import ErrorResponse
+from ..types.tool_provider import ToolProvider
 from ..types.tool_skill_source_request import ToolSkillSourceRequest
+from .types.list_tool_providers_tool_providers_request_status import ListToolProvidersToolProvidersRequestStatus
 from pydantic import ValidationError
 
 # this is used as the default value for optional parameters
@@ -27,75 +32,52 @@ class RawToolProvidersClient:
     def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    def register_tool_provider(
+    def list_tool_providers(
         self,
         project_id: str,
         *,
-        broker_endpoint_ref: str,
-        capability_prefix: str,
-        display_name: str,
-        provider_type: str,
-        tool_catalog_ref: str,
-        approval_policy_ref: typing.Optional[str] = OMIT,
-        credential_owner: typing.Optional[str] = OMIT,
+        capability_prefix: typing.Optional[str] = None,
+        status: typing.Optional[ListToolProvidersToolProvidersRequestStatus] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[typing.Dict[str, typing.Any]]:
+    ) -> HttpResponse[typing.List[ToolProvider]]:
         """
+        The project's tool providers, optionally narrowed to one capability prefix or status.
+
         Parameters
         ----------
         project_id : str
 
-        broker_endpoint_ref : str
+        capability_prefix : typing.Optional[str]
 
-        capability_prefix : str
-
-        display_name : str
-
-        provider_type : str
-
-        tool_catalog_ref : str
-
-        approval_policy_ref : typing.Optional[str]
-
-        credential_owner : typing.Optional[str]
+        status : typing.Optional[ListToolProvidersToolProvidersRequestStatus]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        HttpResponse[typing.Dict[str, typing.Any]]
+        HttpResponse[typing.List[ToolProvider]]
             Successful Response
         """
-        _request_options_with_retries_disabled: typing.Optional[RequestOptions] = (
-            {**request_options, "max_retries": 0} if request_options is not None else {"max_retries": 0}
-        )
         _endpoint_auth_headers = self._client_wrapper.get_auth_headers_for_endpoint(security=[{"BearerAuth": []}])
         _response = self._client_wrapper.httpx_client.request(
             f"v1/projects/{encode_path_param(project_id)}/tool-providers",
-            method="POST",
-            json={
-                "approval_policy_ref": approval_policy_ref,
-                "broker_endpoint_ref": broker_endpoint_ref,
+            method="GET",
+            params={
                 "capability_prefix": capability_prefix,
-                "credential_owner": credential_owner,
-                "display_name": display_name,
-                "provider_type": provider_type,
-                "tool_catalog_ref": tool_catalog_ref,
+                "status": status,
             },
             headers={
                 **_endpoint_auth_headers,
-                "content-type": "application/json",
             },
-            request_options=_request_options_with_retries_disabled,
-            omit=OMIT,
+            request_options=request_options,
         )
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    typing.Dict[str, typing.Any],
+                    typing.List[ToolProvider],
                     parse_obj_as(
-                        type_=typing.Dict[str, typing.Any],  # type: ignore
+                        type_=typing.List[ToolProvider],  # type: ignore
                         object_=_response.json(),
                     ),
                 )
@@ -153,10 +135,516 @@ class RawToolProvidersClient:
             )
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
+    def get_tool_provider(
+        self, project_id: str, capability_prefix: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> HttpResponse[ToolProvider]:
+        """
+        One tool provider with its delivery mode and secret state.
+
+        Parameters
+        ----------
+        project_id : str
+
+        capability_prefix : str
+            The provider's capability prefix; it never changes.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[ToolProvider]
+            Successful Response
+        """
+        _endpoint_auth_headers = self._client_wrapper.get_auth_headers_for_endpoint(security=[{"BearerAuth": []}])
+        _response = self._client_wrapper.httpx_client.request(
+            f"v1/projects/{encode_path_param(project_id)}/tool-providers/{encode_path_param(capability_prefix)}",
+            method="GET",
+            headers={
+                **_endpoint_auth_headers,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    ToolProvider,
+                    parse_obj_as(
+                        type_=ToolProvider,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        except ValidationError as e:
+            raise ParsingError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+            )
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def apply_tool_provider(
+        self,
+        project_id: str,
+        capability_prefix: str,
+        *,
+        broker_endpoint_ref: str,
+        display_name: str,
+        provider_type: str,
+        tool_catalog_ref: str,
+        approval_policy_ref: typing.Optional[str] = OMIT,
+        credential_owner: typing.Optional[str] = OMIT,
+        secret: typing.Optional[str] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[AppliedToolProvider]:
+        """
+        Create the provider for this capability prefix, or converge it to the request.
+
+        Re-sending the same declaration changes nothing. Changing the provider type or
+        credential owner is refused with `state_conflict`.
+
+        Parameters
+        ----------
+        project_id : str
+
+        capability_prefix : str
+            The provider's capability prefix; it never changes.
+
+        broker_endpoint_ref : str
+            A public HTTPS URL receives signed pushes; any other ref is poll-only.
+
+        display_name : str
+
+        provider_type : str
+
+        tool_catalog_ref : str
+
+        approval_policy_ref : typing.Optional[str]
+
+        credential_owner : typing.Optional[str]
+
+        secret : typing.Optional[str]
+            A Standard Webhooks secret: 24-64 random bytes, base64-encoded, with or without the whsec_ prefix. Omit to keep the current secret, or to have Sikaru generate one for a new HTTPS provider. A different secret rotates with a 24-hour overlap.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[AppliedToolProvider]
+            Successful Response
+        """
+        _request_options_with_retries_disabled: typing.Optional[RequestOptions] = (
+            {**request_options, "max_retries": 0} if request_options is not None else {"max_retries": 0}
+        )
+        _endpoint_auth_headers = self._client_wrapper.get_auth_headers_for_endpoint(security=[{"BearerAuth": []}])
+        _response = self._client_wrapper.httpx_client.request(
+            f"v1/projects/{encode_path_param(project_id)}/tool-providers/{encode_path_param(capability_prefix)}",
+            method="PUT",
+            json={
+                "approval_policy_ref": approval_policy_ref,
+                "broker_endpoint_ref": broker_endpoint_ref,
+                "credential_owner": credential_owner,
+                "display_name": display_name,
+                "provider_type": provider_type,
+                "secret": secret,
+                "tool_catalog_ref": tool_catalog_ref,
+            },
+            headers={
+                **_endpoint_auth_headers,
+                "content-type": "application/json",
+            },
+            request_options=_request_options_with_retries_disabled,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    AppliedToolProvider,
+                    parse_obj_as(
+                        type_=AppliedToolProvider,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 409:
+                raise ConflictError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 503:
+                raise ServiceUnavailableError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        except ValidationError as e:
+            raise ParsingError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+            )
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def expire_previous_tool_provider_secret(
+        self, project_id: str, capability_prefix: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> HttpResponse[ToolProvider]:
+        """
+        Stop accepting the previous delivery secret now. Without one this changes nothing.
+
+        Parameters
+        ----------
+        project_id : str
+
+        capability_prefix : str
+            The provider's capability prefix; it never changes.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[ToolProvider]
+            Successful Response
+        """
+        _request_options_with_retries_disabled: typing.Optional[RequestOptions] = (
+            {**request_options, "max_retries": 0} if request_options is not None else {"max_retries": 0}
+        )
+        _endpoint_auth_headers = self._client_wrapper.get_auth_headers_for_endpoint(security=[{"BearerAuth": []}])
+        _response = self._client_wrapper.httpx_client.request(
+            f"v1/projects/{encode_path_param(project_id)}/tool-providers/{encode_path_param(capability_prefix)}/secret/previous",
+            method="DELETE",
+            headers={
+                **_endpoint_auth_headers,
+            },
+            request_options=_request_options_with_retries_disabled,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    ToolProvider,
+                    parse_obj_as(
+                        type_=ToolProvider,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 409:
+                raise ConflictError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 503:
+                raise ServiceUnavailableError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        except ValidationError as e:
+            raise ParsingError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+            )
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def rotate_tool_provider_secret(
+        self,
+        project_id: str,
+        capability_prefix: str,
+        *,
+        overlap_seconds: typing.Optional[int] = OMIT,
+        secret: typing.Optional[str] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[AppliedToolProvider]:
+        """
+        Make a new delivery secret current; the old one stays valid for the overlap.
+
+        Parameters
+        ----------
+        project_id : str
+
+        capability_prefix : str
+            The provider's capability prefix; it never changes.
+
+        overlap_seconds : typing.Optional[int]
+            Seconds the previous secret stays valid; 0 retires it at once.
+
+        secret : typing.Optional[str]
+            A Standard Webhooks secret: 24-64 random bytes, base64-encoded, with or without the whsec_ prefix. Omit to have Sikaru generate one.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[AppliedToolProvider]
+            Successful Response
+        """
+        _request_options_with_retries_disabled: typing.Optional[RequestOptions] = (
+            {**request_options, "max_retries": 0} if request_options is not None else {"max_retries": 0}
+        )
+        _endpoint_auth_headers = self._client_wrapper.get_auth_headers_for_endpoint(security=[{"BearerAuth": []}])
+        _response = self._client_wrapper.httpx_client.request(
+            f"v1/projects/{encode_path_param(project_id)}/tool-providers/{encode_path_param(capability_prefix)}/secret/rotate",
+            method="POST",
+            json={
+                "overlap_seconds": overlap_seconds,
+                "secret": secret,
+            },
+            headers={
+                **_endpoint_auth_headers,
+                "content-type": "application/json",
+            },
+            request_options=_request_options_with_retries_disabled,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    AppliedToolProvider,
+                    parse_obj_as(
+                        type_=AppliedToolProvider,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 409:
+                raise ConflictError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 503:
+                raise ServiceUnavailableError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        except ValidationError as e:
+            raise ParsingError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+            )
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
     def attach_source_tool_skill(
         self,
         project_id: str,
-        tool_provider_id: str,
+        capability_prefix: str,
         *,
         capability_refs: typing.Sequence[str],
         description: str,
@@ -168,7 +656,8 @@ class RawToolProvidersClient:
         ----------
         project_id : str
 
-        tool_provider_id : str
+        capability_prefix : str
+            The provider's capability prefix; it never changes.
 
         capability_refs : typing.Sequence[str]
 
@@ -189,7 +678,7 @@ class RawToolProvidersClient:
         )
         _endpoint_auth_headers = self._client_wrapper.get_auth_headers_for_endpoint(security=[{"BearerAuth": []}])
         _response = self._client_wrapper.httpx_client.request(
-            f"v1/projects/{encode_path_param(project_id)}/tool-providers/{encode_path_param(tool_provider_id)}/skills",
+            f"v1/projects/{encode_path_param(project_id)}/tool-providers/{encode_path_param(capability_prefix)}/skills",
             method="POST",
             json={
                 "capability_refs": capability_refs,
@@ -273,77 +762,54 @@ class AsyncRawToolProvidersClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    async def register_tool_provider(
+    async def list_tool_providers(
         self,
         project_id: str,
         *,
-        broker_endpoint_ref: str,
-        capability_prefix: str,
-        display_name: str,
-        provider_type: str,
-        tool_catalog_ref: str,
-        approval_policy_ref: typing.Optional[str] = OMIT,
-        credential_owner: typing.Optional[str] = OMIT,
+        capability_prefix: typing.Optional[str] = None,
+        status: typing.Optional[ListToolProvidersToolProvidersRequestStatus] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[typing.Dict[str, typing.Any]]:
+    ) -> AsyncHttpResponse[typing.List[ToolProvider]]:
         """
+        The project's tool providers, optionally narrowed to one capability prefix or status.
+
         Parameters
         ----------
         project_id : str
 
-        broker_endpoint_ref : str
+        capability_prefix : typing.Optional[str]
 
-        capability_prefix : str
-
-        display_name : str
-
-        provider_type : str
-
-        tool_catalog_ref : str
-
-        approval_policy_ref : typing.Optional[str]
-
-        credential_owner : typing.Optional[str]
+        status : typing.Optional[ListToolProvidersToolProvidersRequestStatus]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        AsyncHttpResponse[typing.Dict[str, typing.Any]]
+        AsyncHttpResponse[typing.List[ToolProvider]]
             Successful Response
         """
-        _request_options_with_retries_disabled: typing.Optional[RequestOptions] = (
-            {**request_options, "max_retries": 0} if request_options is not None else {"max_retries": 0}
-        )
         _endpoint_auth_headers = await self._client_wrapper.async_get_auth_headers_for_endpoint(
             security=[{"BearerAuth": []}]
         )
         _response = await self._client_wrapper.httpx_client.request(
             f"v1/projects/{encode_path_param(project_id)}/tool-providers",
-            method="POST",
-            json={
-                "approval_policy_ref": approval_policy_ref,
-                "broker_endpoint_ref": broker_endpoint_ref,
+            method="GET",
+            params={
                 "capability_prefix": capability_prefix,
-                "credential_owner": credential_owner,
-                "display_name": display_name,
-                "provider_type": provider_type,
-                "tool_catalog_ref": tool_catalog_ref,
+                "status": status,
             },
             headers={
                 **_endpoint_auth_headers,
-                "content-type": "application/json",
             },
-            request_options=_request_options_with_retries_disabled,
-            omit=OMIT,
+            request_options=request_options,
         )
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    typing.Dict[str, typing.Any],
+                    typing.List[ToolProvider],
                     parse_obj_as(
-                        type_=typing.Dict[str, typing.Any],  # type: ignore
+                        type_=typing.List[ToolProvider],  # type: ignore
                         object_=_response.json(),
                     ),
                 )
@@ -401,10 +867,524 @@ class AsyncRawToolProvidersClient:
             )
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
+    async def get_tool_provider(
+        self, project_id: str, capability_prefix: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> AsyncHttpResponse[ToolProvider]:
+        """
+        One tool provider with its delivery mode and secret state.
+
+        Parameters
+        ----------
+        project_id : str
+
+        capability_prefix : str
+            The provider's capability prefix; it never changes.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[ToolProvider]
+            Successful Response
+        """
+        _endpoint_auth_headers = await self._client_wrapper.async_get_auth_headers_for_endpoint(
+            security=[{"BearerAuth": []}]
+        )
+        _response = await self._client_wrapper.httpx_client.request(
+            f"v1/projects/{encode_path_param(project_id)}/tool-providers/{encode_path_param(capability_prefix)}",
+            method="GET",
+            headers={
+                **_endpoint_auth_headers,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    ToolProvider,
+                    parse_obj_as(
+                        type_=ToolProvider,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        except ValidationError as e:
+            raise ParsingError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+            )
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def apply_tool_provider(
+        self,
+        project_id: str,
+        capability_prefix: str,
+        *,
+        broker_endpoint_ref: str,
+        display_name: str,
+        provider_type: str,
+        tool_catalog_ref: str,
+        approval_policy_ref: typing.Optional[str] = OMIT,
+        credential_owner: typing.Optional[str] = OMIT,
+        secret: typing.Optional[str] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[AppliedToolProvider]:
+        """
+        Create the provider for this capability prefix, or converge it to the request.
+
+        Re-sending the same declaration changes nothing. Changing the provider type or
+        credential owner is refused with `state_conflict`.
+
+        Parameters
+        ----------
+        project_id : str
+
+        capability_prefix : str
+            The provider's capability prefix; it never changes.
+
+        broker_endpoint_ref : str
+            A public HTTPS URL receives signed pushes; any other ref is poll-only.
+
+        display_name : str
+
+        provider_type : str
+
+        tool_catalog_ref : str
+
+        approval_policy_ref : typing.Optional[str]
+
+        credential_owner : typing.Optional[str]
+
+        secret : typing.Optional[str]
+            A Standard Webhooks secret: 24-64 random bytes, base64-encoded, with or without the whsec_ prefix. Omit to keep the current secret, or to have Sikaru generate one for a new HTTPS provider. A different secret rotates with a 24-hour overlap.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[AppliedToolProvider]
+            Successful Response
+        """
+        _request_options_with_retries_disabled: typing.Optional[RequestOptions] = (
+            {**request_options, "max_retries": 0} if request_options is not None else {"max_retries": 0}
+        )
+        _endpoint_auth_headers = await self._client_wrapper.async_get_auth_headers_for_endpoint(
+            security=[{"BearerAuth": []}]
+        )
+        _response = await self._client_wrapper.httpx_client.request(
+            f"v1/projects/{encode_path_param(project_id)}/tool-providers/{encode_path_param(capability_prefix)}",
+            method="PUT",
+            json={
+                "approval_policy_ref": approval_policy_ref,
+                "broker_endpoint_ref": broker_endpoint_ref,
+                "credential_owner": credential_owner,
+                "display_name": display_name,
+                "provider_type": provider_type,
+                "secret": secret,
+                "tool_catalog_ref": tool_catalog_ref,
+            },
+            headers={
+                **_endpoint_auth_headers,
+                "content-type": "application/json",
+            },
+            request_options=_request_options_with_retries_disabled,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    AppliedToolProvider,
+                    parse_obj_as(
+                        type_=AppliedToolProvider,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 409:
+                raise ConflictError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 503:
+                raise ServiceUnavailableError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        except ValidationError as e:
+            raise ParsingError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+            )
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def expire_previous_tool_provider_secret(
+        self, project_id: str, capability_prefix: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> AsyncHttpResponse[ToolProvider]:
+        """
+        Stop accepting the previous delivery secret now. Without one this changes nothing.
+
+        Parameters
+        ----------
+        project_id : str
+
+        capability_prefix : str
+            The provider's capability prefix; it never changes.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[ToolProvider]
+            Successful Response
+        """
+        _request_options_with_retries_disabled: typing.Optional[RequestOptions] = (
+            {**request_options, "max_retries": 0} if request_options is not None else {"max_retries": 0}
+        )
+        _endpoint_auth_headers = await self._client_wrapper.async_get_auth_headers_for_endpoint(
+            security=[{"BearerAuth": []}]
+        )
+        _response = await self._client_wrapper.httpx_client.request(
+            f"v1/projects/{encode_path_param(project_id)}/tool-providers/{encode_path_param(capability_prefix)}/secret/previous",
+            method="DELETE",
+            headers={
+                **_endpoint_auth_headers,
+            },
+            request_options=_request_options_with_retries_disabled,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    ToolProvider,
+                    parse_obj_as(
+                        type_=ToolProvider,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 409:
+                raise ConflictError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 503:
+                raise ServiceUnavailableError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        except ValidationError as e:
+            raise ParsingError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+            )
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def rotate_tool_provider_secret(
+        self,
+        project_id: str,
+        capability_prefix: str,
+        *,
+        overlap_seconds: typing.Optional[int] = OMIT,
+        secret: typing.Optional[str] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[AppliedToolProvider]:
+        """
+        Make a new delivery secret current; the old one stays valid for the overlap.
+
+        Parameters
+        ----------
+        project_id : str
+
+        capability_prefix : str
+            The provider's capability prefix; it never changes.
+
+        overlap_seconds : typing.Optional[int]
+            Seconds the previous secret stays valid; 0 retires it at once.
+
+        secret : typing.Optional[str]
+            A Standard Webhooks secret: 24-64 random bytes, base64-encoded, with or without the whsec_ prefix. Omit to have Sikaru generate one.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[AppliedToolProvider]
+            Successful Response
+        """
+        _request_options_with_retries_disabled: typing.Optional[RequestOptions] = (
+            {**request_options, "max_retries": 0} if request_options is not None else {"max_retries": 0}
+        )
+        _endpoint_auth_headers = await self._client_wrapper.async_get_auth_headers_for_endpoint(
+            security=[{"BearerAuth": []}]
+        )
+        _response = await self._client_wrapper.httpx_client.request(
+            f"v1/projects/{encode_path_param(project_id)}/tool-providers/{encode_path_param(capability_prefix)}/secret/rotate",
+            method="POST",
+            json={
+                "overlap_seconds": overlap_seconds,
+                "secret": secret,
+            },
+            headers={
+                **_endpoint_auth_headers,
+                "content-type": "application/json",
+            },
+            request_options=_request_options_with_retries_disabled,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    AppliedToolProvider,
+                    parse_obj_as(
+                        type_=AppliedToolProvider,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 409:
+                raise ConflictError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 503:
+                raise ServiceUnavailableError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ErrorResponse,
+                        parse_obj_as(
+                            type_=ErrorResponse,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        except ValidationError as e:
+            raise ParsingError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+            )
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
     async def attach_source_tool_skill(
         self,
         project_id: str,
-        tool_provider_id: str,
+        capability_prefix: str,
         *,
         capability_refs: typing.Sequence[str],
         description: str,
@@ -416,7 +1396,8 @@ class AsyncRawToolProvidersClient:
         ----------
         project_id : str
 
-        tool_provider_id : str
+        capability_prefix : str
+            The provider's capability prefix; it never changes.
 
         capability_refs : typing.Sequence[str]
 
@@ -439,7 +1420,7 @@ class AsyncRawToolProvidersClient:
             security=[{"BearerAuth": []}]
         )
         _response = await self._client_wrapper.httpx_client.request(
-            f"v1/projects/{encode_path_param(project_id)}/tool-providers/{encode_path_param(tool_provider_id)}/skills",
+            f"v1/projects/{encode_path_param(project_id)}/tool-providers/{encode_path_param(capability_prefix)}/skills",
             method="POST",
             json={
                 "capability_refs": capability_refs,

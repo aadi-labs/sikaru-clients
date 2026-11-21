@@ -761,8 +761,8 @@ packages:
     engines: {node: ^20.19.0 || >=22.12.0}
     hasBin: true
 
-  schema-utils@4.8.3:
-    resolution: {integrity: sha512-qIfo3f+lRNqnMPgpXSKvUhsT3pY5U+ppmgGr4j8LanFP3W/Ze+xj8DY/dPb5qVu3m6qFIMyMWKVRLNKxrNhxWg==}
+  schema-utils@4.8.4:
+    resolution: {integrity: sha512-av+A29EjwJZIFBYSe/2Y1geYr6xznn7GRA76uiGfgJPaZvICNfGbItbetRdXDi5UJyEpx3ybNUJK7+HbABWrDw==}
     engines: {node: '>= 10.13.0'}
     hasBin: true
     peerDependencies:
@@ -1542,7 +1542,7 @@ snapshots:
   minimizer-webpack-plugin@5.14.0(lightningcss@1.33.0)(postcss@8.5.33)(webpack@5.112.2(lightningcss@1.33.0)(postcss@8.5.33)):
     dependencies:
       jest-worker: 27.5.1
-      schema-utils: 4.8.3(webpack@5.112.2(lightningcss@1.33.0)(postcss@8.5.33))
+      schema-utils: 4.8.4(webpack@5.112.2(lightningcss@1.33.0)(postcss@8.5.33))
       terser: 5.51.2
       webpack: 5.112.2(lightningcss@1.33.0)(postcss@8.5.33)
     optionalDependencies:
@@ -1627,7 +1627,7 @@ snapshots:
       '@rolldown/binding-win32-arm64-msvc': 1.2.19
       '@rolldown/binding-win32-x64-msvc': 1.2.19
 
-  schema-utils@4.8.3(webpack@5.112.2(lightningcss@1.33.0)(postcss@8.5.33)):
+  schema-utils@4.8.4(webpack@5.112.2(lightningcss@1.33.0)(postcss@8.5.33)):
     dependencies:
       '@types/json-schema': 7.0.15
       ajv: 8.20.0
@@ -1790,7 +1790,7 @@ snapshots:
       graceful-fs: 4.2.12
       mime-db: 1.54.0
       minimizer-webpack-plugin: 5.14.0(lightningcss@1.33.0)(postcss@8.5.33)(webpack@5.112.2(lightningcss@1.33.0)(postcss@8.5.33))
-      schema-utils: 4.8.3(webpack@5.112.2(lightningcss@1.33.0)(postcss@8.5.33))
+      schema-utils: 4.8.4(webpack@5.112.2(lightningcss@1.33.0)(postcss@8.5.33))
       tapable: 2.3.4
       watchpack: 2.6.4
       webpack-sources: 3.7.0

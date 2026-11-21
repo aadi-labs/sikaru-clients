@@ -21816,9 +21816,23 @@ await client.sessions.listManagedSessionPlan("project_id", "session_id");
 </details>
 
 ## ToolProviders
-<details><summary><code>client.toolProviders.<a href="/src/api/resources/toolProviders/client/Client.ts">registerToolProvider</a>(project_id, { ...params }) -> Record&lt;string, unknown&gt;</code></summary>
+<details><summary><code>client.toolProviders.<a href="/src/api/resources/toolProviders/client/Client.ts">listToolProviders</a>(project_id, { ...params }) -> Sikaru.ToolProvider[]</code></summary>
 <dl>
 <dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+The project's tool providers, optionally narrowed to one capability prefix or status.
+</dd>
+</dl>
+</dd>
+</dl>
 
 #### 🔌 Usage
 
@@ -21829,9 +21843,153 @@ await client.sessions.listManagedSessionPlan("project_id", "session_id");
 <dd>
 
 ```typescript
-await client.toolProviders.registerToolProvider("project_id", {
+await client.toolProviders.listToolProviders("project_id");
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Sikaru.ListToolProvidersToolProvidersRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ToolProvidersClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.toolProviders.<a href="/src/api/resources/toolProviders/client/Client.ts">getToolProvider</a>(project_id, capability_prefix) -> Sikaru.ToolProvider</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+One tool provider with its delivery mode and secret state.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.toolProviders.getToolProvider("project_id", "capability_prefix");
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**capability_prefix:** `string` — The provider's capability prefix; it never changes.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ToolProvidersClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.toolProviders.<a href="/src/api/resources/toolProviders/client/Client.ts">applyToolProvider</a>(project_id, capability_prefix, { ...params }) -> Sikaru.AppliedToolProvider</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Create the provider for this capability prefix, or converge it to the request.
+
+Re-sending the same declaration changes nothing. Changing the provider type or
+credential owner is refused with `state_conflict`.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.toolProviders.applyToolProvider("project_id", "capability_prefix", {
     broker_endpoint_ref: "broker_endpoint_ref",
-    capability_prefix: "capability_prefix",
     display_name: "display_name",
     provider_type: "provider_type",
     tool_catalog_ref: "tool_catalog_ref"
@@ -21859,7 +22017,15 @@ await client.toolProviders.registerToolProvider("project_id", {
 <dl>
 <dd>
 
-**request:** `Sikaru.RegisterToolProviderRequest` 
+**capability_prefix:** `string` — The provider's capability prefix; it never changes.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Sikaru.ApplyToolProviderRequest` 
     
 </dd>
 </dl>
@@ -21879,7 +22045,157 @@ await client.toolProviders.registerToolProvider("project_id", {
 </dl>
 </details>
 
-<details><summary><code>client.toolProviders.<a href="/src/api/resources/toolProviders/client/Client.ts">attachSourceToolSkill</a>(project_id, tool_provider_id, { ...params }) -> Record&lt;string, unknown&gt;</code></summary>
+<details><summary><code>client.toolProviders.<a href="/src/api/resources/toolProviders/client/Client.ts">expirePreviousToolProviderSecret</a>(project_id, capability_prefix) -> Sikaru.ToolProvider</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Stop accepting the previous delivery secret now. Without one this changes nothing.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.toolProviders.expirePreviousToolProviderSecret("project_id", "capability_prefix");
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**capability_prefix:** `string` — The provider's capability prefix; it never changes.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ToolProvidersClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.toolProviders.<a href="/src/api/resources/toolProviders/client/Client.ts">rotateToolProviderSecret</a>(project_id, capability_prefix, { ...params }) -> Sikaru.AppliedToolProvider</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Make a new delivery secret current; the old one stays valid for the overlap.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.toolProviders.rotateToolProviderSecret("project_id", "capability_prefix");
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**capability_prefix:** `string` — The provider's capability prefix; it never changes.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Sikaru.RotateToolProviderSecretRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ToolProvidersClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.toolProviders.<a href="/src/api/resources/toolProviders/client/Client.ts">attachSourceToolSkill</a>(project_id, capability_prefix, { ...params }) -> Record&lt;string, unknown&gt;</code></summary>
 <dl>
 <dd>
 
@@ -21892,7 +22208,7 @@ await client.toolProviders.registerToolProvider("project_id", {
 <dd>
 
 ```typescript
-await client.toolProviders.attachSourceToolSkill("project_id", "tool_provider_id", {
+await client.toolProviders.attachSourceToolSkill("project_id", "capability_prefix", {
     capability_refs: ["capability_refs"],
     description: "description",
     source: {
@@ -21922,7 +22238,7 @@ await client.toolProviders.attachSourceToolSkill("project_id", "tool_provider_id
 <dl>
 <dd>
 
-**tool_provider_id:** `string` 
+**capability_prefix:** `string` — The provider's capability prefix; it never changes.
     
 </dd>
 </dl>

@@ -4,8 +4,11 @@ import typing
 
 from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ..core.request_options import RequestOptions
+from ..types.applied_tool_provider import AppliedToolProvider
+from ..types.tool_provider import ToolProvider
 from ..types.tool_skill_source_request import ToolSkillSourceRequest
 from .raw_client import AsyncRawToolProvidersClient, RawToolProvidersClient
+from .types.list_tool_providers_tool_providers_request_status import ListToolProvidersToolProvidersRequestStatus
 
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
@@ -26,27 +29,116 @@ class ToolProvidersClient:
         """
         return self._raw_client
 
-    def register_tool_provider(
+    def list_tool_providers(
         self,
         project_id: str,
         *,
-        broker_endpoint_ref: str,
+        capability_prefix: typing.Optional[str] = None,
+        status: typing.Optional[ListToolProvidersToolProvidersRequestStatus] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> typing.List[ToolProvider]:
+        """
+        The project's tool providers, optionally narrowed to one capability prefix or status.
+
+        Parameters
+        ----------
+        project_id : str
+
+        capability_prefix : typing.Optional[str]
+
+        status : typing.Optional[ListToolProvidersToolProvidersRequestStatus]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        typing.List[ToolProvider]
+            Successful Response
+
+        Examples
+        --------
+        from sikaru_sdk import SikaruApi
+
+        client = SikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+        client.tool_providers.list_tool_providers(
+            project_id="project_id",
+        )
+        """
+        _response = self._raw_client.list_tool_providers(
+            project_id, capability_prefix=capability_prefix, status=status, request_options=request_options
+        )
+        return _response.data
+
+    def get_tool_provider(
+        self, project_id: str, capability_prefix: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> ToolProvider:
+        """
+        One tool provider with its delivery mode and secret state.
+
+        Parameters
+        ----------
+        project_id : str
+
+        capability_prefix : str
+            The provider's capability prefix; it never changes.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        ToolProvider
+            Successful Response
+
+        Examples
+        --------
+        from sikaru_sdk import SikaruApi
+
+        client = SikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+        client.tool_providers.get_tool_provider(
+            project_id="project_id",
+            capability_prefix="capability_prefix",
+        )
+        """
+        _response = self._raw_client.get_tool_provider(project_id, capability_prefix, request_options=request_options)
+        return _response.data
+
+    def apply_tool_provider(
+        self,
+        project_id: str,
         capability_prefix: str,
+        *,
+        broker_endpoint_ref: str,
         display_name: str,
         provider_type: str,
         tool_catalog_ref: str,
         approval_policy_ref: typing.Optional[str] = OMIT,
         credential_owner: typing.Optional[str] = OMIT,
+        secret: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> typing.Dict[str, typing.Any]:
+    ) -> AppliedToolProvider:
         """
+        Create the provider for this capability prefix, or converge it to the request.
+
+        Re-sending the same declaration changes nothing. Changing the provider type or
+        credential owner is refused with `state_conflict`.
+
         Parameters
         ----------
         project_id : str
 
-        broker_endpoint_ref : str
-
         capability_prefix : str
+            The provider's capability prefix; it never changes.
+
+        broker_endpoint_ref : str
+            A public HTTPS URL receives signed pushes; any other ref is poll-only.
 
         display_name : str
 
@@ -58,12 +150,15 @@ class ToolProvidersClient:
 
         credential_owner : typing.Optional[str]
 
+        secret : typing.Optional[str]
+            A Standard Webhooks secret: 24-64 random bytes, base64-encoded, with or without the whsec_ prefix. Omit to keep the current secret, or to have Sikaru generate one for a new HTTPS provider. A different secret rotates with a 24-hour overlap.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        typing.Dict[str, typing.Any]
+        AppliedToolProvider
             Successful Response
 
         Examples
@@ -74,24 +169,119 @@ class ToolProvidersClient:
             channel_credential="YOUR_CHANNEL_CREDENTIAL",
             api_key="YOUR_API_KEY",
         )
-        client.tool_providers.register_tool_provider(
+        client.tool_providers.apply_tool_provider(
             project_id="project_id",
-            broker_endpoint_ref="broker_endpoint_ref",
             capability_prefix="capability_prefix",
+            broker_endpoint_ref="broker_endpoint_ref",
             display_name="display_name",
             provider_type="provider_type",
             tool_catalog_ref="tool_catalog_ref",
         )
         """
-        _response = self._raw_client.register_tool_provider(
+        _response = self._raw_client.apply_tool_provider(
             project_id,
+            capability_prefix,
             broker_endpoint_ref=broker_endpoint_ref,
-            capability_prefix=capability_prefix,
             display_name=display_name,
             provider_type=provider_type,
             tool_catalog_ref=tool_catalog_ref,
             approval_policy_ref=approval_policy_ref,
             credential_owner=credential_owner,
+            secret=secret,
+            request_options=request_options,
+        )
+        return _response.data
+
+    def expire_previous_tool_provider_secret(
+        self, project_id: str, capability_prefix: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> ToolProvider:
+        """
+        Stop accepting the previous delivery secret now. Without one this changes nothing.
+
+        Parameters
+        ----------
+        project_id : str
+
+        capability_prefix : str
+            The provider's capability prefix; it never changes.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        ToolProvider
+            Successful Response
+
+        Examples
+        --------
+        from sikaru_sdk import SikaruApi
+
+        client = SikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+        client.tool_providers.expire_previous_tool_provider_secret(
+            project_id="project_id",
+            capability_prefix="capability_prefix",
+        )
+        """
+        _response = self._raw_client.expire_previous_tool_provider_secret(
+            project_id, capability_prefix, request_options=request_options
+        )
+        return _response.data
+
+    def rotate_tool_provider_secret(
+        self,
+        project_id: str,
+        capability_prefix: str,
+        *,
+        overlap_seconds: typing.Optional[int] = OMIT,
+        secret: typing.Optional[str] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AppliedToolProvider:
+        """
+        Make a new delivery secret current; the old one stays valid for the overlap.
+
+        Parameters
+        ----------
+        project_id : str
+
+        capability_prefix : str
+            The provider's capability prefix; it never changes.
+
+        overlap_seconds : typing.Optional[int]
+            Seconds the previous secret stays valid; 0 retires it at once.
+
+        secret : typing.Optional[str]
+            A Standard Webhooks secret: 24-64 random bytes, base64-encoded, with or without the whsec_ prefix. Omit to have Sikaru generate one.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AppliedToolProvider
+            Successful Response
+
+        Examples
+        --------
+        from sikaru_sdk import SikaruApi
+
+        client = SikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+        client.tool_providers.rotate_tool_provider_secret(
+            project_id="project_id",
+            capability_prefix="capability_prefix",
+        )
+        """
+        _response = self._raw_client.rotate_tool_provider_secret(
+            project_id,
+            capability_prefix,
+            overlap_seconds=overlap_seconds,
+            secret=secret,
             request_options=request_options,
         )
         return _response.data
@@ -99,7 +289,7 @@ class ToolProvidersClient:
     def attach_source_tool_skill(
         self,
         project_id: str,
-        tool_provider_id: str,
+        capability_prefix: str,
         *,
         capability_refs: typing.Sequence[str],
         description: str,
@@ -111,7 +301,8 @@ class ToolProvidersClient:
         ----------
         project_id : str
 
-        tool_provider_id : str
+        capability_prefix : str
+            The provider's capability prefix; it never changes.
 
         capability_refs : typing.Sequence[str]
 
@@ -137,7 +328,7 @@ class ToolProvidersClient:
         )
         client.tool_providers.attach_source_tool_skill(
             project_id="project_id",
-            tool_provider_id="tool_provider_id",
+            capability_prefix="capability_prefix",
             capability_refs=["capability_refs"],
             description="description",
             source=ToolSkillSourceRequest(
@@ -147,7 +338,7 @@ class ToolProvidersClient:
         """
         _response = self._raw_client.attach_source_tool_skill(
             project_id,
-            tool_provider_id,
+            capability_prefix,
             capability_refs=capability_refs,
             description=description,
             source=source,
@@ -171,44 +362,31 @@ class AsyncToolProvidersClient:
         """
         return self._raw_client
 
-    async def register_tool_provider(
+    async def list_tool_providers(
         self,
         project_id: str,
         *,
-        broker_endpoint_ref: str,
-        capability_prefix: str,
-        display_name: str,
-        provider_type: str,
-        tool_catalog_ref: str,
-        approval_policy_ref: typing.Optional[str] = OMIT,
-        credential_owner: typing.Optional[str] = OMIT,
+        capability_prefix: typing.Optional[str] = None,
+        status: typing.Optional[ListToolProvidersToolProvidersRequestStatus] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> typing.Dict[str, typing.Any]:
+    ) -> typing.List[ToolProvider]:
         """
+        The project's tool providers, optionally narrowed to one capability prefix or status.
+
         Parameters
         ----------
         project_id : str
 
-        broker_endpoint_ref : str
+        capability_prefix : typing.Optional[str]
 
-        capability_prefix : str
-
-        display_name : str
-
-        provider_type : str
-
-        tool_catalog_ref : str
-
-        approval_policy_ref : typing.Optional[str]
-
-        credential_owner : typing.Optional[str]
+        status : typing.Optional[ListToolProvidersToolProvidersRequestStatus]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        typing.Dict[str, typing.Any]
+        typing.List[ToolProvider]
             Successful Response
 
         Examples
@@ -224,10 +402,133 @@ class AsyncToolProvidersClient:
 
 
         async def main() -> None:
-            await client.tool_providers.register_tool_provider(
+            await client.tool_providers.list_tool_providers(
                 project_id="project_id",
-                broker_endpoint_ref="broker_endpoint_ref",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.list_tool_providers(
+            project_id, capability_prefix=capability_prefix, status=status, request_options=request_options
+        )
+        return _response.data
+
+    async def get_tool_provider(
+        self, project_id: str, capability_prefix: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> ToolProvider:
+        """
+        One tool provider with its delivery mode and secret state.
+
+        Parameters
+        ----------
+        project_id : str
+
+        capability_prefix : str
+            The provider's capability prefix; it never changes.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        ToolProvider
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sikaru_sdk import AsyncSikaruApi
+
+        client = AsyncSikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+
+
+        async def main() -> None:
+            await client.tool_providers.get_tool_provider(
+                project_id="project_id",
                 capability_prefix="capability_prefix",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.get_tool_provider(
+            project_id, capability_prefix, request_options=request_options
+        )
+        return _response.data
+
+    async def apply_tool_provider(
+        self,
+        project_id: str,
+        capability_prefix: str,
+        *,
+        broker_endpoint_ref: str,
+        display_name: str,
+        provider_type: str,
+        tool_catalog_ref: str,
+        approval_policy_ref: typing.Optional[str] = OMIT,
+        credential_owner: typing.Optional[str] = OMIT,
+        secret: typing.Optional[str] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AppliedToolProvider:
+        """
+        Create the provider for this capability prefix, or converge it to the request.
+
+        Re-sending the same declaration changes nothing. Changing the provider type or
+        credential owner is refused with `state_conflict`.
+
+        Parameters
+        ----------
+        project_id : str
+
+        capability_prefix : str
+            The provider's capability prefix; it never changes.
+
+        broker_endpoint_ref : str
+            A public HTTPS URL receives signed pushes; any other ref is poll-only.
+
+        display_name : str
+
+        provider_type : str
+
+        tool_catalog_ref : str
+
+        approval_policy_ref : typing.Optional[str]
+
+        credential_owner : typing.Optional[str]
+
+        secret : typing.Optional[str]
+            A Standard Webhooks secret: 24-64 random bytes, base64-encoded, with or without the whsec_ prefix. Omit to keep the current secret, or to have Sikaru generate one for a new HTTPS provider. A different secret rotates with a 24-hour overlap.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AppliedToolProvider
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sikaru_sdk import AsyncSikaruApi
+
+        client = AsyncSikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+
+
+        async def main() -> None:
+            await client.tool_providers.apply_tool_provider(
+                project_id="project_id",
+                capability_prefix="capability_prefix",
+                broker_endpoint_ref="broker_endpoint_ref",
                 display_name="display_name",
                 provider_type="provider_type",
                 tool_catalog_ref="tool_catalog_ref",
@@ -236,15 +537,126 @@ class AsyncToolProvidersClient:
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.register_tool_provider(
+        _response = await self._raw_client.apply_tool_provider(
             project_id,
+            capability_prefix,
             broker_endpoint_ref=broker_endpoint_ref,
-            capability_prefix=capability_prefix,
             display_name=display_name,
             provider_type=provider_type,
             tool_catalog_ref=tool_catalog_ref,
             approval_policy_ref=approval_policy_ref,
             credential_owner=credential_owner,
+            secret=secret,
+            request_options=request_options,
+        )
+        return _response.data
+
+    async def expire_previous_tool_provider_secret(
+        self, project_id: str, capability_prefix: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> ToolProvider:
+        """
+        Stop accepting the previous delivery secret now. Without one this changes nothing.
+
+        Parameters
+        ----------
+        project_id : str
+
+        capability_prefix : str
+            The provider's capability prefix; it never changes.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        ToolProvider
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sikaru_sdk import AsyncSikaruApi
+
+        client = AsyncSikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+
+
+        async def main() -> None:
+            await client.tool_providers.expire_previous_tool_provider_secret(
+                project_id="project_id",
+                capability_prefix="capability_prefix",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.expire_previous_tool_provider_secret(
+            project_id, capability_prefix, request_options=request_options
+        )
+        return _response.data
+
+    async def rotate_tool_provider_secret(
+        self,
+        project_id: str,
+        capability_prefix: str,
+        *,
+        overlap_seconds: typing.Optional[int] = OMIT,
+        secret: typing.Optional[str] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AppliedToolProvider:
+        """
+        Make a new delivery secret current; the old one stays valid for the overlap.
+
+        Parameters
+        ----------
+        project_id : str
+
+        capability_prefix : str
+            The provider's capability prefix; it never changes.
+
+        overlap_seconds : typing.Optional[int]
+            Seconds the previous secret stays valid; 0 retires it at once.
+
+        secret : typing.Optional[str]
+            A Standard Webhooks secret: 24-64 random bytes, base64-encoded, with or without the whsec_ prefix. Omit to have Sikaru generate one.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AppliedToolProvider
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from sikaru_sdk import AsyncSikaruApi
+
+        client = AsyncSikaruApi(
+            channel_credential="YOUR_CHANNEL_CREDENTIAL",
+            api_key="YOUR_API_KEY",
+        )
+
+
+        async def main() -> None:
+            await client.tool_providers.rotate_tool_provider_secret(
+                project_id="project_id",
+                capability_prefix="capability_prefix",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.rotate_tool_provider_secret(
+            project_id,
+            capability_prefix,
+            overlap_seconds=overlap_seconds,
+            secret=secret,
             request_options=request_options,
         )
         return _response.data
@@ -252,7 +664,7 @@ class AsyncToolProvidersClient:
     async def attach_source_tool_skill(
         self,
         project_id: str,
-        tool_provider_id: str,
+        capability_prefix: str,
         *,
         capability_refs: typing.Sequence[str],
         description: str,
@@ -264,7 +676,8 @@ class AsyncToolProvidersClient:
         ----------
         project_id : str
 
-        tool_provider_id : str
+        capability_prefix : str
+            The provider's capability prefix; it never changes.
 
         capability_refs : typing.Sequence[str]
 
@@ -295,7 +708,7 @@ class AsyncToolProvidersClient:
         async def main() -> None:
             await client.tool_providers.attach_source_tool_skill(
                 project_id="project_id",
-                tool_provider_id="tool_provider_id",
+                capability_prefix="capability_prefix",
                 capability_refs=["capability_refs"],
                 description="description",
                 source=ToolSkillSourceRequest(
@@ -308,7 +721,7 @@ class AsyncToolProvidersClient:
         """
         _response = await self._raw_client.attach_source_tool_skill(
             project_id,
-            tool_provider_id,
+            capability_prefix,
             capability_refs=capability_refs,
             description=description,
             source=source,

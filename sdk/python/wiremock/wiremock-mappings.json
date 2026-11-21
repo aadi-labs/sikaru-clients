@@ -11106,11 +11106,11 @@
       }
     },
     {
-      "id": "1695bee8-1026-46c0-8b3e-9d0e09c8de12",
-      "name": "Register Tool Provider - default",
+      "id": "6afa7a22-5d19-47ca-87d8-6e3a3acb10b8",
+      "name": "List Tool Providers - default",
       "request": {
         "urlPathTemplate": "/v1/projects/{project_id}/tool-providers",
-        "method": "POST",
+        "method": "GET",
         "pathParameters": {
           "project_id": {
             "equalTo": "project_id"
@@ -11118,13 +11118,13 @@
         }
       },
       "response": {
-        "status": 201,
-        "body": "{\n  \"key\": \"value\"\n}",
+        "status": 200,
+        "body": "[\n  {\n    \"approvalPolicyRef\": \"approvalPolicyRef\",\n    \"brokerEndpointRef\": \"brokerEndpointRef\",\n    \"capabilityPrefix\": \"capabilityPrefix\",\n    \"credentialOwner\": \"credentialOwner\",\n    \"deliveryMode\": \"push\",\n    \"displayName\": \"displayName\",\n    \"id\": \"id\",\n    \"providerType\": \"providerType\",\n    \"secretState\": {\n      \"fingerprint\": \"fingerprint\",\n      \"previousExpiresAt\": \"2024-01-15T09:30:00Z\",\n      \"previousFingerprint\": \"previousFingerprint\",\n      \"setAt\": \"2024-01-15T09:30:00Z\",\n      \"source\": \"supplied\",\n      \"version\": 1\n    },\n    \"status\": \"status\",\n    \"toolCatalogRef\": \"toolCatalogRef\"\n  }\n]",
         "headers": {
           "Content-Type": "application/json"
         }
       },
-      "uuid": "1695bee8-1026-46c0-8b3e-9d0e09c8de12",
+      "uuid": "6afa7a22-5d19-47ca-87d8-6e3a3acb10b8",
       "persistent": true,
       "priority": 3,
       "metadata": {
@@ -11137,17 +11137,153 @@
       }
     },
     {
-      "id": "e6311902-521c-442f-a2b3-356a188d1513",
-      "name": "Attach Source Tool Skill - default",
+      "id": "6aa50e8e-23d9-4329-8df3-70394f57af4b",
+      "name": "Get Tool Provider - default",
       "request": {
-        "urlPathTemplate": "/v1/projects/{project_id}/tool-providers/{tool_provider_id}/skills",
+        "urlPathTemplate": "/v1/projects/{project_id}/tool-providers/{capability_prefix}",
+        "method": "GET",
+        "pathParameters": {
+          "project_id": {
+            "equalTo": "project_id"
+          },
+          "capability_prefix": {
+            "equalTo": "capability_prefix"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"approvalPolicyRef\": \"approvalPolicyRef\",\n  \"brokerEndpointRef\": \"brokerEndpointRef\",\n  \"capabilityPrefix\": \"capabilityPrefix\",\n  \"credentialOwner\": \"credentialOwner\",\n  \"deliveryMode\": \"push\",\n  \"displayName\": \"displayName\",\n  \"id\": \"id\",\n  \"providerType\": \"providerType\",\n  \"secretState\": {\n    \"fingerprint\": \"fingerprint\",\n    \"previousExpiresAt\": \"2024-01-15T09:30:00Z\",\n    \"previousFingerprint\": \"previousFingerprint\",\n    \"setAt\": \"2024-01-15T09:30:00Z\",\n    \"source\": \"supplied\",\n    \"version\": 1\n  },\n  \"status\": \"status\",\n  \"toolCatalogRef\": \"toolCatalogRef\"\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "6aa50e8e-23d9-4329-8df3-70394f57af4b",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "e8d0f74a-5166-4d13-b768-9cdd83ec49be",
+      "name": "Apply Tool Provider - default",
+      "request": {
+        "urlPathTemplate": "/v1/projects/{project_id}/tool-providers/{capability_prefix}",
+        "method": "PUT",
+        "pathParameters": {
+          "project_id": {
+            "equalTo": "project_id"
+          },
+          "capability_prefix": {
+            "equalTo": "capability_prefix"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"approvalPolicyRef\": \"approvalPolicyRef\",\n  \"brokerEndpointRef\": \"brokerEndpointRef\",\n  \"capabilityPrefix\": \"capabilityPrefix\",\n  \"credentialOwner\": \"credentialOwner\",\n  \"deliveryMode\": \"push\",\n  \"displayName\": \"displayName\",\n  \"id\": \"id\",\n  \"providerType\": \"providerType\",\n  \"secret\": \"secret\",\n  \"secretState\": {\n    \"fingerprint\": \"fingerprint\",\n    \"previousExpiresAt\": \"2024-01-15T09:30:00Z\",\n    \"previousFingerprint\": \"previousFingerprint\",\n    \"setAt\": \"2024-01-15T09:30:00Z\",\n    \"source\": \"supplied\",\n    \"version\": 1\n  },\n  \"status\": \"status\",\n  \"toolCatalogRef\": \"toolCatalogRef\"\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "e8d0f74a-5166-4d13-b768-9cdd83ec49be",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "1cb7ccfa-e984-4280-a4c5-6fad7174033b",
+      "name": "Expire Previous Tool Provider Secret - default",
+      "request": {
+        "urlPathTemplate": "/v1/projects/{project_id}/tool-providers/{capability_prefix}/secret/previous",
+        "method": "DELETE",
+        "pathParameters": {
+          "project_id": {
+            "equalTo": "project_id"
+          },
+          "capability_prefix": {
+            "equalTo": "capability_prefix"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"approvalPolicyRef\": \"approvalPolicyRef\",\n  \"brokerEndpointRef\": \"brokerEndpointRef\",\n  \"capabilityPrefix\": \"capabilityPrefix\",\n  \"credentialOwner\": \"credentialOwner\",\n  \"deliveryMode\": \"push\",\n  \"displayName\": \"displayName\",\n  \"id\": \"id\",\n  \"providerType\": \"providerType\",\n  \"secretState\": {\n    \"fingerprint\": \"fingerprint\",\n    \"previousExpiresAt\": \"2024-01-15T09:30:00Z\",\n    \"previousFingerprint\": \"previousFingerprint\",\n    \"setAt\": \"2024-01-15T09:30:00Z\",\n    \"source\": \"supplied\",\n    \"version\": 1\n  },\n  \"status\": \"status\",\n  \"toolCatalogRef\": \"toolCatalogRef\"\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "1cb7ccfa-e984-4280-a4c5-6fad7174033b",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "dc1b7319-523e-498a-983e-c86ad8a15bb2",
+      "name": "Rotate Tool Provider Secret - default",
+      "request": {
+        "urlPathTemplate": "/v1/projects/{project_id}/tool-providers/{capability_prefix}/secret/rotate",
         "method": "POST",
         "pathParameters": {
           "project_id": {
             "equalTo": "project_id"
           },
-          "tool_provider_id": {
-            "equalTo": "tool_provider_id"
+          "capability_prefix": {
+            "equalTo": "capability_prefix"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"approvalPolicyRef\": \"approvalPolicyRef\",\n  \"brokerEndpointRef\": \"brokerEndpointRef\",\n  \"capabilityPrefix\": \"capabilityPrefix\",\n  \"credentialOwner\": \"credentialOwner\",\n  \"deliveryMode\": \"push\",\n  \"displayName\": \"displayName\",\n  \"id\": \"id\",\n  \"providerType\": \"providerType\",\n  \"secret\": \"secret\",\n  \"secretState\": {\n    \"fingerprint\": \"fingerprint\",\n    \"previousExpiresAt\": \"2024-01-15T09:30:00Z\",\n    \"previousFingerprint\": \"previousFingerprint\",\n    \"setAt\": \"2024-01-15T09:30:00Z\",\n    \"source\": \"supplied\",\n    \"version\": 1\n  },\n  \"status\": \"status\",\n  \"toolCatalogRef\": \"toolCatalogRef\"\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "dc1b7319-523e-498a-983e-c86ad8a15bb2",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "12003102-a29f-4de4-9b01-0e19bc1da588",
+      "name": "Attach Source Tool Skill - default",
+      "request": {
+        "urlPathTemplate": "/v1/projects/{project_id}/tool-providers/{capability_prefix}/skills",
+        "method": "POST",
+        "pathParameters": {
+          "project_id": {
+            "equalTo": "project_id"
+          },
+          "capability_prefix": {
+            "equalTo": "capability_prefix"
           }
         }
       },
@@ -11158,7 +11294,7 @@
           "Content-Type": "application/json"
         }
       },
-      "uuid": "e6311902-521c-442f-a2b3-356a188d1513",
+      "uuid": "12003102-a29f-4de4-9b01-0e19bc1da588",
       "persistent": true,
       "priority": 3,
       "metadata": {
@@ -11864,6 +12000,6 @@
     }
   ],
   "meta": {
-    "total": 350
+    "total": 354
   }
 }

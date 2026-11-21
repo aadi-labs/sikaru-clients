@@ -26,8 +26,10 @@ export class ToolProvidersClient {
     }
 
     /**
+     * The project's tool providers, optionally narrowed to one capability prefix or status.
+     *
      * @param {string} project_id
-     * @param {Sikaru.RegisterToolProviderRequest} request
+     * @param {Sikaru.ListToolProvidersToolProvidersRequest} request
      * @param {ToolProvidersClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Sikaru.UnauthorizedError}
@@ -38,39 +40,35 @@ export class ToolProvidersClient {
      * @throws {@link errors.SikaruTimeoutError}
      *
      * @example
-     *     await client.toolProviders.registerToolProvider("project_id", {
-     *         broker_endpoint_ref: "broker_endpoint_ref",
-     *         capability_prefix: "capability_prefix",
-     *         display_name: "display_name",
-     *         provider_type: "provider_type",
-     *         tool_catalog_ref: "tool_catalog_ref"
-     *     })
+     *     await client.toolProviders.listToolProviders("project_id")
      */
-    public registerToolProvider(project_id: string, request: Sikaru.RegisterToolProviderRequest, requestOptions?: ToolProvidersClient.RequestOptions): core.HttpResponsePromise<Record<string, unknown>> {
-        return core.HttpResponsePromise.fromPromise(this.__registerToolProvider(project_id, request, requestOptions));
+    public listToolProviders(project_id: string, request: Sikaru.ListToolProvidersToolProvidersRequest = {}, requestOptions?: ToolProvidersClient.RequestOptions): core.HttpResponsePromise<Sikaru.ToolProvider[]> {
+        return core.HttpResponsePromise.fromPromise(this.__listToolProviders(project_id, request, requestOptions));
     }
 
-    private async __registerToolProvider(project_id: string, request: Sikaru.RegisterToolProviderRequest, requestOptions?: ToolProvidersClient.RequestOptions): Promise<core.WithRawResponse<Record<string, unknown>>> {
+    private async __listToolProviders(project_id: string, request: Sikaru.ListToolProvidersToolProvidersRequest = {}, requestOptions?: ToolProvidersClient.RequestOptions): Promise<core.WithRawResponse<Sikaru.ToolProvider[]>> {
         const _metadata: core.EndpointMetadata = { security: [{ BearerAuth: [] }] };
+        const { "capability_prefix": capabilityPrefix, status } = request;
+        const _queryParams: Record<string, unknown> = {
+            capability_prefix: capabilityPrefix,
+            status: status !== undefined ? status : undefined
+        };
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest({ endpointMetadata: _metadata });
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(_authRequest.headers, this._options?.headers, requestOptions?.headers);
         const _response = await core.fetcher({
             url: core.url.join(await core.Supplier.get(this._options.baseUrl) ?? (await core.Supplier.get(this._options.environment) ?? environments.SikaruEnvironment.Default), `v1/projects/${core.url.encodePathParam(project_id)}/tool-providers`),
-            method: "POST",
+            method: "GET",
             headers: _headers,
-            contentType: "application/json",
-            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
-            requestType: "json",
-            body: mergeAdditionalBodyParameters(request, requestOptions?.additionalBodyParameters),
+            queryString: core.url.queryBuilder().addMany(_queryParams).mergeAdditional(requestOptions?.queryParams).build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
-            maxRetries: 0,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
             endpointMetadata: _metadata,
             fetchFn: this._options?.fetch,
             logging: this._options.logging
         });
         if (_response.ok) {
-            return { data: _response.body as Record<string, unknown>, rawResponse: _response.rawResponse };
+            return { data: _response.body as Sikaru.ToolProvider[], rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
@@ -87,12 +85,272 @@ export class ToolProvidersClient {
             }
         }
 
-        return handleNonStatusCodeError(_response.error, _response.rawResponse, "POST", "/v1/projects/{project_id}/tool-providers");
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/v1/projects/{project_id}/tool-providers");
+    }
+
+    /**
+     * One tool provider with its delivery mode and secret state.
+     *
+     * @param {string} project_id
+     * @param {string} capability_prefix - The provider's capability prefix; it never changes.
+     * @param {ToolProvidersClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Sikaru.UnauthorizedError}
+     * @throws {@link Sikaru.ForbiddenError}
+     * @throws {@link Sikaru.NotFoundError}
+     * @throws {@link Sikaru.UnprocessableEntityError}
+     * @throws {@link errors.SikaruError}
+     * @throws {@link errors.SikaruTimeoutError}
+     *
+     * @example
+     *     await client.toolProviders.getToolProvider("project_id", "capability_prefix")
+     */
+    public getToolProvider(project_id: string, capability_prefix: string, requestOptions?: ToolProvidersClient.RequestOptions): core.HttpResponsePromise<Sikaru.ToolProvider> {
+        return core.HttpResponsePromise.fromPromise(this.__getToolProvider(project_id, capability_prefix, requestOptions));
+    }
+
+    private async __getToolProvider(project_id: string, capability_prefix: string, requestOptions?: ToolProvidersClient.RequestOptions): Promise<core.WithRawResponse<Sikaru.ToolProvider>> {
+        const _metadata: core.EndpointMetadata = { security: [{ BearerAuth: [] }] };
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest({ endpointMetadata: _metadata });
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(_authRequest.headers, this._options?.headers, requestOptions?.headers);
+        const _response = await core.fetcher({
+            url: core.url.join(await core.Supplier.get(this._options.baseUrl) ?? (await core.Supplier.get(this._options.environment) ?? environments.SikaruEnvironment.Default), `v1/projects/${core.url.encodePathParam(project_id)}/tool-providers/${core.url.encodePathParam(capability_prefix)}`),
+            method: "GET",
+            headers: _headers,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            endpointMetadata: _metadata,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging
+        });
+        if (_response.ok) {
+            return { data: _response.body as Sikaru.ToolProvider, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401: throw new Sikaru.UnauthorizedError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 403: throw new Sikaru.ForbiddenError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 404: throw new Sikaru.NotFoundError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as unknown, _response.rawResponse);
+                default: throw new errors.SikaruError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.body,
+                    rawResponse: _response.rawResponse
+                });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/v1/projects/{project_id}/tool-providers/{capability_prefix}");
+    }
+
+    /**
+     * Create the provider for this capability prefix, or converge it to the request.
+     *
+     * Re-sending the same declaration changes nothing. Changing the provider type or
+     * credential owner is refused with `state_conflict`.
+     *
+     * @param {string} project_id
+     * @param {string} capability_prefix - The provider's capability prefix; it never changes.
+     * @param {Sikaru.ApplyToolProviderRequest} request
+     * @param {ToolProvidersClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Sikaru.UnauthorizedError}
+     * @throws {@link Sikaru.ForbiddenError}
+     * @throws {@link Sikaru.NotFoundError}
+     * @throws {@link Sikaru.ConflictError}
+     * @throws {@link Sikaru.UnprocessableEntityError}
+     * @throws {@link Sikaru.ServiceUnavailableError}
+     * @throws {@link errors.SikaruError}
+     * @throws {@link errors.SikaruTimeoutError}
+     *
+     * @example
+     *     await client.toolProviders.applyToolProvider("project_id", "capability_prefix", {
+     *         broker_endpoint_ref: "broker_endpoint_ref",
+     *         display_name: "display_name",
+     *         provider_type: "provider_type",
+     *         tool_catalog_ref: "tool_catalog_ref"
+     *     })
+     */
+    public applyToolProvider(project_id: string, capability_prefix: string, request: Sikaru.ApplyToolProviderRequest, requestOptions?: ToolProvidersClient.RequestOptions): core.HttpResponsePromise<Sikaru.AppliedToolProvider> {
+        return core.HttpResponsePromise.fromPromise(this.__applyToolProvider(project_id, capability_prefix, request, requestOptions));
+    }
+
+    private async __applyToolProvider(project_id: string, capability_prefix: string, request: Sikaru.ApplyToolProviderRequest, requestOptions?: ToolProvidersClient.RequestOptions): Promise<core.WithRawResponse<Sikaru.AppliedToolProvider>> {
+        const _metadata: core.EndpointMetadata = { security: [{ BearerAuth: [] }] };
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest({ endpointMetadata: _metadata });
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(_authRequest.headers, this._options?.headers, requestOptions?.headers);
+        const _response = await core.fetcher({
+            url: core.url.join(await core.Supplier.get(this._options.baseUrl) ?? (await core.Supplier.get(this._options.environment) ?? environments.SikaruEnvironment.Default), `v1/projects/${core.url.encodePathParam(project_id)}/tool-providers/${core.url.encodePathParam(capability_prefix)}`),
+            method: "PUT",
+            headers: _headers,
+            contentType: "application/json",
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            requestType: "json",
+            body: mergeAdditionalBodyParameters(request, requestOptions?.additionalBodyParameters),
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: 0,
+            abortSignal: requestOptions?.abortSignal,
+            endpointMetadata: _metadata,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging
+        });
+        if (_response.ok) {
+            return { data: _response.body as Sikaru.AppliedToolProvider, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401: throw new Sikaru.UnauthorizedError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 403: throw new Sikaru.ForbiddenError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 404: throw new Sikaru.NotFoundError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 409: throw new Sikaru.ConflictError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as unknown, _response.rawResponse);
+                case 503: throw new Sikaru.ServiceUnavailableError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                default: throw new errors.SikaruError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.body,
+                    rawResponse: _response.rawResponse
+                });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "PUT", "/v1/projects/{project_id}/tool-providers/{capability_prefix}");
+    }
+
+    /**
+     * Stop accepting the previous delivery secret now. Without one this changes nothing.
+     *
+     * @param {string} project_id
+     * @param {string} capability_prefix - The provider's capability prefix; it never changes.
+     * @param {ToolProvidersClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Sikaru.UnauthorizedError}
+     * @throws {@link Sikaru.ForbiddenError}
+     * @throws {@link Sikaru.NotFoundError}
+     * @throws {@link Sikaru.ConflictError}
+     * @throws {@link Sikaru.UnprocessableEntityError}
+     * @throws {@link Sikaru.ServiceUnavailableError}
+     * @throws {@link errors.SikaruError}
+     * @throws {@link errors.SikaruTimeoutError}
+     *
+     * @example
+     *     await client.toolProviders.expirePreviousToolProviderSecret("project_id", "capability_prefix")
+     */
+    public expirePreviousToolProviderSecret(project_id: string, capability_prefix: string, requestOptions?: ToolProvidersClient.RequestOptions): core.HttpResponsePromise<Sikaru.ToolProvider> {
+        return core.HttpResponsePromise.fromPromise(this.__expirePreviousToolProviderSecret(project_id, capability_prefix, requestOptions));
+    }
+
+    private async __expirePreviousToolProviderSecret(project_id: string, capability_prefix: string, requestOptions?: ToolProvidersClient.RequestOptions): Promise<core.WithRawResponse<Sikaru.ToolProvider>> {
+        const _metadata: core.EndpointMetadata = { security: [{ BearerAuth: [] }] };
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest({ endpointMetadata: _metadata });
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(_authRequest.headers, this._options?.headers, requestOptions?.headers);
+        const _response = await core.fetcher({
+            url: core.url.join(await core.Supplier.get(this._options.baseUrl) ?? (await core.Supplier.get(this._options.environment) ?? environments.SikaruEnvironment.Default), `v1/projects/${core.url.encodePathParam(project_id)}/tool-providers/${core.url.encodePathParam(capability_prefix)}/secret/previous`),
+            method: "DELETE",
+            headers: _headers,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: 0,
+            abortSignal: requestOptions?.abortSignal,
+            endpointMetadata: _metadata,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging
+        });
+        if (_response.ok) {
+            return { data: _response.body as Sikaru.ToolProvider, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401: throw new Sikaru.UnauthorizedError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 403: throw new Sikaru.ForbiddenError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 404: throw new Sikaru.NotFoundError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 409: throw new Sikaru.ConflictError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as unknown, _response.rawResponse);
+                case 503: throw new Sikaru.ServiceUnavailableError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                default: throw new errors.SikaruError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.body,
+                    rawResponse: _response.rawResponse
+                });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "DELETE", "/v1/projects/{project_id}/tool-providers/{capability_prefix}/secret/previous");
+    }
+
+    /**
+     * Make a new delivery secret current; the old one stays valid for the overlap.
+     *
+     * @param {string} project_id
+     * @param {string} capability_prefix - The provider's capability prefix; it never changes.
+     * @param {Sikaru.RotateToolProviderSecretRequest} request
+     * @param {ToolProvidersClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Sikaru.UnauthorizedError}
+     * @throws {@link Sikaru.ForbiddenError}
+     * @throws {@link Sikaru.NotFoundError}
+     * @throws {@link Sikaru.ConflictError}
+     * @throws {@link Sikaru.UnprocessableEntityError}
+     * @throws {@link Sikaru.ServiceUnavailableError}
+     * @throws {@link errors.SikaruError}
+     * @throws {@link errors.SikaruTimeoutError}
+     *
+     * @example
+     *     await client.toolProviders.rotateToolProviderSecret("project_id", "capability_prefix")
+     */
+    public rotateToolProviderSecret(project_id: string, capability_prefix: string, request: Sikaru.RotateToolProviderSecretRequest = {}, requestOptions?: ToolProvidersClient.RequestOptions): core.HttpResponsePromise<Sikaru.AppliedToolProvider> {
+        return core.HttpResponsePromise.fromPromise(this.__rotateToolProviderSecret(project_id, capability_prefix, request, requestOptions));
+    }
+
+    private async __rotateToolProviderSecret(project_id: string, capability_prefix: string, request: Sikaru.RotateToolProviderSecretRequest = {}, requestOptions?: ToolProvidersClient.RequestOptions): Promise<core.WithRawResponse<Sikaru.AppliedToolProvider>> {
+        const _metadata: core.EndpointMetadata = { security: [{ BearerAuth: [] }] };
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest({ endpointMetadata: _metadata });
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(_authRequest.headers, this._options?.headers, requestOptions?.headers);
+        const _response = await core.fetcher({
+            url: core.url.join(await core.Supplier.get(this._options.baseUrl) ?? (await core.Supplier.get(this._options.environment) ?? environments.SikaruEnvironment.Default), `v1/projects/${core.url.encodePathParam(project_id)}/tool-providers/${core.url.encodePathParam(capability_prefix)}/secret/rotate`),
+            method: "POST",
+            headers: _headers,
+            contentType: "application/json",
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            requestType: "json",
+            body: mergeAdditionalBodyParameters(request, requestOptions?.additionalBodyParameters),
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: 0,
+            abortSignal: requestOptions?.abortSignal,
+            endpointMetadata: _metadata,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging
+        });
+        if (_response.ok) {
+            return { data: _response.body as Sikaru.AppliedToolProvider, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401: throw new Sikaru.UnauthorizedError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 403: throw new Sikaru.ForbiddenError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 404: throw new Sikaru.NotFoundError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 409: throw new Sikaru.ConflictError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                case 422: throw new Sikaru.UnprocessableEntityError(_response.error.body as unknown, _response.rawResponse);
+                case 503: throw new Sikaru.ServiceUnavailableError(_response.error.body as Sikaru.ErrorResponse, _response.rawResponse);
+                default: throw new errors.SikaruError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.body,
+                    rawResponse: _response.rawResponse
+                });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "POST", "/v1/projects/{project_id}/tool-providers/{capability_prefix}/secret/rotate");
     }
 
     /**
      * @param {string} project_id
-     * @param {string} tool_provider_id
+     * @param {string} capability_prefix - The provider's capability prefix; it never changes.
      * @param {Sikaru.AttachSourceToolSkillRequest} request
      * @param {ToolProvidersClient.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -104,7 +362,7 @@ export class ToolProvidersClient {
      * @throws {@link errors.SikaruTimeoutError}
      *
      * @example
-     *     await client.toolProviders.attachSourceToolSkill("project_id", "tool_provider_id", {
+     *     await client.toolProviders.attachSourceToolSkill("project_id", "capability_prefix", {
      *         capability_refs: ["capability_refs"],
      *         description: "description",
      *         source: {
@@ -112,16 +370,16 @@ export class ToolProvidersClient {
      *         }
      *     })
      */
-    public attachSourceToolSkill(project_id: string, tool_provider_id: string, request: Sikaru.AttachSourceToolSkillRequest, requestOptions?: ToolProvidersClient.RequestOptions): core.HttpResponsePromise<Record<string, unknown>> {
-        return core.HttpResponsePromise.fromPromise(this.__attachSourceToolSkill(project_id, tool_provider_id, request, requestOptions));
+    public attachSourceToolSkill(project_id: string, capability_prefix: string, request: Sikaru.AttachSourceToolSkillRequest, requestOptions?: ToolProvidersClient.RequestOptions): core.HttpResponsePromise<Record<string, unknown>> {
+        return core.HttpResponsePromise.fromPromise(this.__attachSourceToolSkill(project_id, capability_prefix, request, requestOptions));
     }
 
-    private async __attachSourceToolSkill(project_id: string, tool_provider_id: string, request: Sikaru.AttachSourceToolSkillRequest, requestOptions?: ToolProvidersClient.RequestOptions): Promise<core.WithRawResponse<Record<string, unknown>>> {
+    private async __attachSourceToolSkill(project_id: string, capability_prefix: string, request: Sikaru.AttachSourceToolSkillRequest, requestOptions?: ToolProvidersClient.RequestOptions): Promise<core.WithRawResponse<Record<string, unknown>>> {
         const _metadata: core.EndpointMetadata = { security: [{ BearerAuth: [] }] };
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest({ endpointMetadata: _metadata });
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(_authRequest.headers, this._options?.headers, requestOptions?.headers);
         const _response = await core.fetcher({
-            url: core.url.join(await core.Supplier.get(this._options.baseUrl) ?? (await core.Supplier.get(this._options.environment) ?? environments.SikaruEnvironment.Default), `v1/projects/${core.url.encodePathParam(project_id)}/tool-providers/${core.url.encodePathParam(tool_provider_id)}/skills`),
+            url: core.url.join(await core.Supplier.get(this._options.baseUrl) ?? (await core.Supplier.get(this._options.environment) ?? environments.SikaruEnvironment.Default), `v1/projects/${core.url.encodePathParam(project_id)}/tool-providers/${core.url.encodePathParam(capability_prefix)}/skills`),
             method: "POST",
             headers: _headers,
             contentType: "application/json",
@@ -153,6 +411,6 @@ export class ToolProvidersClient {
             }
         }
 
-        return handleNonStatusCodeError(_response.error, _response.rawResponse, "POST", "/v1/projects/{project_id}/tool-providers/{tool_provider_id}/skills");
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "POST", "/v1/projects/{project_id}/tool-providers/{capability_prefix}/skills");
     }
 }

@@ -5,8 +5,8 @@
 //!
 //! ## Type Categories
 //!
-//! - **Request/Response Types**: 277 types for API operations
-//! - **Model Types**: 446 types for data representation
+//! - **Request/Response Types**: 280 types for API operations
+//! - **Model Types**: 452 types for data representation
 
 pub mod http_channels_http_message_privacy;
 pub mod completions_create_completions_stream_request_prompt;
@@ -85,6 +85,7 @@ pub mod memory_rollback_memory_request_environment;
 pub mod review_queue_create_review_queue_item_request_action;
 pub mod run_schedules_schedule_input_environment;
 pub mod run_schedules_schedule_input_session_mode;
+pub mod tool_providers_list_tool_providers_tool_providers_request_status;
 pub mod trace_imports_create_trace_import_request_mode;
 pub mod trace_imports_create_trace_import_request_provider;
 pub mod trace_imports_plan_trace_import_request_mode;
@@ -120,6 +121,8 @@ pub mod agent_import_source_ref_request;
 pub mod agent_snippets;
 pub mod always_cap;
 pub mod answer_ref;
+pub mod applied_tool_provider_delivery_mode;
+pub mod applied_tool_provider;
 pub mod approval_input_decision;
 pub mod approval_input;
 pub mod attachment_view_cleanup_status;
@@ -525,7 +528,11 @@ pub mod test_report_status;
 pub mod test_report;
 pub mod tested_verdict;
 pub mod tested;
+pub mod tool_provider_delivery_mode;
+pub mod tool_provider;
 pub mod tool_provider_ref_request;
+pub mod tool_provider_secret_state_source;
+pub mod tool_provider_secret_state;
 pub mod tool_skill_source_request;
 pub mod toolkit_category;
 pub mod top_up_hint;
@@ -671,7 +678,8 @@ pub mod schedule_input;
 pub mod schedule_update;
 pub mod pause_input;
 pub mod webhook_input;
-pub mod register_tool_provider_request;
+pub mod apply_tool_provider_request;
+pub mod rotate_tool_provider_secret_request;
 pub mod attach_source_tool_skill_request;
 pub mod create_trace_import_request;
 pub mod plan_trace_import_request;
@@ -728,6 +736,7 @@ pub mod list_schedules_query_request;
 pub mod delete_schedule_query_request;
 pub mod schedule_history_query_request;
 pub mod list_managed_session_events_query_request;
+pub mod list_tool_providers_query_request;
 pub mod forget_request;
 pub mod remember_request;
 pub mod upload_file_request;
@@ -809,6 +818,7 @@ pub use memory_rollback_memory_request_environment::RollbackMemoryRequestEnviron
 pub use review_queue_create_review_queue_item_request_action::CreateReviewQueueItemRequestAction;
 pub use run_schedules_schedule_input_environment::ScheduleInputEnvironment;
 pub use run_schedules_schedule_input_session_mode::ScheduleInputSessionMode;
+pub use tool_providers_list_tool_providers_tool_providers_request_status::ListToolProvidersToolProvidersRequestStatus;
 pub use trace_imports_create_trace_import_request_mode::CreateTraceImportRequestMode;
 pub use trace_imports_create_trace_import_request_provider::CreateTraceImportRequestProvider;
 pub use trace_imports_plan_trace_import_request_mode::PlanTraceImportRequestMode;
@@ -844,6 +854,8 @@ pub use agent_import_source_ref_request::AgentImportSourceRefRequest;
 pub use agent_snippets::AgentSnippets;
 pub use always_cap::AlwaysCap;
 pub use answer_ref::AnswerRef;
+pub use applied_tool_provider_delivery_mode::AppliedToolProviderDeliveryMode;
+pub use applied_tool_provider::AppliedToolProvider;
 pub use approval_input_decision::ApprovalInputDecision;
 pub use approval_input::ApprovalInput;
 pub use attachment_view_cleanup_status::AttachmentViewCleanupStatus;
@@ -1249,7 +1261,11 @@ pub use test_report_status::TestReportStatus;
 pub use test_report::TestReport;
 pub use tested_verdict::TestedVerdict;
 pub use tested::Tested;
+pub use tool_provider_delivery_mode::ToolProviderDeliveryMode;
+pub use tool_provider::ToolProvider;
 pub use tool_provider_ref_request::ToolProviderRefRequest;
+pub use tool_provider_secret_state_source::ToolProviderSecretStateSource;
+pub use tool_provider_secret_state::ToolProviderSecretState;
 pub use tool_skill_source_request::ToolSkillSourceRequest;
 pub use toolkit_category::ToolkitCategory;
 pub use top_up_hint::TopUpHint;
@@ -1395,7 +1411,8 @@ pub use schedule_input::ScheduleInput;
 pub use schedule_update::ScheduleUpdate;
 pub use pause_input::PauseInput;
 pub use webhook_input::WebhookInput;
-pub use register_tool_provider_request::RegisterToolProviderRequest;
+pub use apply_tool_provider_request::ApplyToolProviderRequest;
+pub use rotate_tool_provider_secret_request::RotateToolProviderSecretRequest;
 pub use attach_source_tool_skill_request::AttachSourceToolSkillRequest;
 pub use create_trace_import_request::CreateTraceImportRequest;
 pub use plan_trace_import_request::PlanTraceImportRequest;
@@ -1452,6 +1469,7 @@ pub use list_schedules_query_request::ListSchedulesQueryRequest;
 pub use delete_schedule_query_request::DeleteScheduleQueryRequest;
 pub use schedule_history_query_request::ScheduleHistoryQueryRequest;
 pub use list_managed_session_events_query_request::ListManagedSessionEventsQueryRequest;
+pub use list_tool_providers_query_request::ListToolProvidersQueryRequest;
 pub use forget_request::ForgetRequest;
 pub use remember_request::RememberRequest;
 pub use upload_file_request::UploadFileRequest;

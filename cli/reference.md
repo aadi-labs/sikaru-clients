@@ -4286,27 +4286,77 @@ Stop Background Tasks
 
 ### `sikaru tool-providers`
 
+#### `sikaru tool-providers apply-tool-provider`
+
+Create the provider for this capability prefix, or converge it to the request.
+
+Re-sending the same declaration changes nothing. Changing the provider type or
+credential owner is refused with `state_conflict`.
+
+`PUT /v1/projects/{project_id}/tool-providers/{capability_prefix}`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--project-id` | `string` | Yes |  |
+| `--capability-prefix` | `string` | Yes | The provider's capability prefix; it never changes. |
+| `--json` | `JSON` | Yes | Request body as JSON (or use individual body-field flags) |
+
 #### `sikaru tool-providers attach-source-tool-skill`
 
 Attach Source Tool Skill
 
-`POST /v1/projects/{project_id}/tool-providers/{tool_provider_id}/skills`
+`POST /v1/projects/{project_id}/tool-providers/{capability_prefix}/skills`
 
 | Flag | Type | Required | Description |
 |------|------|----------|-------------|
 | `--project-id` | `string` | Yes |  |
-| `--tool-provider-id` | `string` | Yes |  |
+| `--capability-prefix` | `string` | Yes | The provider's capability prefix; it never changes. |
 | `--json` | `JSON` | Yes | Request body as JSON (or use individual body-field flags) |
 
-#### `sikaru tool-providers register-tool-provider`
+#### `sikaru tool-providers expire-previous-tool-provider-secret`
 
-Register Tool Provider
+Stop accepting the previous delivery secret now. Without one this changes nothing.
 
-`POST /v1/projects/{project_id}/tool-providers`
+`DELETE /v1/projects/{project_id}/tool-providers/{capability_prefix}/secret/previous`
 
 | Flag | Type | Required | Description |
 |------|------|----------|-------------|
 | `--project-id` | `string` | Yes |  |
+| `--capability-prefix` | `string` | Yes | The provider's capability prefix; it never changes. |
+
+#### `sikaru tool-providers get-tool-provider`
+
+One tool provider with its delivery mode and secret state.
+
+`GET /v1/projects/{project_id}/tool-providers/{capability_prefix}`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--project-id` | `string` | Yes |  |
+| `--capability-prefix` | `string` | Yes | The provider's capability prefix; it never changes. |
+
+#### `sikaru tool-providers list-tool-providers`
+
+The project's tool providers, optionally narrowed to one capability prefix or status.
+
+`GET /v1/projects/{project_id}/tool-providers`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--project-id` | `string` | Yes |  |
+| `--capability-prefix` | `string` | No |  |
+| `--status` | `string` | No |  |
+
+#### `sikaru tool-providers rotate-tool-provider-secret`
+
+Make a new delivery secret current; the old one stays valid for the overlap.
+
+`POST /v1/projects/{project_id}/tool-providers/{capability_prefix}/secret/rotate`
+
+| Flag | Type | Required | Description |
+|------|------|----------|-------------|
+| `--project-id` | `string` | Yes |  |
+| `--capability-prefix` | `string` | Yes | The provider's capability prefix; it never changes. |
 | `--json` | `JSON` | Yes | Request body as JSON (or use individual body-field flags) |
 
 ---
