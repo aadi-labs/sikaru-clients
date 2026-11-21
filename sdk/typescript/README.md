@@ -15,6 +15,7 @@ Documentation: [docs.sikaru.ai](https://docs.sikaru.ai) · [API reference](https
 - [Reference](#reference)
 - [Quickstart](#quickstart)
 - [Run An Agent](#run-an-agent)
+- [Tool Providers](#tool-providers)
 - [Streaming](#streaming)
 - [Errors](#errors)
 - [Retries and Timeouts](#retries-and-timeouts)
@@ -91,6 +92,56 @@ console.log((await client.runs.get(project, run.runId)).status);
 `runs.start` confirms that the run was accepted, not that it finished. A terminal event ends the stream, but an idle stream can also close, so read the run's status before treating a closed stream as done. To retry a start that timed out, send the same idempotency key and input. The [quickstart](https://docs.sikaru.ai/get-started/quickstart) creates the agent and walks through the full loop.
 
 
+## Tool providers
+
+A tool provider is your backend's registration as the executor of product-owned tools: Sikaru sends it each tool request an agent makes, signed, and your backend performs the action. The full guide, including Terraform secrets and the request lifecycle, is [Tool providers](https://docs.sikaru.ai/build/tool-providers).
+
+**Declare it on every deploy.** A provider is addressed by its capability prefix, a constant in your code, so your pipeline never stores an ID. The call creates the provider or updates it in place and returns the same `id` each time; an identical declaration changes nothing.
+
+```typescript
+import { Sikaru } from "@aadi-labs/sikaru-sdk/inference";
+
+const client = new Sikaru();
+
+const provider = await client.toolProviders.applyToolProvider(process.env.SIKARU_PROJECT_ID!, "crm", {
+    provider_type: "custom",
+    display_name: "CRM",
+    tool_catalog_ref: "custom://crm/tools",
+    broker_endpoint_ref: "https://tools.example.com/sikaru",
+    secret: process.env.CRM_DELIVERY_SECRET, // whsec_ + base64 of 24-64 random bytes
+});
+console.log(provider.id, provider.deliveryMode, provider.secretState?.fingerprint);
+```
+
+Generate the secret yourself (`echo "whsec_$(openssl rand -base64 32)"`, or `random_bytes` in Terraform) so every deploy can send it. Omit `secret` and Sikaru generates one, returned only in `provider.secret` on that first call. Reads never return a secret: compare `secretState.fingerprint` with your copy instead.
+
+**Verify every delivery before acting on it.** Pass the raw body exactly as received, the request headers, and every secret you currently accept. `verify` checks the signature in constant time and the timestamp within five minutes, then resolves to the parsed body. It uses Web Crypto, so the same handler runs on Node.js 20+, Bun, Deno and edge runtimes:
+
+```typescript
+import { verify, WebhookVerificationError } from "@aadi-labs/sikaru-sdk/webhooks";
+
+const accepted = [process.env.CRM_DELIVERY_SECRET, process.env.CRM_DELIVERY_SECRET_PREVIOUS]
+    .filter((secret): secret is string => Boolean(secret));
+
+export async function POST(request: Request): Promise<Response> {
+    let delivery: unknown;
+    try {
+        delivery = await verify(await request.text(), request.headers, accepted);
+    } catch (error) {
+        if (error instanceof WebhookVerificationError) {
+            return new Response(null, { status: 401 }); // unsigned, tampered, stale or unknown secret
+        }
+        throw error;
+    }
+    // Deduplicate on request.headers.get("webhook-id"): retries reuse it.
+    // Store the delivery durably, return 2xx, then run the tool and submit its result.
+    return new Response(null, { status: 200 });
+}
+```
+
+Because the receiver accepts a list, rotating never drops a delivery: add the new secret to the list, send it in the next declaration (the old one stays valid for 24 hours), then remove the old one. `client.toolProviders.listToolProviders(project)` and `getToolProvider(project, "crm")` read providers with a `tool_providers:read` key. See [Rotate without downtime](https://docs.sikaru.ai/build/tool-providers#rotate-without-downtime).
+
+
 ## Streaming
 
 Pass `stream: true` to get an async iterator of chunks. Streamed chat and completions responses end with a usage chunk.
@@ -150,6 +201,7 @@ A request timeout limits one HTTP call. It does not cancel a hosted run.
 - Read [docs.sikaru.ai/llms.txt](https://docs.sikaru.ai/llms.txt) for an index of every guide and API operation. Append `.md` to any docs page URL for plain Markdown, and add `?lang=typescript` to `llms.txt` to keep only TypeScript examples.
 - Exact request and response fields are in the [OpenAPI schema](https://docs.sikaru.ai/openapi.json). Use only operations listed there.
 - The `sikaru` CLI covers the same API from a shell. `sikaru inference chat z-ai/glm-5.3-flash "Hello" --output json` prints one structured result, and `--help` lists the commands at every level. Install it with `npm install -g @aadi-labs/sikaru-cli`.
+- Address a tool provider by its capability prefix, never a stored ID, and run every delivery through `verify` from `@aadi-labs/sikaru-sdk/webhooks` before acting on it. Never log a delivery secret.
 - Keep `SIKARU_API_KEY` out of code, commits and logs. An accepted run is not a finished run: read its status until it completes, fails or is cancelled.
 
 

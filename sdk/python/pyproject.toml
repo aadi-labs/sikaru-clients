@@ -4,7 +4,7 @@ dynamic = ["version"]
 
 [tool.poetry]
 name = "sikaru_sdk"
-version = "0.0.2"
+version = "0.0.3"
 description = "Official Python SDK for Sikaru: OpenAI-compatible inference, managed agents and evaluations."
 readme = "README.md"
 authors = ["Aadi Labs <support@sikaru.ai>"]

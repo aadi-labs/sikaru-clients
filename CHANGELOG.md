@@ -2,6 +2,26 @@
 
 Release notes are also published at https://docs.sikaru.ai/sdks-and-cli/release-notes.
 
+## 0.0.3
+
+The Python SDK, TypeScript SDK and CLI release together at 0.0.3. Upgrade all three to the same version.
+
+### Breaking changes
+
+- `tool_providers.register_tool_provider` is removed. Declare a provider with `tool_providers.apply_tool_provider`, which creates it or updates it in place by capability prefix and always returns the same ID.
+- Attaching a source tool skill now addresses the provider by capability prefix instead of provider ID.
+- Tool-request pushes and schedule callbacks are signed in the Standard Webhooks format (`webhook-id`, `webhook-timestamp`, `webhook-signature`) with a per-provider secret. Verify deliveries with the new `webhooks.verify` helper.
+
+### SDK
+
+- `tool_providers` adds `list_tool_providers` (filter by capability prefix and status), `get_tool_provider`, `rotate_tool_provider_secret` and `expire_previous_tool_provider_secret`. Reads work with a product API key that has `tool_providers:read`.
+- Supply your own delivery secret when you apply or rotate, or let Sikaru generate one and return it once. Rotation keeps the previous secret valid for an overlap (24 hours by default, up to 7 days, or 0 for immediate).
+- `webhooks.verify` in the Python SDK (`sikaru_sdk.webhooks`) and the TypeScript SDK (`@aadi-labs/sikaru-sdk/webhooks`) checks a delivery against one or more secrets, with timestamp tolerance and constant-time comparison.
+
+### CLI
+
+- `sikaru agent tool-providers` adds `apply_tool_provider`, `list_tool_providers`, `get_tool_provider`, `rotate_tool_provider_secret` and `expire_previous_tool_provider_secret`, and removes `register_tool_provider`.
+
 ## 0.0.2
 
 The Python SDK, TypeScript SDK and CLI release together at 0.0.2. Upgrade all three to the same version.
