@@ -54,11 +54,14 @@ def _header(headers: typing.Mapping[str, str], name: str) -> str:
 
 
 def _check_timestamp(timestamp: str) -> None:
-    try:
-        sent = int(timestamp)
-    except ValueError:
-        raise WebhookVerificationError('Invalid webhook-timestamp header') from None
-    if abs(time.time() - sent) > TOLERANCE_SECONDS:
+    # Plain ASCII digits only, as the TypeScript helper requires: int() would also
+    # take signs, underscores, spaces and non-ASCII digits.
+    if not (timestamp.isascii() and timestamp.isdigit()):
+        raise WebhookVerificationError('Invalid webhook-timestamp header')
+    # Integer arithmetic, so a large value is just outside the window instead of
+    # overflowing a float; the length cap also keeps int() under Python's
+    # digit limit. Twenty digits is far beyond any real Unix time.
+    if len(timestamp) > 20 or abs(int(time.time()) - int(timestamp)) > TOLERANCE_SECONDS:
         raise WebhookVerificationError('Delivery timestamp is outside the tolerance window')
 
 
